@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "airbnb"
+  ],
+  "globals": {
+    "window": "readable",
+    "document": "readable",
+    "localStorage": "readable"
+  },
+  "plugins": [
+    "react"
+  ],
+  "parser": "babel-eslint",
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-underscore-dangle": 0,
+    "no-param-reassign": 0,
+    "react/prop-types": 0,
+    "react/button-has-type": 0,
+    "no-shadow": 1
+  }
+}
