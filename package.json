@@ -7,6 +7,10 @@
     "dev:server": "nodemon --watch build --exec \"node  build/bundle.js\"",
     "dev:build-server": "webpack --config webpack.server.js --watch",
     "dev:build-client": "webpack --config webpack.client.js --watch",
+    "prod:start": "npm run prod:build-client && npm run prod:build-server && npm run prod:server",
+    "prod:server": "node build/bundle.js",
+    "prod:build-server": "webpack --config webpack.prod.server.js",
+    "prod:build-client": "webpack --config webpack.prod.client.js",
     "lint:less": "stylelint 'src/**/*.less' --syntax less",
     "lint:less:fix": "stylelint 'src/**/*.less' --syntax less --fix",
     "lint:js": "eslint src/ --ext .js,.jsx",
@@ -15,6 +19,10 @@
   "author": "V.V.Arkavenko",
   "license": "MIT",
   "description": "Good client architecture",
+  "browserslist": [
+    "> 1%",
+    "ie 10"
+  ],
   "babel": {
     "presets": [
       "@babel/env",
@@ -42,6 +50,7 @@
     ]
   },
   "dependencies": {
+    "autoprefixer": "^9.6.1",
     "axios": "^0.19.0",
     "babel-eslint": "^10.0.2",
     "cors": "^2.8.5",
@@ -56,6 +65,8 @@
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
     "node": "^12.7.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "react-helmet": "^5.2.0",
@@ -69,6 +80,7 @@
     "redux-thunk": "^2.3.0",
     "serialize-javascript": "^1.5.0",
     "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "validator": "^11.1.0"
   },
   "devDependencies": {
@@ -79,14 +91,18 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.3",
+    "clean-webpack-plugin": "^3.0.0",
+    "compression-webpack-plugin": "^3.0.0",
     "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.2",
+    "html-webpack-inline-source-plugin": "0.0.10",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^3.0.1",
     "lint-staged": "^9.2.1",
+    "mini-css-extract-plugin": "^0.8.0",
     "nodemon": "^1.18.6",
     "npm-run-all": "^4.1.5",
     "stylelint": "^10.1.0",

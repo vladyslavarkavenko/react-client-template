@@ -20,7 +20,7 @@ import reducers from './reduxReducers';
 import routes from '../common/routes';
 import App from '../common/App';
 
-const content = fs.readFileSync(path.resolve('./dist/index.html'), 'utf8');
+const content = fs.readFileSync(path.resolve('./dist/ssr-template.txt'), 'utf8');
 
 const app = express();
 const port = 3005;
