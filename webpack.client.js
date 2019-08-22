@@ -1,6 +1,7 @@
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 const path = require('path');
 
 const config = {
@@ -67,6 +68,7 @@ const config = {
     new ReactLoadablePlugin({
       filename: path.resolve(__dirname, 'dist', 'react-loadable.json'),
     }),
+    new Dotenv({ path: './config/development.env' }),
   ],
 };
 
