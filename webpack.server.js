@@ -1,6 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-const nodeExternals = require('webpack-node-externals');
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
+const nodeExternals = require('webpack-node-externals');
 
 const config = {
   entry: './src/server',
@@ -20,6 +21,7 @@ const config = {
     ],
   },
   devtool: 'inline-source-map',
+  plugins: [new Dotenv({ path: './config/development.env' })],
 };
 
 module.exports = config;

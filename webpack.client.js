@@ -1,8 +1,9 @@
-const { ReactLoadablePlugin } = require('react-loadable/webpack');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { ReactLoadablePlugin } = require('react-loadable/webpack');
 
 const config = {
   devtool: 'eval-source-map',
@@ -62,8 +63,11 @@ const config = {
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './index.html',
+      filename: 'ssr-template.txt',
+      inlineSource: '.(css)$',
     }),
     new ReactLoadablePlugin({
       filename: path.resolve(__dirname, 'dist', 'react-loadable.json'),
