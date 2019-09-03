@@ -18,6 +18,18 @@ const config = {
         test: /\.(js)$/,
         use: 'babel-loader',
       },
+      {
+        test: /\.(jpe?g|png|gif|svg|eot|ttf|woff)$/i,
+        include: path.resolve(__dirname, 'src/common/assets/images'),
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+            },
+          },
+        ],
+      },
     ],
   },
   devtool: 'inline-source-map',

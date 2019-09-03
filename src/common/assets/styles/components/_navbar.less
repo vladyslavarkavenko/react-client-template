@@ -1,0 +1,59 @@
+.nav-bar {
+  position: sticky;
+  top: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 13px 22px;
+  z-index: 999;
+  &__logo {
+    display: block;
+    width: 112px;
+  }
+
+  .lang-switcher {
+    margin-left: auto;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    > span {
+      line-height: normal;
+      font-size: 20px;
+      color: #fff;
+      font-weight: 700;
+    }
+    > i {
+      color: #fff;
+      font-size: 14px;
+      margin-left: 8px;
+      margin-bottom: -4px;
+    }
+  }
+
+  &__user-buttons {
+    margin-left: auto;
+    button {
+      color: @font-color-lighter;
+      font-size: 24px;
+      margin: 0 12px;
+
+      &.slide-down {
+        font-size: 18px;
+      }
+      &:hover {
+        color: @font-color-dark;
+      }
+    }
+  }
+
+  .avatar {
+    width: 34px;
+    margin-left: 8px;
+    margin-right: 8px;
+    height: 34px;
+  }
+
+  &--white {
+    background-color: #fff;
+  }
+}

@@ -1,7 +1,9 @@
-// import validator from 'validator';
-//
-// export default {
-//   validateSomething(example) {
-//     return validator.isLength(example, { min: 2, max 64 });
-//   },
-// };
+import validator from 'validator';
+
+export function validateEmail(value) {
+  return validator.isEmail(value);
+}
+
+export function validatePassword(value) {
+  return value.length;
+}

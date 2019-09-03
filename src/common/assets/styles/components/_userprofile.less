@@ -1,0 +1,243 @@
+.user-profile {
+  &__header {
+    color: #fff;
+    background-image: linear-gradient(277deg, #51b7ef, #1974b2);
+    min-height: 85px;
+    position: relative;
+    display: flex;
+    padding: 0 20px 0 0;
+
+    &-nav {
+      min-height: 40px;
+      background-color: #fff;
+      border-bottom: @border-block;
+
+      &-tabs {
+        height: 100%;
+        margin-left: 148px;
+        display: flex;
+        > input[type="radio"] {
+          display: none;
+        }
+        > label {
+          vertical-align: middle;
+          height: 100%;
+          cursor: pointer;
+          color: @font-color-lighter;
+          align-self: stretch;
+          display: block;
+          font-weight: 700;
+          line-height: 1.9;
+          padding: 8px 16px;
+
+          &.active {
+            color: @font-color-dark;
+            border-bottom: 2px solid #0075b7;
+          }
+        }
+      }
+    }
+
+    &-btn {
+      margin-left: auto;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+
+      .button {
+        color: #fff;
+        background: none;
+        border: 1px solid #fff;
+        width: 118px;
+        box-shadow: 0 0 3px 3px transparent;
+        transition: 0.2s;
+        margin: 0 8px;
+
+        &:hover {
+          box-shadow: 0 0 3px 2px #ffffff44;
+        }
+
+        > i {
+          margin-right: 4px;
+        }
+
+        > span {
+          font-size: 14px;
+          line-height: 18px;
+          font-weight: 700;
+        }
+      }
+
+      &--edit {
+        margin-left: 32px;
+      }
+    }
+  }
+
+  &__avatar {
+    position: relative;
+    left: 20px;
+    top: 24px;
+    width: 112px;
+    height: 112px;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 1px @font-color-light;
+  }
+
+  &__personal {
+    margin-left: 36px;
+    margin-top: 24px;
+    &-name {
+      display: block;
+      font-weight: 700;
+      font-size: 24px;
+    }
+
+    &-status {
+      margin-top: 4px;
+      font-weight: 600;
+      line-height: 1.38;
+    }
+
+    &-location {
+      margin-top: 4px;
+      font-size: 14px;
+      line-height: 1.57;
+
+      > i {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  &__body {
+    padding: 16px;
+    min-height: 500px;
+
+    &--edit {
+      padding: 24px 124px;
+    }
+  }
+
+  &__edit-form {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 24px;
+    justify-content: space-between;
+    background-color: #fff;
+
+    > .form__row {
+      width: calc(50% - 12px);
+      &--100 {
+        width: 100%;
+      }
+    }
+
+    > .form__block {
+      > h3 {
+        font-size: 15px;
+        color: @font-color-dark;
+      }
+    }
+
+    &-buttons {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
+
+      > .button {
+        border: @border-block;
+        margin: 0 6px;
+        transition: all 0.2s;
+
+        &.cancel-btn {
+          color: @font-color-lighter;
+          &:hover {
+            color: @font-color-dark;
+          }
+        }
+        &.save-btn {
+          background: @secondary-bg-color;
+          color: #fff;
+          &:hover {
+            background: @secondary-bg-color-darken;
+          }
+        }
+      }
+    }
+  }
+
+  &__edit {
+    &-satisfaction {
+      display: flex;
+      margin-top: 28px;
+      padding-bottom: 24px;
+      > input[type="radio"] {
+        display: none;
+        &:checked + label {
+          background-color: @secondary-bg-color;
+          color: #fff;
+        }
+      }
+
+
+      &-option {
+        text-align: center;
+        width: 95px;
+        margin-right: 24px;
+        padding: 24px 0;
+        border: @border-block;
+        color: @font-color-lighter;
+        cursor: pointer;
+        border-radius: @border-radius-block;
+
+        > i {
+          display: block;
+          font-size: 24px;
+        }
+        > span {
+          padding-top: 10px;
+          font-weight: 700;
+          font-size: 12px;
+          display: block;
+        }
+      }
+    }
+
+    &-searching-status {
+      display: flex;
+      margin-top: 24px;
+      padding-bottom: 28px;
+
+      > input[type="radio"] {
+        display: none;
+
+        &:checked + label {
+          background-color: @secondary-bg-color;
+          color: #fff;
+        }
+      }
+
+      &-option {
+        padding: 5px 18px;
+        text-align: center;
+        border: @border-block;
+        cursor: pointer;
+        color: @font-color-lighter;
+
+        &:first-of-type {
+          border-radius: @border-radius-block 0 0 @border-radius-block;
+          border-right: none;
+        }
+        &:last-of-type {
+          border-left: none;
+          border-radius: 0 @border-radius-block @border-radius-block 0;
+        }
+        > span {
+          font-size: 13px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}

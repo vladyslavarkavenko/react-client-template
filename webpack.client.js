@@ -38,11 +38,11 @@ const config = {
           },
         ],
       },
-      {
-        test: /\.css$/,
-        include: path.resolve(__dirname, 'src/common/assets/styles'),
-        use: ['style-loader', 'css-loader'],
-      },
+      // {
+      //   test: /\.css$/,
+      //   include: path.resolve(__dirname, 'src/common/assets/styles'),
+      //   use: ['style-loader', 'css-loader'],
+      // },
       {
         test: /\.less$/,
         include: path.resolve(__dirname, 'src/common/assets/styles'),

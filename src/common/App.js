@@ -1,49 +1,22 @@
-import { renderRoutes } from 'react-router-config';
-import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import { Helmet } from 'react-helmet';
-import i18n from 'i18next';
+import { renderRoutes } from 'react-router-config';
 
 import routes from './routes';
-import { DEFAULT_LANGUAGE } from './config';
-import { changeLanguage } from './modules/language';
+import NavBar from './components/ui-components/Header';
 
-class App extends React.Component {
-  componentDidMount() {
-    const { changeLanguage } = this.props;
-    changeLanguage(DEFAULT_LANGUAGE);
-  }
+const App = () => (
+  <>
+    <Helmet>
+      <title> cTRU </title>
+      <meta name="description" content="cTRU" />
+    </Helmet>
 
-  render() {
-    const { changeLanguage } = this.props;
+    <div>
+      <NavBar />
+      {renderRoutes(routes)}
+    </div>
+  </>
+);
 
-    return (
-      <Fragment>
-        <Helmet>
-          <title> App Title </title>
-          <meta name="description" content="Server side rendering and code-splitting" />
-        </Helmet>
-
-        <div>
-          <h1>This is App root page</h1>
-          <hr />
-          {renderRoutes(routes)}
-          <hr />
-          <button onClick={() => changeLanguage('en')}>En</button>
-          <button onClick={() => changeLanguage('ru')}>Ru</button>
-          <div>{i18n.t('test_message')}</div>
-        </div>
-      </Fragment>
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-  lng: state.language.lng,
-});
-
-const mapDispatchToProps = dispatch => ({
-  changeLanguage: lng => dispatch(changeLanguage(lng)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

@@ -1,0 +1,55 @@
+@import "../common/_vars";
+
+.dashboard-page {
+  display: flex;
+  height: calc(100% - 60px);
+
+  &__sidebar {
+    flex-basis: 15%;
+    flex-grow: 1;
+    flex-shrink: 0;
+    min-width: 170px;
+    background: #2d3e50;
+    align-self: stretch;
+    color: #fff;
+    overflow-y: auto;
+  }
+
+  &__content {
+    flex-basis: 85%;
+    align-self: stretch;
+    overflow-y: auto;
+  }
+
+  &__navigation {
+    display: flex;
+    flex-direction: column;
+    &-link {
+      padding: 17px 24px;
+      font-size: 14px;
+      color: @font-color-lighter;
+
+      > i {
+        margin-right: 22px;
+      }
+
+      &--active {
+        color: #fff;
+        position: relative;
+        background-color: #273646;
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          top: 0;
+          width: 12px;
+          background-image: linear-gradient(to left, rgba(48, 54, 57, 0), #03a2fb);
+          background-size: contain;
+          background-position: center;
+        }
+      }
+    }
+  }
+}

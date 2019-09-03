@@ -23,7 +23,7 @@ import App from '../common/App';
 const content = fs.readFileSync(path.resolve('./dist/ssr-template.txt'), 'utf8');
 
 const app = express();
-const port = 3005;
+const port = 3001;
 
 app.use(cors());
 app.use(express.static(path.resolve('./dist')));

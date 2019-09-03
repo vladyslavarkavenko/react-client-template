@@ -11,8 +11,6 @@
     "prod:server": "node build/bundle.js",
     "prod:build-server": "webpack --config webpack.prod.server.js",
     "prod:build-client": "webpack --config webpack.prod.client.js",
-    "lint:less": "stylelint 'src/**/*.less' --syntax less",
-    "lint:less:fix": "stylelint 'src/**/*.less' --syntax less --fix",
     "lint:js": "eslint src/ --ext .js,.jsx",
     "lint:js:fix": "eslint src/ --ext .js,.jsx --fix"
   },
@@ -43,10 +41,6 @@
     "src/**/*.js": [
       "npm run lint:js:fix",
       "git add"
-    ],
-    "src/**/*.less": [
-      "npm run lint:less:fix",
-      "git add"
     ]
   },
   "dependencies": {
@@ -59,6 +53,7 @@
     "eslint-loader": "^2.2.1",
     "express": "^4.16.4",
     "express-http-proxy": "^1.5.1",
+    "file-loader": "^4.2.0",
     "html-loader": "^0.5.5",
     "i18next": "^17.0.6",
     "isomorphic-fetch": "^2.2.1",
@@ -75,6 +70,7 @@
     "react-redux": "^5.1.0",
     "react-router-config": "^4.4.0-beta.6",
     "react-router-dom": "^4.3.1",
+    "react-select": "^3.0.4",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.5",
     "redux-logger": "^3.0.6",
@@ -106,8 +102,6 @@
     "mini-css-extract-plugin": "^0.8.0",
     "nodemon": "^1.18.6",
     "npm-run-all": "^4.1.5",
-    "stylelint": "^10.1.0",
-    "stylelint-config-standard": "^18.3.0",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
     "webpack-node-externals": "^1.7.2"

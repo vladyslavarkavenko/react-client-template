@@ -34,8 +34,8 @@ export function changeLanguage(lng) {
       i18n.init({ lng, resources });
       dispatch(setLanguage(lng));
     })
-    .catch(() => {
-      console.log(`Error loading text file for ${lng}`);
+    .catch((err) => {
+      console.log(`Error loading text file for ${lng} \n`, err);
     });
 }
 
