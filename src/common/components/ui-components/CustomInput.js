@@ -1,5 +1,7 @@
 import React from 'react';
 
+// TODO: Set up this for checkboxes too.
+
 export default function CustomInput({
   id,
   name,
