@@ -32,8 +32,8 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <div className="header">
-        <Link to="/">
+      <div className="nav-bar">
+        <Link to="/" className="nav-bar__logo">
           <img src="./logo.png" alt="cTRU-Logo" className="logo" />
         </Link>
         <div>{i18n.t('test_message')}</div>
@@ -41,6 +41,8 @@ class NavBar extends React.Component {
           options={options}
           onChange={this.selectLanguage}
           defaultValue={options.find(({ value }) => value === DEFAULT_LANGUAGE)}
+          className="lang-switcher"
+          classNamePrefix="lang-switcher"
         />
       </div>
     );

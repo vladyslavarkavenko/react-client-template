@@ -1,5 +1,6 @@
 .nav-bar {
-  position: sticky;
+  position: fixed;
+  width: 100%;
   top: 0;
   height: 60px;
   display: flex;
@@ -12,21 +13,36 @@
   }
 
   .lang-switcher {
+    min-width: 80px;
     margin-left: auto;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    > span {
-      line-height: normal;
+
+    &__control {
+      border: none;
+      background: none;
+      justify-content: center;
+    }
+
+    &__value-container {
+      padding: 0;
+      flex-basis: auto;
       font-size: 20px;
       color: #fff;
+    }
+
+    &__single-value {
+      color: #fff;
+      font-size: 20px;
+      font-family: 'Muli', sans-serif;
       font-weight: 700;
     }
-    > i {
+
+    &__indicator {
+      padding: 10px;
       color: #fff;
-      font-size: 14px;
-      margin-left: 8px;
-      margin-bottom: -4px;
+    }
+
+    &__indicator-separator {
+      display: none;
     }
   }
 

@@ -50,7 +50,7 @@ const config = {
       },
       {
         test: /\.(jpe?g|png|gif|svg|eot|ttf|woff)$/i,
-        include: path.resolve(__dirname, 'src/common/assets/images'),
+        include: path.resolve(__dirname, 'src/common/assets'),
         use: [
           {
             loader: 'file-loader',
