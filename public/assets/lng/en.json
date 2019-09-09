@@ -1,0 +1,43 @@
+{
+  "en": {
+    "translation": {
+      "api": {
+        "title": "cTRU"
+      },
+      "register": {
+        "title": "Sign up in cTRU",
+        "name": {
+          "first": "First name",
+          "last": "Last name"
+        },
+        "email": "Email address",
+        "phone": "Phone",
+        "password": "Password",
+        "passwordNote": "At least 8 characters",
+        "policy": "I agree to the Terms of Service, Privacy Policy and Cookie Policy",
+        "buttons": {
+          "signUp": "Sign up"
+        }
+      },
+      "login": {
+        "title": "Log in cTRU",
+        "email": "Email address",
+        "password": "Password",
+        "buttons": {
+          "login": "Log in"
+        },
+        "forgotPassword": "Forgot password?"
+      },
+      "errors" : {
+        "email": "Email address format is incorrect",
+        "pass": "Password in invalid",
+        "password": "Password should contain lower-, uppercase letters and numbers",
+        "name": {
+          "first": "First name should be 2-30 character",
+          "last": "Last name should be 2-150 character"
+        },
+        "phone": "Phone format is incorrect"
+      }
+    }
+  }
+}

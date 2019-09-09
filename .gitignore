@@ -2,4 +2,5 @@
 node_modules/
 playground/
 build/
-dist/
+public/
+!public/assets

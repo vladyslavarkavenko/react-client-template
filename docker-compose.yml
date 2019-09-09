@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  client:
+    container_name: ctru_client
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile_client
+    volumes:
+      - ./:/app/client
+      - /app/client/node_modules/
+    ports:
+      - "3000:3000"
+    tty: true
+    working_dir: /app/client
