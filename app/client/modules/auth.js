@@ -230,9 +230,16 @@ export function login(data, cb) {
 export function register(data, cb) {
   return dispatch => AuthService.register(data)
     .then((user) => {
+      const newCb = (err) => {
+        if (err) {
+          cb(err);
+        } else {
+          dispatch(getRoles(cb));
+        }
+      };
+
       dispatch(setUser(user));
-      dispatch(obtainTokens(data, err => err && cb(err)));
-      dispatch(getRoles(cb));
+      dispatch(obtainTokens(data, newCb));
     })
     .catch(cb);
 }

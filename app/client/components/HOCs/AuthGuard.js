@@ -8,7 +8,8 @@ export default (OriginalComponent) => {
   const MixedComponent = (props) => {
     const { isAuthorized } = props;
     if (isAuthorized === null) {
-      return <div> Loading... </div>;
+      console.log('Loading_1');
+      return <div className="loading"> Loading... </div>;
     }
     return isAuthorized
       ? <OriginalComponent {...props} />

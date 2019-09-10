@@ -27,10 +27,9 @@ const Loading = ({
     );
   }
   if (pastDelay) {
+    console.log('Loading_2');
     return (
-      <div>
-        <p>Loading...</p>
-      </div>
+      <div className="loading"> Loading... </div>
     );
   }
   return null;

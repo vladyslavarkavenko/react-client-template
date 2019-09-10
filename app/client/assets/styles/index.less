@@ -58,6 +58,18 @@ img {
   height: auto;
 }
 
+.app-wrap {
+  position: relative;
+}
+
+.loading {
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .text-center {
   text-align: center;
 }
@@ -73,6 +85,7 @@ img {
 
 .decor {
   position: absolute;
+  z-index: -1;
   &-rt {
     top: 0;
     right: 0;

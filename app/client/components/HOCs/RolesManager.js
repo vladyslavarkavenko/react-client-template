@@ -9,7 +9,8 @@ export default (OriginalComponent) => {
     const { rolesPermissions, activeRole } = props;
 
     if (rolesPermissions === null) {
-      return <div> Loading... </div>;
+      console.log('Loading_3');
+      return <div className="loading"> Loading... </div>;
     }
     if (!activeRole) {
       return <Redirect to="/choose-role" />;

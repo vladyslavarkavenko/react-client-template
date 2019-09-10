@@ -25,6 +25,8 @@ const initialErrorsState = {
   errorPolicy: false,
 };
 
+// TODO: Fix ssr (double loading).
+
 class SignUp extends React.Component {
   constructor(props) {
     super(props);
@@ -76,6 +78,7 @@ class SignUp extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log('here!');
 
     this.setState({ ...initialErrorsState });
 

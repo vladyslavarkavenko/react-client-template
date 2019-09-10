@@ -1,5 +1,6 @@
 // TODO: Rewrite alert to notifications.
-export default function ({ data }) {
+export default function (err) {
+  const { data } = err;
   if (data.detail) {
     return window.alert(data.detail);
   }
