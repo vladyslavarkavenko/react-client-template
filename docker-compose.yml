@@ -13,7 +13,7 @@ services:
       - "3000:3000"
     tty: true
     working_dir: /app/client
-    network:
+    networks:
       - dev-ctru_default
       
 networks:
