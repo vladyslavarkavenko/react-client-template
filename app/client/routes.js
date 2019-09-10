@@ -12,6 +12,13 @@ const routes = [
     }),
   },
   {
+    path: '/choose-role',
+    exact: true,
+    component: customLoadable({
+      loader: () => import('./pages/ChooseRole'),
+    }),
+  },
+  {
     path: '/login',
     exact: true,
     component: customLoadable({

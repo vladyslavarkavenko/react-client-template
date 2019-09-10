@@ -5,7 +5,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: Dockerfile_client
+      dockerfile: dockerfile-client
     volumes:
       - ./:/app/client
       - /app/client/node_modules/

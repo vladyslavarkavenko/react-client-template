@@ -8,7 +8,7 @@ import { clearRedirect } from '../../modules/redirect';
 import SvgDecorRT from '../../../../public/assets/svg/decor-rt.svg';
 import SvgDecorLB from '../../../../public/assets/svg/decor-lb.svg';
 
-const pathsWithDecor = ['forgot-password', 'registration', 'login'];
+const pathsWithDecor = ['forgot-password', 'registration', 'login', 'choose-role'];
 
 // TODO: Check if we need polyfill for includes.
 // TODO: Split logic for decor, app init and redirect in different files.
