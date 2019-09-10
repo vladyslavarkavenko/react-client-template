@@ -1,6 +1,9 @@
+# Think gow to setup for public/assets.
 .idea/
 node_modules/
 playground/
 build/
-public/
-!public/assets
+public/*.js
+public/*.css
+public/react-loadable.json
+public/ssr-template.txt
