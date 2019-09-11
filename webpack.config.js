@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
@@ -57,9 +56,6 @@ const config = {
       filename: '[name].[hash].css',
     }),
     new OptimizeCSSAssetsPlugin(),
-    new Dotenv({
-      path: './config/development.env',
-    }),
   ],
 };
 

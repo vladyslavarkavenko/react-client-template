@@ -5,11 +5,11 @@
   "scripts": {
     "prod:build": "babel ./app -d build",
     "prod:build:client": "webpack --config webpack.prod.js",
-    "prod:build:server": "node ./build/server/index.js",
+    "prod:build:server": "NODE_ENV=production node ./build/server/index.js",
     "prod:start": "npm run prod:build && npm run prod:build:client && npm run prod:build:server",
     "dev:build:client": "webpack -w",
     "dev:hot:client": "node devServer.js",
-    "dev:build:server": "nodemon -x babel-node ./app/server/index.js -w ./app/server/* ",
+    "dev:build:server": "NODE_ENV=development nodemon -x babel-node ./app/server/index.js -w ./app/server/* ",
     "start": "npm-run-all -p dev:build:client dev:hot:client dev:build:server",
     "lint:js": "eslint src/ --ext .js,.jsx",
     "lint:js:fix": "eslint src/ --ext .js,.jsx --fix"
@@ -47,6 +47,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
     "express": "^4.16.4",
     "express-http-proxy": "^1.5.1",
     "i18next": "^17.0.6",

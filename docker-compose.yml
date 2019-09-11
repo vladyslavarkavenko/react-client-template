@@ -3,6 +3,8 @@ services:
   client:
     container_name: ctru_client
     restart: always
+    environment:
+      - /config/development.env
     build:
       context: .
       dockerfile: dockerfile-client
