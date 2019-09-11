@@ -4,8 +4,8 @@
 npm start 
 
 #### To deploy project:
-docker-compose build \
-docker-compose up -d
+docker-compose -f docker-compose-dev.yml build \
+docker-compose -f docker-compose-dev.yml up -d
 
 # Production
 
@@ -13,5 +13,5 @@ docker-compose up -d
 npm run prod:start
 
 #### To deploy project:
-docker-compose -f docker-compose-prod.yml build \
-docker-compose -f docker-compose-prod.yml up -d
+docker-compose build \
+docker-compose up -d

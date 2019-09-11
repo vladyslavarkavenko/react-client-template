@@ -4,10 +4,10 @@
   "main": "index.js",
   "scripts": {
     "prod:build": "babel ./app -d build",
-    "prod:build:client": "webpack --config webpack.prod.js",
+    "prod:build:client": "webpack",
     "prod:build:server": "NODE_ENV=production node ./build/server/index.js",
     "prod:start": "npm run prod:build && npm run prod:build:client && npm run prod:build:server",
-    "dev:build:client": "webpack -w",
+    "dev:build:client": "webpack --config webpack.config.dev.js -w",
     "dev:hot:client": "node devServer.js",
     "dev:build:server": "NODE_ENV=development nodemon -x babel-node ./app/server/index.js -w ./app/server/* ",
     "start": "npm-run-all -p dev:build:client dev:hot:client dev:build:server",

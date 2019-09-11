@@ -115,29 +115,6 @@ function obtainTokens(data, cb) {
 }
 
 // External actions
-export function useRefreshToken(cb) {
-  return (dispatch) => {
-    const refresh = localStorage.getItem('refresh_token');
-    const errCb = (err = true) => {
-      dispatch(toggleAuthorize(false));
-      removeTokens();
-      cb(err);
-    };
-
-    if (refresh) {
-      return AuthService.refresh({ refresh })
-        .then((tokens) => {
-          setTokens(tokens);
-          dispatch(toggleAuthorize());
-          cb();
-        })
-        .catch(errCb);
-    }
-
-    return errCb();
-  };
-}
-
 // TODO: Remove this fn to another file.
 function stateFromRes({ customers, staff }) {
   const {
@@ -211,6 +188,28 @@ export function getUser(cb) {
       }
       cb && cb(err);
     });
+}
+
+export function useRefreshToken(cb) {
+  return (dispatch) => {
+    const refresh = localStorage.getItem('refresh_token');
+    const errCb = (err = true) => {
+      dispatch(toggleAuthorize(false));
+      removeTokens();
+      cb(err);
+    };
+
+    if (refresh) {
+      return AuthService.refresh({ refresh })
+        .then((tokens) => {
+          setTokens(tokens);
+          dispatch(getUser(cb));
+        })
+        .catch(errCb);
+    }
+
+    return errCb();
+  };
 }
 
 export function login(data, cb) {

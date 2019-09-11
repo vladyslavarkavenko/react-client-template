@@ -22,7 +22,7 @@ import routes from '../client/routes';
 import App from '../client/App';
 import CONFIG from '../client/config';
 
-const { PORT, API_URL, MODE } = CONFIG;
+const { PORT, API_URL } = CONFIG;
 
 const content = fs.readFileSync(path.resolve('./public/ssr-template.txt'), 'utf8');
 
@@ -31,12 +31,10 @@ const app = express();
 app.use(cors());
 app.use(express.static(path.resolve('./public')));
 
-// In production this is handled by Nginx.
-if (MODE === 'development') {
-  app.use('/api', proxy(API_URL, {
-    proxyReqPathResolver: req => `/api${req.url}`,
-  }));
-}
+// TODO: We have Nginx for that in prod.
+app.use('/api', proxy(API_URL, {
+  proxyReqPathResolver: req => `/api${req.url}`,
+}));
 
 const preloadData = (location, store) => {
   const branch = matchRoutes(routes, location);

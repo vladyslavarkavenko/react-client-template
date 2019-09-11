@@ -1,21 +1,20 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+
+// TODO: Set up clean webpack plugin.
 
 const config = {
-  devtool: 'none',
+  devtool: 'cheap-module-eval-source-map',
   entry: './app/client/index.js',
-  mode: 'production',
+  mode: 'development',
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'public'),
-    chunkFilename: '[name].js',
     publicPath: '/',
   },
   module: {
@@ -27,6 +26,9 @@ const config = {
           {
             loader: 'babel-loader',
           },
+          {
+            loader: 'eslint-loader',
+          },
         ],
       },
       {
@@ -35,38 +37,21 @@ const config = {
           {
             loader: MiniCssExtractPlugin.loader,
           },
-          {
-            loader: 'css-loader',
-            options: {
-              url: false,
-            },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: [autoprefixer()],
-            },
-          },
+          'css-loader',
           'less-loader',
         ],
       },
     ],
   },
   plugins: [
-    // new BundleAnalyzerPlugin(),
     // new CleanWebpackPlugin(),
-    new ReactLoadablePlugin({
-      filename: './public/react-loadable.json',
-    }),
     new HtmlWebpackPlugin({
       template: './index.html',
       filename: 'ssr-template.txt',
-      inlineSource: '.(css)$',
-      minify: {
-        collapseWhitespace: true,
-      },
     }),
-    new HtmlWebpackInlineSourcePlugin(),
+    new ReactLoadablePlugin({
+      filename: './public/react-loadable.json',
+    }),
     new MiniCssExtractPlugin({
       filename: '[name].[hash].css',
     }),

@@ -4,10 +4,10 @@ services:
     container_name: ctru_client
     restart: always
     environment:
-      - /config/development.env
+      - /config/production.env
     build:
       context: .
-      dockerfile: dockerfile-client
+      dockerfile: dockerfile
     volumes:
       - ./:/app/client
       - /app/client/node_modules/
@@ -15,3 +15,11 @@ services:
       - "3000:3000"
     tty: true
     working_dir: /app/client
+    networks:
+      - ctru
+
+networks:
+  ctru:
+    external:
+      name: dev-ctru_default
+

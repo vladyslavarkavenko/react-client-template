@@ -3,8 +3,9 @@ const webpack = require('webpack');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const WebpackDevServer = require('webpack-dev-server');
 
-const webpackConfig = require('./webpack.config.js');
+const webpackConfig = require('./webpack.config.dev.js');
 
+// TODO: Split config out.
 const port = 8000;
 const options = {
   contentBase: './public',
@@ -20,7 +21,7 @@ const options = {
   },
   proxy: {
     '/': 'http://localhost:3000',
-    '/public': 'http://localhost:3000', // Why?
+    '/public': 'http://localhost:3000', // Why we need this?
   },
 };
 

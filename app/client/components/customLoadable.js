@@ -10,7 +10,6 @@ const Loading = ({
   retry,
 }) => {
   if (error) {
-    console.log('ERR:', error);
     return (
       <div>
         <p> Error! </p>
@@ -27,7 +26,6 @@ const Loading = ({
     );
   }
   if (pastDelay) {
-    console.log('Loading_2');
     return (
       <div className="loading"> Loading... </div>
     );
