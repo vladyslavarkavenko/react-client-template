@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -71,6 +72,7 @@ const config = {
       filename: '[name].[hash].css',
     }),
     new OptimizeCSSAssetsPlugin(),
+    new Dotenv({ path: './config/production.env' }),
   ],
 };
 
