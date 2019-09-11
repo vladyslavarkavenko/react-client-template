@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import queryString from 'query-string';
 
 import Input from '../../components/ui-components/CustomInput';
-import NewPasswordInput from '../../components/NewPasswordInput';
+import PasswordInput from '../../components/PasswordInput';
 import {
   validateEmail,
   validatePassword,
@@ -26,6 +26,7 @@ const initialErrorsState = {
 };
 
 // TODO: Fix ssr (double loading).
+// TODO: Remove errors when user starts typing in that field. (Think about it)
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -193,10 +194,12 @@ class SignUp extends React.Component {
             name="phone"
             labelText={i18next.t('register.phone')}
           />
-          <NewPasswordInput
+          <PasswordInput
+            showIndicator
             value={password}
             error={errorPassword}
             onChange={this.onChange}
+            labelText={i18next.t('register.password')}
           />
           <div className={`policy-agreement ${errorPolicy ? 'checkbox-error' : ''}`}>
             <input

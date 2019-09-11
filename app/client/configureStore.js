@@ -7,6 +7,9 @@ import thunk from 'redux-thunk';
 
 import reducerRegistry from './utils/reducerRegistry';
 import { addResponseIntercept } from './utils/api';
+import CONFIG from './config';
+
+const { ENV } = CONFIG;
 
 const preloadedState = window.__PRELOADED_STATE__;
 delete window.__PRELOADED_STATE__;
@@ -21,8 +24,9 @@ const combine = (reducers) => {
   return combineReducers(reducers);
 };
 
-// TODO: Disable for production!
-const enhancer = composeWithDevTools(applyMiddleware(thunk, logger));
+const enhancer = ENV === 'development'
+  ? composeWithDevTools(applyMiddleware(thunk, logger))
+  : composeWithDevTools(applyMiddleware(thunk));
 const reducer = combine(reducerRegistry.getReducers());
 
 const store = createStore(

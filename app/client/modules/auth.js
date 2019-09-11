@@ -190,20 +190,19 @@ export function getUser(cb) {
     });
 }
 
-export function useRefreshToken(cb) {
+export function useRefreshToken() {
   return (dispatch) => {
     const refresh = localStorage.getItem('refresh_token');
-    const errCb = (err = true) => {
-      dispatch(toggleAuthorize(false));
+    const errCb = () => {
       removeTokens();
-      cb(err);
+      dispatch(toggleAuthorize(false));
     };
 
     if (refresh) {
       return AuthService.refresh({ refresh })
         .then((tokens) => {
           setTokens(tokens);
-          dispatch(getUser(cb));
+          dispatch(getUser());
         })
         .catch(errCb);
     }

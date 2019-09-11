@@ -42,13 +42,7 @@ export function addResponseIntercept(store) {
       }
 
       if (status === 401) {
-        store.dispatch(useRefreshToken((e) => {
-          if (e) {
-            store.dispatch(redirectTo('/login'));
-          } else {
-            // TODO: Send request again.
-          }
-        }));
+        store.dispatch(useRefreshToken());
       }
 
       return Promise.reject(err);

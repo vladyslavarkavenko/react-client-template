@@ -6,7 +6,7 @@ import SvgSlashEye from '../../../public/assets/svg/eye-slash.svg';
 
 import PasswordIndicator from './newPasswordInput/PasswordIndicator';
 
-class NewPasswordInput extends React.Component {
+class PasswordInput extends React.Component {
   constructor(props) {
     super(props);
 
@@ -24,7 +24,13 @@ class NewPasswordInput extends React.Component {
   }
 
   render() {
-    const { value, onChange, error } = this.props;
+    const {
+      value,
+      onChange,
+      error,
+      labelText,
+      showIndicator = false,
+    } = this.props;
     const { isPasswordVisible } = this.state;
 
     // TODO: Rewrite this using CustomInput.js
@@ -43,8 +49,13 @@ class NewPasswordInput extends React.Component {
           htmlFor="password"
           className="form__row-label"
         >
-          {i18next.t('register.password')}
-          <PasswordIndicator value={value} />
+          {labelText}
+          {
+            showIndicator
+            && (
+              <PasswordIndicator value={value} />
+            )
+          }
         </label>
         <div className="position-relative">
           <input
@@ -75,4 +86,4 @@ class NewPasswordInput extends React.Component {
   }
 }
 
-export default NewPasswordInput;
+export default PasswordInput;

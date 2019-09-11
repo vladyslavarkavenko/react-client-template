@@ -5,8 +5,16 @@ import { Link } from 'react-router-dom';
 
 import { login } from '../../modules/auth';
 import Input from '../../components/ui-components/CustomInput';
+import PasswordInput from '../../components/PasswordInput';
 import { validateEmail, validatePassword } from '../../utils/validator';
 import displayError from '../../utils/displayError';
+
+const initialErrorsState = {
+  emailError: null,
+  passwordError: null,
+};
+
+// TODO: Remove errors when user starts typing in that field. (Think about it)
 
 class LogIn extends React.Component {
   constructor(props) {
@@ -15,8 +23,7 @@ class LogIn extends React.Component {
     this.state = {
       email: '',
       password: '',
-      emailError: null,
-      passwordError: null,
+      ...initialErrorsState,
     };
 
     this.onChange = this.onChange.bind(this);
@@ -30,6 +37,8 @@ class LogIn extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+
+    this.setState({ ...initialErrorsState });
 
     const { login, history } = this.props;
     const { email, password } = this.state;
@@ -78,10 +87,8 @@ class LogIn extends React.Component {
             error={emailError}
             labelText={i18next.t('login.email')}
           />
-          <Input
-            name="password"
+          <PasswordInput
             value={password}
-            type="password"
             onChange={this.onChange}
             error={passwordError}
             labelText={i18next.t('login.password')}
