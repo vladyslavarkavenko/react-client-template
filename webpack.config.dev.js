@@ -4,10 +4,11 @@ const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 // TODO: Set up clean webpack plugin.
+// TODO: MiniCssExtractPlugin breaks hot reload for styles.
 
 const config = {
   devtool: 'cheap-module-eval-source-map',
@@ -35,9 +36,10 @@ const config = {
       {
         test: /\.less$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
+          'style-loader',
+          // {
+          //   loader: MiniCssExtractPlugin.loader,
+          // },
           'css-loader',
           'less-loader',
         ],
@@ -53,9 +55,9 @@ const config = {
     new ReactLoadablePlugin({
       filename: './public/react-loadable.json',
     }),
-    new MiniCssExtractPlugin({
-      filename: '[name].[hash].css',
-    }),
+    // new MiniCssExtractPlugin({
+    //   filename: '[name].[hash].css',
+    // }),
     new OptimizeCSSAssetsPlugin(),
     new Dotenv({ path: './config/development.env' }),
   ],

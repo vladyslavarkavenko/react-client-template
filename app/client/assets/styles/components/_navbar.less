@@ -7,9 +7,117 @@
   align-items: center;
   padding: 13px 22px;
   z-index: 999;
+
+  &.nav-bar-profile {
+    border: 0.5px solid #E6E9EE;
+    background-color: #FFFFFF;
+    display: flex;
+
+    .search {
+      margin-right: 24px;
+      height: 60px;
+      position: relative;
+      flex-grow: 1;
+
+      svg {
+        position: absolute;
+        transform: translateY(-50%);
+        top: 50%;
+        left: 16px;
+        color: #808FA3;
+      }
+
+      input {
+        height: 100%;
+        width: 100%;
+        padding-left: 50px;
+        border: 0.5px solid #E6E9EE;
+        border-right: none;
+        font-size: 16px;
+        color: #808FA3;
+      }
+    }
+
+    .share-opinion-btn {
+      margin-right: 24px;
+      padding: 14px 28px;
+      background-color: #3ea0da;
+      color: white;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 700;
+      min-width: 202px;
+
+      &:hover {
+        background-color: #1ca6bd;
+      }
+    }
+
+    svg {
+      height: 21px;
+      fill: #808FA3;
+      margin-right: 24px;
+
+      &:hover {
+        fill: #7691B6;
+      }
+    }
+
+    .avatar {
+      width: 40px;
+      min-width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .menu-btn {
+      svg {
+        width: 12px;
+        margin-right: 0;
+      }
+    }
+
+    ul.menu {
+      position: absolute;
+      right: 22px;
+      top: 60px;
+      width: 180px;
+      border-left: 2px solid #3EA0DA;
+      background-color: #FFF;
+      box-shadow: 0 0 1px 0 #C0C5D2, 0 5px 11px 0 rgba(52, 52, 52, 0.12);
+      padding: 16px;
+      color: #353535;
+      font-size: 14px;
+
+      hr {
+        height: 1px;
+        border: 0.5px solid #E6E9EE;
+        margin-bottom: 16px;
+      }
+
+      li {
+        cursor: pointer;
+
+        &:not(:last-child) {
+          margin-bottom: 16px;
+        }
+        &:hover {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
   &__logo {
     display: block;
-    width: 112px;
+    width: 196px;
+    margin-right: 24px;
+
+    img {
+      max-width: 112px;
+    }
   }
 
   .lang-switcher {
@@ -48,6 +156,7 @@
 
   &__user-buttons {
     margin-left: auto;
+
     button {
       color: @font-color-lighter;
       font-size: 24px;
@@ -56,20 +165,11 @@
       &.slide-down {
         font-size: 18px;
       }
+
       &:hover {
         color: @font-color-dark;
       }
     }
   }
 
-  .avatar {
-    width: 34px;
-    margin-left: 8px;
-    margin-right: 8px;
-    height: 34px;
-  }
-
-  &--white {
-    background-color: #fff;
-  }
 }

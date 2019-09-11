@@ -173,6 +173,13 @@ export function getRoles(cb) {
     });
 }
 
+export function signout() {
+  return (dispatch) => {
+    removeTokens();
+    dispatch(toggleAuthorize(false));
+  };
+}
+
 export function getUser(cb) {
   return dispatch => AuthService.getUser()
     .then((user) => {
@@ -193,10 +200,7 @@ export function getUser(cb) {
 export function useRefreshToken() {
   return (dispatch) => {
     const refresh = localStorage.getItem('refresh_token');
-    const errCb = () => {
-      removeTokens();
-      dispatch(toggleAuthorize(false));
-    };
+    const errCb = () => dispatch(signout());
 
     if (refresh) {
       return AuthService.refresh({ refresh })

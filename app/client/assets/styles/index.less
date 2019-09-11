@@ -12,6 +12,7 @@
 @import "components/_userprofile";
 
 // TODO: Add code splitting.
+// TODO: Reorganize styling and prepare it for adaptive layout.
 // Pages
 @import "pages/choose-role-page";
 
@@ -30,12 +31,13 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-p, a, span, label {
+p, a, span, label, input {
   font-family: 'Muli', sans-serif;
 }
 
 input {
   outline: none;
+  border: none;
 }
 
 button {
@@ -56,6 +58,10 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+ul, ol {
+  list-style: none;
 }
 
 .app-wrap {
