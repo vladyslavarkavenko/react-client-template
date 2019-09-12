@@ -8,11 +8,6 @@ import { ROLES } from '../constants';
 import SvgMapMarker from '../../../public/assets/svg/map-marker.svg';
 import SvgPen from '../../../public/assets/svg/pen.svg';
 
-function formatPhoneNumber(number) {
-  const match = number.match(/^(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/);
-  return `+${match[1]} ${match[2]} ${match[3]} ${match[4]} ${match[5]}`;
-}
-
 const {
   CUSTOMER, ADMIN,
 } = ROLES;
@@ -20,28 +15,50 @@ const {
 class Profile extends React.Component {
   render() {
     const {
-      user: {
-        email,
-        firstName,
-        lastName,
-        phone,
-        avatar,
-        about,
-        location,
-        title,
-      },
+      user,
       activeRole,
+      rolesPermissions,
+      companies,
     } = this.props;
 
-    // eslint-disable-next-line no-nested-ternary
-    const profileTitle = activeRole === ADMIN
-      ? '89% satisfied clients'
-      : activeRole === CUSTOMER
-        ? 'I\'m satisfied'
-        : title;
+    const {
+      firstName,
+      lastName,
+      location,
+    } = user;
 
+    let email;
+    let avatar;
+    let phone;
+    let web;
+    let about;
+    let name;
+    let profileTitle;
+
+    if (activeRole === ADMIN) {
+      const {
+        email: e, avatar: a, phone: p, web: w, about: ab, name: n,
+      } = companies[rolesPermissions[activeRole]];
+      email = e;
+      avatar = a;
+      phone = p;
+      web = w;
+      about = ab;
+      name = n;
+      profileTitle = '89% satisfied clients';
+    } else {
+      const {
+        email: e, avatar: a, phone: p, web: w, about: ab, title,
+      } = user;
+      email = e;
+      avatar = a;
+      phone = p;
+      web = w;
+      about = ab;
+      name = `${firstName} ${lastName}`;
+      profileTitle = activeRole === CUSTOMER ? 'I\'m satisfied' : title;
+    }
     const aboutTitle = activeRole === CUSTOMER ? 'Biography' : 'Portrait';
-    const name = `${firstName} ${lastName}`;
 
     return (
       <div className="content">
@@ -94,7 +111,7 @@ class Profile extends React.Component {
               <div className="info-line">
                 <p> Phone </p>
                 <a href={`tel:${phone}`}>
-                  {formatPhoneNumber(phone)}
+                  {phone}
                 </a>
               </div>
               {
@@ -102,7 +119,7 @@ class Profile extends React.Component {
                 && (
                   <div className="info-line">
                     <p> Web </p>
-                    <a href="abc@example.com">abc@example.com</a>
+                    <a href={web}>{web}</a>
                   </div>
                 )
               }
@@ -121,6 +138,8 @@ class Profile extends React.Component {
 const mapStateToProps = state => ({
   user: state.auth.user,
   activeRole: state.auth.activeRole,
+  rolesPermissions: state.auth.rolesPermissions,
+  companies: state.auth.companies,
 });
 
 export default AuthGuard(RolesManager(connect(mapStateToProps)(Profile)));
