@@ -56,7 +56,7 @@ class ChooseRole extends React.Component {
 
     return (
       <div className="form-page choose-role-page">
-        <div className="content">
+        <div className="roles-content">
           <h1 className="form-page__title"> Choose your role </h1>
           <div className="cards">
             {

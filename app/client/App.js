@@ -10,6 +10,7 @@ import Layout from './components/ui-components/Layout';
 // TODO: Add favicon.
 // TODO: Clean webpack configs, it seems that there is some redundant code.
 // TODO: Add local environment.
+// TODO: Choose better default avatar.
 
 // eslint-disable-next-line react/prefer-stateless-function
 class App extends React.Component {

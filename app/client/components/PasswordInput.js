@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import SvgEye from '../../../public/assets/svg/eye.svg';
 import SvgSlashEye from '../../../public/assets/svg/eye-slash.svg';
 
-import PasswordIndicator from './newPasswordInput/PasswordIndicator';
+import PasswordIndicator from './passwordInput/PasswordIndicator';
 
 class PasswordInput extends React.Component {
   constructor(props) {

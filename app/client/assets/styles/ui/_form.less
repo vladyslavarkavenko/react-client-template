@@ -1,18 +1,17 @@
+// TODO: Centring forms with flex box blur edges< rewrite using position absolute.
 .form {
     &-page {
-        min-height: 100vh;
-        padding: 120px 0;
+        padding: 60px 0 120px 0;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         .container {
             width: 470px;
-            height: 100%;
-            max-width: 470px;
-            min-height: 400px;
-            margin: 0  auto;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            margin-top: -68px; // For right centring without title.
         }
         &__title {
             font-size: 1.5em;

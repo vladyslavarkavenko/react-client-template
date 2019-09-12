@@ -7,6 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { signout } from '../../modules/auth';
 import { changeLanguage } from '../../modules/language';
 import { DEFAULT_LANGUAGE } from '../../config';
+import { PAGES_WITH_DECOR } from '../../constants';
 
 import SvgSearch from '../../../../public/assets/svg/search.svg';
 import SvgQuestion from '../../../../public/assets/svg/question.svg';
@@ -24,9 +25,8 @@ const options = [
   },
 ];
 
-const pathsWithProfile = [''];
-
 // TODO: Add styling for language select.
+// TODO: Split all text to local.
 
 class TopBar extends React.Component {
   constructor(props) {
@@ -51,13 +51,21 @@ class TopBar extends React.Component {
     }));
   }
 
+  logOut() {
+    const { signout } = this.props;
+
+    signout();
+    this.toggleMenu();
+  }
+
   render() {
     const { showMenu } = this.state;
-    const { location: { pathname }, signout } = this.props;
-    const isProfile = pathsWithProfile.includes(pathname.replace(/\//g, ''));
+    const { location: { pathname } } = this.props;
+
+    const isWithDecor = PAGES_WITH_DECOR.includes(pathname.replace(/\//g, ''));
 
     return (
-      <div className={`nav-bar ${isProfile ? 'nav-bar-profile' : ''}`}>
+      <div className={`nav-bar ${isWithDecor ? '' : 'nav-bar-profile'}`}>
         <Link to="/" className="nav-bar__logo">
           <img
             src="/assets/img/logo.png"
@@ -66,8 +74,17 @@ class TopBar extends React.Component {
           />
         </Link>
         {
-          isProfile
+          isWithDecor
             ? (
+              <Select
+                options={options}
+                onChange={this.selectLanguage}
+                defaultValue={options.find(({ value }) => value === DEFAULT_LANGUAGE)}
+                className="lang-switcher"
+                classNamePrefix="lang-switcher"
+              />
+            )
+            : (
               <>
                 <div className="search">
                   <SvgSearch />
@@ -97,25 +114,24 @@ class TopBar extends React.Component {
                   showMenu
                   && (
                     <ul className="menu">
-                      <li>Profile</li>
-                      <li>Settings</li>
+                      <li onClick={this.toggleMenu}>
+                        <Link to="/profile">
+                          Profile
+                        </Link>
+                      </li>
+                      <li onClick={this.toggleMenu}>
+                        <Link to="/">
+                          Settings
+                        </Link>
+                      </li>
                       <hr />
-                      <li onClick={signout}>
-                          Log out
+                      <li onClick={this.logOut}>
+                        Log out
                       </li>
                     </ul>
                   )
                 }
               </>
-            )
-            : (
-              <Select
-                options={options}
-                onChange={this.selectLanguage}
-                defaultValue={options.find(({ value }) => value === DEFAULT_LANGUAGE)}
-                className="lang-switcher"
-                classNamePrefix="lang-switcher"
-              />
             )
         }
       </div>

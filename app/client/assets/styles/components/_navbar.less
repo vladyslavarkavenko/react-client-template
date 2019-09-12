@@ -1,3 +1,4 @@
+// Top bar
 .nav-bar {
   position: fixed;
   width: 100%;
@@ -13,8 +14,12 @@
     background-color: #FFFFFF;
     display: flex;
 
-    .search {
+
+    .search, button:not(:last-of-type) {
       margin-right: 24px;
+    }
+
+    .search {
       height: 60px;
       position: relative;
       flex-grow: 1;
@@ -23,8 +28,9 @@
         position: absolute;
         transform: translateY(-50%);
         top: 50%;
-        left: 16px;
+        left: 24px;
         color: #808FA3;
+        height: 16px;
       }
 
       input {
@@ -41,22 +47,21 @@
     .share-opinion-btn {
       margin-right: 24px;
       padding: 14px 28px;
-      background-color: #3ea0da;
-      color: white;
+      background-color: rgba(62, 160, 218, 1);
+      color: #fff;
       border-radius: 4px;
       font-size: 16px;
       font-weight: 700;
       min-width: 202px;
 
       &:hover {
-        background-color: #1ca6bd;
+        background-color: rgba(62, 160, 218, .9);
       }
     }
 
     svg {
       height: 21px;
       fill: #808FA3;
-      margin-right: 24px;
 
       &:hover {
         fill: #7691B6;
@@ -100,9 +105,14 @@
       li {
         cursor: pointer;
 
+        a {
+          display: block;
+        }
+
         &:not(:last-child) {
           margin-bottom: 16px;
         }
+
         &:hover {
           font-weight: 600;
         }
@@ -113,7 +123,7 @@
   &__logo {
     display: block;
     width: 196px;
-    margin-right: 24px;
+    min-width: 196px;
 
     img {
       max-width: 112px;
@@ -171,5 +181,43 @@
       }
     }
   }
+}
 
+// Left bar
+.left-bar {
+  color: #E6E9EE;
+  background-color: #2D3E50;
+  font-size: 14px;
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+
+  li a {
+    padding: 18px 30px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      font-weight: bold;
+      color: #fff;
+
+      &::before {
+        content: "";
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 10px;
+        position: absolute;
+        background: linear-gradient(270deg, rgba(48, 54, 57, 0) 0%, #03A2FB 100%);
+      }
+    }
+  }
+
+  svg {
+    height: 16px;
+    fill: #E6E9EE;
+    margin-right: 20px;
+  }
 }

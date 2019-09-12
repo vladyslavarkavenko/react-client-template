@@ -119,7 +119,7 @@ function obtainTokens(data, cb) {
 function stateFromRes({ customers, staff }) {
   const {
     company,
-    isObject,
+    isAdmin,
     isAnalyst,
     isManager,
   } = staff;
@@ -128,29 +128,29 @@ function stateFromRes({ customers, staff }) {
   const companies = {};
   const rolesPermissions = {};
 
-  if (customers.length) {
-    rolesPermissions[CUSTOMER] = [];
-    customers.forEach((cmp) => {
-      const { id } = cmp;
-
-      companies[id] = cmp;
-      rolesPermissions[CUSTOMER].push(id);
-    });
-  }
-
   if (company) {
     const { id } = company;
 
     companies[id] = company;
-    if (isObject) {
+    if (isManager) {
       rolesPermissions[MANAGER] = id;
     }
     if (isAnalyst) {
       rolesPermissions[ANALYST] = id;
     }
-    if (isManager) {
+    if (isAdmin) {
       rolesPermissions[ADMIN] = id;
     }
+  }
+
+  if (customers.length) {
+    rolesPermissions[CUSTOMER] = [];
+    customers.forEach(({ company, manager }) => {
+      const { id } = company;
+
+      companies[id] = { ...company, manager };
+      rolesPermissions[CUSTOMER].push(id);
+    });
   }
 
   const availableRoles = Object.keys(rolesPermissions);

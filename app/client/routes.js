@@ -33,6 +33,13 @@ const routes = [
     }),
   },
   {
+    path: '/profile',
+    exact: true,
+    component: customLoadable({
+      loader: () => import('./pages/Profile'),
+    }),
+  },
+  {
     path: '/forgot-password',
     exact: true,
     component: customLoadable({
