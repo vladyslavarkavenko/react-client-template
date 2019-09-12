@@ -36,6 +36,7 @@ class TopBar extends React.Component {
       showMenu: false,
     };
 
+    this.logOut = this.logOut.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
     this.selectLanguage = this.selectLanguage.bind(this);
   }

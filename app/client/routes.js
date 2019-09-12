@@ -3,7 +3,8 @@ import React from 'react';
 
 import customLoadable from './components/customLoadable';
 
-// TODO: Split all user related routes
+// TODO: Split all user related routes to /profile/... sub-routes for ssr.
+// TODO: Split views and routes for different roles.
 
 const routes = [
   {
