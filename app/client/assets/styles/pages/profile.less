@@ -129,6 +129,7 @@
     display: flex;
 
     .info-block {
+      position: relative;
       background-color: #fff;
       border: 0.5px solid #E6E9EE;
       padding: 20px;
@@ -136,6 +137,25 @@
       h1 {
         margin-bottom: 20px;
         font-size: 20px;
+      }
+
+      .edit-wrapper {
+        height: 28px;
+        width: 28px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #03A2FB;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+
+        svg {
+          height: 16px;
+          fill: #03A2FB;
+        }
       }
 
       .info-line {
@@ -166,4 +186,57 @@
       flex: 1 0 0;
     }
   }
+}
+
+// !
+.edit-photo-btn {
+  display: flex;
+  width: 100px;
+  height: 40px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #fff;
+    color: #4db2ea;
+    border: none;
+  }
+}
+
+.info-block {
+  textarea {
+    border: none;
+    overflow: auto;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    resize: none; /*remove the resize handle on the bottom right*/
+
+    display: block;
+
+    background: #e6e9ee9e;
+    border-radius: 4px;
+    padding: 5px;
+    min-height: 100px;
+    width: calc(100% - 100px);
+    font-family: 'Muli', sans-serif;
+    font-size: 16px;
+  }
+}
+
+.save-btn {
+  width: 80px;
+  height: 30px;
+  background-color: #2bbd73;
+  color: white;
+  font-size: 16px;
+  border-radius: 4px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }

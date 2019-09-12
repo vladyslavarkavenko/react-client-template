@@ -57,6 +57,19 @@ export default function reducer(state = initialState, action) {
         ...state,
         activeRole: action.role,
       };
+    // !
+    // eslint-disable-next-line no-use-before-define
+    case SET_COMPANY: {
+      // Broke immutability.
+      const { company } = action;
+      const newCompanies = { ...state.companies };
+      newCompanies[company.id] = company;
+
+      return {
+        ...state,
+        companies: newCompanies,
+      };
+    }
     default:
       return state;
   }
@@ -244,6 +257,25 @@ export function register(data, cb) {
       dispatch(obtainTokens(data, newCb));
     })
     .catch(cb);
+}
+
+// !
+const SET_COMPANY = createActionName('SET_COMPANY');
+
+const setCompany = company => ({
+  company,
+  type: SET_COMPANY,
+});
+
+export function updateCompany(data, cb) {
+  console.log('data', data);
+  return dispatch => AuthService.updateCompany(data)
+    .then((company) => {
+      console.log('company', company);
+      dispatch(setCompany(company));
+      cb();
+    })
+    .catch(err => console.log('err', err));
 }
 
 reducerRegistry.register(reducerName, reducer);

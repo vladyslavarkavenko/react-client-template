@@ -55,4 +55,5 @@ export default {
   post: (endpoint, data) => request('post', endpoint, data),
   put: (endpoint, data) => request('put', endpoint, data),
   del: (endpoint, data) => request('delete', endpoint, data),
+  patch: (endpoint, data) => request('patch', endpoint, data),
 };

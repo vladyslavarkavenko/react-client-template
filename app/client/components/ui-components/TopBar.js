@@ -27,6 +27,7 @@ const options = [
 
 // TODO: Add styling for language select.
 // TODO: Split all text to local.
+// TODO: On click outside of menu close it.
 
 class TopBar extends React.Component {
   constructor(props) {

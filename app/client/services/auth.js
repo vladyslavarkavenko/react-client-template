@@ -20,6 +20,11 @@ class AuthService {
   static refresh(data) {
     return api.post('/core/token/refresh/', data);
   }
+
+  // !
+  static updateCompany(data) {
+    return api.patch('/company/company/', data);
+  }
 }
 
 export default AuthService;
