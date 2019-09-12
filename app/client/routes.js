@@ -3,6 +3,8 @@ import React from 'react';
 
 import customLoadable from './components/customLoadable';
 
+// TODO: Split all user related routes
+
 const routes = [
   {
     path: '/',
