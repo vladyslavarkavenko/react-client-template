@@ -7,7 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { signout } from '../../modules/auth';
 import { changeLanguage } from '../../modules/language';
 import { DEFAULT_LANGUAGE } from '../../config';
-import { PAGES_WITH_DECOR } from '../../constants';
+import { PAGES_WITH_DECOR, ROLES } from '../../constants';
 
 import SvgSearch from '../../../../public/assets/svg/search.svg';
 import SvgQuestion from '../../../../public/assets/svg/question.svg';
@@ -20,8 +20,8 @@ const options = [
     label: 'EN',
   },
   {
-    value: 'ru',
-    label: 'RU',
+    value: 'de',
+    label: 'DE',
   },
 ];
 
@@ -62,7 +62,9 @@ class TopBar extends React.Component {
 
   render() {
     const { showMenu } = this.state;
-    const { location: { pathname } } = this.props;
+    const { location: { pathname }, activeRole } = this.props;
+
+    const isCustomer = activeRole === ROLES.CUSTOMER;
 
     const isWithDecor = PAGES_WITH_DECOR.includes(pathname.replace(/\//g, ''));
 
@@ -94,9 +96,14 @@ class TopBar extends React.Component {
                     placeholder="Search"
                   />
                 </div>
-                <button className="share-opinion-btn">
-                  Share your opinion
-                </button>
+                {
+                  isCustomer
+                  && (
+                    <Link to="/share-opinion" className="share-opinion-btn">
+                      Share your opinion
+                    </Link>
+                  )
+                }
                 <button>
                   <SvgQuestion />
                 </button>
@@ -141,9 +148,13 @@ class TopBar extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  activeRole: state.auth.activeRole
+});
+
 const mapDispatchToProps = dispatch => ({
   changeLanguage: lng => dispatch(changeLanguage(lng)),
   signout: () => dispatch(signout()),
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(TopBar));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TopBar));

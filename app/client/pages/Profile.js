@@ -11,7 +11,7 @@ import SvgMapMarker from '../../../public/assets/svg/map-marker.svg';
 import SvgPen from '../../../public/assets/svg/pen.svg';
 
 const {
-  CUSTOMER, ADMIN,
+  CUSTOMER, ANALYST, ADMIN,
 } = ROLES;
 
 const EditIcon = ({ onClick }) => (
@@ -33,11 +33,19 @@ class Profile extends React.Component {
     this.phoneRef = React.createRef();
     this.webRef = React.createRef();
     this.mailRef = React.createRef();
+    this.nameRef = React.createRef();
 
     this.clickContactsSave = this.clickContactsSave.bind(this);
+    this.clickNameSave = this.clickNameSave.bind(this);
     this.clickAboutSave = this.clickAboutSave.bind(this);
     this.toggleEditing = this.toggleEditing.bind(this);
     this.toggleEditFor = this.toggleEditFor.bind(this);
+  }
+
+  clickNameSave() {
+    const { updateCompany } = this.props;
+
+    updateCompany({ name: this.nameRef.current.value }, this.toggleEditing);
   }
 
   clickAboutSave() {
@@ -120,12 +128,15 @@ class Profile extends React.Component {
     }
     const aboutTitle = activeRole === CUSTOMER ? 'Biography' : 'Portrait';
 
+    const isAnalyst = activeRole === ANALYST;
+
+    const link = activeRole === CUSTOMER ? 'http://alexsears.com/assets/img/alexsears.jpg' : 'https://www.createalogoonline.com/wp-content/uploads/2015/11/Red-3D-logo.jpg';
     return (
       <div className="content">
         <div className="content-header">
           <div className="avatar">
             <div className="img-wrapper">
-              <img src={avatar || 'assets/img/empty-avatar.jpg'} alt="Avatar" />
+              <img src={ link || avatar || 'assets/img/empty-avatar.jpg'} alt="Avatar" />
             </div>
           </div>
           <div className="info">
@@ -133,10 +144,11 @@ class Profile extends React.Component {
               editing
                 ? (
                   <>
-                    <input type="text" defaultValue={name} className="input-header"/>
-                    <button className="edit-photo-btn">
-                      Edit photo
-                    </button>
+                    <input type="text" defaultValue={name} className="input-header" ref={this.nameRef}/>
+                    <div>
+                      <button className="save-btn-s" onClick={this.clickNameSave}> Save </button>
+                      <button className="save-btn-c" onClick={this.toggleEditing}> Cancel </button>
+                    </div>
                   </>
                 )
                 : (
@@ -159,10 +171,15 @@ class Profile extends React.Component {
             }
           </div>
           <div className="buttons">
-            <button className="edit-btn" onClick={this.toggleEditing}>
-              <SvgPen />
-              Edit
-            </button>
+            {
+              !editing && !isAnalyst
+              && (
+                <button className="edit-btn" onClick={this.toggleEditing}>
+                  <SvgPen/>
+                  Edit
+                </button>
+              )
+            }
           </div>
           <ul className="content-nav-bar">
             <li>Overview</li>
@@ -189,7 +206,7 @@ class Profile extends React.Component {
                     </p>
                   )
               }
-              <EditIcon onClick={() => this.toggleEditFor('About')} />
+              { !isAnalyst && <EditIcon onClick={() => this.toggleEditFor('About')} /> }
               {
                 editingAbout
                 && (
@@ -200,7 +217,7 @@ class Profile extends React.Component {
           </div>
           <div className="sidebar">
             <div className="info-block">
-              <EditIcon onClick={() => this.toggleEditFor('Contacts')} />
+              { !isAnalyst && <EditIcon onClick={() => this.toggleEditFor('Contacts')} />}
               <h1> Contacts </h1>
               <div className="info-line">
                 <p> Phone </p>

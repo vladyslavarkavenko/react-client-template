@@ -22,6 +22,13 @@ const routes = [
     }),
   },
   {
+    path: '/share-opinion',
+    exact: true,
+    component: customLoadable({
+      loader: () => import('./pages/ShareOpinipon'),
+    }),
+  },
+  {
     path: '/login',
     exact: true,
     component: customLoadable({
