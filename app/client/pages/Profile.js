@@ -61,7 +61,7 @@ class Profile extends React.Component {
       {
         phone: this.phoneRef.current.value,
         web: this.webRef.current.value,
-        mail: this.mailRef.current.value
+        email: this.mailRef.current.value
       },
       () => this.toggleEditFor('Contacts')
     );
@@ -102,7 +102,7 @@ class Profile extends React.Component {
     let name;
     let profileTitle;
 
-    if (activeRole === ADMIN) {
+    if (activeRole === ADMIN || activeRole === ANALYST) {
       console.log('companies[rolesPermissions[activeRole]]', companies, rolesPermissions, activeRole);
       const {
         email: e, avatar: a, phone: p, web: w, about: ab, name: n,
