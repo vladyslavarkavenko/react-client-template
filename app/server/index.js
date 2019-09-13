@@ -35,12 +35,12 @@ app.use(express.static(path.resolve('./public')));
 app.use('/api', proxy(API_URL, {
   proxyReqPathResolver: req => `/api${req.url}`,
 }));
-app.use('/media', proxy(API_URL, {
-  proxyReqPathResolver: req => `/media${req.url}`,
-}));
-app.use('/static', proxy(API_URL, {
-  proxyReqPathResolver: req => `/static${req.url}`,
-}));
+// app.use('/media', proxy(API_URL, {
+//   proxyReqPathResolver: req => `/media${req.url}`,
+// }));
+// app.use('/static', proxy(API_URL, {
+//   proxyReqPathResolver: req => `/static${req.url}`,
+// }));
 
 const preloadData = (location, store) => {
   const branch = matchRoutes(routes, location);
