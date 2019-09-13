@@ -18,12 +18,15 @@
         width: 110px;
         border-radius: 50%;
         overflow: hidden;
+        margin: auto;
 
         img {
           width: 100%;
           height: auto;
           min-height: 110px;
           min-width: 100px;
+          line-height: 110px;
+          text-align: center;
         }
       }
     }
@@ -219,13 +222,21 @@
 
     display: block;
 
-    background: #e6e9ee9e;
+    background: aliceblue;
     border-radius: 4px;
     padding: 5px;
     min-height: 100px;
     width: calc(100% - 100px);
     font-family: 'Muli', sans-serif;
     font-size: 16px;
+  }
+
+  input {
+    padding: 8px;
+    background: aliceblue;
+    width: 100%;
+    border-radius: 4px;
+    font-family: 'Muli', sans-serif;
   }
 }
 
@@ -239,4 +250,18 @@
   position: absolute;
   right: 20px;
   bottom: 20px;
+}
+
+.save-btn-b {
+  background-color: #2bbd73;
+  color: white;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 4px;
+  height: 30px;
+  margin-top: 20px;
+}
+
+.input-header {
+
 }

@@ -30,7 +30,11 @@ class Profile extends React.Component {
     };
 
     this.aboutRef = React.createRef();
+    this.phoneRef = React.createRef();
+    this.webRef = React.createRef();
+    this.mailRef = React.createRef();
 
+    this.clickContactsSave = this.clickContactsSave.bind(this);
     this.clickAboutSave = this.clickAboutSave.bind(this);
     this.toggleEditing = this.toggleEditing.bind(this);
     this.toggleEditFor = this.toggleEditFor.bind(this);
@@ -40,6 +44,19 @@ class Profile extends React.Component {
     const { updateCompany } = this.props;
 
     updateCompany({ about: this.aboutRef.current.value }, () => this.toggleEditFor('About'));
+  }
+
+  clickContactsSave() {
+    const { updateCompany } = this.props;
+
+    updateCompany(
+      {
+        phone: this.phoneRef.current.value,
+        web: this.webRef.current.value,
+        mail: this.mailRef.current.value
+      },
+      () => this.toggleEditFor('Contacts')
+    );
   }
 
   toggleEditing() {
@@ -61,7 +78,7 @@ class Profile extends React.Component {
       rolesPermissions,
       companies,
     } = this.props;
-    const { editing, editingAbout } = this.state;
+    const { editing, editingAbout, editingContacts } = this.state;
 
     const {
       firstName,
@@ -115,9 +132,12 @@ class Profile extends React.Component {
             {
               editing
                 ? (
-                  <button className="edit-photo-btn">
-                  Edit photo
-                  </button>
+                  <>
+                    <input type="text" defaultValue={name} className="input-header"/>
+                    <button className="edit-photo-btn">
+                      Edit photo
+                    </button>
+                  </>
                 )
                 : (
                   <>
@@ -169,12 +189,7 @@ class Profile extends React.Component {
                     </p>
                   )
               }
-              {
-                editing
-                && (
-                  <EditIcon onClick={() => this.toggleEditFor('About')} />
-                )
-              }
+              <EditIcon onClick={() => this.toggleEditFor('About')} />
               {
                 editingAbout
                 && (
@@ -185,32 +200,70 @@ class Profile extends React.Component {
           </div>
           <div className="sidebar">
             <div className="info-block">
-              {
-                editing
-                && (
-                  <EditIcon />
-                )
-              }
+              <EditIcon onClick={() => this.toggleEditFor('Contacts')} />
               <h1> Contacts </h1>
               <div className="info-line">
                 <p> Phone </p>
-                <a href={`tel:${phone}`}>
-                  {phone}
-                </a>
+                {
+                  editingContacts
+                    ? (
+                      <input
+                        ref={this.phoneRef}
+                        defaultValue={phone}
+                      />
+                    )
+                    : (
+                      <a href={`tel:${phone}`}>
+                        {phone}
+                      </a>
+                    )
+                }
               </div>
               {
                 activeRole === ADMIN
                 && (
                   <div className="info-line">
                     <p> Web </p>
-                    <a href={web}>{web}</a>
+                    {
+                      editingContacts
+                        ? (
+                          <input
+                            ref={this.webRef}
+                            defaultValue={web}
+                          />
+                        )
+                        : (
+                          <a href={web}>
+                            {web}
+                          </a>
+                        )
+                    }
                   </div>
                 )
               }
               <div className="info-line">
                 <p> Mail </p>
-                <a href={`mailto:${email}`}>{email}</a>
+                {
+                  editingContacts
+                    ? (
+                      <input
+                        ref={this.mailRef}
+                        defaultValue={email}
+                      />
+                    )
+                    : (
+                      <a href={`mailto:${email}`}>
+                        {email}
+                      </a>
+                    )
+                }
               </div>
+              {
+                editingContacts
+                && (
+                  <button className="save-btn-b" onClick={this.clickContactsSave}> Save </button>
+                )
+              }
             </div>
           </div>
         </div>
