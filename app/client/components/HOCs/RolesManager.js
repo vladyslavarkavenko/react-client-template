@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import Loader from '../ui-components/Loader';
+import routing from '../../utils/routing';
 
 export default (OriginalComponent) => {
   const MixedComponent = (props) => {
@@ -12,7 +13,7 @@ export default (OriginalComponent) => {
       return <Loader />;
     }
     if (!activeRole) {
-      return <Redirect to="/choose-role" />;
+      return <Redirect to={routing().chooseRole}/>;
     }
     return <OriginalComponent {...props} />;
   };

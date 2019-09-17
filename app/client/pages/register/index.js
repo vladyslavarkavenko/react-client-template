@@ -14,6 +14,7 @@ import {
 } from '../../utils/validator';
 import { register } from '../../modules/auth';
 import displayError from '../../utils/displayError';
+import routing from '../../utils/routing';
 
 
 const initialErrorsState = {
@@ -60,7 +61,7 @@ class SignUp extends React.Component {
     if (token) {
       newState.token = token;
     } else {
-      return history.push('/404');
+      return history.push(routing().notFound);
     }
     if (email) {
       newState.email = email;
@@ -119,7 +120,7 @@ class SignUp extends React.Component {
       register(data, err => (
         err
           ? displayError(err)
-          : history.push('/')
+          : history.push(routing().root)
       ));
     } else {
       const newState = {};
