@@ -1,6 +1,7 @@
 {
   "extends": [
-    "airbnb"
+    "airbnb",
+    "prettier"
   ],
   "globals": {
     "window": "readable",
@@ -8,10 +9,12 @@
     "localStorage": "readable"
   },
   "plugins": [
-    "react"
+    "react",
+    "prettier"
   ],
   "parser": "babel-eslint",
   "rules": {
+    "prettier/prettier": ["error"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-underscore-dangle": 0,
     "no-param-reassign": 0,

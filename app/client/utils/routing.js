@@ -5,6 +5,7 @@ export default (params) => {
     notFound: '/not-found',
 
     login: '/login',
+
     registration: '/registration',
     forgotPassword: '/forgot-password',
 
