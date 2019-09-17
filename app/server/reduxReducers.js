@@ -8,5 +8,5 @@ import companies from '../client/modules/companies';
 export default combineReducers({
   auth,
   language,
-  companies,
+  companies
 });

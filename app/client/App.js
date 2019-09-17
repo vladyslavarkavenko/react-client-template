@@ -24,9 +24,7 @@ class App extends React.Component {
 
         <div className="app-wrap">
           <TopBar />
-          <Layout>
-            {renderRoutes(routes)}
-          </Layout>
+          <Layout>{renderRoutes(routes)}</Layout>
         </div>
       </>
     );

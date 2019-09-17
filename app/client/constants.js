@@ -3,11 +3,11 @@ module.exports = {
     ADMIN: 'ADMIN',
     MANAGER: 'MANAGER',
     ANALYST: 'ANALYST',
-    CUSTOMER: 'CUSTOMER',
+    CUSTOMER: 'CUSTOMER'
   },
   INFO_LINE_TYPES: {
     NUMBER: 'Phone',
     SITE: 'Web',
-    EMAIL: 'Mail',
-  },
+    EMAIL: 'Mail'
+  }
 };

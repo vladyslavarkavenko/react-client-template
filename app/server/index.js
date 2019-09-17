@@ -32,24 +32,31 @@ app.use(cors());
 app.use(express.static(path.resolve('./public')));
 
 // TODO: We have Nginx for that in prod.
-app.use('/api', proxy(API_URL, {
-  proxyReqPathResolver: req => `/api${req.url}`,
-}));
-app.use('/media', proxy(API_URL, {
-  proxyReqPathResolver: req => `/media${req.url}`,
-}));
-app.use('/static', proxy(API_URL, {
-  proxyReqPathResolver: req => `/static${req.url}`,
-}));
+app.use(
+  '/api',
+  proxy(API_URL, {
+    proxyReqPathResolver: (req) => `/api${req.url}`
+  })
+);
+app.use(
+  '/media',
+  proxy(API_URL, {
+    proxyReqPathResolver: (req) => `/media${req.url}`
+  })
+);
+app.use(
+  '/static',
+  proxy(API_URL, {
+    proxyReqPathResolver: (req) => `/static${req.url}`
+  })
+);
 
 const preloadData = (location, store) => {
   const branch = matchRoutes(routes, location);
 
   const promises = branch.map(({ route, match }) => {
     if (route) {
-      return route.loadData
-        ? route.loadData(store, match)
-        : Promise.resolve();
+      return route.loadData ? route.loadData(store, match) : Promise.resolve();
     }
     return undefined;
   });
@@ -64,13 +71,13 @@ app.get('*', (req, res) => {
 
   preloadData(req.url, store).then(() => {
     const html = renderToString(
-      <Loadable.Capture report={moduleName => modules.push(moduleName)}>
+      <Loadable.Capture report={(moduleName) => modules.push(moduleName)}>
         <Provider store={store}>
           <StaticRouter location={req.url} context={context}>
             <App />
           </StaticRouter>
         </Provider>
-      </Loadable.Capture>,
+      </Loadable.Capture>
     );
 
     const bundles = getBundles(stats, modules);
@@ -81,16 +88,21 @@ app.get('*', (req, res) => {
     filledContent = filledContent.replace('<!--meta-->', helmet.meta.toString());
     filledContent = filledContent.replace('<!--html-->', html);
     filledContent = filledContent.replace('{/*preload_state*/}', serialize(store.getState()));
-    filledContent = filledContent.replace('<!--scripts-->', bundles.map(bundle => `<script src="/${bundle.file}"> </script>`).join('\n'));
+    filledContent = filledContent.replace(
+      '<!--scripts-->',
+      bundles.map((bundle) => `<script src="/${bundle.file}"> </script>`).join('\n')
+    );
 
     res.status(200).send(filledContent);
   });
 });
 
-Loadable.preloadAll().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is listening on port: ${PORT}`);
+Loadable.preloadAll()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is listening on port: ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
   });
-}).catch((err) => {
-  console.log(err);
-});
