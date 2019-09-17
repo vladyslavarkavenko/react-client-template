@@ -24,16 +24,13 @@ const combine = (reducers) => {
   return combineReducers(reducers);
 };
 
-const enhancer = ENV === 'development'
-  ? composeWithDevTools(applyMiddleware(thunk, logger))
-  : composeWithDevTools(applyMiddleware(thunk));
+const enhancer =
+  ENV === 'development'
+    ? composeWithDevTools(applyMiddleware(thunk, logger))
+    : composeWithDevTools(applyMiddleware(thunk));
 const reducer = combine(reducerRegistry.getReducers());
 
-const store = createStore(
-  reducer,
-  preloadedState,
-  enhancer,
-);
+const store = createStore(reducer, preloadedState, enhancer);
 
 // To replace the store's reducer whenever a new reducer is registered.
 reducerRegistry.setChangeListener((reducers) => {
