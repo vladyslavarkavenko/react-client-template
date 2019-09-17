@@ -6,6 +6,7 @@ import Icon from './chooseRole/Icon';
 import { setActiveRole } from '../modules/auth';
 import AuthGuard from '../components/HOCs/AuthGuard';
 import Loader from '../components/ui-components/Loader';
+import routing from '../utils/routing';
 
 // TODO: Split text to locales file.
 class ChooseRole extends React.Component {
@@ -25,7 +26,7 @@ class ChooseRole extends React.Component {
     const { activeRole, rolesPermissions } = this.props;
 
     if (activeRole) {
-      return <Redirect to="/account/profile" />;
+      return <Redirect to={routing().profile}/>;
     }
 
     if (!rolesPermissions) {

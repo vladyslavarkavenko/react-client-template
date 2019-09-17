@@ -38,7 +38,7 @@ export function addResponseIntercept(store) {
       const { response: { status } } = err;
 
       if (status === 404) {
-        store.dispatch(redirectTo('/404'));
+        store.dispatch(redirectTo(routing().notFound));
       }
 
       if (status === 401) {

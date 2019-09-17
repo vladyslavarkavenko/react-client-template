@@ -10,6 +10,7 @@ import SvgBell from '../../../../public/assets/svg/bell.svg';
 import SvgSearch from '../../../../public/assets/svg/search.svg';
 import SvgQuestion from '../../../../public/assets/svg/question.svg';
 import SvgArrowDown from '../../../../public/assets/svg/arrow-down.svg';
+import routing from '../../utils/routing';
 
 // TODO: Split all text to local.
 // TODO: On click outside of menu close it.
@@ -57,7 +58,7 @@ class TopBarWithProfile extends React.Component {
         {
           isCustomer
           && (
-            <Link to="/share-opinion" className="share-opinion-btn">
+            <Link to={routing().shareOpinion} className="share-opinion-btn">
               Share your opinion
             </Link>
           )
@@ -85,12 +86,12 @@ class TopBarWithProfile extends React.Component {
           && (
             <ul className="menu">
               <li>
-                <Link to="/profile">
+                <Link to={routing().profile}>
                   Profile
                 </Link>
               </li>
               <li onClick={this.toggleMenu}>
-                <Link to="/">
+                <Link to={routing().root}>
                   Settings
                 </Link>
               </li>

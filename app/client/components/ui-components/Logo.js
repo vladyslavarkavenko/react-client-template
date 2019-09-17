@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import routing from '../../utils/routing';
 
 const Logo = () => (
-  <Link to="/" className="nav-bar__logo">
+  <Link to={routing().root} className="nav-bar__logo">
     <img
       src="/assets/img/logo.png"
       alt="cTRU-Logo"

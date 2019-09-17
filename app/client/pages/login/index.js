@@ -8,6 +8,7 @@ import Input from '../../components/ui-components/CustomInput';
 import PasswordInput from '../../components/PasswordInput';
 import { validateEmail, validatePassword } from '../../utils/validator';
 import displayError from '../../utils/displayError';
+import routing from '../../utils/routing';
 
 const initialErrorsState = {
   emailError: null,
@@ -50,7 +51,7 @@ class LogIn extends React.Component {
       login({ email, password }, err => (
         err
           ? displayError(err)
-          : history.push('/account/profile')
+          : history.push(routing().profile)
       ));
     } else {
       const newState = {};
@@ -103,7 +104,7 @@ class LogIn extends React.Component {
           </div>
         </form>
         <div className="text-center">
-          <Link to="/forgot-password">
+          <Link to={routing().forgotPassword}>
             {i18next.t('login.forgotPassword')}
           </Link>
         </div>

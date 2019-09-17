@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import PasswordInput from '../../components/PasswordInput';
 import Input from '../../components/ui-components/CustomInput';
+import routing from '../../utils/routing';
 
 // TODO: Write logic for handling that.
 
@@ -16,7 +17,7 @@ export default function ForgotPassword({ handleSubmitBtn }) {
           <button type="submit" className="button form__submit-btn">
             Save
           </button>
-          <Link to="/login" className="button form__cancel-btn">
+          <Link to={routing().login} className="button form__cancel-btn">
             Cancel
           </Link>
         </div>
