@@ -50,7 +50,7 @@ class LogIn extends React.Component {
       login({ email, password }, err => (
         err
           ? displayError(err)
-          : history.push('/')
+          : history.push('/account/profile')
       ));
     } else {
       const newState = {};

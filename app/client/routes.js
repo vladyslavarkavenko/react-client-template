@@ -3,29 +3,18 @@ import React from 'react';
 
 import customLoadable from './components/customLoadable';
 
-// TODO: Split all user related routes to /profile/... sub-routes for ssr.
-// TODO: Split views and routes for different roles.
 
 const routes = [
   {
     path: '/',
     exact: true,
-    component: customLoadable({
-      loader: () => import('./pages/Dashboard'),
-    }),
+    component: () => <Redirect to="/account" />,
   },
   {
-    path: '/choose-role',
+    path: '/registration',
     exact: true,
     component: customLoadable({
-      loader: () => import('./pages/ChooseRole'),
-    }),
-  },
-  {
-    path: '/share-opinion',
-    exact: true,
-    component: customLoadable({
-      loader: () => import('./pages/ShareOpinipon'),
+      loader: () => import('./pages/Register'),
     }),
   },
   {
@@ -36,18 +25,45 @@ const routes = [
     }),
   },
   {
-    path: '/registration',
+    path: '/choose-role',
     exact: true,
     component: customLoadable({
-      loader: () => import('./pages/Register'),
+      loader: () => import('./pages/ChooseRole'),
     }),
   },
   {
-    path: '/profile',
-    exact: true,
+    path: '/account',
     component: customLoadable({
-      loader: () => import('./pages/Profile'),
+      loader: () => import('./pages/Account'),
     }),
+    routes: [
+      {
+        path: '/account',
+        exact: true,
+        component: () => <Redirect to="/account/profile" />,
+      },
+      {
+        path: '/account/profile',
+        exact: true,
+        component: customLoadable({
+          loader: () => import('./pages/Profile'),
+        }),
+      },
+      {
+        path: '/account/dashboard',
+        exact: true,
+        component: customLoadable({
+          loader: () => import('./pages/Dashboard'),
+        }),
+      },
+      {
+        path: '/account/share-opinion',
+        exact: true,
+        component: customLoadable({
+          loader: () => import('./pages/ShareOpinion'),
+        }),
+      },
+    ],
   },
   {
     path: '/forgot-password',

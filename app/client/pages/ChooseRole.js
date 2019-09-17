@@ -1,38 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { Redirect } from 'react-router-dom';
+
+import Icon from './chooseRole/Icon';
 import { setActiveRole } from '../modules/auth';
 import AuthGuard from '../components/HOCs/AuthGuard';
-import { ROLES } from '../constants';
+import Loader from '../components/ui-components/Loader';
 
-import SvgAdmin from '../../../public/assets/svg/admin.svg';
-import SvgAnalyst from '../../../public/assets/svg/analyst.svg';
-import SvgCustomer from '../../../public/assets/svg/customer.svg';
-import SvgManager from '../../../public/assets/svg/manager.svg';
-
-const {
-  CUSTOMER,
-  ADMIN,
-  ANALYST,
-  MANAGER,
-} = ROLES;
-
-const Icon = ({ role }) => {
-  switch (role) {
-    case CUSTOMER:
-      return <SvgCustomer />;
-    case ADMIN:
-      return <SvgAdmin />;
-    case ANALYST:
-      return <SvgAnalyst />;
-    case MANAGER:
-      return <SvgManager />;
-    default:
-      return null;
-  }
-};
-
+// TODO: Split text to locales file.
 class ChooseRole extends React.Component {
   constructor(props) {
     super(props);
@@ -41,17 +16,20 @@ class ChooseRole extends React.Component {
   }
 
   setActiveRole(role) {
-    const { setActiveRole, history } = this.props;
+    const { setActiveRole } = this.props;
 
     setActiveRole(role);
-    history.push('/');
   }
 
   render() {
     const { activeRole, rolesPermissions } = this.props;
 
     if (activeRole) {
-      return <Redirect to="/" />;
+      return <Redirect to="/account/profile" />;
+    }
+
+    if (!rolesPermissions) {
+      return <Loader />;
     }
 
     return (
@@ -60,8 +38,7 @@ class ChooseRole extends React.Component {
           <h1 className="form-page__title"> Choose your role </h1>
           <div className="cards">
             {
-              rolesPermissions
-              && Object.keys(rolesPermissions)
+              Object.keys(rolesPermissions)
                 .map(role => (
                   <button
                     key={role}

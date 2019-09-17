@@ -7,12 +7,14 @@
     "prod:build:client": "webpack",
     "prod:build:server": "NODE_ENV=production node ./build/server/index.js",
     "prod:start": "npm run prod:build && npm run prod:build:client && npm run prod:build:server",
+
     "dev:build:client": "webpack --config webpack.config.dev.js -w",
     "dev:hot:client": "node devServer.js",
     "dev:build:server": "NODE_ENV=development nodemon -x babel-node ./app/server/index.js -w ./app/server/* ",
     "start": "npm-run-all -p dev:build:client dev:hot:client dev:build:server",
-    "lint:js": "eslint src/ --ext .js,.jsx",
-    "lint:js:fix": "eslint src/ --ext .js,.jsx --fix"
+
+    "lint:js": "eslint app/ --ext .js,.jsx",
+    "lint:js:fix": "eslint app/ --ext .js,.jsx --fix"
   },
   "author": "V.V.Arkavenko",
   "license": "MIT",

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 
 import AuthGuard from '../components/HOCs/AuthGuard';
 import RolesManager from '../components/HOCs/RolesManager';
@@ -10,7 +9,6 @@ class Dashboard extends React.Component {
     return (
       <div>
         Dashboard
-        <Redirect to="/profile" />
       </div>
     );
   }

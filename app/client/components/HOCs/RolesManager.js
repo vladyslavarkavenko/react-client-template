@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-// TODO: Make good looking loader.
+import Loader from '../ui-components/Loader';
 
 export default (OriginalComponent) => {
   const MixedComponent = (props) => {
     const { rolesPermissions, activeRole } = props;
 
     if (rolesPermissions === null) {
-      return <div className="loading"> Loading... </div>;
+      return <Loader />;
     }
     if (!activeRole) {
       return <Redirect to="/choose-role" />;

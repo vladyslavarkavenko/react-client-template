@@ -1,13 +1,8 @@
+import AuthService from '../services/auth';
 import { setApiHeaders } from '../utils/api';
 import reducerRegistry from '../utils/reducerRegistry';
-import AuthService from '../services/auth';
-import { ROLES } from '../constants';
-
-const {
-  CUSTOMER, ADMIN, ANALYST, MANAGER,
-} = ROLES;
-
-// TODO: Think about saving activeRole to localStorage.
+import { setTokens, stateFromRes, removeTokens } from './auth/helpers';
+import { setCompanies } from './companies';
 
 const reducerName = 'auth';
 
@@ -15,16 +10,17 @@ const createActionName = name => `app/${reducerName}/${name}`;
 
 const SET_USER = createActionName('SET_USER');
 const SET_ACTIVE_ROLE = createActionName('SET_ACTIVE_ROLE');
-const SET_ROLES = createActionName('SET_ROLES');
 const AUTHORIZE = createActionName('AUTHORIZE');
+const SET_ROLES = createActionName('SET_ROLES');
 
 const initialState = {
   user: null,
   isAuthorized: null,
-  activeRole: null, // CUSTOMER/MANAGER/ANALYST/ADMIN
+  activeRole: null, // CUSTOMER/ MANAGER/ ANALYST/ ADMIN
   rolesPermissions: null, // { CUSTOMER: [id], MANAGER: id, ANALYST: id, ADMIN: id }
-  companies: null, // { id1: {}, id2: {}, ... }
 };
+
+// TODO: Check refresh token functionality.
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -39,59 +35,21 @@ export default function reducer(state = initialState, action) {
         isAuthorized: action.isAuthorized,
       };
     case SET_ROLES: {
-      const {
-        companies,
-        rolesPermissions,
-        activeRole,
-      } = action;
+      const { type, ...rest } = action;
 
-      return {
-        ...state,
-        companies,
-        rolesPermissions,
-        activeRole,
-      };
+      return { ...state, ...rest };
     }
     case SET_ACTIVE_ROLE:
       return {
         ...state,
         activeRole: action.role,
       };
-    // !
-    // eslint-disable-next-line no-use-before-define
-    case SET_COMPANY: {
-      // Broke immutability.
-      const { company } = action;
-      const newCompanies = { ...state.companies };
-      newCompanies[company.id] = company;
-
-      return {
-        ...state,
-        companies: newCompanies,
-      };
-    }
     default:
       return state;
   }
 }
 
-export const setTokens = ({ access, refresh }) => {
-  if (access) {
-    localStorage.setItem('access_token', access);
-    setApiHeaders({ Authorization: `Bearer ${access}` });
-  }
-  if (refresh) {
-    localStorage.setItem('refresh_token', refresh);
-  }
-};
-
-const removeTokens = () => {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('refresh_token');
-  setApiHeaders({ Authorization: '' });
-};
-
-// Helper actions
+// Sync actions
 const setUser = user => ({
   user,
   type: SET_USER,
@@ -102,18 +60,21 @@ const toggleAuthorize = (isAuthorized = true) => ({
   type: AUTHORIZE,
 });
 
-export const setActiveRole = role => ({
-  role,
-  type: SET_ACTIVE_ROLE,
-});
-
-const setRoles = ({ companies, rolesPermissions, activeRole }) => ({
-  activeRole,
-  companies,
-  rolesPermissions,
+const setRoles = data => ({
+  ...data,
   type: SET_ROLES,
 });
 
+export const setActiveRole = (role) => {
+  localStorage.setItem('role', role);
+
+  return ({
+    role,
+    type: SET_ACTIVE_ROLE,
+  });
+};
+
+// Async actions
 function obtainTokens(data, cb) {
   return dispatch => AuthService.obtainTokens(data)
     .then((tokens) => {
@@ -127,65 +88,6 @@ function obtainTokens(data, cb) {
     });
 }
 
-// External actions
-// TODO: Remove this fn to another file.
-function stateFromRes({ customers, staff }) {
-  const {
-    company,
-    isAdmin,
-    isAnalyst,
-    isManager,
-  } = staff;
-
-  let activeRole = null;
-  const companies = {};
-  const rolesPermissions = {};
-
-  if (company) {
-    const { id } = company;
-
-    companies[id] = company;
-    if (isManager) {
-      rolesPermissions[MANAGER] = id;
-    }
-    if (isAnalyst) {
-      rolesPermissions[ANALYST] = id;
-    }
-    if (isAdmin) {
-      rolesPermissions[ADMIN] = id;
-    }
-  }
-
-  if (customers.length) {
-    rolesPermissions[CUSTOMER] = [];
-    customers.forEach(({ company, manager }) => {
-      const { id } = company;
-
-      companies[id] = { ...company, manager };
-      rolesPermissions[CUSTOMER].push(id);
-    });
-  }
-
-  const availableRoles = Object.keys(rolesPermissions);
-  if (availableRoles.length === 1) {
-    // eslint-disable-next-line prefer-destructuring
-    activeRole = availableRoles[0];
-  }
-
-  return { companies, rolesPermissions, activeRole };
-}
-
-export function getRoles(cb) {
-  return dispatch => AuthService.getRoles()
-    .then((res) => {
-      dispatch(setRoles(stateFromRes(res)));
-      cb && cb();
-    })
-    .catch((err) => {
-      cb && cb(err);
-    });
-}
-
 export function signout() {
   return (dispatch) => {
     removeTokens();
@@ -193,7 +95,20 @@ export function signout() {
   };
 }
 
-export function getUser(cb) {
+function getRoles(cb) {
+  return dispatch => AuthService.getRoles()
+    .then((res) => {
+      const { companies, ...rest } = stateFromRes(res);
+      dispatch(setRoles(rest));
+      dispatch(setCompanies(companies));
+      cb && cb();
+    })
+    .catch((err) => {
+      cb && cb(err);
+    });
+}
+
+function getUser(cb) {
   return dispatch => AuthService.getUser()
     .then((user) => {
       dispatch(setUser(user));
@@ -228,17 +143,22 @@ export function useRefreshToken() {
   };
 }
 
-export function login(data, cb) {
+export function init() {
   return (dispatch) => {
-    const newCb = (err) => {
-      if (err) {
-        cb(err);
-      } else {
-        dispatch(getUser(cb));
-      }
-    };
+    const accessToken = localStorage.getItem('access_token');
 
-    dispatch(obtainTokens(data, newCb));
+    if (accessToken) {
+      setApiHeaders({ Authorization: `Bearer ${accessToken}` });
+      dispatch(getUser());
+
+      const activeRole = localStorage.getItem('role');
+
+      if (activeRole) {
+        dispatch(setActiveRole(activeRole));
+      }
+    } else {
+      dispatch(useRefreshToken());
+    }
   };
 }
 
@@ -259,23 +179,18 @@ export function register(data, cb) {
     .catch(cb);
 }
 
-// !
-const SET_COMPANY = createActionName('SET_COMPANY');
+export function login(data, cb) {
+  return (dispatch) => {
+    const newCb = (err) => {
+      if (err) {
+        cb(err);
+      } else {
+        dispatch(getUser(cb));
+      }
+    };
 
-const setCompany = company => ({
-  company,
-  type: SET_COMPANY,
-});
-
-export function updateCompany(data, cb) {
-  console.log('data', data);
-  return dispatch => AuthService.updateCompany(data)
-    .then((company) => {
-      console.log('company', company);
-      dispatch(setCompany(company));
-      cb();
-    })
-    .catch(err => console.log('err', err));
+    dispatch(obtainTokens(data, newCb));
+  };
 }
 
 reducerRegistry.register(reducerName, reducer);

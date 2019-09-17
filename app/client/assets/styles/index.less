@@ -6,6 +6,7 @@
 @import "ui/_button";
 @import "ui/_form";
 @import "ui/_inputs";
+@import "ui/_loader";
 
 // Components
 @import "components/_navbar";
@@ -76,12 +77,11 @@ ul, ol {
 }
 
 .loading {
-  height: 100%;
-  min-height: 100vh;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-grow: 1;
+  margin-top: -60px;
 }
 
 .text-center {

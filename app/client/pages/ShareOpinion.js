@@ -9,7 +9,7 @@ class Profile extends React.Component {
   render() {
     return (
       <div className="content">
-        <img src="/assets/img/sss.png" alt="" style={{ width: '100%' }}/>
+       Share your opinion
       </div>
     );
   }

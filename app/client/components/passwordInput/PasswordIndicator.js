@@ -14,7 +14,7 @@ export default function PasswordIndicator({ value }) {
 
   const lowerCaseUsed = /[a-z]/.test(value);
   const upperCaseUsed = /[A-Z]/.test(value);
-  const numbersUsed = /[0-9]/.test(value);
+  const numbersUsed = /[0-9]/.test(value); // TODO: Add special symb.
 
   const level = [lowerCaseUsed, upperCaseUsed, numbersUsed].filter(b => b).length;
 
