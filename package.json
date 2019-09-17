@@ -15,7 +15,7 @@
 
     "lint:js": "eslint app/ --ext .js,.jsx",
     "lint:js:fix": "eslint app/ --ext .js,.jsx --fix",
-    "prettier": "prettier --write app/**/*.(js|jsx)"
+    "prettier": "prettier --write app/**/*.jsx app/**/*.js"
   },
   "author": "V.V.Arkavenko",
   "license": "MIT",
