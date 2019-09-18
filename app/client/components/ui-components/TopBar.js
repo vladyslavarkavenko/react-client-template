@@ -9,12 +9,12 @@ import { changeLanguage } from '../../modules/language';
 const options = [
   {
     value: 'en',
-    label: 'EN',
+    label: 'EN'
   },
   {
     value: 'de',
-    label: 'DE',
-  },
+    label: 'DE'
+  }
 ];
 
 // TODO: Add styling for language select.
@@ -48,8 +48,11 @@ class TopBar extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  changeLanguage: lng => dispatch(changeLanguage(lng)),
+const mapDispatchToProps = (dispatch) => ({
+  changeLanguage: (lng) => dispatch(changeLanguage(lng))
 });
 
-export default connect(null, mapDispatchToProps)(TopBar);
+export default connect(
+  null,
+  mapDispatchToProps
+)(TopBar);

@@ -2,14 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { ROLES } from '../constants';
+import { updateCompany } from '../modules/companies';
 import ProfileForAdmin from './profile/ProfileForAdmin';
 import ProfileForAnalyst from './profile/ProfileForAnalyst';
 import ProfileForManager from './profile/ProfileForManager';
 import ProfileForCustomer from './profile/ProfileForCustomer';
 
-const {
-  ADMIN, MANAGER, ANALYST, CUSTOMER,
-} = ROLES;
+const { ADMIN, MANAGER, ANALYST, CUSTOMER } = ROLES;
 
 const Profile = (props) => {
   let Page;
@@ -38,10 +37,13 @@ const Profile = (props) => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   activeRole: state.auth.activeRole,
   rolesPermissions: state.auth.rolesPermissions,
-  companies: state.companies.companies,
+  companies: state.companies.companies
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(
+  mapStateToProps,
+  { updateCompany }
+)(Profile);

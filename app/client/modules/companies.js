@@ -3,13 +3,13 @@ import CompaniesService from '../services/companies';
 
 const reducerName = 'companies';
 
-const createActionName = name => `app/${reducerName}/${name}`;
+const createActionName = (name) => `app/${reducerName}/${name}`;
 
 const SET_COMPANY = createActionName('SET_COMPANY');
 const SET_COMPANIES = createActionName('SET_COMPANIES');
 
 const initialState = {
-  companies: null, // { id1: {}, id2: {}, ... }
+  companies: null // { id1: {}, id2: {}, ... }
 };
 
 export default function reducer(state = initialState, action) {
@@ -19,7 +19,7 @@ export default function reducer(state = initialState, action) {
 
       return {
         ...state,
-        companies,
+        companies
       };
     }
     case SET_COMPANY: {
@@ -30,7 +30,7 @@ export default function reducer(state = initialState, action) {
 
       return {
         ...state,
-        companies: newCompanies,
+        companies: newCompanies
       };
     }
     default:
@@ -38,24 +38,25 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-const setCompany = company => ({
+const setCompany = (company) => ({
   company,
-  type: SET_COMPANY,
+  type: SET_COMPANY
 });
 
-export const setCompanies = companies => ({
+export const setCompanies = (companies) => ({
   companies,
-  type: SET_COMPANIES,
+  type: SET_COMPANIES
 });
 
 // TODO: Check this.
 export function updateCompany(data, cb) {
-  return dispatch => CompaniesService.updateCompany(data)
-    .then((company) => {
-      dispatch(setCompany(company));
-      cb();
-    })
-    .catch(err => console.log('err', err));
+  return (dispatch) =>
+    CompaniesService.updateCompany(data)
+      .then((company) => {
+        dispatch(setCompany(company));
+        cb();
+      })
+      .catch((err) => console.log('err', err));
 }
 
 reducerRegistry.register(reducerName, reducer);

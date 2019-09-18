@@ -4,7 +4,7 @@ const initialState = null;
 
 const reducerName = 'redirect';
 
-const createActionName = name => `app/${reducerName}/${name}`;
+const createActionName = (name) => `app/${reducerName}/${name}`;
 
 // actions name
 const REDIRECT = createActionName('REDIRECT');
@@ -26,5 +26,5 @@ export default function reducer(state = initialState, action = {}) {
 reducerRegistry.register(reducerName, reducer);
 
 // action creators
-export const redirectTo = to => ({ to, type: REDIRECT });
+export const redirectTo = (to) => ({ to, type: REDIRECT });
 export const clearRedirect = () => ({ type: CLEAR_REDIRECT });

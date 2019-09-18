@@ -10,12 +10,11 @@ import {
   validatePassword,
   validateFirstName,
   validateLastName,
-  validatePhone,
+  validatePhone
 } from '../../utils/validator';
 import { register } from '../../modules/auth';
 import displayError from '../../utils/displayError';
 import routing from '../../utils/routing';
-
 
 const initialErrorsState = {
   errorFirstName: '',
@@ -23,7 +22,7 @@ const initialErrorsState = {
   errorEmail: '',
   errorPhone: '',
   errorPassword: '',
-  errorPolicy: false,
+  errorPolicy: false
 };
 
 // TODO: Fix ssr (double loading).
@@ -41,7 +40,7 @@ class SignUp extends React.Component {
       password: '',
       policy: false,
       token: null,
-      ...initialErrorsState,
+      ...initialErrorsState
     };
 
     this.onChange = this.onChange.bind(this);
@@ -50,10 +49,8 @@ class SignUp extends React.Component {
 
   componentDidMount() {
     const {
-      location: {
-        search,
-      },
-      history,
+      location: { search },
+      history
     } = this.props;
     const { token, email } = queryString.parse(search);
 
@@ -71,9 +68,7 @@ class SignUp extends React.Component {
   }
 
   onChange(e) {
-    const {
-      value, name, type, checked,
-    } = e.target;
+    const { value, name, type, checked } = e.target;
 
     this.setState({ [name]: type === 'checkbox' ? checked : value });
   }
@@ -84,15 +79,7 @@ class SignUp extends React.Component {
     this.setState({ ...initialErrorsState });
 
     const { register, history } = this.props;
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      password,
-      policy,
-      token,
-    } = this.state;
+    const { firstName, lastName, email, phone, password, policy, token } = this.state;
 
     const isFirstNameValid = validateFirstName(firstName);
     const isLastNameValid = validateLastName(lastName);
@@ -101,12 +88,12 @@ class SignUp extends React.Component {
     const isPhoneValid = validatePhone(phone);
 
     if (
-      isEmailValid
-      && isPasswordValid
-      && isFirstNameValid
-      && isLastNameValid
-      && isPhoneValid
-      && policy
+      isEmailValid &&
+      isPasswordValid &&
+      isFirstNameValid &&
+      isLastNameValid &&
+      isPhoneValid &&
+      policy
     ) {
       const data = {
         firstName,
@@ -114,14 +101,10 @@ class SignUp extends React.Component {
         phone,
         email,
         password,
-        token,
+        token
       };
 
-      register(data, err => (
-        err
-          ? displayError(err)
-          : history.push(routing().root)
-      ));
+      register(data, (err) => (err ? displayError(err) : history.push(routing().root)));
     } else {
       const newState = {};
 
@@ -161,7 +144,7 @@ class SignUp extends React.Component {
       errorEmail,
       errorPhone,
       errorPassword,
-      errorPolicy,
+      errorPolicy
     } = this.state;
 
     return (
@@ -210,15 +193,10 @@ class SignUp extends React.Component {
               type="checkbox"
               id="policy"
             />
-            <label htmlFor="policy">
-              {i18next.t('register.policy')}
-            </label>
+            <label htmlFor="policy">{i18next.t('register.policy')}</label>
           </div>
           <div className="form__bottom">
-            <button
-              type="submit"
-              className="button form__submit-btn"
-            >
+            <button type="submit" className="button form__submit-btn">
               {i18next.t('register.buttons.signUp')}
             </button>
           </div>
@@ -228,4 +206,7 @@ class SignUp extends React.Component {
   }
 }
 
-export default connect(null, { register })(SignUp);
+export default connect(
+  null,
+  { register }
+)(SignUp);

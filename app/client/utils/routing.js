@@ -1,22 +1,21 @@
-export default (params) => {
-  return {
-    root: '/',
+export default (/* params */) => ({
+  root: '/',
 
-    notFound: '/not-found',
+  notFound: '/not-found',
 
-    login: '/login',
+  login: '/login',
+  registration: '/registration',
+  forgotPassword: '/forgot-password',
 
-    registration: '/registration',
-    forgotPassword: '/forgot-password',
+  chooseRole: '/choose-role',
 
-    chooseRole: '/choose-role',
+  account: '/account',
+  profile: '/account/profile',
+  about: '/account/profile/about',
+  overview: '/account/profile/overview',
+  dashboard: '/account/dashboard',
+  shareOpinion: '/account/share-opinion'
 
-    account: '/account',
-    profile: '/account/profile',
-    dashboard: '/account/dashboard',
-    shareOpinion: '/account/share-opinion'
-
-    // route with params example:
-    // changePassword: `/auth/reset/${params ? params : ':token'}`,
-  };
-};
+  // route with params example:
+  // changePassword: `/auth/reset/${params ? params : ':token'}`,
+});

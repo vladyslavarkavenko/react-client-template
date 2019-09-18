@@ -12,7 +12,7 @@ import routing from '../../utils/routing';
 
 const initialErrorsState = {
   emailError: null,
-  passwordError: null,
+  passwordError: null
 };
 
 // TODO: Remove errors when user starts typing in that field. (Think about it)
@@ -24,7 +24,7 @@ class LogIn extends React.Component {
     this.state = {
       email: '',
       password: '',
-      ...initialErrorsState,
+      ...initialErrorsState
     };
 
     this.onChange = this.onChange.bind(this);
@@ -48,11 +48,9 @@ class LogIn extends React.Component {
     const isPasswordValid = validatePassword(password);
 
     if (isEmailValid && isPasswordValid) {
-      login({ email, password }, err => (
-        err
-          ? displayError(err)
-          : history.push(routing().profile)
-      ));
+      login({ email, password }, (err) =>
+        err ? displayError(err) : history.push(routing().profile)
+      );
     } else {
       const newState = {};
 
@@ -68,19 +66,11 @@ class LogIn extends React.Component {
   }
 
   render() {
-    const {
-      email,
-      password,
-      emailError,
-      passwordError,
-    } = this.state;
+    const { email, password, emailError, passwordError } = this.state;
 
     return (
       <div className="form-wrapper">
-        <form
-          className="form"
-          onSubmit={this.handleSubmit}
-        >
+        <form className="form" onSubmit={this.handleSubmit}>
           <Input
             name="email"
             value={email}
@@ -95,22 +85,20 @@ class LogIn extends React.Component {
             labelText={i18next.t('login.password')}
           />
           <div className="form__bottom">
-            <button
-              type="submit"
-              className="button form__submit-btn"
-            >
+            <button type="submit" className="button form__submit-btn">
               {i18next.t('login.buttons.login')}
             </button>
           </div>
         </form>
         <div className="text-center">
-          <Link to={routing().forgotPassword}>
-            {i18next.t('login.forgotPassword')}
-          </Link>
+          <Link to={routing().forgotPassword}>{i18next.t('login.forgotPassword')}</Link>
         </div>
       </div>
     );
   }
 }
 
-export default connect(null, { login })(LogIn);
+export default connect(
+  null,
+  { login }
+)(LogIn);

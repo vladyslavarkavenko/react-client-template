@@ -9,5 +9,15 @@ module.exports = {
     NUMBER: 'Phone',
     SITE: 'Web',
     EMAIL: 'Mail'
+  },
+  HEADER_ICONS: {
+    PEN: 'PEN',
+    DELETE: 'DELETE',
+    CAMERA: 'CAMERA'
+  },
+  BTN_TYPES: {
+    BLUE: 'blue',
+    WHITE: 'white',
+    TRANSPARENT: 'transparent'
   }
 };

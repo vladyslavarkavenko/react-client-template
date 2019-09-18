@@ -8,7 +8,7 @@ i18n.init({ lng: 'en', resources });
 
 const reducerName = 'language';
 
-const createActionName = name => `app/${reducerName}/${name}`;
+const createActionName = (name) => `app/${reducerName}/${name}`;
 
 const CHANGE_LANGUAGE = createActionName('CHANGE_LANGUAGE');
 
@@ -19,7 +19,7 @@ export default function reducer(state = initialState, action) {
     case CHANGE_LANGUAGE:
       return {
         ...state,
-        lng: action.lng,
+        lng: action.lng
       };
     default:
       return state;
@@ -27,20 +27,21 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action creators
-const setLanguage = lng => ({
+const setLanguage = (lng) => ({
   lng,
-  type: CHANGE_LANGUAGE,
+  type: CHANGE_LANGUAGE
 });
 
 export function changeLanguage(lng) {
-  return dispatch => import(`../../../public/assets/lng/${lng}.json`)
-    .then(({ default: resources }) => {
-      i18n.init({ lng, resources });
-      dispatch(setLanguage(lng));
-    })
-    .catch((err) => {
-      console.log(`Error loading text file for ${lng} \n`, err);
-    });
+  return (dispatch) =>
+    import(`../../../public/assets/lng/${lng}.json`)
+      .then(({ default: resources }) => {
+        i18n.init({ lng, resources });
+        dispatch(setLanguage(lng));
+      })
+      .catch((err) => {
+        console.log(`Error loading text file for ${lng} \n`, err);
+      });
 }
 
 reducerRegistry.register(reducerName, reducer);

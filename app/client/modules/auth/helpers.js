@@ -1,9 +1,7 @@
 import { setApiHeaders } from '../../utils/api';
 import { ROLES } from '../../constants';
 
-const {
-  CUSTOMER, ADMIN, ANALYST, MANAGER,
-} = ROLES;
+const { CUSTOMER, ADMIN, ANALYST, MANAGER } = ROLES;
 
 export const setTokens = ({ access, refresh }) => {
   if (access) {
@@ -22,12 +20,7 @@ export const removeTokens = () => {
 };
 
 export const stateFromRes = ({ customers, staff }) => {
-  const {
-    company,
-    isAdmin,
-    isAnalyst,
-    isManager,
-  } = staff;
+  const { company, isAdmin, isAnalyst, isManager } = staff;
 
   let activeRole = null;
   const companies = {};

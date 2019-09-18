@@ -1,7 +1,7 @@
-import { Redirect } from 'react-router-dom';
-import routing from './utils/routing';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
+import routing from './utils/routing';
 import customLoadable from './components/customLoadable';
 
 const routes = [
@@ -44,10 +44,30 @@ const routes = [
       },
       {
         path: routing().profile,
-        exact: true,
         component: customLoadable({
           loader: () => import('./pages/Profile')
-        })
+        }),
+        routes: [
+          {
+            path: routing().profile,
+            exact: true,
+            component: () => <Redirect to={routing().about} />
+          },
+          {
+            path: routing().about,
+            exact: true,
+            component: customLoadable({
+              loader: () => import('./pages/profile/About')
+            })
+          },
+          {
+            path: routing().overview,
+            exact: true,
+            component: customLoadable({
+              loader: () => import('./pages/profile/Overview')
+            })
+          }
+        ]
       },
       {
         path: routing().dashboard,

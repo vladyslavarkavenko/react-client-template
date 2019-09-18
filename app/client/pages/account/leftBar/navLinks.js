@@ -11,43 +11,43 @@ const navLinks = [
   {
     title: 'Dashboard',
     Icon: SvgHome,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Opinions',
     Icon: SvgEyeEmpty,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Matching',
     Icon: SvgMatch,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Benchmarks',
     Icon: SvgAnalyst,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Staff',
     Icon: SvgStaff,
-    to: '/',
+    to: '/'
   },
   {
     title: 'My clients',
     Icon: SvgClients,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Community',
     Icon: SvgMegaphone,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Subjects',
     Icon: SvgLightbulb,
-    to: '/',
-  },
+    to: '/'
+  }
 ];
 
 export default navLinks;

@@ -11,13 +11,11 @@ export default (OriginalComponent) => {
     if (isAuthorized === null) {
       return <Loader />;
     }
-    return isAuthorized
-      ? <OriginalComponent {...props} />
-      : <Redirect to={routing().login}/>;
+    return isAuthorized ? <OriginalComponent {...props} /> : <Redirect to={routing().login} />;
   };
 
-  const mapStateToProps = state => ({
-    isAuthorized: state.auth.isAuthorized,
+  const mapStateToProps = (state) => ({
+    isAuthorized: state.auth.isAuthorized
   });
 
   return connect(mapStateToProps)(MixedComponent);

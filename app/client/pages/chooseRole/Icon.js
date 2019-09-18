@@ -6,12 +6,7 @@ import SvgAnalyst from '../../../../public/assets/svg/analyst.svg';
 import SvgCustomer from '../../../../public/assets/svg/customer.svg';
 import SvgManager from '../../../../public/assets/svg/manager.svg';
 
-const {
-  CUSTOMER,
-  ADMIN,
-  ANALYST,
-  MANAGER,
-} = ROLES;
+const { CUSTOMER, ADMIN, ANALYST, MANAGER } = ROLES;
 
 const Icon = ({ role }) => {
   switch (role) {

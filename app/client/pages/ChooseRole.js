@@ -26,7 +26,7 @@ class ChooseRole extends React.Component {
     const { activeRole, rolesPermissions } = this.props;
 
     if (activeRole) {
-      return <Redirect to={routing().profile}/>;
+      return <Redirect to={routing().profile} />;
     }
 
     if (!rolesPermissions) {
@@ -38,18 +38,12 @@ class ChooseRole extends React.Component {
         <div className="roles-content">
           <h1 className="form-page__title"> Choose your role </h1>
           <div className="cards">
-            {
-              Object.keys(rolesPermissions)
-                .map(role => (
-                  <button
-                    key={role}
-                    onClick={() => this.setActiveRole(role)}
-                  >
-                    <Icon role={role} />
-                    <h6>{role}</h6>
-                  </button>
-                ))
-            }
+            {Object.keys(rolesPermissions).map((role) => (
+              <button key={role} onClick={() => this.setActiveRole(role)}>
+                <Icon role={role} />
+                <h6>{role}</h6>
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -57,13 +51,18 @@ class ChooseRole extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   activeRole: state.auth.activeRole,
-  rolesPermissions: state.auth.rolesPermissions,
+  rolesPermissions: state.auth.rolesPermissions
 });
 
-const mapDispatchToProps = dispatch => ({
-  setActiveRole: data => dispatch(setActiveRole(data)),
+const mapDispatchToProps = (dispatch) => ({
+  setActiveRole: (data) => dispatch(setActiveRole(data))
 });
 
-export default AuthGuard(connect(mapStateToProps, mapDispatchToProps)(ChooseRole));
+export default AuthGuard(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ChooseRole)
+);

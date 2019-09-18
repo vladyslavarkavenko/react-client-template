@@ -12,33 +12,9 @@ class Contacts extends React.Component {
 
     return (
       <div>
-        {
-          phone
-          && (
-            <InfoLine
-              type={NUMBER}
-              data={phone}
-            />
-          )
-        }
-        {
-          web
-          && (
-            <InfoLine
-              type={SITE}
-              data={web}
-            />
-          )
-        }
-        {
-          email
-          && (
-            <InfoLine
-              type={EMAIL}
-              data={email}
-            />
-          )
-        }
+        {phone && <InfoLine type={NUMBER} data={phone} />}
+        {web && <InfoLine type={SITE} data={web} />}
+        {email && <InfoLine type={EMAIL} data={email} />}
       </div>
     );
   }

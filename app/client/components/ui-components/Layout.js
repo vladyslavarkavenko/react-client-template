@@ -29,4 +29,7 @@ class Layout extends React.Component {
   }
 }
 
-export default connect(null, { init })(Layout);
+export default connect(
+  null,
+  { init }
+)(Layout);

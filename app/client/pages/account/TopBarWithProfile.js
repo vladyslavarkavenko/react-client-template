@@ -20,7 +20,7 @@ class TopBarWithProfile extends React.Component {
     super(props);
 
     this.state = {
-      showMenu: false,
+      showMenu: false
     };
 
     this.logOut = this.logOut.bind(this);
@@ -28,8 +28,8 @@ class TopBarWithProfile extends React.Component {
   }
 
   toggleMenu() {
-    this.setState(state => ({
-      showMenu: !state.showMenu,
+    this.setState((state) => ({
+      showMenu: !state.showMenu
     }));
   }
 
@@ -51,18 +51,13 @@ class TopBarWithProfile extends React.Component {
         <Logo />
         <div className="search">
           <SvgSearch />
-          <input
-            placeholder="Search"
-          />
+          <input placeholder="Search" />
         </div>
-        {
-          isCustomer
-          && (
-            <Link to={routing().shareOpinion} className="share-opinion-btn">
-              Share your opinion
-            </Link>
-          )
-        }
+        {isCustomer && (
+          <Link to={routing().shareOpinion} className="share-opinion-btn">
+            Share your opinion
+          </Link>
+        )}
         <button>
           <SvgQuestion />
         </button>
@@ -70,49 +65,37 @@ class TopBarWithProfile extends React.Component {
           <SvgBell />
         </button>
         <div className="avatar">
-          <img
-            src="assets/img/empty-avatar.jpg"
-            alt="Avatar"
-          />
+          <img src="assets/img/empty-avatar.jpg" alt="Avatar" />
         </div>
-        <button
-          className="menu-btn"
-          onClick={this.toggleMenu}
-        >
+        <button className="menu-btn" onClick={this.toggleMenu}>
           <SvgArrowDown />
         </button>
-        {
-          showMenu
-          && (
-            <ul className="menu">
-              <li>
-                <Link to={routing().profile}>
-                  Profile
-                </Link>
-              </li>
-              <li onClick={this.toggleMenu}>
-                <Link to={routing().root}>
-                  Settings
-                </Link>
-              </li>
-              <hr />
-              <li onClick={this.logOut}>
-                Log out
-              </li>
-            </ul>
-          )
-        }
+        {showMenu && (
+          <ul className="menu">
+            <li>
+              <Link to={routing().profile}>Profile</Link>
+            </li>
+            <li onClick={this.toggleMenu}>
+              <Link to={routing().root}>Settings</Link>
+            </li>
+            <hr />
+            <li onClick={this.logOut}>Log out</li>
+          </ul>
+        )}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  activeRole: state.auth.activeRole,
+const mapStateToProps = (state) => ({
+  activeRole: state.auth.activeRole
 });
 
-const mapDispatchToProps = dispatch => ({
-  signout: () => dispatch(signout()),
+const mapDispatchToProps = (dispatch) => ({
+  signout: () => dispatch(signout())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TopBarWithProfile);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TopBarWithProfile);

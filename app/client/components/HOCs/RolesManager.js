@@ -13,14 +13,14 @@ export default (OriginalComponent) => {
       return <Loader />;
     }
     if (!activeRole) {
-      return <Redirect to={routing().chooseRole}/>;
+      return <Redirect to={routing().chooseRole} />;
     }
     return <OriginalComponent {...props} />;
   };
 
-  const mapStateToProps = state => ({
+  const mapStateToProps = (state) => ({
     activeRole: state.auth.activeRole,
-    rolesPermissions: state.auth.rolesPermissions,
+    rolesPermissions: state.auth.rolesPermissions
   });
 
   return connect(mapStateToProps)(MixedComponent);

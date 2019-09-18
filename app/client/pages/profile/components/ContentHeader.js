@@ -1,72 +1,81 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import Button from './Button';
+import { HEADER_ICONS, BTN_TYPES } from '../../../constants';
+
 import SvgMapMarker from '../../../../../public/assets/svg/map-marker.svg';
 
-const ContentHeader = ({
-  displayAvatar = false,
-  avatar,
-  location,
-  title,
-  subTitle,
-  renderButtons,
-  navLinks,
-}) => (
-  <div className="content-header">
-    {
-      displayAvatar
-      && (
-        <div className="avatar">
-          <div className="img-wrapper">
-            <img
-              alt="Avatar"
-              src={avatar || 'assets/img/empty-avatar.jpg'}
-            />
+const { PEN, CAMERA, DELETE } = HEADER_ICONS;
+const { TRANSPARENT } = BTN_TYPES;
+
+// eslint-disable-next-line react/prefer-stateless-function
+class ContentHeader extends React.Component {
+  render() {
+    const {
+      displayAvatar = false,
+      avatar,
+      location,
+      title,
+      subTitle,
+      editForm,
+      navLinks,
+      editMode,
+      toggleEditMode
+    } = this.props;
+
+    return (
+      <div className="content-header">
+        {displayAvatar && (
+          <div className="avatar">
+            <div className="img-wrapper">
+              <img alt="Avatar" src={avatar || 'assets/img/empty-avatar.jpg'} />
+            </div>
           </div>
+        )}
+        <div className="info">
+          {editMode ? (
+            <div className="buttons">
+              <Button icon={CAMERA} title="Edit photo" type={TRANSPARENT} />
+              <Button icon={DELETE} title="Delete" type={TRANSPARENT} />
+            </div>
+          ) : (
+            <>
+              {title && <h1>{title}</h1>}
+              {subTitle && <h2>{subTitle}</h2>}
+              {location && (
+                <div className="location">
+                  <SvgMapMarker />
+                  <p>{location}</p>
+                </div>
+              )}
+            </>
+          )}
         </div>
-      )
-    }
-    <div className="info">
-      { title && <h1>{title}</h1> }
-      { subTitle && <h2>{subTitle}</h2> }
-      {
-        location
-        && (
-          <div className="location">
-            <SvgMapMarker />
-            <p>
-              {location}
-            </p>
-          </div>
-        )
-      }
-    </div>
-    {
-      renderButtons
-      && (
-        <div className="buttons">
-          {renderButtons()}
-        </div>
-      )
-    }
-    {
-      navLinks
-      && (
-        <ul className="content-nav-bar">
-          {
-            navLinks.map(({ to, title }) => (
+        {editForm && !editMode && (
+          <Button
+            icon={PEN}
+            title="Edit"
+            onClick={toggleEditMode}
+            className="edit-btn"
+            type={TRANSPARENT}
+          />
+        )}
+        {editMode && editForm}
+        {navLinks && (
+          <ul className="content-nav-bar">
+            {navLinks.map(({ to, title }) => (
               <li key={to}>
                 <NavLink to={to} activeClassName="active">
                   {title}
                 </NavLink>
               </li>
-            ))
-          }
-        </ul>
-      )
-    }
-  </div>
-
-);
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  }
+}
 
 export default ContentHeader;

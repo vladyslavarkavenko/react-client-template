@@ -6,7 +6,7 @@ import { setCompanies } from './companies';
 
 const reducerName = 'auth';
 
-const createActionName = name => `app/${reducerName}/${name}`;
+const createActionName = (name) => `app/${reducerName}/${name}`;
 
 const SET_USER = createActionName('SET_USER');
 const SET_ACTIVE_ROLE = createActionName('SET_ACTIVE_ROLE');
@@ -17,7 +17,7 @@ const initialState = {
   user: null,
   isAuthorized: null,
   activeRole: null, // CUSTOMER/ MANAGER/ ANALYST/ ADMIN
-  rolesPermissions: null, // { CUSTOMER: [id], MANAGER: id, ANALYST: id, ADMIN: id }
+  rolesPermissions: null // { CUSTOMER: [id], MANAGER: id, ANALYST: id, ADMIN: id }
 };
 
 // TODO: Check refresh token functionality.
@@ -27,12 +27,12 @@ export default function reducer(state = initialState, action) {
     case SET_USER:
       return {
         ...state,
-        user: action.user,
+        user: action.user
       };
     case AUTHORIZE:
       return {
         ...state,
-        isAuthorized: action.isAuthorized,
+        isAuthorized: action.isAuthorized
       };
     case SET_ROLES: {
       const { type, ...rest } = action;
@@ -42,7 +42,7 @@ export default function reducer(state = initialState, action) {
     case SET_ACTIVE_ROLE:
       return {
         ...state,
-        activeRole: action.role,
+        activeRole: action.role
       };
     default:
       return state;
@@ -50,42 +50,43 @@ export default function reducer(state = initialState, action) {
 }
 
 // Sync actions
-const setUser = user => ({
+const setUser = (user) => ({
   user,
-  type: SET_USER,
+  type: SET_USER
 });
 
 const toggleAuthorize = (isAuthorized = true) => ({
   isAuthorized,
-  type: AUTHORIZE,
+  type: AUTHORIZE
 });
 
-const setRoles = data => ({
+const setRoles = (data) => ({
   ...data,
-  type: SET_ROLES,
+  type: SET_ROLES
 });
 
 export const setActiveRole = (role) => {
   localStorage.setItem('role', role);
 
-  return ({
+  return {
     role,
-    type: SET_ACTIVE_ROLE,
-  });
+    type: SET_ACTIVE_ROLE
+  };
 };
 
 // Async actions
 function obtainTokens(data, cb) {
-  return dispatch => AuthService.obtainTokens(data)
-    .then((tokens) => {
-      setTokens(tokens);
-      dispatch(toggleAuthorize());
-      cb();
-    })
-    .catch((err) => {
-      dispatch(toggleAuthorize(false));
-      cb(err);
-    });
+  return (dispatch) =>
+    AuthService.obtainTokens(data)
+      .then((tokens) => {
+        setTokens(tokens);
+        dispatch(toggleAuthorize());
+        cb();
+      })
+      .catch((err) => {
+        dispatch(toggleAuthorize(false));
+        cb(err);
+      });
 }
 
 export function signout() {
@@ -96,33 +97,35 @@ export function signout() {
 }
 
 function getRoles(cb) {
-  return dispatch => AuthService.getRoles()
-    .then((res) => {
-      const { companies, ...rest } = stateFromRes(res);
-      dispatch(setRoles(rest));
-      dispatch(setCompanies(companies));
-      cb && cb();
-    })
-    .catch((err) => {
-      cb && cb(err);
-    });
+  return (dispatch) =>
+    AuthService.getRoles()
+      .then((res) => {
+        const { companies, ...rest } = stateFromRes(res);
+        dispatch(setRoles(rest));
+        dispatch(setCompanies(companies));
+        cb && cb();
+      })
+      .catch((err) => {
+        cb && cb(err);
+      });
 }
 
 function getUser(cb) {
-  return dispatch => AuthService.getUser()
-    .then((user) => {
-      dispatch(setUser(user));
-      dispatch(getRoles(cb));
-      dispatch(toggleAuthorize());
-      cb && cb();
-    })
-    .catch((err) => {
-      // If 401 we try to use refresh token (In axios interceptor).
-      if (err.status !== 401) {
-        dispatch(toggleAuthorize(false));
-      }
-      cb && cb(err);
-    });
+  return (dispatch) =>
+    AuthService.getUser()
+      .then((user) => {
+        dispatch(setUser(user));
+        dispatch(getRoles(cb));
+        dispatch(toggleAuthorize());
+        cb && cb();
+      })
+      .catch((err) => {
+        // If 401 we try to use refresh token (In axios interceptor).
+        if (err.status !== 401) {
+          dispatch(toggleAuthorize(false));
+        }
+        cb && cb(err);
+      });
 }
 
 export function useRefreshToken() {
@@ -157,26 +160,28 @@ export function init() {
         dispatch(setActiveRole(activeRole));
       }
     } else {
+      console.log('here1');
       dispatch(useRefreshToken());
     }
   };
 }
 
 export function register(data, cb) {
-  return dispatch => AuthService.register(data)
-    .then((user) => {
-      const newCb = (err) => {
-        if (err) {
-          cb(err);
-        } else {
-          dispatch(getRoles(cb));
-        }
-      };
+  return (dispatch) =>
+    AuthService.register(data)
+      .then((user) => {
+        const newCb = (err) => {
+          if (err) {
+            cb(err);
+          } else {
+            dispatch(getRoles(cb));
+          }
+        };
 
-      dispatch(setUser(user));
-      dispatch(obtainTokens(data, newCb));
-    })
-    .catch(cb);
+        dispatch(setUser(user));
+        dispatch(obtainTokens(data, newCb));
+      })
+      .catch(cb);
 }
 
 export function login(data, cb) {
