@@ -17,7 +17,7 @@ const config = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'public'),
-    publicPath: '/',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -26,12 +26,12 @@ const config = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: 'babel-loader'
           },
           {
-            loader: 'eslint-loader',
-          },
-        ],
+            loader: 'eslint-loader'
+          }
+        ]
       },
       {
         test: /\.less$/,
@@ -41,26 +41,26 @@ const config = {
           //   loader: MiniCssExtractPlugin.loader,
           // },
           'css-loader',
-          'less-loader',
-        ],
-      },
-    ],
+          'less-loader'
+        ]
+      }
+    ]
   },
   plugins: [
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './index.html',
-      filename: 'ssr-template.txt',
+      filename: 'ssr-template.txt'
     }),
     new ReactLoadablePlugin({
-      filename: './public/react-loadable.json',
+      filename: './public/react-loadable.json'
     }),
     // new MiniCssExtractPlugin({
     //   filename: '[name].[hash].css',
     // }),
     new OptimizeCSSAssetsPlugin(),
-    new Dotenv({ path: './config/development.env' }),
-  ],
+    new Dotenv({ path: './config/development.env' })
+  ]
 };
 
 module.exports = config;
