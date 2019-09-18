@@ -6,48 +6,49 @@ import SvgStaff from '../../../../../public/assets/svg/staff.svg';
 import SvgClients from '../../../../../public/assets/svg/clients.svg';
 import SvgMegaphone from '../../../../../public/assets/svg/megaphone.svg';
 import SvgLightbulb from '../../../../../public/assets/svg/lightbulb.svg';
+import routing from '../../../utils/routing';
 
 const navLinks = [
   {
     title: 'Dashboard',
     Icon: SvgHome,
-    to: '/',
+    to: routing().dashboard
   },
   {
     title: 'Opinions',
     Icon: SvgEyeEmpty,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Matching',
     Icon: SvgMatch,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Benchmarks',
     Icon: SvgAnalyst,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Staff',
     Icon: SvgStaff,
-    to: '/',
+    to: '/'
   },
   {
     title: 'My clients',
     Icon: SvgClients,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Community',
     Icon: SvgMegaphone,
-    to: '/',
+    to: '/'
   },
   {
     title: 'Subjects',
     Icon: SvgLightbulb,
-    to: '/',
-  },
+    to: '/'
+  }
 ];
 
 export default navLinks;

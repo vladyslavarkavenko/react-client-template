@@ -1,21 +1,32 @@
 import React from 'react';
-import { hydrate } from 'react-dom';
+import { render } from 'react-dom';
 import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import App from './App';
-import store from './configureStore';
+import App from './components/App';
+import store from './utils/configureStore';
 
 import './assets/styles/index.less';
+import AppWrapper from './components/Wrappers/AppWrapper';
 
-Loadable.preloadReady().then(() => {
-  hydrate(
-    <Provider store={store}>
-      <BrowserRouter>
+const place = document.getElementById('app');
+
+const Application = (
+  <Provider store={store}>
+    <BrowserRouter>
+      <AppWrapper>
         <App />
-      </BrowserRouter>
-    </Provider>,
-    document.getElementById('app')
-  );
-});
+      </AppWrapper>
+    </BrowserRouter>
+  </Provider>
+);
+
+if (place.hasChildNodes() === true) {
+  Loadable.preloadReady().then(() => {
+    // Change to hydration
+    render(Application, place);
+  });
+} else {
+  render(Application, place);
+}

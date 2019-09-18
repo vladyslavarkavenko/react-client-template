@@ -6,8 +6,11 @@ import { clearRedirect } from '../../../modules/redirect';
 
 const RedirectTo = ({ to }) => (to ? <Redirect to={to} /> : null);
 
-const mapStateToProps = state => ({
-  to: state.redirect,
+const mapStateToProps = (state) => ({
+  to: state.redirect
 });
 
-export default connect(mapStateToProps, { clearRedirect })(RedirectTo);
+export default connect(
+  mapStateToProps,
+  { clearRedirect }
+)(RedirectTo);

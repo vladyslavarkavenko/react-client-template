@@ -2,7 +2,7 @@
 export function debounce(f, ms) {
   let timer = null;
 
-  return function (...args) {
+  return function(...args) {
     const onComplete = () => {
       f.apply(this, args);
       timer = null;

@@ -13,25 +13,12 @@ export default function CustomInput({
 }) {
   return (
     <div className="input-block form__row">
-      {
-        error
-        && (
-          <span className="input-error-message">
-            {error}
-          </span>
-        )
-      }
-      {
-        labelText
-        && (
-          <label
-            htmlFor={id || name}
-            className="form__row-label"
-          >
-            {labelText}
-          </label>
-        )
-      }
+      {error && <span className="input-error-message">{error}</span>}
+      {labelText && (
+        <label htmlFor={id || name} className="form__row-label">
+          {labelText}
+        </label>
+      )}
       <input
         id={id || name}
         className={`form__row-input ${error ? 'input-error' : ''}`}

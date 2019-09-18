@@ -13,15 +13,10 @@ class ProfileForAdmin extends React.Component {
   }
 
   render() {
-    const {
-      activeRole,
-      rolesPermissions,
-      companies,
-    } = this.props;
+    const { activeRole, rolesPermissions, companies } = this.props;
 
-    const {
-      email, avatar, phone, web, about, name,
-    } = companies[rolesPermissions[activeRole]];
+    console.log(activeRole, rolesPermissions, companies);
+    const { email, avatar, phone, web, about, name } = companies[rolesPermissions[activeRole]];
 
     return (
       <div className="content">
@@ -31,31 +26,22 @@ class ProfileForAdmin extends React.Component {
           title={name}
           subTitle="89% of clients are satisfied"
           renderButtons={EditButton}
-          navLinks={[
-            { to: '/', title: 'Overview' },
-            { to: '/', title: 'About' },
-          ]}
+          navLinks={[{ to: '/', title: 'Overview' }, { to: '/', title: 'About' }]}
         />
         <ContentBody
           structure={{
             main: [
               {
                 title: 'Portrait',
-                body: about,
-              },
+                body: about
+              }
             ],
             sidebar: [
               {
                 title: 'Contacts',
-                bodyComponent: () => (
-                  <Contacts
-                    email={email}
-                    phone={phone}
-                    web={web}
-                  />
-                ),
-              },
-            ],
+                bodyComponent: () => <Contacts email={email} phone={phone} web={web} />
+              }
+            ]
           }}
         />
       </div>

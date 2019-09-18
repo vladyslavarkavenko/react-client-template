@@ -9,5 +9,9 @@ module.exports = {
     NUMBER: 'Phone',
     SITE: 'Web',
     EMAIL: 'Mail'
+  },
+  TOKENS: {
+    ACCESS: 'access_token',
+    REFRESH: 'refresh_token'
   }
 };

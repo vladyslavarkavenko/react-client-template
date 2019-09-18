@@ -1,5 +1,5 @@
 import React from 'react';
-import { INFO_LINE_TYPES } from '../../../../constants';
+import { INFO_LINE_TYPES } from '../../../../utils/constants';
 
 const { NUMBER, EMAIL, SITE } = INFO_LINE_TYPES;
 
@@ -7,11 +7,7 @@ const InfoBlock = ({ type, data }) => {
   let Line;
   switch (type) {
     case NUMBER:
-      Line = (
-        <a href={`tel:${data}`}>
-          {data}
-        </a>
-      );
+      Line = <a href={`tel:${data}`}>{data}</a>;
       break;
     case EMAIL:
       Line = (
@@ -21,11 +17,7 @@ const InfoBlock = ({ type, data }) => {
       );
       break;
     case SITE:
-      Line = (
-        <a href={`mailto:${data}`}>
-          {data}
-        </a>
-      );
+      Line = <a href={`mailto:${data}`}>{data}</a>;
       break;
     default:
       Line = null;

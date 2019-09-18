@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import Icon from './chooseRole/Icon';
-import { setActiveRole } from '../modules/auth';
+import { setActiveRole } from '../modules/auth/authActions';
 import AuthGuard from '../components/HOCs/AuthGuard';
 import Loader from '../components/ui-components/Loader';
 import routing from '../utils/routing';
+import authSelectors from '../modules/auth/authSelectors';
 
 // TODO: Split text to locales file.
 class ChooseRole extends React.Component {
@@ -26,7 +27,7 @@ class ChooseRole extends React.Component {
     const { activeRole, rolesPermissions } = this.props;
 
     if (activeRole) {
-      return <Redirect to={routing().profile}/>;
+      return <Redirect to={routing().profile} />;
     }
 
     if (!rolesPermissions) {
@@ -38,18 +39,12 @@ class ChooseRole extends React.Component {
         <div className="roles-content">
           <h1 className="form-page__title"> Choose your role </h1>
           <div className="cards">
-            {
-              Object.keys(rolesPermissions)
-                .map(role => (
-                  <button
-                    key={role}
-                    onClick={() => this.setActiveRole(role)}
-                  >
-                    <Icon role={role} />
-                    <h6>{role}</h6>
-                  </button>
-                ))
-            }
+            {Object.keys(rolesPermissions).map((role) => (
+              <button key={role} onClick={() => this.setActiveRole(role)}>
+                <Icon role={role} />
+                <h6>{role}</h6>
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -57,13 +52,16 @@ class ChooseRole extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  activeRole: state.auth.activeRole,
-  rolesPermissions: state.auth.rolesPermissions,
+const mapStateToProps = (state) => ({
+  activeRole: authSelectors.activeRole(state),
+  rolesPermissions: authSelectors.rolePermissions(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  setActiveRole: data => dispatch(setActiveRole(data)),
-});
+const mapDispatchToProps = {
+  setActiveRole
+};
 
-export default AuthGuard(connect(mapStateToProps, mapDispatchToProps)(ChooseRole));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChooseRole);

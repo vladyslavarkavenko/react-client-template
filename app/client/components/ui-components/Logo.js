@@ -4,11 +4,7 @@ import routing from '../../utils/routing';
 
 const Logo = () => (
   <Link to={routing().root} className="nav-bar__logo">
-    <img
-      src="/assets/img/logo.png"
-      alt="cTRU-Logo"
-      className="logo"
-    />
+    <img src="/assets/img/logo.png" alt="cTRU-Logo" className="logo" />
   </Link>
 );
 
