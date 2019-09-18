@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 
 import Logo from './Logo';
-import { DEFAULT_LANGUAGE } from '../../config';
+import { DEFAULT_LANGUAGE } from '../../utils/config';
 import { changeLanguage } from '../../modules/language';
 
 const options = [

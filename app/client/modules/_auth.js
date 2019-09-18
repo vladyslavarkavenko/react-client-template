@@ -1,8 +1,8 @@
 import AuthService from '../services/auth';
 import { setApiHeaders } from '../utils/api';
 import reducerRegistry from '../utils/reducerRegistry';
-import { setTokens, stateFromRes, removeTokens } from './auth/helpers';
-import { setCompanies } from './companies';
+import { setTokens, formatRolesPayload, removeTokens } from './helpers/helpers';
+import { setCompanies } from './_companies';
 
 const reducerName = 'auth';
 
@@ -100,7 +100,7 @@ function getRoles(cb) {
   return (dispatch) =>
     AuthService.getRoles()
       .then((res) => {
-        const { companies, ...rest } = stateFromRes(res);
+        const { companies, ...rest } = formatRolesPayload(res);
         dispatch(setRoles(rest));
         dispatch(setCompanies(companies));
         cb && cb();
@@ -110,6 +110,7 @@ function getRoles(cb) {
       });
 }
 
+//* *
 function getUser(cb) {
   return (dispatch) =>
     AuthService.getUser()
@@ -128,6 +129,7 @@ function getUser(cb) {
       });
 }
 
+//* *
 export function useRefreshToken() {
   return (dispatch) => {
     const refresh = localStorage.getItem('refresh_token');
@@ -160,7 +162,6 @@ export function init() {
         dispatch(setActiveRole(activeRole));
       }
     } else {
-      console.log('here1');
       dispatch(useRefreshToken());
     }
   };

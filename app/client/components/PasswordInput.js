@@ -24,7 +24,7 @@ class PasswordInput extends React.Component {
   }
 
   render() {
-    const { value, onChange, error, labelText, showIndicator = false } = this.props;
+    const { value, onChange, error, labelText, showIndicator = false, readOnly } = this.props;
     const { isPasswordVisible } = this.state;
 
     // TODO: Rewrite this using CustomInput.js
@@ -44,6 +44,7 @@ class PasswordInput extends React.Component {
             value={value}
             type={isPasswordVisible ? 'text' : 'password'}
             className="form__row-input"
+            readOnly={readOnly}
           />
           <button
             className="toggle-password-visibility"

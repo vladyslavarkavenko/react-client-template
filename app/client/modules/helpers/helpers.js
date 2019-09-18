@@ -1,5 +1,5 @@
 import { setApiHeaders } from '../../utils/api';
-import { ROLES } from '../../constants';
+import { ROLES } from '../../utils/constants';
 
 const { CUSTOMER, ADMIN, ANALYST, MANAGER } = ROLES;
 
@@ -19,7 +19,7 @@ export const removeTokens = () => {
   setApiHeaders({ Authorization: '' });
 };
 
-export const stateFromRes = ({ customers, staff }) => {
+export const formatRolesPayload = ({ customers, staff }) => {
   const { company, isAdmin, isAnalyst, isManager } = staff;
 
   let activeRole = null;

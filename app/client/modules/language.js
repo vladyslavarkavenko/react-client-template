@@ -44,4 +44,4 @@ export function changeLanguage(lng) {
       });
 }
 
-reducerRegistry.register(reducerName, reducer);
+// reducerRegistry.register(reducerName, reducer);

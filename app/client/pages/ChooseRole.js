@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import Icon from './chooseRole/Icon';
-import { setActiveRole } from '../modules/auth';
+import { setActiveRole } from '../modules/auth/authActions';
 import AuthGuard from '../components/HOCs/AuthGuard';
 import Loader from '../components/ui-components/Loader';
 import routing from '../utils/routing';
+import authSelectors from '../modules/auth/authSelectors';
 
 // TODO: Split text to locales file.
 class ChooseRole extends React.Component {
@@ -52,17 +53,15 @@ class ChooseRole extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  activeRole: state.auth.activeRole,
-  rolesPermissions: state.auth.rolesPermissions
+  activeRole: authSelectors.activeRole(state),
+  rolesPermissions: authSelectors.rolePermissions(state)
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  setActiveRole: (data) => dispatch(setActiveRole(data))
-});
+const mapDispatchToProps = {
+  setActiveRole
+};
 
-export default AuthGuard(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ChooseRole)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChooseRole);

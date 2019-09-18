@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-import CONFIG from '../config';
-import routing from './routing';
+import CONFIG from './config';
 import { redirectTo } from '../modules/redirect';
-import { useRefreshToken } from '../modules/auth';
+import routing from './routing';
+import { pushRefreshToken } from '../modules/auth/authActions';
+// import { useRefreshToken } from '../modules/_auth';
 
 const instance = axios.create({ baseURL: `${CONFIG.APP_URL}/api` });
 
@@ -48,12 +49,13 @@ export function addResponseIntercept(store) {
       } = err;
 
       if (status === 404) {
-        store.dispatch(redirectTo(routing().notFound));
+        // store.dispatch(redirectTo(routing().notFound));
       }
 
       if (status === 401) {
-        console.log('here2');
-        store.dispatch(useRefreshToken());
+        //TODO: Need improvments
+        store.dispatch(pushRefreshToken());
+        // store.dispatch(useRefreshToken());
       }
 
       return Promise.reject(err);

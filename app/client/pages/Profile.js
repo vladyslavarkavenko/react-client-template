@@ -1,12 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { ROLES } from '../constants';
+//TODO: MERGE: fix new action
+import { ROLES } from '../utils/constants';
 import { updateCompany } from '../modules/companies';
 import ProfileForAdmin from './profile/ProfileForAdmin';
 import ProfileForAnalyst from './profile/ProfileForAnalyst';
 import ProfileForManager from './profile/ProfileForManager';
 import ProfileForCustomer from './profile/ProfileForCustomer';
+import authSelectors from '../modules/auth/authSelectors';
+import companiesSelectors from '../modules/companies/companiesSelectors';
 
 const { ADMIN, MANAGER, ANALYST, CUSTOMER } = ROLES;
 
@@ -38,12 +41,9 @@ const Profile = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  activeRole: state.auth.activeRole,
-  rolesPermissions: state.auth.rolesPermissions,
-  companies: state.companies.companies
+  activeRole: authSelectors.activeRole(state),
+  rolesPermissions: authSelectors.rolePermissions(state),
+  companies: companiesSelectors.data(state)
 });
 
-export default connect(
-  mapStateToProps,
-  { updateCompany }
-)(Profile);
+export default connect(mapStateToProps)(Profile);

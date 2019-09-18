@@ -9,7 +9,6 @@ export default function CustomInput({
   labelText,
   onChange,
   error,
-  className,
   ...rest
 }) {
   return (

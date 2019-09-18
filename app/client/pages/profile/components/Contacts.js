@@ -1,7 +1,7 @@
 import React from 'react';
 
 import InfoLine from './contacts/InfoLine';
-import { INFO_LINE_TYPES } from '../../../constants';
+import { INFO_LINE_TYPES } from '../../../utils/constants';
 
 const { NUMBER, SITE, EMAIL } = INFO_LINE_TYPES;
 

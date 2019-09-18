@@ -4,19 +4,25 @@ import { Redirect } from 'react-router-dom';
 
 import Loader from '../ui-components/Loader';
 import routing from '../../utils/routing';
+import authSelectors from '../../modules/auth/authSelectors';
 
 export default (OriginalComponent) => {
-  const MixedComponent = (props) => {
-    const { isAuthorized } = props;
-    if (isAuthorized === null) {
+  const AuthGuardHOC = ({ isAuthorized, status, ...rest }) => {
+    if (isAuthorized) {
+      return <OriginalComponent {...rest} />;
+    }
+
+    if (status === 'request') {
       return <Loader />;
     }
-    return isAuthorized ? <OriginalComponent {...props} /> : <Redirect to={routing().login} />;
+
+    return <Redirect to={routing().login} />;
   };
 
   const mapStateToProps = (state) => ({
-    isAuthorized: state.auth.isAuthorized
+    isAuthorized: authSelectors.isAuth(state),
+    status: authSelectors.status(state)
   });
 
-  return connect(mapStateToProps)(MixedComponent);
+  return connect(mapStateToProps)(AuthGuardHOC);
 };

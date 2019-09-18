@@ -23,7 +23,7 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-reducerRegistry.register(reducerName, reducer);
+// reducerRegistry.register(reducerName, reducer);
 
 // action creators
 export const redirectTo = (to) => ({ to, type: REDIRECT });
