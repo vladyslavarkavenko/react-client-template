@@ -5,12 +5,13 @@ import Contacts from './components/Contacts';
 // eslint-disable-next-line react/prefer-stateless-function
 class About extends React.Component {
   render() {
-    const { activeRole, rolesPermissions, companies } = this.props;
+    const { activeRole, rolesPermissions, companies, editMode } = this.props;
 
     const { web, email, phone, about } = companies[rolesPermissions[activeRole]];
 
     return (
       <ContentBody
+        editMode={editMode}
         main={[
           {
             title: 'Portrait',

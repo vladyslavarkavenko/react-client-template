@@ -8,7 +8,7 @@ import SvgDelete from '../../../../../public/assets/svg/delete.svg';
 const { PEN, CAMERA, DELETE } = HEADER_ICONS;
 const { WHITE } = BTN_TYPES;
 
-const Button = ({ onClick, title, icon, className, type = WHITE }) => {
+const Button = ({ onClick, title, icon, className, type = WHITE, htmlFor }) => {
   let Svg;
   switch (icon) {
     case PEN:
@@ -26,6 +26,15 @@ const Button = ({ onClick, title, icon, className, type = WHITE }) => {
   }
 
   const newClassName = `btn btn-${type} ${className || ''}`;
+
+  if (htmlFor) {
+    return (
+      <label htmlFor={htmlFor} className={newClassName}>
+        {Svg && <Svg />}
+        {title}
+      </label>
+    );
+  }
 
   return (
     <button className={newClassName} onClick={onClick}>

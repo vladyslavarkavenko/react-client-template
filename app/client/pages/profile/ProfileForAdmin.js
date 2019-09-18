@@ -13,28 +13,70 @@ class ProfileForAdmin extends React.Component {
     const { avatar, name, title } = companies[rolesPermissions[activeRole]];
 
     this.state = {
-      name,
-      title,
-      avatar,
+      name: name || '', // If null default values doesn't work.
+      title: title || '',
+      avatar: avatar || '',
+      newAvatar: '',
       editMode: false
     };
 
     this.onChange = this.onChange.bind(this);
+    this.onCancel = this.onCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.toggleEditMode = this.toggleEditMode.bind(this);
   }
 
+  // eslint-disable-next-line consistent-return
   onChange(e) {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
 
-    this.setState({ [name]: value });
+    if (name === 'avatar') {
+      if (!files) {
+        return this.setState({ avatar: '' });
+      }
+      // eslint-disable-next-line no-undef
+      const reader = new FileReader();
+
+      reader.onload = ({ target: { result } }) => {
+        this.setState({ newAvatar: result, avatar: files[0] });
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      this.setState({ [name]: value });
+    }
   }
 
   onSubmit(e) {
+    // TODO: Add validation.
     e.preventDefault();
     const { updateCompany } = this.props;
+    const { name, title, avatar } = this.state;
 
-    updateCompany(this.state);
+    // eslint-disable-next-line no-undef
+    const data = new FormData();
+
+    if (name) data.append('name', name);
+    if (title) data.append('title', title);
+    // We send avatar only if it is empty string (deleted) or if it is blob type (new image).
+    // When we have string with length that mean we have avatar url from server.
+    if (!avatar.length) data.append('avatar', avatar);
+
+    updateCompany(data, this.toggleEditMode);
+  }
+
+  onCancel(e) {
+    e.preventDefault();
+
+    const { activeRole, rolesPermissions, companies } = this.props;
+    const { avatar, name, title } = companies[rolesPermissions[activeRole]];
+
+    this.setState({
+      name: name || '',
+      title: title || '',
+      avatar: avatar || '',
+      newAvatar: '',
+      editMode: false
+    });
   }
 
   toggleEditMode() {
@@ -48,7 +90,7 @@ class ProfileForAdmin extends React.Component {
       route: { routes }
     } = this.props;
 
-    const { avatar, name, title, editMode } = this.state;
+    const { avatar, newAvatar, name, title, editMode } = this.state;
 
     return (
       <div className="content">
@@ -56,7 +98,8 @@ class ProfileForAdmin extends React.Component {
           editMode={editMode}
           toggleEditMode={this.toggleEditMode}
           displayAvatar
-          avatar={avatar}
+          avatar={newAvatar || avatar}
+          onAvatarChange={this.onChange}
           title={name}
           subTitle="89% of clients are satisfied"
           editForm={
@@ -64,19 +107,17 @@ class ProfileForAdmin extends React.Component {
               inputs={[
                 {
                   name: 'name',
-                  labelText: 'Name',
                   value: name,
                   onChange: this.onChange
                 },
                 {
                   name: 'title',
-                  labelText: 'Title',
                   value: title,
                   onChange: this.onChange
                 }
               ]}
-              onCancel={this.toggleEditMode}
-              onSubmit={this.toggleEditMode}
+              onSubmit={this.onSubmit}
+              onCancel={this.onCancel}
             />
           }
           navLinks={[
@@ -84,7 +125,7 @@ class ProfileForAdmin extends React.Component {
             { to: routing().about, title: 'About' }
           ]}
         />
-        {renderRoutes(routes, this.props)}
+        {renderRoutes(routes, { ...this.props, editMode })}
       </div>
     );
   }

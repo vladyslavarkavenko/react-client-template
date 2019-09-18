@@ -21,7 +21,8 @@ class ContentHeader extends React.Component {
       editForm,
       navLinks,
       editMode,
-      toggleEditMode
+      toggleEditMode,
+      onAvatarChange
     } = this.props;
 
     return (
@@ -29,15 +30,29 @@ class ContentHeader extends React.Component {
         {displayAvatar && (
           <div className="avatar">
             <div className="img-wrapper">
-              <img alt="Avatar" src={avatar || 'assets/img/empty-avatar.jpg'} />
+              <img alt="Avatar" src={avatar || '/assets/img/empty-avatar.jpg'} />
             </div>
           </div>
         )}
         <div className="info">
           {editMode ? (
             <div className="buttons">
-              <Button icon={CAMERA} title="Edit photo" type={TRANSPARENT} />
-              <Button icon={DELETE} title="Delete" type={TRANSPARENT} />
+              <>
+                <Button htmlFor="avatar" icon={CAMERA} title="Edit photo" type={TRANSPARENT} />
+                <input
+                  id="avatar"
+                  type="file"
+                  className="hidden"
+                  name="avatar"
+                  onChange={onAvatarChange}
+                />
+              </>
+              <Button
+                icon={DELETE}
+                title="Delete"
+                type={TRANSPARENT}
+                onClick={() => onAvatarChange({ target: { name: 'avatar' } })}
+              />
             </div>
           ) : (
             <>
