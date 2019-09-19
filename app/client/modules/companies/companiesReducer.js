@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import reducerRegistry from '../../utils/reducerRegistry';
+// import reducerRegistry from '../../utils/reducerRegistry';
 
 import * as actions from './companiesActions';
 import * as auth from '../auth/authActions';

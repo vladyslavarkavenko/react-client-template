@@ -1,19 +1,19 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { withRouter } from "react-router-dom";
+import RedirectWatcher from '../ui-components/layout/RedirectWatcher';
 
-const AppWrapper = (props) => (
+const AppWrapper = ({ children }) => (
   <>
     <Helmet>
       <title>cTRU</title>
       <meta name="description" content="cTRU" />
     </Helmet>
+
+    <RedirectWatcher />
     {/* Notification system */}
     {/* Other modules such as analytics */}
-    <div className="app-wrap">
-      {props.children}
-    </div>
+    <div className="app-wrap">{children}</div>
   </>
 );
 
-export default withRouter(AppWrapper);
+export default AppWrapper;

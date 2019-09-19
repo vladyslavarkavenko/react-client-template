@@ -1,5 +1,5 @@
 import React from 'react';
 
 export default function Overview() {
-  return 'Overview page';
+  return <div>Overview page</div>;
 }

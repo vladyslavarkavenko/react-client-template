@@ -4,6 +4,7 @@ import AuthService from '../../services/auth';
 import { setTokens, removeTokens } from '../helpers/helpers';
 import { TOKENS } from '../../utils/constants';
 import routing from '../../utils/routing';
+import { historyPush } from '../redirect/redirectActions';
 
 export const prefix = 'auth';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -23,7 +24,7 @@ export const pushRefreshToken = createRequestBound('REFRESH_TOKEN_PUSH');
 function* setActiveRoleWorker({ payload }) {
   localStorage.setItem('role', payload);
 
-  yield put(setActiveRole.success(payload))
+  yield put(setActiveRole.success(payload));
 }
 
 function* refreshTokenWorker() {
@@ -47,7 +48,7 @@ function* loginByTokenWorker() {
   // proceed login
   if (accessToken) {
     yield put(pushLoginByToken.request());
-    setTokens({ access: accessToken, refresh: refreshToken })
+    setTokens({ access: accessToken, refresh: refreshToken });
 
     // TODO: Invalid token refreshing logic
     // if (!accessToken && refreshToken) {
@@ -61,7 +62,7 @@ function* loginByTokenWorker() {
         call(() => AuthService.getRoles())
       ]);
 
-      const role = localStorage.getItem('role')
+      const role = localStorage.getItem('role');
 
       if (role) {
         yield put(setActiveRole.success(role));
@@ -76,7 +77,7 @@ function* loginByTokenWorker() {
   }
 }
 
-function* loginWorker({ payload: { email, password, history } }) {
+function* loginWorker({ payload: { email, password } }) {
   yield put(pushLogin.request());
   try {
     const tokenRes = yield call(() => AuthService.obtainTokens({ email, password }));
@@ -87,7 +88,7 @@ function* loginWorker({ payload: { email, password, history } }) {
       call(() => AuthService.getRoles())
     ]);
     // format roles by formatRolesPayload in reducer;
-    const role = localStorage.getItem('role')
+    const role = localStorage.getItem('role');
 
     if (role) {
       yield put(setActiveRole.success(role));
@@ -100,9 +101,7 @@ function* loginWorker({ payload: { email, password, history } }) {
       })
     );
 
-
-
-    history.push(routing().account);
+    yield put(historyPush(routing().account));
   } catch (err) {
     console.error(err);
     yield put(pushLogin.failure());
@@ -110,17 +109,13 @@ function* loginWorker({ payload: { email, password, history } }) {
 }
 
 function* logoutWorker() {
-  removeTokens()
-
-  //TODO: Improve this
-  // yield call(() => window.location.reload());
+  yield removeTokens();
 }
 
-function* signUpWorker({ payload: { input, history } }) {
+function* signUpWorker({ payload: { input } }) {
   yield put(pushSignUp.request());
 
   try {
-    console.log(input);
     yield call(() => AuthService.register(input));
     // start Sign In
     yield put(pushLogin({ email: input.email, password: input.password }));
@@ -139,6 +134,6 @@ export function* authWatcher() {
     takeLatest(pushLogout.TRIGGER, logoutWorker),
     takeLatest(pushSignUp.TRIGGER, signUpWorker),
 
-    takeLatest(setActiveRole.TRIGGER, setActiveRoleWorker),
+    takeLatest(setActiveRole.TRIGGER, setActiveRoleWorker)
   ]);
 }

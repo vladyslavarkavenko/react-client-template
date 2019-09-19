@@ -9,9 +9,9 @@ const appReducer = combineReducers({
 });
 
 export default (state, action) => {
-  // if (action.type === pushLogout.TRIGGER) {
-  //   state = undefined;
-  // }
+  if (action.type === pushLogout.TRIGGER) {
+    state = undefined;
+  }
 
   return appReducer(state, action);
 };

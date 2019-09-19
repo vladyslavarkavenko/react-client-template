@@ -126,7 +126,7 @@ class ProfileForAdmin extends React.Component {
             { to: routing().about, title: 'About' }
           ]}
         />
-        {/*{renderRoutes(routes, { ...this.props, editMode })}*/}
+        {/* {renderRoutes(routes, { ...this.props, editMode })} */}
         <Switch>
           <WrappedRoute
             exact

@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 
 import Icon from './chooseRole/Icon';
 import { setActiveRole } from '../modules/auth/authActions';
-import AuthGuard from '../components/HOCs/AuthGuard';
 import Loader from '../components/ui-components/Loader';
 import routing from '../utils/routing';
 import authSelectors from '../modules/auth/authSelectors';

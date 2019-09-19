@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 import CONFIG from './config';
-import { redirectTo } from '../modules/redirect';
-import routing from './routing';
+// import { redirectTo } from '../modules/redirect';
+// import routing from './routing';
 import { pushRefreshToken } from '../modules/auth/authActions';
 // import { useRefreshToken } from '../modules/_auth';
 
@@ -53,7 +53,7 @@ export function addResponseIntercept(store) {
       }
 
       if (status === 401) {
-        //TODO: Need improvments
+        // TODO: Need improvements
         store.dispatch(pushRefreshToken());
         // store.dispatch(useRefreshToken());
       }

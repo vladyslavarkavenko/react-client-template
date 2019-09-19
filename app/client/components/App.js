@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch } from 'react-router-dom';
 import routing from '../utils/routing';
 
-import customLoadable from '../components/customLoadable';
+import customLoadable from './customLoadable';
 import SignInRoute from './Wrappers/SignInRoute';
 import WrappedRoute from './Wrappers/WrappedRoute';
 import AuthRoute from './Wrappers/AuthRoute';

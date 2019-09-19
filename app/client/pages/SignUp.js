@@ -1,6 +1,7 @@
 import React from 'react';
 import i18next from 'i18next';
 import queryString from 'query-string';
+import { connect } from 'react-redux';
 import routing from '../utils/routing';
 import {
   validateEmail,
@@ -11,7 +12,6 @@ import {
 } from '../utils/validator';
 import Input from '../components/ui-components/CustomInput';
 import PasswordInput from '../components/PasswordInput';
-import { connect } from 'react-redux';
 import { pushSignUp } from '../modules/auth/authActions';
 
 const initialErrorsState = {

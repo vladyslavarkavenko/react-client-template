@@ -5,8 +5,6 @@ import { combineReducers } from 'redux';
 import * as actions from './authActions';
 import { formatRolesPayload } from '../helpers/helpers';
 import { makeStatusReducer } from '../../utils/reduxHelpers';
-import { pushLoginByToken } from './authActions';
-import { pushLogin } from './authActions';
 
 const userInitial = null;
 
@@ -100,7 +98,7 @@ const data = combineReducers({
 });
 
 // TODO: Add different statuses for token and simple login
-const status = makeStatusReducer([pushLoginByToken, pushLogin]);
+const status = makeStatusReducer([actions.pushLoginByToken, actions.pushLogin]);
 
 const authReducer = combineReducers({
   status,

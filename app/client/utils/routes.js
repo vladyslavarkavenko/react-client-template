@@ -47,7 +47,6 @@ const routes = [
         component: customLoadable({
           loader: () => import('../pages/Profile')
         }),
-        //TODO: Apply new routes after merge
         routes: [
           {
             path: routing().profile,

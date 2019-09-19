@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 
 import resources from '../../../public/assets/lng/en.json';
-import reducerRegistry from '../utils/reducerRegistry';
+// import reducerRegistry from '../utils/reducerRegistry';
 
 // TODO: Think how to implement good localization.
 i18n.init({ lng: 'en', resources });

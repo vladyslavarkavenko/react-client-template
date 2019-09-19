@@ -26,7 +26,7 @@ const generateStatusActions = (action) => ({
 });
 
 export function makeStatusReducer(action) {
-  //generate with multiple actions
+  // generate with multiple actions
   if (Array.isArray(action)) {
     let handlers = {};
 
@@ -41,7 +41,7 @@ export function makeStatusReducer(action) {
 }
 
 export function makeStatusWithResetReducer(action, resetAction) {
-  //generate with multiple actions
+  // generate with multiple actions
   if (Array.isArray(action)) {
     let handlers = {
       [resetAction]() {

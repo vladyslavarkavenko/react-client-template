@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
 import PasswordInput from '../components/PasswordInput';
 import Input from '../components/ui-components/CustomInput';
-import { Link } from 'react-router-dom';
 import routing from '../utils/routing';
 
-export default function ForgotPasswordPage(props) {
+export default function ForgotPasswordPage() {
   return (
     <div className="form-page">
       <div className="container">

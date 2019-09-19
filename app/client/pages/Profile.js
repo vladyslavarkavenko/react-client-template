@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-//TODO: MERGE: fix new action
 import { ROLES } from '../utils/constants';
 // import { updateCompany } from '../modules/companies';
 import { pushUpdateCompany } from '../modules/companies/companiesActions';
@@ -34,8 +33,6 @@ const Profile = (props) => {
       break;
   }
 
-  console.log('render profile');
-
   return (
     <div className="content">
       <Page {...props} />
@@ -43,15 +40,14 @@ const Profile = (props) => {
   );
 };
 
-const mapStateToProps = (state, props) => ({
-  ...props,
+const mapStateToProps = (state) => ({
   activeRole: authSelectors.activeRole(state),
   rolesPermissions: authSelectors.rolePermissions(state),
   companies: companiesSelectors.data(state)
 });
 
 const mapDispatchToProps = {
-  //updateCompany
+  // updateCompany
   pushUpdateCompany
 };
 

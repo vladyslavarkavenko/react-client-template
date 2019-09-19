@@ -10,14 +10,12 @@ export default (OriginalComponent) => {
   const RolesManagerHOC = (props) => {
     const { rolesPermissions, activeRole, authStatus } = props;
 
-    if (rolesPermissions === null || authStatus !== 'success') {
+    if (rolesPermissions === null || authStatus === 'request') {
       return <Loader />;
     }
     if (!activeRole) {
       return <Redirect to={routing().chooseRole} />;
     }
-
-    console.log(activeRole);
 
     return <OriginalComponent {...props} />;
   };

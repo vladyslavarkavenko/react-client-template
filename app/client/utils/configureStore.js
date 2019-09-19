@@ -1,4 +1,4 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -6,13 +6,11 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer from '../rootReducer';
 
-import reducerRegistry from './reducerRegistry';
+// import reducerRegistry from './reducerRegistry';
 import { addResponseIntercept } from './api';
-import CONFIG from './config';
+// import CONFIG from './config';
 import rootSaga from '../rootSaga';
 import { pushLoginByToken } from '../modules/auth/authActions';
-
-const { ENV } = CONFIG;
 
 // const preloadedState = window.__PRELOADED_STATE__;
 // delete window.__PRELOADED_STATE__;

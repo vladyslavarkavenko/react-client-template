@@ -1,13 +1,13 @@
 import React from 'react';
 import i18next from 'i18next';
 
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { validateEmail, validatePassword } from '../utils/validator';
 import Input from '../components/ui-components/CustomInput';
 import PasswordInput from '../components/PasswordInput';
-import { Link } from 'react-router-dom';
 import routing from '../utils/routing';
 import { pushLogin } from '../modules/auth/authActions';
-import { connect } from 'react-redux';
 import authSelectors from '../modules/auth/authSelectors';
 
 const initialErrorsState = {
@@ -39,7 +39,7 @@ class Login extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    const { pushLogin, history, status } = this.props;
+    const { pushLogin, status } = this.props;
 
     if (status === 'request') {
       return;
@@ -53,7 +53,7 @@ class Login extends React.Component {
     const isPasswordValid = validatePassword(password);
 
     if (isEmailValid && isPasswordValid) {
-      pushLogin({ email, password, history });
+      pushLogin({ email, password });
 
       // login({ email, password }, err => (
       //   err
@@ -117,8 +117,7 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  history: props.history,
+const mapStateToProps = (state) => ({
   status: authSelectors.status(state)
 });
 

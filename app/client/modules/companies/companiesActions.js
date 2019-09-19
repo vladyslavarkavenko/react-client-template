@@ -14,10 +14,8 @@ function* updateCompanyWorker({ payload: { data, handleFinish } }) {
     // TODO: Check this.
     const company = yield call(() => CompaniesService.updateCompany(data));
 
-    console.log(data, company);
     yield put(pushUpdateCompany.success(company));
     handleFinish();
-
   } catch (err) {
     console.error(err);
   }
