@@ -6,6 +6,7 @@ export default (/* params */) => ({
   login: '/login',
   registration: '/registration',
   forgotPassword: '/forgot-password',
+  resetPassword: '/reset_password/',
 
   chooseRole: '/choose-role',
 

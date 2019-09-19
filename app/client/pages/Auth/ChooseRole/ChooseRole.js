@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import Icon from './chooseRole/Icon';
-import { setActiveRole } from '../modules/auth/authActions';
-import Loader from '../components/ui-components/Loader';
-import routing from '../utils/routing';
-import authSelectors from '../modules/auth/authSelectors';
+import ChooseRoleIcon from './Items/ChooseRoleIcon';
+import { setActiveRole } from '../../../modules/auth/authActions';
+import Loader from '../../../components/ui-components/Layout/Loader';
+import routing from '../../../utils/routing';
+import authSelectors from '../../../modules/auth/authSelectors';
 
 // TODO: Split text to locales file.
 class ChooseRole extends React.Component {
@@ -40,7 +40,7 @@ class ChooseRole extends React.Component {
           <div className="cards">
             {Object.keys(rolesPermissions).map((role) => (
               <button key={role} onClick={() => this.setActiveRole(role)}>
-                <Icon role={role} />
+                <ChooseRoleIcon role={role} />
                 <h6>{role}</h6>
               </button>
             ))}

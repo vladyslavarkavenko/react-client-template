@@ -2,7 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { historyWatcherInit } from '../../../modules/redirect/redirectActions';
+import { historyWatcherInit } from '../../modules/redirect/redirectActions';
 
 // import { Redirect } from 'react-router-dom';
 

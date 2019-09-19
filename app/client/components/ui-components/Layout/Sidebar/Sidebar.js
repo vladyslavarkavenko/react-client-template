@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import navLinks from './leftBar/navLinks';
+import navLinks from './navLinks';
 
-const LeftBar = () => (
+const Sidebar = () => (
   <ul className="left-bar">
     {navLinks.map(({ title, Icon, to }) => (
       <li key={title}>
@@ -16,4 +16,4 @@ const LeftBar = () => (
   </ul>
 );
 
-export default LeftBar;
+export default Sidebar;

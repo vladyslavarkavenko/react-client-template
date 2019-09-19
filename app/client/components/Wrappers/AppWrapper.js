@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import RedirectWatcher from '../ui-components/layout/RedirectWatcher';
+import RedirectWatcher from '../ui-components/RedirectWatcher';
 
 const AppWrapper = ({ children }) => (
   <>

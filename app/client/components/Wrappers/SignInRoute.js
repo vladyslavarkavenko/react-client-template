@@ -1,16 +1,16 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import TopBar from '../ui-components/TopBar';
-import Layout from '../ui-components/Layout';
+import AuthTopBar from '../ui-components/Layout/AuthTopBar';
+import AuthBackground from '../ui-components/Layout/AuthBackground';
 
 // TODO: Make different layout for login and other pages
 export default function SignInRoute(props) {
   return (
     <>
-      <TopBar />
-      <Layout>
+      <AuthTopBar />
+      <AuthBackground>
         <Route {...props} />
-      </Layout>
+      </AuthBackground>
     </>
   );
 }

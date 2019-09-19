@@ -2,16 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { ROLES } from '../../utils/constants';
-import { pushLogout } from '../../modules/auth/authActions';
-import Logo from '../../components/ui-components/Logo';
+import { ROLES } from '../../../utils/constants';
+import { pushLogout } from '../../../modules/auth/authActions';
+import Logo from './Logo';
 
-import SvgBell from '../../../../public/assets/svg/bell.svg';
-import SvgSearch from '../../../../public/assets/svg/search.svg';
-import SvgQuestion from '../../../../public/assets/svg/question.svg';
-import SvgArrowDown from '../../../../public/assets/svg/arrow-down.svg';
-import routing from '../../utils/routing';
-import authSelectors from '../../modules/auth/authSelectors';
+import SvgBell from '../../../../../public/assets/svg/bell.svg';
+import SvgSearch from '../../../../../public/assets/svg/search.svg';
+import SvgQuestion from '../../../../../public/assets/svg/question.svg';
+import SvgArrowDown from '../../../../../public/assets/svg/arrow-down.svg';
+import routing from '../../../utils/routing';
+import authSelectors from '../../../modules/auth/authSelectors';
 
 // TODO: Split all text to local.
 // TODO: On click outside of menu close it.

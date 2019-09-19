@@ -2,17 +2,18 @@ import React from 'react';
 import i18next from 'i18next';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
-import routing from '../utils/routing';
+import routing from '../../utils/routing';
 import {
   validateEmail,
   validateFirstName,
   validateLastName,
   validatePassword,
   validatePhone
-} from '../utils/validator';
-import Input from '../components/ui-components/CustomInput';
-import PasswordInput from '../components/PasswordInput';
-import { pushSignUp } from '../modules/auth/authActions';
+} from '../../utils/validator';
+import TextInput from '../../components/ui-components/Form/TextInput';
+import PasswordInput from '../../components/PasswordInput';
+import { pushSignUp } from '../../modules/auth/authActions';
+import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
 
 const initialErrorsState = {
   errorFirstName: '',
@@ -143,6 +144,8 @@ class SignUp extends React.Component {
       errorPolicy
     } = this.state;
 
+    //TODO: add confirm password field
+
     return (
       <div className="form-page">
         <div className="container">
@@ -150,28 +153,28 @@ class SignUp extends React.Component {
 
           <div className="form-wrapper">
             <form className="form" onSubmit={this.handleSubmit}>
-              <Input
+              <TextInput
                 value={firstName}
                 error={errorFirstName}
                 onChange={this.onChange}
                 name="firstName"
                 labelText={i18next.t('register.name.first')}
               />
-              <Input
+              <TextInput
                 value={lastName}
                 error={errorLastName}
                 onChange={this.onChange}
                 name="lastName"
                 labelText={i18next.t('register.name.last')}
               />
-              <Input
+              <TextInput
                 value={email}
                 error={errorEmail}
                 onChange={this.onChange}
                 name="email"
                 labelText={i18next.t('register.email')}
               />
-              <Input
+              <TextInput
                 value={phone}
                 error={errorPhone}
                 onChange={this.onChange}
@@ -180,21 +183,23 @@ class SignUp extends React.Component {
               />
               <PasswordInput
                 showIndicator
+                showTooltip
+                name="password"
                 value={password}
                 error={errorPassword}
                 onChange={this.onChange}
                 labelText={i18next.t('register.password')}
               />
-              <div className={`policy-agreement ${errorPolicy ? 'checkbox-error' : ''}`}>
-                <input
-                  name="policy"
-                  checked={policy}
-                  onChange={this.onChange}
-                  type="checkbox"
-                  id="policy"
-                />
-                <label htmlFor="policy">{i18next.t('register.policy')}</label>
-              </div>
+
+              <CheckboxInput
+                name="policy"
+                checked={policy}
+                onChange={this.onChange}
+                className="policy-agreement"
+                type="checkbox"
+                error={errorPolicy}
+                labelText={i18next.t('register.policy')}
+              />
               <div className="form__bottom">
                 <button type="submit" className="button form__submit-btn">
                   {i18next.t('register.buttons.signUp')}

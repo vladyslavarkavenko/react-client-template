@@ -27,6 +27,8 @@
     "no-unused-expressions": 0,
     "import/no-cycle": 1,
     "jsx-a11y/no-noninteractive-element-interactions": 1,
-    "jsx-a11y/click-events-have-key-events": 0
+    "jsx-a11y/click-events-have-key-events": 0,
+    "spaced-comment": 0,
+    "react/jsx-one-expression-per-line": 0
   }
 }
