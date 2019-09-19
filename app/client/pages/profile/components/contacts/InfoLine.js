@@ -1,5 +1,5 @@
 import React from 'react';
-import { INFO_LINE_TYPES } from '../../../../constants';
+import { INFO_LINE_TYPES } from '../../../../utils/constants';
 
 const { NUMBER, EMAIL, SITE } = INFO_LINE_TYPES;
 

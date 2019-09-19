@@ -1,20 +1,18 @@
 import React from 'react';
 import i18next from 'i18next';
-import { connect } from 'react-redux';
 import queryString from 'query-string';
-
-import Input from '../../components/ui-components/CustomInput';
-import PasswordInput from '../../components/PasswordInput';
+import { connect } from 'react-redux';
+import routing from '../utils/routing';
 import {
   validateEmail,
-  validatePassword,
   validateFirstName,
   validateLastName,
+  validatePassword,
   validatePhone
-} from '../../utils/validator';
-import { register } from '../../modules/auth';
-import displayError from '../../utils/displayError';
-import routing from '../../utils/routing';
+} from '../utils/validator';
+import Input from '../components/ui-components/CustomInput';
+import PasswordInput from '../components/PasswordInput';
+import { pushSignUp } from '../modules/auth/authActions';
 
 const initialErrorsState = {
   errorFirstName: '',
@@ -24,9 +22,6 @@ const initialErrorsState = {
   errorPassword: '',
   errorPolicy: false
 };
-
-// TODO: Fix ssr (double loading).
-// TODO: Remove errors when user starts typing in that field. (Think about it)
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -78,7 +73,7 @@ class SignUp extends React.Component {
 
     this.setState({ ...initialErrorsState });
 
-    const { register, history } = this.props;
+    const { pushSignUp, history } = this.props;
     const { firstName, lastName, email, phone, password, policy, token } = this.state;
 
     const isFirstNameValid = validateFirstName(firstName);
@@ -95,7 +90,7 @@ class SignUp extends React.Component {
       isPhoneValid &&
       policy
     ) {
-      const data = {
+      const input = {
         firstName,
         lastName,
         phone,
@@ -104,7 +99,8 @@ class SignUp extends React.Component {
         token
       };
 
-      register(data, (err) => (err ? displayError(err) : history.push(routing().root)));
+      pushSignUp({ input, history });
+      // register(data, (err) => (err ? displayError(err) : history.push(routing().root)));
     } else {
       const newState = {};
 
@@ -148,65 +144,80 @@ class SignUp extends React.Component {
     } = this.state;
 
     return (
-      <div className="form-wrapper">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <Input
-            value={firstName}
-            error={errorFirstName}
-            onChange={this.onChange}
-            name="firstName"
-            labelText={i18next.t('register.name.first')}
-          />
-          <Input
-            value={lastName}
-            error={errorLastName}
-            onChange={this.onChange}
-            name="lastName"
-            labelText={i18next.t('register.name.last')}
-          />
-          <Input
-            value={email}
-            error={errorEmail}
-            onChange={this.onChange}
-            name="email"
-            labelText={i18next.t('register.email')}
-          />
-          <Input
-            value={phone}
-            error={errorPhone}
-            onChange={this.onChange}
-            name="phone"
-            labelText={i18next.t('register.phone')}
-          />
-          <PasswordInput
-            showIndicator
-            value={password}
-            error={errorPassword}
-            onChange={this.onChange}
-            labelText={i18next.t('register.password')}
-          />
-          <div className={`policy-agreement ${errorPolicy ? 'checkbox-error' : ''}`}>
-            <input
-              name="policy"
-              checked={policy}
-              onChange={this.onChange}
-              type="checkbox"
-              id="policy"
-            />
-            <label htmlFor="policy">{i18next.t('register.policy')}</label>
+      <div className="form-page">
+        <div className="container">
+          <h1 className="form-page__title">{i18next.t('register.title')}</h1>
+
+          <div className="form-wrapper">
+            <form className="form" onSubmit={this.handleSubmit}>
+              <Input
+                value={firstName}
+                error={errorFirstName}
+                onChange={this.onChange}
+                name="firstName"
+                labelText={i18next.t('register.name.first')}
+              />
+              <Input
+                value={lastName}
+                error={errorLastName}
+                onChange={this.onChange}
+                name="lastName"
+                labelText={i18next.t('register.name.last')}
+              />
+              <Input
+                value={email}
+                error={errorEmail}
+                onChange={this.onChange}
+                name="email"
+                labelText={i18next.t('register.email')}
+              />
+              <Input
+                value={phone}
+                error={errorPhone}
+                onChange={this.onChange}
+                name="phone"
+                labelText={i18next.t('register.phone')}
+              />
+              <PasswordInput
+                showIndicator
+                value={password}
+                error={errorPassword}
+                onChange={this.onChange}
+                labelText={i18next.t('register.password')}
+              />
+              <div className={`policy-agreement ${errorPolicy ? 'checkbox-error' : ''}`}>
+                <input
+                  name="policy"
+                  checked={policy}
+                  onChange={this.onChange}
+                  type="checkbox"
+                  id="policy"
+                />
+                <label htmlFor="policy">{i18next.t('register.policy')}</label>
+              </div>
+              <div className="form__bottom">
+                <button type="submit" className="button form__submit-btn">
+                  {i18next.t('register.buttons.signUp')}
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="form__bottom">
-            <button type="submit" className="button form__submit-btn">
-              {i18next.t('register.buttons.signUp')}
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     );
   }
 }
 
+const mapStateToProps = (state, props) => ({
+  history: props.history,
+  location: props.location
+});
+
+const mapDispatchToProps = {
+  pushSignUp
+};
+
 export default connect(
-  null,
-  { register }
+  mapStateToProps,
+  mapDispatchToProps
 )(SignUp);

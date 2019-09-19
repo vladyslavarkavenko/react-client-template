@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { ROLES } from '../../constants';
-import { signout } from '../../modules/auth';
+import { ROLES } from '../../utils/constants';
+import { pushLogout } from '../../modules/auth/authActions';
 import Logo from '../../components/ui-components/Logo';
 
 import SvgBell from '../../../../public/assets/svg/bell.svg';
@@ -11,6 +11,7 @@ import SvgSearch from '../../../../public/assets/svg/search.svg';
 import SvgQuestion from '../../../../public/assets/svg/question.svg';
 import SvgArrowDown from '../../../../public/assets/svg/arrow-down.svg';
 import routing from '../../utils/routing';
+import authSelectors from '../../modules/auth/authSelectors';
 
 // TODO: Split all text to local.
 // TODO: On click outside of menu close it.
@@ -34,9 +35,9 @@ class TopBarWithProfile extends React.Component {
   }
 
   logOut() {
-    const { signout } = this.props;
+    const { pushLogout } = this.props;
 
-    signout();
+    pushLogout();
     this.toggleMenu();
   }
 
@@ -73,7 +74,7 @@ class TopBarWithProfile extends React.Component {
         {showMenu && (
           <ul className="menu">
             <li>
-              <Link to={routing().profile}>Profile</Link>
+              <Link to={routing().about}>Profile</Link>
             </li>
             <li onClick={this.toggleMenu}>
               <Link to={routing().root}>Settings</Link>
@@ -88,12 +89,12 @@ class TopBarWithProfile extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  activeRole: state.auth.activeRole
+  activeRole: authSelectors.activeRole(state)
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  signout: () => dispatch(signout())
-});
+const mapDispatchToProps = {
+  pushLogout
+};
 
 export default connect(
   mapStateToProps,

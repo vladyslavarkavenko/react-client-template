@@ -4,24 +4,27 @@ import { Redirect } from 'react-router-dom';
 
 import Loader from '../ui-components/Loader';
 import routing from '../../utils/routing';
+import authSelectors from '../../modules/auth/authSelectors';
 
 export default (OriginalComponent) => {
-  const MixedComponent = (props) => {
-    const { rolesPermissions, activeRole } = props;
+  const RolesManagerHOC = (props) => {
+    const { rolesPermissions, activeRole, authStatus } = props;
 
-    if (rolesPermissions === null) {
+    if (rolesPermissions === null || authStatus === 'request') {
       return <Loader />;
     }
     if (!activeRole) {
       return <Redirect to={routing().chooseRole} />;
     }
+
     return <OriginalComponent {...props} />;
   };
 
   const mapStateToProps = (state) => ({
-    activeRole: state.auth.activeRole,
-    rolesPermissions: state.auth.rolesPermissions
+    authStatus: authSelectors.status(state),
+    activeRole: authSelectors.activeRole(state),
+    rolesPermissions: authSelectors.rolePermissions(state)
   });
 
-  return connect(mapStateToProps)(MixedComponent);
+  return connect(mapStateToProps)(RolesManagerHOC);
 };

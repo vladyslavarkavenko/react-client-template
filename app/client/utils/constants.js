@@ -10,6 +10,10 @@ module.exports = {
     SITE: 'Web',
     EMAIL: 'Mail'
   },
+  TOKENS: {
+    ACCESS: 'access_token',
+    REFRESH: 'refresh_token'
+  },
   HEADER_ICONS: {
     PEN: 'PEN',
     DELETE: 'DELETE',

@@ -6,12 +6,13 @@ import SvgStaff from '../../../../../public/assets/svg/staff.svg';
 import SvgClients from '../../../../../public/assets/svg/clients.svg';
 import SvgMegaphone from '../../../../../public/assets/svg/megaphone.svg';
 import SvgLightbulb from '../../../../../public/assets/svg/lightbulb.svg';
+import routing from '../../../utils/routing';
 
 const navLinks = [
   {
     title: 'Dashboard',
     Icon: SvgHome,
-    to: '/'
+    to: routing().dashboard
   },
   {
     title: 'Opinions',

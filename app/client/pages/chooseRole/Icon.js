@@ -1,5 +1,5 @@
 import React from 'react';
-import { ROLES } from '../../constants';
+import { ROLES } from '../../utils/constants';
 
 import SvgAdmin from '../../../../public/assets/svg/admin.svg';
 import SvgAnalyst from '../../../../public/assets/svg/analyst.svg';

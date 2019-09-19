@@ -54,7 +54,7 @@ export function updateCompany(data, cb) {
     CompaniesService.updateCompany(data)
       .then((company) => {
         dispatch(setCompany(company));
-        cb && cb();
+        cb();
       })
       .catch((err) => console.log('err', err));
 }

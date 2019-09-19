@@ -4,6 +4,9 @@
       "api": {
         "title": "cTRU"
       },
+      "default": {
+        "loading": "Loading"
+      },
       "register": {
         "title": "Sign up in cTRU",
         "name": {
@@ -31,7 +34,7 @@
       "errors" : {
         "email": "Email address format is incorrect",
         "pass": "Password in invalid",
-        "password": "Password should contain lower-, uppercase letters and numbers",
+        "password": "Password should contain lower, uppercase letters and numbers",
         "name": {
           "first": "First name should be 2-30 character",
           "last": "Last name should be 2-150 character"

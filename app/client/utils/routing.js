@@ -10,9 +10,12 @@ export default (/* params */) => ({
   chooseRole: '/choose-role',
 
   account: '/account',
-  profile: '/account/profile',
+
+  profile: '/account/profile/:type',
+
   about: '/account/profile/about',
   overview: '/account/profile/overview',
+
   dashboard: '/account/dashboard',
   shareOpinion: '/account/share-opinion'
 

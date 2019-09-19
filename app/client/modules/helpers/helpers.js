@@ -1,5 +1,5 @@
 import { setApiHeaders } from '../../utils/api';
-import { ROLES } from '../../constants';
+import { ROLES } from '../../utils/constants';
 
 const { CUSTOMER, ADMIN, ANALYST, MANAGER } = ROLES;
 
@@ -16,10 +16,11 @@ export const setTokens = ({ access, refresh }) => {
 export const removeTokens = () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
+  localStorage.removeItem('role');
   setApiHeaders({ Authorization: '' });
 };
 
-export const stateFromRes = ({ customers, staff }) => {
+export const formatRolesPayload = ({ customers, staff }) => {
   const { company, isAdmin, isAnalyst, isManager } = staff;
 
   let activeRole = null;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Button from './Button';
-import { BTN_TYPES } from '../../../constants';
+import { BTN_TYPES } from '../../../utils/constants';
 import CustomInput from '../../../components/ui-components/CustomInput';
 
 const { BLUE } = BTN_TYPES;

@@ -1,8 +1,8 @@
-import React from 'react';
 import { Redirect } from 'react-router-dom';
+import React from 'react';
+import routing from './routing';
 
-import routing from './utils/routing';
-import customLoadable from './components/customLoadable';
+import customLoadable from '../components/customLoadable';
 
 const routes = [
   {
@@ -14,27 +14,27 @@ const routes = [
     path: routing().registration,
     exact: true,
     component: customLoadable({
-      loader: () => import('./pages/Register')
+      loader: () => import('../pages/SignUp')
     })
   },
   {
     path: routing().login,
     exact: true,
     component: customLoadable({
-      loader: () => import('./pages/Login')
+      loader: () => import('../pages/Login')
     })
   },
   {
     path: routing().chooseRole,
     exact: true,
     component: customLoadable({
-      loader: () => import('./pages/ChooseRole')
+      loader: () => import('../pages/ChooseRole')
     })
   },
   {
     path: routing().account,
     component: customLoadable({
-      loader: () => import('./pages/Account')
+      loader: () => import('../pages/Account')
     }),
     routes: [
       {
@@ -45,7 +45,7 @@ const routes = [
       {
         path: routing().profile,
         component: customLoadable({
-          loader: () => import('./pages/Profile')
+          loader: () => import('../pages/Profile')
         }),
         routes: [
           {
@@ -73,14 +73,14 @@ const routes = [
         path: routing().dashboard,
         exact: true,
         component: customLoadable({
-          loader: () => import('./pages/Dashboard')
+          loader: () => import('../pages/Dashboard')
         })
       },
       {
         path: routing().shareOpinion,
         exact: true,
         component: customLoadable({
-          loader: () => import('./pages/ShareOpinion')
+          loader: () => import('../pages/ShareOpinion')
         })
       }
     ]
@@ -89,14 +89,14 @@ const routes = [
     path: routing().forgotPassword,
     exact: true,
     component: customLoadable({
-      loader: () => import('./pages/ForgotPassword')
+      loader: () => import('../pages/ForgotPassword')
     })
   },
   {
     path: routing().notFound,
     exact: true,
     component: customLoadable({
-      loader: () => import('./pages/PageNotFound')
+      loader: () => import('../pages/PageNotFound')
     })
   },
   {
