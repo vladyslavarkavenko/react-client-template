@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import Button from './Button';
-import { HEADER_ICONS, BTN_TYPES } from '../../../constants';
+import { HEADER_ICONS, BTN_TYPES } from '../../../utils/constants';
 
 import SvgMapMarker from '../../../../../public/assets/svg/map-marker.svg';
 

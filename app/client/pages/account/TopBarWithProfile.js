@@ -66,7 +66,7 @@ class TopBarWithProfile extends React.Component {
           <SvgBell />
         </button>
         <div className="avatar">
-          <img src="assets/img/empty-avatar.jpg" alt="Avatar" />
+          <img src="/assets/img/empty-avatar.jpg" alt="Avatar" />
         </div>
         <button className="menu-btn" onClick={this.toggleMenu}>
           <SvgArrowDown />
@@ -74,7 +74,7 @@ class TopBarWithProfile extends React.Component {
         {showMenu && (
           <ul className="menu">
             <li>
-              <Link to={routing().profile}>Profile</Link>
+              <Link to={routing().about}>Profile</Link>
             </li>
             <li onClick={this.toggleMenu}>
               <Link to={routing().root}>Settings</Link>

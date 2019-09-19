@@ -1,9 +1,14 @@
 import React from 'react';
-import { renderRoutes } from 'react-router-config';
+import { Switch } from 'react-router-dom';
+import WrappedRoute from '../../components/Wrappers/WrappedRoute';
+import customLoadable from '../../components/customLoadable';
 
 import routing from '../../utils/routing';
 import EditForm from './components/EditForm';
 import ContentHeader from './components/ContentHeader';
+
+const Overview = customLoadable({ loader: () => import('./Overview') });
+const About = customLoadable({ loader: () => import('./About') });
 
 class ProfileForAdmin extends React.Component {
   constructor(props) {
@@ -49,7 +54,7 @@ class ProfileForAdmin extends React.Component {
   onSubmit(e) {
     // TODO: Add validation.
     e.preventDefault();
-    const { updateCompany } = this.props;
+    const { pushUpdateCompany } = this.props;
     const { name, title, avatar } = this.state;
 
     // eslint-disable-next-line no-undef
@@ -61,7 +66,7 @@ class ProfileForAdmin extends React.Component {
     // When we have string with length that mean we have avatar url from server.
     if (!avatar.length) data.append('avatar', avatar);
 
-    updateCompany(data, this.toggleEditMode);
+    pushUpdateCompany({ data, handleFinish: this.toggleEditMode });
   }
 
   onCancel(e) {
@@ -86,10 +91,6 @@ class ProfileForAdmin extends React.Component {
   }
 
   render() {
-    const {
-      route: { routes }
-    } = this.props;
-
     const { avatar, newAvatar, name, title, editMode } = this.state;
 
     return (
@@ -125,7 +126,19 @@ class ProfileForAdmin extends React.Component {
             { to: routing().about, title: 'About' }
           ]}
         />
-        {renderRoutes(routes, { ...this.props, editMode })}
+        {/*{renderRoutes(routes, { ...this.props, editMode })}*/}
+        <Switch>
+          <WrappedRoute
+            exact
+            path={routing().about}
+            render={() => <About {...this.props} editMode={editMode} />}
+          />
+          <WrappedRoute
+            exact
+            path={routing().overview}
+            render={() => <Overview {...this.props} editMode={editMode} />}
+          />
+        </Switch>
       </div>
     );
   }

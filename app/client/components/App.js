@@ -17,6 +17,9 @@ const ShareOpinion = customLoadable({ loader: () => import('../pages/ShareOpinio
 const ForgotPassword = customLoadable({ loader: () => import('../pages/ForgotPassword') });
 const PageNotFound = customLoadable({ loader: () => import('../pages/PageNotFound') });
 
+// additional subroutes
+// Overview, About
+
 // TODO: Add stylelint before commits.
 // TODO: Add favicon.
 // TODO: Clean webpack configs, it seems that there is some redundant code.
@@ -32,7 +35,9 @@ export default function App() {
       <SignInRoute exact path={routing().forgotPassword} component={ForgotPassword} />
 
       <AuthRoute exact path={routing().account} component={Account} />
+
       <AuthRoute exact path={routing().dashboard} component={Dashboard} />
+
       <AuthRoute exact path={routing().profile} component={Profile} />
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />
 

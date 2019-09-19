@@ -21,7 +21,7 @@ const companiesReducer = handleActions(
     [actions.setCompanies.SUCCESS](state, { payload }) {
       return payload;
     },
-    [actions.setCompany.SUCCESS](state, { payload }) {
+    [actions.pushUpdateCompany.SUCCESS](state, { payload }) {
       const newCompanies = { ...state.companies };
       newCompanies[payload.id] = payload;
 

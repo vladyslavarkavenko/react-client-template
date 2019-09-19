@@ -20,6 +20,12 @@ export const pushSignUp = createRequestBound('SIGNUP_PUSH');
 export const pushLogout = createRequestBound('LOGOUT_PUSH');
 export const pushRefreshToken = createRequestBound('REFRESH_TOKEN_PUSH');
 
+function* setActiveRoleWorker({ payload }) {
+  localStorage.setItem('role', payload);
+
+  yield put(setActiveRole.success(payload))
+}
+
 function* refreshTokenWorker() {
   const refreshToken = localStorage.getItem(TOKENS.REFRESH);
 
@@ -55,6 +61,12 @@ function* loginByTokenWorker() {
         call(() => AuthService.getRoles())
       ]);
 
+      const role = localStorage.getItem('role')
+
+      if (role) {
+        yield put(setActiveRole.success(role));
+      }
+
       yield put(pushLoginByToken.success({ user, roles }));
     } catch (err) {
       console.error(err);
@@ -75,6 +87,11 @@ function* loginWorker({ payload: { email, password, history } }) {
       call(() => AuthService.getRoles())
     ]);
     // format roles by formatRolesPayload in reducer;
+    const role = localStorage.getItem('role')
+
+    if (role) {
+      yield put(setActiveRole.success(role));
+    }
 
     yield put(
       pushLogin.success({
@@ -82,6 +99,8 @@ function* loginWorker({ payload: { email, password, history } }) {
         roles
       })
     );
+
+
 
     history.push(routing().account);
   } catch (err) {
@@ -91,7 +110,7 @@ function* loginWorker({ payload: { email, password, history } }) {
 }
 
 function* logoutWorker() {
-  yield call(() => removeTokens());
+  removeTokens()
 
   //TODO: Improve this
   // yield call(() => window.location.reload());
@@ -118,6 +137,8 @@ export function* authWatcher() {
     takeLatest(pushLoginByToken.TRIGGER, loginByTokenWorker),
     takeLatest(pushRefreshToken.TRIGGER, refreshTokenWorker),
     takeLatest(pushLogout.TRIGGER, logoutWorker),
-    takeLatest(pushSignUp.TRIGGER, signUpWorker)
+    takeLatest(pushSignUp.TRIGGER, signUpWorker),
+
+    takeLatest(setActiveRole.TRIGGER, setActiveRoleWorker),
   ]);
 }

@@ -27,7 +27,7 @@ class ChooseRole extends React.Component {
     const { activeRole, rolesPermissions } = this.props;
 
     if (activeRole) {
-      return <Redirect to={routing().profile} />;
+      return <Redirect to={routing().about} />;
     }
 
     if (!rolesPermissions) {

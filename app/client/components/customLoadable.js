@@ -5,6 +5,7 @@ import React from 'react';
 
 const Loading = ({ error, timedOut, pastDelay, retry }) => {
   if (error) {
+    console.error(error);
     return (
       <div>
         <p> Error! </p>

@@ -56,9 +56,8 @@ const roleInitial = null;
 
 const roleReducer = handleActions(
   {
-    [actions.setActiveRole.TRIGGER](state, { payload }) {
+    [actions.setActiveRole.SUCCESS](state, { payload }) {
       // TODO: Move to saga
-      localStorage.setItem('role', payload);
       return payload;
     },
     [actions.pushLogout.TRIGGER]() {

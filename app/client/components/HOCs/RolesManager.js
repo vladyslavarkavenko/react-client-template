@@ -8,13 +8,13 @@ import authSelectors from '../../modules/auth/authSelectors';
 
 export default (OriginalComponent) => {
   const RolesManagerHOC = (props) => {
-    const { rolesPermissions, activeRole } = props;
+    const { rolesPermissions, activeRole, authStatus } = props;
 
-    if (rolesPermissions === null) {
+    if (rolesPermissions === null || authStatus !== 'success') {
       return <Loader />;
     }
     if (!activeRole) {
-      return <Redirect to={routing().chooseRole}/>;
+      return <Redirect to={routing().chooseRole} />;
     }
 
     console.log(activeRole);
@@ -23,6 +23,7 @@ export default (OriginalComponent) => {
   };
 
   const mapStateToProps = (state) => ({
+    authStatus: authSelectors.status(state),
     activeRole: authSelectors.activeRole(state),
     rolesPermissions: authSelectors.rolePermissions(state)
   });

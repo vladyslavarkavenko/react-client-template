@@ -5,21 +5,24 @@ import CompaniesService from '../../services/companies';
 export const prefix = 'companies';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
-export const setCompany = createRequestBound('SET_COMPANY');
+export const pushUpdateCompany = createRequestBound('COMPANY_UPDATE_PUSH');
 export const setCompanies = createRequestBound('SET_COMPANIES');
 
-function* updateCompanyWorker({ payload: { data, cb } }) {
-  yield put(setCompany.request());
+function* updateCompanyWorker({ payload: { data, handleFinish } }) {
+  yield put(pushUpdateCompany.request());
   try {
     // TODO: Check this.
-    const res = yield call(() => CompaniesService.updateCompany(data));
-    yield put(setCompany.success(res.data.company));
-    cb();
+    const company = yield call(() => CompaniesService.updateCompany(data));
+
+    console.log(data, company);
+    yield put(pushUpdateCompany.success(company));
+    handleFinish();
+
   } catch (err) {
     console.error(err);
   }
 }
 
 export function* companiesWatcher() {
-  yield all([takeLatest(setCompany.TRIGGER, updateCompanyWorker)]);
+  yield all([takeLatest(pushUpdateCompany.TRIGGER, updateCompanyWorker)]);
 }

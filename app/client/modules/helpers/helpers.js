@@ -16,6 +16,7 @@ export const setTokens = ({ access, refresh }) => {
 export const removeTokens = () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
+  localStorage.removeItem('role');
   setApiHeaders({ Authorization: '' });
 };
 

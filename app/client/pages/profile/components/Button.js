@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { HEADER_ICONS, BTN_TYPES } from '../../../constants';
+import { HEADER_ICONS, BTN_TYPES } from '../../../utils/constants';
 import SvgPen from '../../../../../public/assets/svg/pen.svg';
 import SvgCamera from '../../../../../public/assets/svg/camera.svg';
 import SvgDelete from '../../../../../public/assets/svg/delete.svg';
