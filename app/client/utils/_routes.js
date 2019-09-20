@@ -4,7 +4,7 @@ import routing from './routing';
 
 import customLoadable from '../components/customLoadable';
 
-const routes = [
+const _routes = [
   {
     path: routing().root,
     exact: true,
@@ -14,21 +14,21 @@ const routes = [
     path: routing().registration,
     exact: true,
     component: customLoadable({
-      loader: () => import('../pages/SignUp')
+      loader: () => import('../pages/Auth/SignUp')
     })
   },
   {
     path: routing().login,
     exact: true,
     component: customLoadable({
-      loader: () => import('../pages/Login')
+      loader: () => import('../pages/Auth/Login')
     })
   },
   {
     path: routing().chooseRole,
     exact: true,
     component: customLoadable({
-      loader: () => import('../pages/ChooseRole')
+      loader: () => import('../pages/Auth/ChooseRole/ChooseRole')
     })
   },
   {
@@ -89,7 +89,7 @@ const routes = [
     path: routing().forgotPassword,
     exact: true,
     component: customLoadable({
-      loader: () => import('../pages/ForgotPassword')
+      loader: () => import('../pages/Auth/ForgotPassword/ForgotPassword')
     })
   },
   {
@@ -105,4 +105,4 @@ const routes = [
   }
 ];
 
-export default routes;
+export default _routes;

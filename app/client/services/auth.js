@@ -20,6 +20,14 @@ class AuthService {
   static refresh(data) {
     return api.post('/core/token/refresh/', data);
   }
+
+  static recoverEmail({ email }) {
+    return api.post('/core/user/recovery_email/', { email });
+  }
+
+  static changePassword({ password, token }) {
+    return api.post('/core/user/set_password/', { password, token });
+  }
 }
 
 export default AuthService;

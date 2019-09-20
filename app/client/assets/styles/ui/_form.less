@@ -72,6 +72,12 @@
         &:hover {
             background-color: @secondary-bg-color-darken;
         }
+
+      //.loading-btn {
+      //  background-color: @button-bg-loading;
+      //  color: @button-font-loading;
+      //  transition: background-color 0.2s;
+      //}
     }
 
     &__cancel-btn {
@@ -90,6 +96,10 @@
             display: flex;
             align-items: center;
         }
+    }
+
+    &__text {
+      margin: 0 1rem;
     }
 }
 
@@ -124,7 +134,7 @@
     }
 }
 
-.policy-agreement {
+.policy-agreement, .checkbox-form {
     margin: 1rem 0;
     display: flex;
     &.checkbox-error label {
@@ -149,3 +159,5 @@
         height: 18px;
     }
 }
+
+

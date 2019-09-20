@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import Loader from '../ui-components/Loader';
+import Loader from '../ui-components/Layout/Loader';
 import routing from '../../utils/routing';
 import authSelectors from '../../modules/auth/authSelectors';
 

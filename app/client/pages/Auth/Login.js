@@ -3,12 +3,13 @@ import i18next from 'i18next';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { validateEmail, validatePassword } from '../utils/validator';
-import Input from '../components/ui-components/CustomInput';
-import PasswordInput from '../components/PasswordInput';
-import routing from '../utils/routing';
-import { pushLogin } from '../modules/auth/authActions';
-import authSelectors from '../modules/auth/authSelectors';
+import { validateEmail, validatePassword } from '../../utils/validator';
+import TextInput from '../../components/ui-components/Form/TextInput';
+import PasswordInput from '../../components/PasswordInput';
+import routing from '../../utils/routing';
+import { pushLogin } from '../../modules/auth/authActions';
+import authSelectors from '../../modules/auth/authSelectors';
+import Button from '../../components/ui-components/Form/Button';
 
 const initialErrorsState = {
   emailError: null,
@@ -78,7 +79,7 @@ class Login extends React.Component {
     const { status } = this.props;
     const { email, password, emailError, passwordError } = this.state;
 
-    const isDisabled = status === 'request';
+    const isLoading = status === 'request';
 
     return (
       <div className="form-page">
@@ -86,25 +87,32 @@ class Login extends React.Component {
           <h1 className="form-page__title">{i18next.t('login.title')}</h1>
           <div className="form-wrapper">
             <form className="form" onSubmit={this.handleSubmit}>
-              <Input
+              <TextInput
                 name="email"
                 value={email}
                 onChange={this.onChange}
                 error={emailError}
                 labelText={i18next.t('login.email')}
-                readOnly={isDisabled}
+                readOnly={isLoading}
               />
               <PasswordInput
                 value={password}
+                name="password"
                 onChange={this.onChange}
                 error={passwordError}
                 labelText={i18next.t('login.password')}
-                readOnly={isDisabled}
+                readOnly={isLoading}
               />
               <div className="form__bottom">
-                <button type="submit" className="button form__submit-btn" disabled={isDisabled}>
-                  {isDisabled ? i18next.t('default.loading') : i18next.t('login.buttons.login')}
-                </button>
+                <Button
+                  type="submit"
+                  isLoading={isLoading}
+                  title={i18next.t('login.buttons.login')}
+                />
+
+                {/*<button type="submit" className="button form__submit-btn" disabled={isDisabled}>*/}
+                {/*  {isDisabled ? i18next.t('default.loading') : i18next.t('login.buttons.login')}*/}
+                {/*</button>*/}
               </div>
             </form>
             <div className="text-center">

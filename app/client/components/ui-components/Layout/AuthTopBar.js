@@ -3,8 +3,8 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 
 import Logo from './Logo';
-import { DEFAULT_LANGUAGE } from '../../utils/config';
-import { changeLanguage } from '../../modules/language';
+import { DEFAULT_LANGUAGE } from '../../../utils/config';
+import { changeLanguage } from '../../../modules/language';
 
 const options = [
   {
@@ -19,7 +19,7 @@ const options = [
 
 // TODO: Add styling for language select.
 
-class TopBar extends React.Component {
+class AuthTopBar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -55,4 +55,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   null,
   mapDispatchToProps
-)(TopBar);
+)(AuthTopBar);

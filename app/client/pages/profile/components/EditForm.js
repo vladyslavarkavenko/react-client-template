@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from './Button';
 import { BTN_TYPES } from '../../../utils/constants';
-import CustomInput from '../../../components/ui-components/CustomInput';
+import TextInput from '../../../components/ui-components/Form/TextInput';
 
 const { BLUE } = BTN_TYPES;
 
@@ -12,7 +12,7 @@ const EditForm = ({ inputs, onChange, reset, save, errors }) => (
       const labelText = name.charAt(0).toUpperCase() + name.slice(1);
 
       return (
-        <CustomInput
+        <TextInput
           key={name}
           name={name}
           labelText={labelText}

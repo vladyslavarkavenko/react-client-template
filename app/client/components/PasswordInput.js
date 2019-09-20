@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import SvgEye from '../../../public/assets/svg/eye.svg';
 import SvgSlashEye from '../../../public/assets/svg/eye-slash.svg';
 
-import PasswordIndicator from './passwordInput/PasswordIndicator';
+import PasswordIndicator from './ui-components/Form/PasswordIndicator';
 
 class PasswordInput extends React.Component {
   constructor(props) {
@@ -24,27 +24,40 @@ class PasswordInput extends React.Component {
   }
 
   render() {
-    const { value, onChange, error, labelText, showIndicator = false, readOnly } = this.props;
+    const {
+      name = 'password',
+      value,
+      onChange,
+      error,
+      labelText,
+      showIndicator,
+      showTooltip,
+      readOnly,
+      forwardRef
+    } = this.props;
     const { isPasswordVisible } = this.state;
 
+    const key = `${name}_pass`;
     // TODO: Rewrite this using CustomInput.js
+
     return (
       <div className="input-block form__row">
         {error && <span className="input-error-message">{error}</span>}
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor="password" className="form__row-label">
+        <label htmlFor={key} className="form__row-label">
           {labelText}
           {showIndicator && <PasswordIndicator value={value} />}
         </label>
         <div className="position-relative">
           <input
-            id="password"
-            name="password"
+            id={key}
+            name={name}
             onChange={onChange}
             value={value}
             type={isPasswordVisible ? 'text' : 'password'}
             className="form__row-input"
             readOnly={readOnly}
+            ref={forwardRef}
           />
           <button
             className="toggle-password-visibility"
@@ -54,7 +67,9 @@ class PasswordInput extends React.Component {
             {isPasswordVisible ? <SvgEye /> : <SvgSlashEye />}
           </button>
         </div>
-        <span className="form__row-tooltip">{i18next.t('register.passwordNote')}</span>
+        {showTooltip && (
+          <span className="form__row-tooltip">{i18next.t('register.passwordNote')}</span>
+        )}
       </div>
     );
   }
