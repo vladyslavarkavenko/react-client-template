@@ -79,9 +79,9 @@ export function getEmailValidation(email, messages = {}) {
 export function getPasswordValidation(data, messages = {}) {
   // data is object -> data = {password: '1234', confirmPassword: '1234'}
   const {
-    required = i18next.t('validation.email.required'),
-    info = i18next.t('validation.email.info'),
-    match = i18next.t('validation.email.match')
+    required = i18next.t('validation.password.required'),
+    info = i18next.t('validation.password.info'),
+    match = i18next.t('validation.password.match')
   } = messages;
 
   const errors = {};
