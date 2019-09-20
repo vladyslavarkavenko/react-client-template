@@ -14,6 +14,7 @@ import TextInput from '../../components/ui-components/Form/TextInput';
 import PasswordInput from '../../components/PasswordInput';
 import { pushSignUp } from '../../modules/auth/authActions';
 import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
+import Button from '../../components/ui-components/Form/Button';
 
 const initialErrorsState = {
   errorFirstName: '',
@@ -201,9 +202,10 @@ class SignUp extends React.Component {
                 labelText={i18next.t('register.policy')}
               />
               <div className="form__bottom">
-                <button type="submit" className="button form__submit-btn">
-                  {i18next.t('register.buttons.signUp')}
-                </button>
+                <Button type="submit" title={i18next.t('register.buttons.signUp')} />
+                {/*<button type="submit" className="button form__submit-btn">*/}
+                {/*  {i18next.t('register.buttons.signUp')}*/}
+                {/*</button>*/}
               </div>
             </form>
           </div>

@@ -6,6 +6,7 @@ import routing from '../../../utils/routing';
 import AuthService from '../../../services/auth';
 import PasswordInput from '../../../components/PasswordInput';
 import ResetPasswordValidation from './ResetPasswordValidation';
+import Button from '../../../components/ui-components/Form/Button';
 
 export default class ResetPassword extends React.Component {
   constructor(props) {
@@ -85,6 +86,8 @@ export default class ResetPassword extends React.Component {
   render() {
     const { errors, status, input } = this.state;
 
+    const isLoading = status === 'request';
+
     return (
       <div className="form-page">
         <div className="container">
@@ -99,6 +102,7 @@ export default class ResetPassword extends React.Component {
                 error={errors.password}
                 onChange={this.onChange}
                 labelText={i18next.t('resetPassword.password')}
+                readOnly={isLoading}
               />
               <PasswordInput
                 name="confirmPassword"
@@ -106,17 +110,16 @@ export default class ResetPassword extends React.Component {
                 error={errors.confirmPassword}
                 onChange={this.onChange}
                 labelText={i18next.t('resetPassword.confirmPassword')}
+                readOnly={isLoading}
               />
 
               <div className="form__bottom form__bottom-flex-a">
-                <button
-                  type="button"
+                <Button
+                  type="submit"
+                  isLoading={isLoading}
                   onClick={this.handleChangePassword}
-                  className="button form__submit-btn"
-                  disabled={status === 'request'}
-                >
-                  {i18next.t('resetPassword.buttons.send')}
-                </button>
+                  title={i18next.t('resetPassword.buttons.send')}
+                />
                 <Link to={routing().login} className="button form__cancel-btn">
                   {i18next.t('resetPassword.buttons.cancel')}
                 </Link>

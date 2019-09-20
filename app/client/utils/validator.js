@@ -1,4 +1,5 @@
 import validator from 'validator';
+import i18next from 'i18next';
 
 export function validateEmail(value) {
   return validator.isEmail(value);
@@ -31,9 +32,9 @@ export function validateText({ value, min, max }) {
 
 export function getEmailValidation(email, messages = {}) {
   const {
-    required = 'Email is required',
-    info = 'Write correct email',
-    long = 'Email is too long'
+    required = i18next.t('validation.email.required'),
+    info = i18next.t('validation.email.info'),
+    long = i18next.t('validation.email.long')
   } = messages;
 
   const errors = {};
@@ -59,9 +60,9 @@ export function getEmailValidation(email, messages = {}) {
 export function getPasswordValidation(data, messages = {}) {
   // data is object -> data = {password: '1234', confirmPassword: '1234'}
   const {
-    required = 'Password field is required',
-    info = 'Password must be at least 8 characters long and include uppercase, lowercase letters, numbers and special symbols',
-    match = "Passwords didn't match"
+    required = i18next.t('validation.email.required'),
+    info = i18next.t('validation.email.info'),
+    match = i18next.t('validation.email.match')
   } = messages;
 
   const errors = {};

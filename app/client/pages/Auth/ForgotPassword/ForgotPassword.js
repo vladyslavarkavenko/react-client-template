@@ -1,10 +1,12 @@
 import React from 'react';
+import i18next from 'i18next';
 import { Link } from 'react-router-dom';
 
 import TextInput from '../../../components/ui-components/Form/TextInput';
 import routing from '../../../utils/routing';
 import AuthService from '../../../services/auth';
 import ForgotPasswordValidation from './ForgotPasswordValidation';
+import Button from '../../../components/ui-components/Form/Button';
 
 export default class ForgotPassword extends React.Component {
   constructor(props) {
@@ -59,21 +61,20 @@ export default class ForgotPassword extends React.Component {
 
     console.log(isValid);
 
+    const isLoading = status === 'request';
+
     return (
       <div className="form-page">
         <div className="container">
-          <h1 className="form-page__title">Reset password</h1>
+          <h1 className="form-page__title">{i18next.t('forgotPassword.title')}</h1>
           <div className="form-wrapper">
             {status === 'success' ? (
               <div className="form">
                 <p className="form__text text-center">
-                  Email with reset link has been sent to:
+                  {i18next.t('forgotPassword.successText')}
                   <br />
                   <span className="text-bold ">{input.email}</span>
                 </p>
-                <Link to={routing().login} className="button form__submit-btn my-3">
-                  Login
-                </Link>
               </div>
             ) : (
               <form onSubmit={this.handleRecoverPassword} className="form">
@@ -83,18 +84,17 @@ export default class ForgotPassword extends React.Component {
                   labelText="Email"
                   error={errors.email}
                   forwardRef={this.email}
+                  readOnly={isLoading}
                 />
                 <div className="form__bottom form__bottom-flex-a">
-                  <button
-                    type="button"
+                  <Button
+                    type="submit"
+                    isLoading={isLoading}
                     onClick={this.handleRecoverPassword}
-                    className="button form__submit-btn"
-                    disabled={status === 'request'}
-                  >
-                    Send
-                  </button>
+                    title={i18next.t('forgotPassword.buttons.send')}
+                  />
                   <Link to={routing().login} className="button form__cancel-btn">
-                    Cancel
+                    {i18next.t('forgotPassword.buttons.cancel')}
                   </Link>
                 </div>
               </form>

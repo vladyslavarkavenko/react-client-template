@@ -7,6 +7,18 @@
       "default": {
         "loading": "Loading"
       },
+      "validation": {
+        "email": {
+          "required": "Email is required",
+          "info": "Email format is incorrect",
+          "long": "Email is too long"
+        },
+        "password": {
+          "required": "Password field is required",
+          "info": "Password should contain lower, uppercase letters, numbers and special symbols",
+          "match": "Passwords didn't match"
+        }
+      },
       "register": {
         "title": "Sign up in cTRU",
         "name": {
@@ -24,6 +36,17 @@
       },
       "resetPassword": {
         "title": "Change password",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "passwordNote": "At least 8 characters",
+        "buttons": {
+          "send": "Send",
+          "cancel": "Cancel"
+        }
+      },
+      "forgotPassword": {
+        "title": "Forgot password",
+        "successText": "Email with reset link has been sent to:",
         "password": "Password",
         "confirmPassword": "Confirm Password",
         "passwordNote": "At least 8 characters",
