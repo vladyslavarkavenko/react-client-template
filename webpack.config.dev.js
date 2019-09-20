@@ -34,6 +34,16 @@ const config = {
         ]
       },
       {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          // {
+          //   loader: MiniCssExtractPlugin.loader,
+          // },
+          'css-loader',
+        ]
+      },
+      {
         test: /\.less$/,
         use: [
           'style-loader',
