@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import i18next from 'i18next';
-import getErrorMessage from '../utils/getErrorMessage';
+import getErrorMessage from './getErrorMessage';
 
 const defaultOptions = {
   position: toast.POSITION.TOP_RIGHT,

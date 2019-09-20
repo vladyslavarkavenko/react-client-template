@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import routing from '../../../utils/routing';
 import AuthService from '../../../services/auth';
-import Notification from '../../../services/notifications';
+import Notification from '../../../utils/notifications';
 import PasswordInput from '../../../components/PasswordInput';
 import ResetPasswordValidation from './ResetPasswordValidation';
 import Button from '../../../components/ui-components/Form/Button';

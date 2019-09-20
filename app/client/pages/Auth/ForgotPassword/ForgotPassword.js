@@ -7,7 +7,7 @@ import routing from '../../../utils/routing';
 import AuthService from '../../../services/auth';
 import ForgotPasswordValidation from './ForgotPasswordValidation';
 import Button from '../../../components/ui-components/Form/Button';
-import Notification from '../../../services/notifications';
+import Notification from '../../../utils/notifications';
 
 export default class ForgotPassword extends React.Component {
   constructor(props) {

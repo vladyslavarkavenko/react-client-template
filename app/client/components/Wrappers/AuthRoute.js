@@ -11,7 +11,9 @@ function AuthRoute(props) {
     <>
       <TopBarWithProfile />
       <Sidebar />
-      <Route {...props} />
+      <div className="content">
+        <Route {...props} />
+      </div>
     </>
   );
 }

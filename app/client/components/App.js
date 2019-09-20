@@ -6,12 +6,26 @@ import customLoadable from './customLoadable';
 import SignInRoute from './Wrappers/SignInRoute';
 import WrappedRoute from './Wrappers/WrappedRoute';
 import AuthRoute from './Wrappers/AuthRoute';
+import RolesRoute from './Wrappers/RolesRoute';
 
 const Login = customLoadable({ loader: () => import('../pages/Auth/Login') });
 const Register = customLoadable({ loader: () => import('../pages/Auth/SignUp') });
 const ChooseRole = customLoadable({ loader: () => import('../pages/Auth/ChooseRole/ChooseRole') });
 const Account = customLoadable({ loader: () => import('../pages/Account') });
-const Profile = customLoadable({ loader: () => import('../pages/Profile') });
+// const Profile = customLoadable({ loader: () => import('../pages/Profile') });
+const ProfileForAdmin = customLoadable({
+  loader: () => import('../pages/profile/ProfileForAdmin')
+});
+const ProfileForAnalyst = customLoadable({
+  loader: () => import('../pages/profile/ProfileForAnalyst')
+});
+const ProfileForManager = customLoadable({
+  loader: () => import('../pages/profile/ProfileForManager')
+});
+const ProfileForCustomer = customLoadable({
+  loader: () => import('../pages/profile/ProfileForCustomer')
+});
+
 const Dashboard = customLoadable({ loader: () => import('../pages/Dashboard') });
 const ShareOpinion = customLoadable({ loader: () => import('../pages/ShareOpinion') });
 const ForgotPassword = customLoadable({
@@ -44,7 +58,15 @@ export default function App() {
 
       <AuthRoute exact path={routing().dashboard} component={Dashboard} />
 
-      <AuthRoute exact path={routing().profile} component={Profile} />
+      {/*<AuthRoute exact path={routing().profile} component={Profile} />*/}
+      <RolesRoute
+        exact
+        path={routing().profile}
+        forAdmin={ProfileForAdmin}
+        forAnalyst={ProfileForAnalyst}
+        forManager={ProfileForManager}
+        forCustomer={ProfileForCustomer}
+      />
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />
 
       {/* TODO: Change to actual root */}

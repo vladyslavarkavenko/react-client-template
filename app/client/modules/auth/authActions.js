@@ -9,7 +9,7 @@ import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
 import authSelectors from './authSelectors';
 import companiesSelectors from '../companies/companiesSelectors';
-import Notification from '../../services/notifications';
+import Notification from '../../utils/notifications';
 
 export const prefix = 'auth';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
