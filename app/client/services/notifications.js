@@ -1,21 +1,30 @@
 import { toast } from 'react-toastify';
+import i18next from 'i18next';
+import getErrorMessage from '../utils/getErrorMessage';
 
 const defaultOptions = {
   position: toast.POSITION.TOP_RIGHT,
-  delay: 5000
+  autoClose: 4000
 };
 
 // We can pass our react component for custom notification
 export default class Notification {
   static success(message) {
+    console.log('Notification:', message);
     return toast.success(message, defaultOptions);
   }
 
   static error(message) {
-    return toast.error(message, defaultOptions);
+    if (typeof message === 'object') {
+      message = getErrorMessage(message);
+    }
+
+    console.error('Notification:', message);
+    return toast.error(message || i18next.t('notifications.defaultError'), defaultOptions);
   }
 
   static info(message) {
+    console.log('Notification:', message);
     return toast.info(message, defaultOptions);
   }
 

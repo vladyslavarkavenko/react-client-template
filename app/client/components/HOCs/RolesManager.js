@@ -13,6 +13,7 @@ export default (OriginalComponent) => {
     if (rolesPermissions === null || authStatus === 'request') {
       return <Loader />;
     }
+
     if (!activeRole) {
       return <Redirect to={routing().chooseRole} />;
     }

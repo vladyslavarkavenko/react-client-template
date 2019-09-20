@@ -7,6 +7,7 @@ import routing from '../../../utils/routing';
 import AuthService from '../../../services/auth';
 import ForgotPasswordValidation from './ForgotPasswordValidation';
 import Button from '../../../components/ui-components/Form/Button';
+import Notification from '../../../services/notifications';
 
 export default class ForgotPassword extends React.Component {
   constructor(props) {
@@ -15,7 +16,7 @@ export default class ForgotPassword extends React.Component {
     this.email = React.createRef();
 
     this.state = {
-      isValid: 'none', //none, false, true
+      // isValid: 'none', //none, false, true
       status: 'none',
       input: {
         email: ''
@@ -39,10 +40,10 @@ export default class ForgotPassword extends React.Component {
           this.setState({ status: 'success', input: { email } });
         })
         .catch((err) => {
-          console.error(err);
+          Notification.error(err);
           this.setState({
             status: 'failure',
-            isValid: false,
+            // isValid: false,
             errors: {
               email: 'Wrong email'
             }
@@ -50,16 +51,13 @@ export default class ForgotPassword extends React.Component {
         });
     } else {
       this.setState({
-        isValid,
         errors
       });
     }
   }
 
   render() {
-    const { errors, isValid, status, input } = this.state;
-
-    console.log(isValid);
+    const { errors, status, input } = this.state;
 
     const isLoading = status === 'request';
 

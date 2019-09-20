@@ -3,7 +3,6 @@ import i18next from 'i18next';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Notification from '../../services/notifications';
 import { validateEmail, validatePassword } from '../../utils/validator';
 import TextInput from '../../components/ui-components/Form/TextInput';
 import PasswordInput from '../../components/PasswordInput';
@@ -31,10 +30,6 @@ class Login extends React.Component {
 
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
-    Notification.success('Success message');
-    Notification.error('Error message');
-    Notification.info('Info message');
   }
 
   onChange(e) {

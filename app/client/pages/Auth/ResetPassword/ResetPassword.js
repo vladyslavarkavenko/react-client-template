@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import routing from '../../../utils/routing';
 import AuthService from '../../../services/auth';
+import Notification from '../../../services/notifications';
 import PasswordInput from '../../../components/PasswordInput';
 import ResetPasswordValidation from './ResetPasswordValidation';
 import Button from '../../../components/ui-components/Form/Button';
@@ -62,17 +63,15 @@ export default class ResetPassword extends React.Component {
       AuthService.changePassword({ token, password })
         .then(() => {
           this.setState({ status: 'success' });
+          Notification.success(i18next.t('notification.success.changePassword'));
 
           history.push(routing().login);
         })
         .catch((err) => {
-          console.error(err);
+          Notification.error(err);
+
           this.setState({
-            status: 'failure',
-            isValid: false,
-            errors: {
-              server: 'Something went wrong'
-            }
+            status: 'failure'
           });
         });
     } else {

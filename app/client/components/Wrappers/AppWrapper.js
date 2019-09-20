@@ -14,9 +14,7 @@ const AppWrapper = ({ children }) => (
       className="custom-toast-container"
       toastClassName="custom-toast"
       bodyClassName="custom-toast__body"
-      autoClose={false}
       hideProgressBar
-      newestOnTop
     />
     <RedirectWatcher />
     {/* Other modules such as analytics */}
