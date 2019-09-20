@@ -1,9 +1,19 @@
 import validator from 'validator';
 
+// Common
 export function validateEmail(value) {
   return validator.isEmail(value);
 }
 
+export function validateURL(value) {
+  return validator.isURL(value);
+}
+
+export function validatePhone(value) {
+  return validator.isMobilePhone(value);
+}
+
+// User
 export function validatePassword(value) {
   const isLengthValid = value && value.length >= 8;
   const lowerCaseUsed = /[a-z]/.test(value);
@@ -21,6 +31,15 @@ export function validateLastName(value) {
   return validator.isLength(value, { min: 2, max: 150 });
 }
 
-export function validatePhone(value) {
-  return validator.isMobilePhone(value);
+// Company
+export function validateCompanyName(value) {
+  return validator.isLength(value, { min: 2, max: 256 });
+}
+
+export function validateCompanyTitle(value) {
+  return validator.isLength(value, { min: 2, max: 60 });
+}
+
+export function validateCompanyAbout(value) {
+  return validator.isLength(value, { min: 2, max: 256 });
 }

@@ -8,7 +8,7 @@ module.exports = {
   INFO_LINE_TYPES: {
     NUMBER: 'Phone',
     SITE: 'Web',
-    EMAIL: 'Mail'
+    EMAIL: 'Email'
   },
   TOKENS: {
     ACCESS: 'access_token',

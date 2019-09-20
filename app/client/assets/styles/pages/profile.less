@@ -37,6 +37,7 @@
       color: #fff;
       background: linear-gradient(322.07deg, #51B7EF 0%, #1974B2 100%);
       padding: 20px 20px 20px 150px;
+      min-height: 82px;
 
       h1 {
         font-size: 24px;
@@ -149,7 +150,7 @@
 
       &.edit-btn {
         position: absolute;
-        top: 25px;
+        top: 20px;
         right: 20px;
       }
 
@@ -220,6 +221,10 @@
         }
       }
 
+      .input-block {
+        margin-bottom: 0;
+      }
+
       .info-line {
         &:not(:last-of-type) {
           margin-bottom: 13px;
@@ -284,8 +289,7 @@
     background: aliceblue;
     border-radius: 4px;
     padding: 5px;
-    min-height: 170px;
-    width: calc(100% - 100px);
+    width: 100%;
     font-family: 'Muli', sans-serif;
     font-size: 16px;
   }

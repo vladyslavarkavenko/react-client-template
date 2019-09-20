@@ -53,7 +53,7 @@ class ChooseRole extends React.Component {
 
 const mapStateToProps = (state) => ({
   activeRole: authSelectors.activeRole(state),
-  rolesPermissions: authSelectors.rolePermissions(state)
+  rolesPermissions: authSelectors.rolesPermissions(state)
 });
 
 const mapDispatchToProps = {

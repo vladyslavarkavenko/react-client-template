@@ -23,7 +23,7 @@ export default (OriginalComponent) => {
   const mapStateToProps = (state) => ({
     authStatus: authSelectors.status(state),
     activeRole: authSelectors.activeRole(state),
-    rolesPermissions: authSelectors.rolePermissions(state)
+    rolesPermissions: authSelectors.rolesPermissions(state)
   });
 
   return connect(mapStateToProps)(RolesManagerHOC);

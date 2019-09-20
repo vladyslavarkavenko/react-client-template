@@ -42,7 +42,7 @@ const Profile = (props) => {
 
 const mapStateToProps = (state) => ({
   activeRole: authSelectors.activeRole(state),
-  rolesPermissions: authSelectors.rolePermissions(state),
+  rolesPermissions: authSelectors.rolesPermissions(state),
   companies: companiesSelectors.data(state)
 });
 

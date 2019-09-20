@@ -5,23 +5,24 @@ import Contacts from './components/Contacts';
 // eslint-disable-next-line react/prefer-stateless-function
 class About extends React.Component {
   render() {
-    const { activeRole, rolesPermissions, companies, editMode } = this.props;
-
-    const { web, email, phone, about } = companies[rolesPermissions[activeRole]];
+    const {
+      data: { web, email, phone, about }
+    } = this.props;
 
     return (
       <ContentBody
-        editMode={editMode}
+        {...this.props}
         main={[
           {
             title: 'Portrait',
-            body: about
+            body: about,
+            name: 'about'
           }
         ]}
         sidebar={[
           {
             title: 'Contacts',
-            body: <Contacts email={email} phone={phone} web={web} />
+            body: <Contacts {...this.props} email={email} phone={phone} web={web} />
           }
         ]}
       />
