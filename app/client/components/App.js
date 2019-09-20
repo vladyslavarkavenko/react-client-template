@@ -23,7 +23,7 @@ const ResetPassword = customLoadable({
 const PageNotFound = customLoadable({ loader: () => import('../pages/PageNotFound') });
 
 // additional subroutes
-// Overview, About
+// Overview, CompanyAbout
 
 // TODO: Add stylelint before commits.
 // TODO: Add favicon.

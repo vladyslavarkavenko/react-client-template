@@ -57,7 +57,7 @@ const _routes = [
             path: routing().about,
             exact: true,
             component: customLoadable({
-              loader: () => import('./pages/profile/About')
+              loader: () => import('./pages/profile/CompanyAbout')
             })
           },
           {

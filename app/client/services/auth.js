@@ -28,6 +28,10 @@ class AuthService {
   static changePassword({ password, token }) {
     return api.post('/core/user/set_password/', { password, token });
   }
+
+  static updateUser(data) {
+    return api.patch('/core/user/', data);
+  }
 }
 
 export default AuthService;

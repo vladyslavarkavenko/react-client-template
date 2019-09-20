@@ -21,14 +21,14 @@ const InfoLine = ({ type, data, onChange, isEdit, errors }) => {
     case NUMBER:
       line = <a href={`tel:${data}`}>{data}</a>;
       break;
-    case EMAIL:
+    case SITE:
       line = (
         <a href={data} rel="noopener noreferrer" target="_blank">
           {data}
         </a>
       );
       break;
-    case SITE:
+    case EMAIL:
       line = <a href={`mailto:${data}`}>{data}</a>;
       break;
     default:

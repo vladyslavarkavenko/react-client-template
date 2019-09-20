@@ -24,9 +24,49 @@ const userReducer = handleActions(
     },
     [actions.pushLogout.TRIGGER]() {
       return userInitial;
+    },
+    [actions.pushUpdateUser.SUCCESS](state, { payload }) {
+      return payload;
     }
   },
   userInitial
+);
+
+const isEdit = handleActions(
+  {
+    [actions.editModeUser](state) {
+      return !state;
+    }
+  },
+  false
+);
+
+const initErrors = {};
+const errors = handleActions(
+  {
+    [actions.setUserErrors](state, { payload }) {
+      return payload;
+    },
+    [actions.setUserErrors]() {
+      return initErrors;
+    }
+  },
+  initErrors
+);
+
+const activeEditUser = handleActions(
+  {
+    [actions.pushLoginByToken.SUCCESS](state, { payload }) {
+      return payload.user;
+    },
+    [actions.pushLogin.SUCCESS](state, { payload }) {
+      return payload.user;
+    },
+    [actions.updateUser](state, { payload }) {
+      return { ...state, ...payload };
+    }
+  },
+  null
 );
 
 const isAuthReducer = handleActions(
@@ -57,7 +97,7 @@ const roleReducer = handleActions(
     [actions.pushLoginByToken.SUCCESS](state, { payload }) {
       const { activeRole } = formatRolesPayload(payload.roles);
 
-      return activeRole || roleInitial;
+      return activeRole || state;
     },
     [actions.pushLogin.SUCCESS](state, { payload }) {
       const { activeRole } = formatRolesPayload(payload.roles);
@@ -111,15 +151,12 @@ const status = makeStatusReducer([actions.pushLoginByToken, actions.pushLogin]);
 
 const authReducer = combineReducers({
   status,
-  data
+  data,
+  isEdit,
+  errors,
+  activeEditUser
 });
 
 // reducerRegistry.register(actions.prefix, authReducer);
 
 export default authReducer;
-// const oldAuthInital = {
-//   user: null,
-//   isAuthorized: null,
-//   activeRole: null, // CUSTOMER/ MANAGER/ ANALYST/ ADMIN
-//   rolesPermissions: null // { CUSTOMER: [id], MANAGER: id, ANALYST: id, ADMIN: id }
-// };
