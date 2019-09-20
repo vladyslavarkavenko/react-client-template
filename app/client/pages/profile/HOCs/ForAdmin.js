@@ -31,12 +31,11 @@ export default (OriginalComponent) => {
     onChange(e) {
       const { updateCompany } = this.props;
 
-      console.log(e.target);
       const { name, value, files } = e.target;
 
       if (name === 'avatar') {
         if (!files) {
-          return updateCompany({ avatar: '' });
+          return updateCompany({ avatar: '', newAvatar: undefined });
         }
         // eslint-disable-next-line no-undef
         const reader = new FileReader();
@@ -121,7 +120,6 @@ export default (OriginalComponent) => {
       const {
         updateCompany,
         pushUpdateCompany,
-        resetCompany,
         editModeCompanies,
         activeEditCompany,
         ...rest

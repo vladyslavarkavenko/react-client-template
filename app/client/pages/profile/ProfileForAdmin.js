@@ -9,11 +9,12 @@ import ContentHeader from './components/ContentHeader';
 import ForAdmin from './HOCs/ForAdmin';
 
 const Overview = customLoadable({ loader: () => import('./Overview') });
-const AboutForAdmin = ForAdmin(customLoadable({ loader: () => import('./About') }));
+const AboutForAdmin = ForAdmin(customLoadable({ loader: () => import('./CompanyAbout') }));
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ProfileForAdmin extends React.Component {
   render() {
+    console.log(this.props);
     const {
       data: { avatar, newAvatar, name, title }
     } = this.props;

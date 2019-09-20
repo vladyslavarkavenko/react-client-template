@@ -18,6 +18,7 @@ export default (OriginalComponent) => {
       return <Redirect to={routing().chooseRole} />;
     }
 
+    console.log('here', props);
     return <OriginalComponent {...props} />;
   };
 

@@ -10,6 +10,7 @@ import { historyPush } from '../redirect/redirectActions';
 import authSelectors from './authSelectors';
 import companiesSelectors from '../companies/companiesSelectors';
 import Notification from '../../utils/notifications';
+import createToggleRoutine from '../helpers/createToggleRoutine';
 
 export const prefix = 'auth';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -25,6 +26,23 @@ export const pushLoginByToken = createRequestBound('LOGIN_BY_TOKEN_PUSH');
 export const pushSignUp = createRequestBound('SIGNUP_PUSH');
 export const pushLogout = createRequestBound('LOGOUT_PUSH');
 export const pushRefreshToken = createRequestBound('REFRESH_TOKEN_PUSH');
+
+export const pushUpdateUser = createRequestBound('USER_UPDATE_PUSH');
+export const editModeUser = createToggleRoutine(prefix, 'EDIT_MODE');
+export const updateUser = createRequestBound('USER_UPDATE');
+export const setUserErrors = createRequestBound('USER_SET_ERRORS');
+
+function* updateUserWorker({ payload: { data } }) {
+  yield put(pushUpdateUser.request());
+  try {
+    const user = yield call(() => AuthService.updateUser(data));
+
+    yield put(pushUpdateUser.success(user));
+    yield put(editModeUser.toggle());
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 function* setActiveRoleWorker({ payload }) {
   localStorage.setItem('role', payload);
@@ -76,13 +94,13 @@ function* loginByTokenWorker() {
         call(() => AuthService.getRoles())
       ]);
 
+      yield put(pushLoginByToken.success({ user, roles }));
+
       const role = localStorage.getItem('role');
 
       if (role) {
-        yield put(setActiveRole.success(role));
+        yield put(setActiveRole.trigger(role));
       }
-
-      yield put(pushLoginByToken.success({ user, roles }));
     } catch (err) {
       console.error(err);
       removeTokens();
@@ -149,7 +167,7 @@ export function* authWatcher() {
     takeLatest(pushRefreshToken.TRIGGER, refreshTokenWorker),
     takeLatest(pushLogout.TRIGGER, logoutWorker),
     takeLatest(pushSignUp.TRIGGER, signUpWorker),
-
+    takeLatest(pushUpdateUser.TRIGGER, updateUserWorker),
     takeLatest(setActiveRole.TRIGGER, setActiveRoleWorker)
   ]);
 }

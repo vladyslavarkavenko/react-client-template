@@ -3,10 +3,10 @@ import ContentBody from './components/ContentBody';
 import Contacts from './components/Contacts';
 
 // eslint-disable-next-line react/prefer-stateless-function
-class About extends React.Component {
+class UserAbout extends React.Component {
   render() {
     const {
-      data: { web, email, phone, about }
+      data: { email, phone, about }
     } = this.props;
 
     return (
@@ -14,7 +14,7 @@ class About extends React.Component {
         {...this.props}
         main={[
           {
-            title: 'Portrait',
+            title: 'Biography',
             body: about,
             name: 'about'
           }
@@ -22,7 +22,7 @@ class About extends React.Component {
         sidebar={[
           {
             title: 'Contacts',
-            body: <Contacts {...this.props} email={email} phone={phone} web={web} />
+            body: <Contacts {...this.props} email={email} phone={phone} />
           }
         ]}
       />
@@ -30,4 +30,4 @@ class About extends React.Component {
   }
 }
 
-export default About;
+export default UserAbout;
