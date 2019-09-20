@@ -1,6 +1,6 @@
 import React from 'react';
 import { INFO_LINE_TYPES } from '../../../../utils/constants';
-import CustomInput from '../../../../components/ui-components/CustomInput';
+import TextInput from '../../../../components/ui-components/Form/TextInput';
 
 const { NUMBER, EMAIL, SITE } = INFO_LINE_TYPES;
 
@@ -11,7 +11,7 @@ const InfoLine = ({ type, data, onChange, isEdit, errors }) => {
     return (
       <div className="info-line">
         <p>{type}</p>
-        <CustomInput value={data} name={name} onChange={onChange} error={errors[name]} />
+        <TextInput value={data} name={name} onChange={onChange} error={errors[name]} />
       </div>
     );
   }
