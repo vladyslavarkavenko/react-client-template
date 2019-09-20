@@ -8,13 +8,13 @@ const { NUMBER, SITE, EMAIL } = INFO_LINE_TYPES;
 // eslint-disable-next-line react/prefer-stateless-function
 class Contacts extends React.Component {
   render() {
-    const { phone, web, email } = this.props;
+    const { phone, web, email, ...rest } = this.props;
 
     return (
       <div>
-        {phone && <InfoLine type={NUMBER} data={phone} />}
-        {web && <InfoLine type={SITE} data={web} />}
-        {email && <InfoLine type={EMAIL} data={email} />}
+        {typeof phone !== 'undefined' && <InfoLine {...rest} type={NUMBER} data={phone} />}
+        {typeof web !== 'undefined' && <InfoLine {...rest} type={SITE} data={web} />}
+        {typeof email !== 'undefined' && <InfoLine {...rest} type={EMAIL} data={email} />}
       </div>
     );
   }

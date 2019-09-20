@@ -5,9 +5,9 @@ export function toggleItemInArray(state, payload) {
 
   if (clonedState.includes(payload)) {
     return clonedState.filter((item) => item !== payload);
-  } else {
-    return [...clonedState, payload];
   }
+
+  return [...clonedState, payload];
 }
 
 const generateStatusActions = (action) => ({

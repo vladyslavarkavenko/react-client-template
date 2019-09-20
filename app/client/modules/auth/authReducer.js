@@ -54,9 +54,18 @@ const roleInitial = null;
 
 const roleReducer = handleActions(
   {
+    [actions.pushLoginByToken.SUCCESS](state, { payload }) {
+      const { activeRole } = formatRolesPayload(payload.roles);
+
+      return activeRole || roleInitial;
+    },
+    [actions.pushLogin.SUCCESS](state, { payload }) {
+      const { activeRole } = formatRolesPayload(payload.roles);
+
+      return activeRole || roleInitial;
+    },
     [actions.setActiveRole.SUCCESS](state, { payload }) {
-      // TODO: Move to saga
-      return payload;
+      return payload.role;
     },
     [actions.pushLogout.TRIGGER]() {
       return roleInitial;
@@ -94,7 +103,7 @@ const data = combineReducers({
   user: userReducer,
   isAuthorized: isAuthReducer,
   activeRole: roleReducer,
-  rolePermissions: permissionsReducer
+  rolesPermissions: permissionsReducer
 });
 
 // TODO: Add different statuses for token and simple login

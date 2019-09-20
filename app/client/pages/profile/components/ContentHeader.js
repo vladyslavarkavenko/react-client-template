@@ -15,14 +15,14 @@ class ContentHeader extends React.Component {
     const {
       displayAvatar = false,
       avatar,
-      location,
+      loc,
       title,
       subTitle,
       editForm,
       navLinks,
-      editMode,
+      isEdit,
       toggleEditMode,
-      onAvatarChange
+      onChange
     } = this.props;
 
     return (
@@ -35,7 +35,7 @@ class ContentHeader extends React.Component {
           </div>
         )}
         <div className="info">
-          {editMode ? (
+          {isEdit ? (
             <div className="buttons">
               <>
                 <Button htmlFor="avatar" icon={CAMERA} title="Edit photo" type={TRANSPARENT} />
@@ -44,30 +44,30 @@ class ContentHeader extends React.Component {
                   type="file"
                   className="hidden"
                   name="avatar"
-                  onChange={onAvatarChange}
+                  onChange={onChange}
                 />
               </>
               <Button
                 icon={DELETE}
                 title="Delete"
                 type={TRANSPARENT}
-                onClick={() => onAvatarChange({ target: { name: 'avatar' } })}
+                onClick={() => onChange({ target: { name: 'avatar' } })}
               />
             </div>
           ) : (
             <>
               {title && <h1>{title}</h1>}
               {subTitle && <h2>{subTitle}</h2>}
-              {location && (
+              {loc && (
                 <div className="location">
                   <SvgMapMarker />
-                  <p>{location}</p>
+                  <p>{loc}</p>
                 </div>
               )}
             </>
           )}
         </div>
-        {editForm && !editMode && (
+        {editForm && !isEdit && (
           <Button
             icon={PEN}
             title="Edit"
@@ -76,7 +76,7 @@ class ContentHeader extends React.Component {
             type={TRANSPARENT}
           />
         )}
-        {editMode && editForm}
+        {isEdit && editForm}
         {navLinks && (
           <ul className="content-nav-bar">
             {navLinks.map(({ to, title }) => (

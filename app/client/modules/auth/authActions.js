@@ -1,10 +1,12 @@
-import { call, put, takeLatest, all } from 'redux-saga/effects';
+import { call, select, put, takeLatest, all } from 'redux-saga/effects';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import AuthService from '../../services/auth';
 import { setTokens, removeTokens } from '../helpers/helpers';
 import { TOKENS } from '../../utils/constants';
 import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
+import authSelectors from './authSelectors';
+import companiesSelectors from '../companies/companiesSelectors';
 
 export const prefix = 'auth';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -24,7 +26,15 @@ export const pushRefreshToken = createRequestBound('REFRESH_TOKEN_PUSH');
 function* setActiveRoleWorker({ payload }) {
   localStorage.setItem('role', payload);
 
-  yield put(setActiveRole.success(payload));
+  const permissions = yield select(authSelectors.rolesPermissions);
+  const companies = yield select(companiesSelectors.data);
+
+  const data = {
+    role: payload,
+    company: companies[permissions[payload]]
+  };
+
+  yield put(setActiveRole.success(data));
 }
 
 function* refreshTokenWorker() {

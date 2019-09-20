@@ -1,9 +1,21 @@
 import React from 'react';
 import { INFO_LINE_TYPES } from '../../../../utils/constants';
+import CustomInput from '../../../../components/ui-components/CustomInput';
 
 const { NUMBER, EMAIL, SITE } = INFO_LINE_TYPES;
 
-const InfoBlock = ({ type, data }) => {
+const InfoLine = ({ type, data, onChange, isEdit, errors }) => {
+  if (isEdit) {
+    const name = type.toLowerCase();
+
+    return (
+      <div className="info-line">
+        <p>{type}</p>
+        <CustomInput value={data} name={name} onChange={onChange} error={errors[name]} />
+      </div>
+    );
+  }
+
   let line;
   switch (type) {
     case NUMBER:
@@ -32,4 +44,4 @@ const InfoBlock = ({ type, data }) => {
   );
 };
 
-export default InfoBlock;
+export default InfoLine;
