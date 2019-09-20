@@ -1,0 +1,32 @@
+.makeLoader(@size: 64px, @color: @secondary-bg-color) {
+  //display: inline-block;
+  //width: @size; //64
+  //height: @size;
+
+  display: inline-block;
+  position: absolute;
+  width: @size; //64
+  height: auto;
+  right: 1rem;
+
+  &:after {
+    content: " ";
+    display: block;
+    width: calc(@size * 0.7); // 46
+    height:  calc(@size * 0.7);
+    margin: 1px;
+    border-radius: 50%;
+    border: 5px solid @color; //#03A2FB
+    border-color: @color transparent @color transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

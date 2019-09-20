@@ -11,3 +11,43 @@
     cursor: pointer;
     outline: none;
 }
+
+// Button.js
+.component {
+  &.btn {
+    margin: 1rem auto;
+    border: none;
+    min-height: 42px;
+    min-width: 250px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: @border-radius-block;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+
+    &__submit {
+      background-color: @secondary-bg-color;
+      color: #fff;
+      transition: background-color 0.2s;
+      &:hover {
+        background-color: @secondary-bg-color-darken;
+      }
+
+      &.is-loading {
+        background-color: @button-bg-loading;
+        color: @button-font-loading;
+        transition: background-color 0.2s;
+      }
+
+      .preloader {
+        .makeLoader(20px, @button-font-loading);
+      }
+    }
+  }
+}
+
