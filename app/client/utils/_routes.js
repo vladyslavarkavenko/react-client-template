@@ -80,7 +80,7 @@ const _routes = [
         path: routing().shareOpinion,
         exact: true,
         component: customLoadable({
-          loader: () => import('../pages/ShareOpinion')
+          loader: () => import('../pages/ShareOpinion/ShareOpinion')
         })
       }
     ]

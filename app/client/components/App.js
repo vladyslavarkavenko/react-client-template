@@ -27,7 +27,7 @@ const ProfileForCustomer = customLoadable({
 });
 
 const Dashboard = customLoadable({ loader: () => import('../pages/Dashboard') });
-const ShareOpinion = customLoadable({ loader: () => import('../pages/ShareOpinion') });
+const ShareOpinion = customLoadable({ loader: () => import('../pages/ShareOpinion/ShareOpinion') });
 const ForgotPassword = customLoadable({
   loader: () => import('../pages/Auth/ForgotPassword/ForgotPassword')
 });

@@ -21,13 +21,12 @@ export const removeTokens = () => {
 };
 
 export const formatRolesPayload = ({ customers, staff }) => {
-  const { company, isAdmin, isAnalyst, isManager } = staff;
-
   let activeRole = null;
   const companies = {};
   const rolesPermissions = {};
 
-  if (company) {
+  if (staff) {
+    const { company, isAdmin, isAnalyst, isManager } = staff;
     const { id } = company;
 
     companies[id] = company;
