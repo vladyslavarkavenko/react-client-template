@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { ROLES } from '../utils/constants';
-// import { updateCompany } from '../modules/companies';
 import { pushUpdateCompany } from '../modules/companies/companiesActions';
 import ProfileForAdmin from './profile/ProfileForAdmin';
 import ProfileForAnalyst from './profile/ProfileForAnalyst';

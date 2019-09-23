@@ -16,6 +16,7 @@ import {
   editModeUser,
   pushUpdateUser
 } from '../../../modules/auth/authActions';
+import { validateUser } from '../../../utils/validator';
 
 export default (OriginalComponent) => {
   class ForCustomerHOC extends React.Component {
@@ -29,6 +30,7 @@ export default (OriginalComponent) => {
 
     // eslint-disable-next-line consistent-return
     onChange(e) {
+      e.persist && e.persist();
       const { updateUser } = this.props;
 
       const { name, value, files } = e.target;
@@ -51,32 +53,28 @@ export default (OriginalComponent) => {
 
     save(e) {
       e.preventDefault();
-      const {
-        setUserErrors,
-        pushUpdateUser,
-        activeEditUser: { avatar, firstName, lastName, phone, email, about, location }
-      } = this.props;
+      const { setUserErrors, pushUpdateUser, activeEditUser } = this.props;
+      const { errors, isValid } = validateUser(activeEditUser);
+
+      if (!isValid) {
+        return setUserErrors(errors);
+      }
 
       // eslint-disable-next-line no-undef
       const data = new FormData();
-      const errors = {};
+      const { avatar, firstName, lastName, phone, email, about, location } = activeEditUser;
 
       if (!avatar.length) {
         data.append('avatar', avatar);
       }
-      // TODO: Add validation
-      data.append('firstName', firstName);
-      data.append('lastName', lastName);
       data.append('phone', phone);
       data.append('email', email);
       data.append('about', about);
+      data.append('lastName', lastName);
       data.append('location', location);
+      data.append('firstName', firstName);
 
-      if (Object.keys(errors).length) {
-        setUserErrors(errors);
-      } else {
-        pushUpdateUser({ data });
-      }
+      return pushUpdateUser({ data });
     }
 
     reset(e) {

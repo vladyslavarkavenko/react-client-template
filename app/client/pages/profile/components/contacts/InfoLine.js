@@ -17,23 +17,28 @@ const InfoLine = ({ type, data, onChange, isEdit, errors }) => {
   }
 
   let line;
-  switch (type) {
-    case NUMBER:
-      line = <a href={`tel:${data}`}>{data}</a>;
-      break;
-    case SITE:
-      line = (
-        <a href={data} rel="noopener noreferrer" target="_blank">
-          {data}
-        </a>
-      );
-      break;
-    case EMAIL:
-      line = <a href={`mailto:${data}`}>{data}</a>;
-      break;
-    default:
-      line = null;
-      break;
+  if (!data) {
+    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+    line = <a> — </a>;
+  } else {
+    switch (type) {
+      case NUMBER:
+        line = <a href={`tel:${data}`}>{data}</a>;
+        break;
+      case SITE:
+        line = (
+          <a href={data} rel="noopener noreferrer" target="_blank">
+            {data}
+          </a>
+        );
+        break;
+      case EMAIL:
+        line = <a href={`mailto:${data}`}>{data}</a>;
+        break;
+      default:
+        line = null;
+        break;
+    }
   }
 
   return (

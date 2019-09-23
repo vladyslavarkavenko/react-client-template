@@ -47,7 +47,7 @@ const errors = handleActions(
     [actions.setUserErrors](state, { payload }) {
       return payload;
     },
-    [actions.setUserErrors]() {
+    [actions.editModeUser]() {
       return initErrors;
     }
   },

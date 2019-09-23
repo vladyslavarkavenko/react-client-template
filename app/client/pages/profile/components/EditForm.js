@@ -8,17 +8,16 @@ const { BLUE } = BTN_TYPES;
 
 const EditForm = ({ inputs, onChange, reset, save, errors }) => (
   <form className="content-edit-info">
-    {inputs.map(({ name, value }) => {
-      const labelText = name.charAt(0).toUpperCase() + name.slice(1);
-
+    {inputs.map(({ name, value, labelText, className }) => {
       return (
         <TextInput
           key={name}
           name={name}
-          labelText={labelText}
+          labelText={labelText || name.charAt(0).toUpperCase() + name.slice(1)}
           value={value}
           onChange={onChange}
           error={errors[name]}
+          className={className}
         />
       );
     })}

@@ -15,7 +15,7 @@
     display: flex;
 
 
-    .search, button:not(:last-of-type) {
+    .search, button:not(.menu-btn) {
       margin-right: 24px;
     }
 
@@ -68,26 +68,32 @@
       }
     }
 
-    .avatar {
-      width: 40px;
-      min-width: 40px;
-      height: 40px;
-      margin-right: 10px;
-      border-radius: 20px;
-      overflow: hidden;
-    }
+    .menu-wrapper {
+      cursor: pointer;
+      display: flex;
 
-    .menu-btn {
-      svg {
-        width: 12px;
-        margin-right: 0;
+      .avatar {
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        border-radius: 20px;
+        overflow: hidden;
       }
+
+      .menu-btn {
+        svg {
+          width: 12px;
+          margin-right: 0;
+        }
+      }
+
     }
 
     ul.menu {
       position: absolute;
       right: 22px;
-      top: 60px;
+      top: 59px;
       width: 180px;
       border-left: 2px solid #3EA0DA;
       background-color: #FFF;

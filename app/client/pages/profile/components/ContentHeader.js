@@ -9,6 +9,8 @@ import SvgMapMarker from '../../../../../public/assets/svg/map-marker.svg';
 const { PEN, CAMERA, DELETE } = HEADER_ICONS;
 const { TRANSPARENT } = BTN_TYPES;
 
+// TODO: Add loading when updating.
+// TODO: Add validation for image.
 // eslint-disable-next-line react/prefer-stateless-function
 class ContentHeader extends React.Component {
   render() {

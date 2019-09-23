@@ -1,15 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// import {
-//   validateEmail,
-//   validatePhone,
-//   validateLocation,
-//   validateFirstName,
-//   validateLastName,
-//   validateUserAbout,
-//   validateUserTitle,
-// } from '../../../utils/validator';
+import { validateUser } from '../../../utils/validator';
 import authSelectors from '../../../modules/auth/authSelectors';
 import {
   updateUser,
@@ -30,6 +22,7 @@ export default (OriginalComponent) => {
 
     // eslint-disable-next-line consistent-return
     onChange(e) {
+      e.persist && e.persist();
       const { updateUser } = this.props;
 
       const { name, value, files } = e.target;
@@ -52,33 +45,30 @@ export default (OriginalComponent) => {
 
     save(e) {
       e.preventDefault();
-      const {
-        setUserErrors,
-        pushUpdateUser,
-        activeEditUser: { avatar, firstName, lastName, phone, email, about, location, title }
-      } = this.props;
+      const { setUserErrors, pushUpdateUser, activeEditUser } = this.props;
+      const { errors, isValid } = validateUser(activeEditUser);
+
+      console.log('here', errors, isValid);
+      if (!isValid) {
+        return setUserErrors(errors);
+      }
 
       // eslint-disable-next-line no-undef
       const data = new FormData();
-      const errors = {};
+      const { avatar, firstName, lastName, phone, email, about, location, title } = activeEditUser;
 
       if (!avatar.length) {
         data.append('avatar', avatar);
       }
-      // TODO: Add validation
-      data.append('firstName', firstName);
-      data.append('lastName', lastName);
       data.append('phone', phone);
       data.append('email', email);
       data.append('about', about);
-      data.append('location', location);
       data.append('title', title);
+      data.append('lastName', lastName);
+      data.append('location', location);
+      data.append('firstName', firstName);
 
-      if (Object.keys(errors).length) {
-        setUserErrors(errors);
-      } else {
-        pushUpdateUser({ data });
-      }
+      return pushUpdateUser({ data });
     }
 
     reset(e) {
