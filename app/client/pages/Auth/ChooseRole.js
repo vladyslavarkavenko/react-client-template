@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import ChooseRoleIcon from './Items/ChooseRoleIcon';
-import { setActiveRole } from '../../../modules/auth/authActions';
-import Loader from '../../../components/ui-components/Layout/Loader';
-import routing from '../../../utils/routing';
-import authSelectors from '../../../modules/auth/authSelectors';
+import ChooseRoleIcon from './chooseRole/ChooseRoleIcon';
+import { setActiveRole } from '../../modules/auth/authActions';
+import Loader from '../../components/ui-components/Layout/Loader';
+import routing from '../../utils/routing';
+import authSelectors from '../../modules/auth/authSelectors';
 
 // TODO: Split text to locales file.
 class ChooseRole extends React.Component {

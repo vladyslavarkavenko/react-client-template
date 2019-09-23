@@ -9,14 +9,59 @@
       },
       "validation": {
         "email": {
+          "long": "Email is too long",
           "required": "Email is required",
-          "info": "Email format is incorrect",
-          "long": "Email is too long"
+          "info": "Email format is invalid"
         },
-        "password": {
-          "required": "Password field is required",
-          "info": "Password should contain lower, uppercase letters, numbers and special symbols",
-          "match": "Passwords didn't match"
+        "phone": {
+          "format": "Phone format is invalid",
+          "required": "Phone number is required"
+        },
+        "location": {
+          "required": "Location is required"
+        },
+        "company": {
+          "name": {
+            "required": "Name is required",
+            "length": "Name must be {{min}}-{{max}} characters long"
+          },
+          "web": {
+            "required": "Site is required",
+            "format": "Site format is invalid"
+          },
+          "about": {
+            "required": "Portrait is required",
+            "length": "Portrait  must be {{min}}-{{max}} characters long"
+          },
+          "title": {
+            "length": "Title must be {{min}}-{{max}} characters long"
+          }
+        },
+        "user": {
+          "password": {
+            "match": "Passwords don't match",
+            "required": "Password is required",
+            "length": "Password must be minimum {{min}} characters long",
+            "info": "Password should contain lower-, uppercase letters and numbers or special symbols"
+          },
+          "about": {
+            "required": "Biography is required",
+            "length": "Biography  must be {{min}}-{{max}} characters long"
+          },
+          "title": {
+            "length": "Title must be {{min}}-{{max}} characters long"
+          },
+          "policy": {
+            "required": "Terms and conditions must be accepted"
+          },
+          "firstName": {
+            "required": "First name is required",
+            "length": "First name must be {{min}}-{{max}} characters long"
+          },
+          "lastName": {
+            "required": "Last name is required",
+            "length": "Last name must be {{min}}-{{max}} characters long"
+          }
         }
       },
       "notification": {
@@ -72,16 +117,6 @@
           "login": "Log in"
         },
         "forgotPassword": "Forgot password?"
-      },
-      "errors" : {
-        "email": "Email address format is incorrect",
-        "pass": "Password in invalid",
-        "password": "Password should contain lower, uppercase letters and numbers",
-        "name": {
-          "first": "First name should be 2-30 character",
-          "last": "Last name should be 2-150 character"
-        },
-        "phone": "Phone format is incorrect"
       }
     }
   }

@@ -35,12 +35,14 @@ class ProfileForCustomer extends React.Component {
                 {
                   labelText: 'First name',
                   name: 'firstName',
-                  value: firstName
+                  value: firstName,
+                  className: 'mr-2 d-inline-block'
                 },
                 {
                   labelText: 'Last name',
                   name: 'lastName',
-                  value: lastName
+                  value: lastName,
+                  className: 'd-inline-block'
                 },
                 {
                   name: 'location',

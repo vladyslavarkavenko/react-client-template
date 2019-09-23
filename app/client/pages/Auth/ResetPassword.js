@@ -2,12 +2,12 @@ import React from 'react';
 import i18next from 'i18next';
 import { Link } from 'react-router-dom';
 
-import routing from '../../../utils/routing';
-import AuthService from '../../../services/auth';
-import Notification from '../../../utils/notifications';
-import PasswordInput from '../../../components/PasswordInput';
-import ResetPasswordValidation from './ResetPasswordValidation';
-import Button from '../../../components/ui-components/Form/Button';
+import routing from '../../utils/routing';
+import AuthService from '../../services/auth';
+import PasswordInput from '../../components/PasswordInput';
+import { validateUserResetPassword } from '../../utils/validator';
+import Button from '../../components/ui-components/Form/Button';
+import Notification from '../../utils/notifications';
 
 export default class ResetPassword extends React.Component {
   constructor(props) {
@@ -55,7 +55,7 @@ export default class ResetPassword extends React.Component {
     const { history } = this.props;
     const { token, password } = input;
 
-    const { isValid, errors } = ResetPasswordValidation(input);
+    const { isValid, errors } = validateUserResetPassword(input);
 
     if (isValid) {
       this.setState({ status: 'request' });

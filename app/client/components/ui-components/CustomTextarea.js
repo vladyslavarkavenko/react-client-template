@@ -11,6 +11,7 @@ export default function CustomTextarea({
   className,
   ...rest
 }) {
+  console.log('error', error);
   return (
     <div className={`input-block form__row ${className || ''}`}>
       {error && <span className="input-error-message">{error}</span>}

@@ -48,7 +48,7 @@ class PasswordInput extends React.Component {
           {labelText}
           {showIndicator && <PasswordIndicator value={value} />}
         </label>
-        <div className="position-relative">
+        <div className="p-relative">
           <input
             id={key}
             name={name}

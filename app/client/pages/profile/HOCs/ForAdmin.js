@@ -1,14 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import {
-  validateCompanyAbout,
-  validateCompanyName,
-  validateEmail,
-  validatePhone,
-  validateCompanyTitle,
-  validateURL
-} from '../../../utils/validator';
+import { validateCompany } from '../../../utils/validator';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 import {
   editModeCompanies,
@@ -29,6 +22,7 @@ export default (OriginalComponent) => {
 
     // eslint-disable-next-line consistent-return
     onChange(e) {
+      e.persist && e.persist();
       const { updateCompany } = this.props;
 
       const { name, value, files } = e.target;
@@ -51,61 +45,29 @@ export default (OriginalComponent) => {
 
     save(e) {
       e.preventDefault();
-      const {
-        setCompanyErrors,
-        pushUpdateCompany,
-        activeEditCompany: { avatar, name, title, phone, web, email, about }
-      } = this.props;
+      const { setCompanyErrors, pushUpdateCompany, activeEditCompany } = this.props;
+      const { errors, isValid } = validateCompany(activeEditCompany);
+
+      if (!isValid) {
+        return setCompanyErrors(errors);
+      }
 
       // eslint-disable-next-line no-undef
       const data = new FormData();
-      const errors = {};
+      const { avatar, name, title, phone, web, email, about } = activeEditCompany;
 
       if (!avatar.length) {
+        console.log('typeof avatar', typeof avatar);
         data.append('avatar', avatar);
       }
+      data.append('web', web);
+      data.append('name', name);
+      data.append('title', title);
+      data.append('phone', phone);
+      data.append('email', email);
+      data.append('about', about);
 
-      if (validateCompanyName(name)) {
-        data.append('name', name);
-      } else {
-        errors.name = 'Invalid name';
-      }
-
-      if (validateCompanyTitle(title)) {
-        data.append('title', title);
-      } else {
-        errors.title = 'Invalid title';
-      }
-
-      if (validatePhone(phone)) {
-        data.append('phone', phone);
-      } else {
-        errors.phone = 'Invalid phone';
-      }
-
-      if (validateEmail(email)) {
-        data.append('email', email);
-      } else {
-        errors.email = 'Invalid email';
-      }
-
-      if (validateURL(web)) {
-        data.append('web', web);
-      } else {
-        errors.web = 'Invalid web';
-      }
-
-      if (validateCompanyAbout(about)) {
-        data.append('about', about);
-      } else {
-        errors.about = 'Invalid about';
-      }
-
-      if (Object.keys(errors).length) {
-        setCompanyErrors(errors);
-      } else {
-        pushUpdateCompany({ data });
-      }
+      return pushUpdateCompany({ data });
     }
 
     reset(e) {

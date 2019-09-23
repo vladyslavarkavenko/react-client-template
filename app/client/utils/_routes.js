@@ -28,7 +28,7 @@ const _routes = [
     path: routing().chooseRole,
     exact: true,
     component: customLoadable({
-      loader: () => import('../pages/Auth/ChooseRole/ChooseRole')
+      loader: () => import('../pages/Auth/ChooseRole')
     })
   },
   {
@@ -89,7 +89,7 @@ const _routes = [
     path: routing().forgotPassword,
     exact: true,
     component: customLoadable({
-      loader: () => import('../pages/Auth/ForgotPassword/ForgotPassword')
+      loader: () => import('../pages/Auth/ForgotPassword')
     })
   },
   {

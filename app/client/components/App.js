@@ -10,7 +10,7 @@ import RolesRoute from './Wrappers/RolesRoute';
 
 const Login = customLoadable({ loader: () => import('../pages/Auth/Login') });
 const Register = customLoadable({ loader: () => import('../pages/Auth/SignUp') });
-const ChooseRole = customLoadable({ loader: () => import('../pages/Auth/ChooseRole/ChooseRole') });
+const ChooseRole = customLoadable({ loader: () => import('../pages/Auth/ChooseRole') });
 const Account = customLoadable({ loader: () => import('../pages/Account') });
 // const Profile = customLoadable({ loader: () => import('../pages/Profile') });
 const ProfileForAdmin = customLoadable({
@@ -29,10 +29,10 @@ const ProfileForCustomer = customLoadable({
 const Dashboard = customLoadable({ loader: () => import('../pages/Dashboard') });
 const ShareOpinion = customLoadable({ loader: () => import('../pages/ShareOpinion') });
 const ForgotPassword = customLoadable({
-  loader: () => import('../pages/Auth/ForgotPassword/ForgotPassword')
+  loader: () => import('../pages/Auth/ForgotPassword')
 });
 const ResetPassword = customLoadable({
-  loader: () => import('../pages/Auth/ResetPassword/ResetPassword')
+  loader: () => import('../pages/Auth/ResetPassword')
 });
 const PageNotFound = customLoadable({ loader: () => import('../pages/PageNotFound') });
 

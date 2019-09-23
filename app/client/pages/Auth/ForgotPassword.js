@@ -2,12 +2,12 @@ import React from 'react';
 import i18next from 'i18next';
 import { Link } from 'react-router-dom';
 
-import TextInput from '../../../components/ui-components/Form/TextInput';
-import routing from '../../../utils/routing';
-import AuthService from '../../../services/auth';
-import ForgotPasswordValidation from './ForgotPasswordValidation';
-import Button from '../../../components/ui-components/Form/Button';
-import Notification from '../../../utils/notifications';
+import TextInput from '../../components/ui-components/Form/TextInput';
+import routing from '../../utils/routing';
+import AuthService from '../../services/auth';
+import { validateUserForgotPassword } from '../../utils/validator';
+import Button from '../../components/ui-components/Form/Button';
+import Notification from '../../utils/notifications';
 
 export default class ForgotPassword extends React.Component {
   constructor(props) {
@@ -16,7 +16,6 @@ export default class ForgotPassword extends React.Component {
     this.email = React.createRef();
 
     this.state = {
-      // isValid: 'none', //none, false, true
       status: 'none',
       input: {
         email: ''
@@ -30,7 +29,7 @@ export default class ForgotPassword extends React.Component {
   handleRecoverPassword(e) {
     e.preventDefault();
     const email = this.email.current.value;
-    const { isValid, errors } = ForgotPasswordValidation(email);
+    const { isValid, errors } = validateUserForgotPassword(email);
 
     if (isValid) {
       this.setState({ status: 'request' });
@@ -43,7 +42,6 @@ export default class ForgotPassword extends React.Component {
           Notification.error(err);
           this.setState({
             status: 'failure',
-            // isValid: false,
             errors: {
               email: 'Wrong email'
             }

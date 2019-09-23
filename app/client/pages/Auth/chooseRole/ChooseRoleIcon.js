@@ -1,10 +1,10 @@
 import React from 'react';
-import { ROLES } from '../../../../utils/constants';
+import { ROLES } from '../../../utils/constants';
 
-import SvgAdmin from '../../../../../../public/assets/svg/admin.svg';
-import SvgAnalyst from '../../../../../../public/assets/svg/analyst.svg';
-import SvgCustomer from '../../../../../../public/assets/svg/customer.svg';
-import SvgManager from '../../../../../../public/assets/svg/manager.svg';
+import SvgAdmin from '../../../../../public/assets/svg/admin.svg';
+import SvgAnalyst from '../../../../../public/assets/svg/analyst.svg';
+import SvgCustomer from '../../../../../public/assets/svg/customer.svg';
+import SvgManager from '../../../../../public/assets/svg/manager.svg';
 
 const { CUSTOMER, ADMIN, ANALYST, MANAGER } = ROLES;
 

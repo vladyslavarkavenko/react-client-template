@@ -3,18 +3,13 @@ import i18next from 'i18next';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { validateEmail, validatePassword } from '../../utils/validator';
+import { validateUserLogin } from '../../utils/validator';
 import TextInput from '../../components/ui-components/Form/TextInput';
 import PasswordInput from '../../components/PasswordInput';
 import routing from '../../utils/routing';
 import { pushLogin } from '../../modules/auth/authActions';
 import authSelectors from '../../modules/auth/authSelectors';
 import Button from '../../components/ui-components/Form/Button';
-
-const initialErrorsState = {
-  emailError: null,
-  passwordError: null
-};
 
 // TODO: Remove errors when user starts typing in that field. (Think about it)
 
@@ -25,7 +20,7 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      ...initialErrorsState
+      errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
@@ -39,45 +34,24 @@ class Login extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
     const { pushLogin, status } = this.props;
 
     if (status === 'request') {
-      return;
+      return null;
     }
 
-    this.setState({ ...initialErrorsState });
+    const { errors, isValid } = validateUserLogin(this.state);
+    if (!isValid) {
+      return this.setState({ errors });
+    }
 
     const { email, password } = this.state;
-
-    const isEmailValid = validateEmail(email);
-    const isPasswordValid = validatePassword(password);
-
-    if (isEmailValid && isPasswordValid) {
-      pushLogin({ email, password });
-
-      // login({ email, password }, err => (
-      //   err
-      //     ? displayError(err)
-      //     : history.push(routing().profile)
-      // ));
-    } else {
-      const newState = {};
-
-      if (!isEmailValid) {
-        newState.emailError = i18next.t('errors.email');
-      }
-      if (!isPasswordValid) {
-        newState.passwordError = i18next.t('errors.pass');
-      }
-
-      this.setState(newState);
-    }
+    return pushLogin({ email, password });
   }
 
   render() {
     const { status } = this.props;
-    const { email, password, emailError, passwordError } = this.state;
+    const { email, password, errors } = this.state;
 
     const isLoading = status === 'request';
 
@@ -91,7 +65,7 @@ class Login extends React.Component {
                 name="email"
                 value={email}
                 onChange={this.onChange}
-                error={emailError}
+                error={errors.email}
                 labelText={i18next.t('login.email')}
                 readOnly={isLoading}
               />
@@ -99,7 +73,7 @@ class Login extends React.Component {
                 value={password}
                 name="password"
                 onChange={this.onChange}
-                error={passwordError}
+                error={errors.password}
                 labelText={i18next.t('login.password')}
                 readOnly={isLoading}
               />
@@ -109,10 +83,6 @@ class Login extends React.Component {
                   isLoading={isLoading}
                   title={i18next.t('login.buttons.login')}
                 />
-
-                {/*<button type="submit" className="button form__submit-btn" disabled={isDisabled}>*/}
-                {/*  {isDisabled ? i18next.t('default.loading') : i18next.t('login.buttons.login')}*/}
-                {/*</button>*/}
               </div>
             </form>
             <div className="text-center">

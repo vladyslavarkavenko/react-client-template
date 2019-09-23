@@ -24,14 +24,42 @@ class TopBarWithProfile extends React.Component {
       showMenu: false
     };
 
+    this.menu = React.createRef();
+    this.menuBtn = React.createRef();
+
     this.logOut = this.logOut.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.checkForClickOutside = this.checkForClickOutside.bind(this);
+    this.enableCheckForClickOutside = this.enableCheckForClickOutside.bind(this);
+    this.disableCheckForClickOutside = this.disableCheckForClickOutside.bind(this);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mouseup', this.checkForClickOutside);
+  }
+
+  checkForClickOutside(e) {
+    if (!this.menu.current.contains(e.target) && !this.menuBtn.current.contains(e.target)) {
+      this.toggleMenu();
+    }
+  }
+
+  enableCheckForClickOutside() {
+    window.addEventListener('mouseup', this.checkForClickOutside);
+  }
+
+  disableCheckForClickOutside() {
+    window.removeEventListener('mouseup', this.checkForClickOutside);
   }
 
   toggleMenu() {
-    this.setState((state) => ({
-      showMenu: !state.showMenu
-    }));
+    this.setState(
+      (state) => ({ showMenu: !state.showMenu }),
+      () => {
+        const { showMenu } = this.state;
+        showMenu ? this.enableCheckForClickOutside() : this.disableCheckForClickOutside();
+      }
+    );
   }
 
   logOut() {
@@ -65,15 +93,17 @@ class TopBarWithProfile extends React.Component {
         <button>
           <SvgBell />
         </button>
-        <div className="avatar">
-          <img src="/assets/img/empty-avatar.jpg" alt="Avatar" />
+        <div className="menu-wrapper" onClick={this.toggleMenu} ref={this.menuBtn}>
+          <div className="avatar">
+            <img src="/assets/img/empty-avatar.jpg" alt="Avatar" />
+          </div>
+          <button className="menu-btn">
+            <SvgArrowDown />
+          </button>
         </div>
-        <button className="menu-btn" onClick={this.toggleMenu}>
-          <SvgArrowDown />
-        </button>
         {showMenu && (
-          <ul className="menu">
-            <li>
+          <ul className="menu" ref={this.menu}>
+            <li onClick={this.toggleMenu}>
               <Link to={routing().about}>Profile</Link>
             </li>
             <li onClick={this.toggleMenu}>
