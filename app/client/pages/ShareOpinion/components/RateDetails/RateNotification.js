@@ -1,5 +1,5 @@
 import React from 'react';
-import ExclamationCircleSvg from '../../../../../public/assets/svg/exclamation-circle.svg';
+import ExclamationCircleSvg from '../../../../../../public/assets/svg/exclamation-circle.svg';
 
 export default function RateNotification() {
   return (

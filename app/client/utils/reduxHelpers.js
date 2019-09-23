@@ -56,10 +56,13 @@ export function makeStatusWithResetReducer(action, resetAction) {
     return handleActions(handlers, 'none');
   }
 
-  return handleActions({
-    ...generateStatusActions(action),
-    [resetAction]() {
-      return 'none';
-    }
-  });
+  return handleActions(
+    {
+      ...generateStatusActions(action),
+      [resetAction]() {
+        return 'none';
+      }
+    },
+    'none'
+  );
 }
