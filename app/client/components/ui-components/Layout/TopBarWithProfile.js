@@ -71,7 +71,7 @@ class TopBarWithProfile extends React.Component {
 
   render() {
     const { showMenu } = this.state;
-    const { activeRole } = this.props;
+    const { activeRole, user } = this.props;
 
     const isCustomer = activeRole === ROLES.CUSTOMER;
 
@@ -95,7 +95,7 @@ class TopBarWithProfile extends React.Component {
         </button>
         <div className="menu-wrapper" onClick={this.toggleMenu} ref={this.menuBtn}>
           <div className="avatar">
-            <img src="/assets/img/empty-avatar.jpg" alt="Avatar" />
+            <img src={user.avatar || '/assets/img/empty-avatar.jpg'} alt="Avatar" />
           </div>
           <button className="menu-btn">
             <SvgArrowDown />
@@ -119,6 +119,7 @@ class TopBarWithProfile extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  user: authSelectors.user(state),
   activeRole: authSelectors.activeRole(state)
 });
 
