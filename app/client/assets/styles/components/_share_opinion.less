@@ -12,7 +12,7 @@
   padding: 0;
   height: 100%;
 
-  .evaluate {
+  .rate {
     &-list {
       flex-direction: column;
       flex-grow: 1;
@@ -35,6 +35,8 @@
       }
 
       &__item {
+        display: flex;
+        position:relative;
         height: 80px;
         font-size: 1.05rem;
         line-height: 40px;
@@ -47,6 +49,53 @@
         &:hover {
           background-color: @border-color-list;
         }
+
+        .company {
+
+          &-label {
+            position: absolute;
+            top: -1px;
+            bottom: -1px;
+            left: 0;
+
+            background-color: @alert-color-blue;
+            width: 3px;
+
+          }
+          &-info {
+
+          }
+
+          &-title {
+            line-height: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+          }
+          &-subtitle {
+            line-height: 2.25rem;
+            font-size: 1rem;
+          }
+          &-img {
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+            img {
+
+
+            }
+          }
+          &-alert {
+            position: absolute;
+            right: 1rem;
+            top: 0.5rem;
+            svg {
+              width: 20px;
+              fill: @alert-color-red;
+            }
+          }
+        }
+
+
       }
     }
     &-details {
@@ -156,19 +205,21 @@
 
         }
 
+
+
         &__subject {
           position: relative;
           display: flex;
+          //flex-direction: column;
           margin-bottom: 15px;
-          align-items: center;
-          height: 90px;
+          min-height: 90px;
           background-color: white;
           border: 1px solid @border-color-list;
           //border-left: 3px solid @alert-color-red;
           padding: 10px 15px;
 
-
           &.active {
+            flex-direction: column;
             .subject-arrow {
               transform: rotate(180deg);
             }
@@ -176,22 +227,26 @@
           }
 
           .subject-arrow {
-            width: 12px;
+            align-self: center;
+            cursor: pointer;
+            width: 15px;
+            line-height: 15px;
             fill: @font-color-lighter;
             transition: transform 0.2s;
             margin-right: 20px;
-
           }
 
           .subject-main {
             display: flex;
             flex-grow: 1;
+            //flex-direction: column;
+
 
           }
           .subject-img {
             margin-right: 20px;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             >img {
               border-radius: 50%;
             }
@@ -204,8 +259,32 @@
 
           }
 
+          .subject-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            >span {
+              margin-left: 10px;
+              line-height: 1rem;
+              //display: flex;
+              //align-items: baseline;
+
+              svg {
+                fill: @alert-color-red;
+                width: 18px;
+              }
+            }
+          }
+
+          .subject-count {
+            font-size: 0.95rem;
+            color: @font-color-lighter;
+          }
+
           .subject-progress-bar {
-            background-color: #cececf;
+            background-color: @primary-bg-color;
             border-radius: 10px;
             width: 100%;
             height: 5px;
@@ -215,6 +294,55 @@
               border-radius: 10px;
               height: 5px;
 
+            }
+          }
+
+          .topics-list {
+            margin: 20px 0 0 0;
+            background-color: white;
+
+            .topic {
+              padding: 0 10px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              min-height: 50px;
+              margin: 5px 5px;
+              background-color: white;
+
+              &-name {
+                font-size: 1rem;
+                line-height: 24px;
+              }
+              &-checkbox {
+                // TODO: create custom checkbox
+                [type="checkbox"]:not(:checked) + label,
+                [type="checkbox"]:checked + label {
+                  font-family: 'Muli', sans-serif;
+                  color: black;
+                  font-size: 1rem;
+                  padding-left: 2rem;
+                  font-weight: normal;
+                }
+                [type="checkbox"]:not(:checked) + label:after,
+                [type="checkbox"]:checked + label:after {
+                  //font-size: 1.25rem;
+                  //color:black;
+
+                }
+
+              }
+              &-status {
+                //justify-self: flex-end;
+                display: flex;
+                align-content: center;
+                margin-left: 20px;
+
+                svg {
+                  width: 20px;
+                  fill: @alert-color-red;
+                }
+              }
             }
           }
 
