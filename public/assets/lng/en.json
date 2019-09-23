@@ -64,6 +64,15 @@
           }
         }
       },
+      "notification": {
+        "error": {
+          "default": "Something went wrong"
+        },
+        "success": {
+          "signUp": "Registration completed",
+          "changePassword": "Your password has been changed"
+        }
+      },
       "register": {
         "title": "Sign up in cTRU",
         "name": {

@@ -1,4 +1,6 @@
 import { call, select, put, takeLatest, all } from 'redux-saga/effects';
+
+import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import AuthService from '../../services/auth';
 import { setTokens, removeTokens } from '../helpers/helpers';
@@ -7,6 +9,7 @@ import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
 import authSelectors from './authSelectors';
 import companiesSelectors from '../companies/companiesSelectors';
+import Notification from '../../utils/notifications';
 import createToggleRoutine from '../helpers/createToggleRoutine';
 
 export const prefix = 'auth';
@@ -64,6 +67,7 @@ function* refreshTokenWorker() {
       setTokens(res.data.tokens);
     } catch (err) {
       removeTokens();
+      Notification.error(err);
       console.error(err);
     }
   }
@@ -131,7 +135,7 @@ function* loginWorker({ payload: { email, password } }) {
 
     yield put(historyPush(routing().account));
   } catch (err) {
-    console.error(err);
+    Notification.error(err);
     yield put(pushLogin.failure());
   }
 }
@@ -148,8 +152,10 @@ function* signUpWorker({ payload: { input } }) {
     // start Sign In
     yield put(pushLogin({ email: input.email, password: input.password }));
 
+    Notification.success(i18next.t('notification.success.signUp'));
     yield put(pushSignUp.success());
   } catch (err) {
+    Notification.error(err);
     yield put(pushSignUp.failure());
   }
 }

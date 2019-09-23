@@ -17,7 +17,7 @@ const config = {
     filename: '[name].js',
     path: path.resolve(__dirname, 'public'),
     chunkFilename: '[name].js',
-    publicPath: '/',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -26,54 +26,74 @@ const config = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: 'babel-loader'
+          }
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
           },
-        ],
+          {
+            loader: 'css-loader',
+            options: {
+              url: false
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [autoprefixer()]
+            }
+          }
+        ]
       },
       {
         test: /\.less$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader
           },
           {
             loader: 'css-loader',
             options: {
-              url: false,
-            },
+              url: false
+            }
           },
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [autoprefixer()],
-            },
+              plugins: [autoprefixer()]
+            }
           },
-          'less-loader',
-        ],
-      },
-    ],
+          'less-loader'
+        ]
+      }
+    ]
   },
   plugins: [
     // new BundleAnalyzerPlugin(),
     // new CleanWebpackPlugin(),
     new ReactLoadablePlugin({
-      filename: './public/react-loadable.json',
+      filename: './public/react-loadable.json'
     }),
     new HtmlWebpackPlugin({
       template: './index.html',
       filename: 'ssr-template.txt',
       inlineSource: '.(css)$',
       minify: {
-        collapseWhitespace: true,
-      },
+        collapseWhitespace: true
+      }
     }),
     new HtmlWebpackInlineSourcePlugin(),
     new MiniCssExtractPlugin({
-      filename: '[name].[hash].css',
+      filename: '[name].[hash].css'
     }),
     new OptimizeCSSAssetsPlugin(),
-    new Dotenv({ path: './config/production.env' }),
-  ],
+    new Dotenv({ path: './config/production.env' })
+  ]
 };
 
 module.exports = config;
