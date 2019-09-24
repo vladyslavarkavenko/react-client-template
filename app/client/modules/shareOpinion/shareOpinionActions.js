@@ -8,8 +8,8 @@ export const prefix = 'shareOpinion';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const selectOpinionProfile = createRequestBound('PROFILE_SELECT');
+export const selectOpinionTopic = createRequestBound('TOPIC_SELECT');
 export const fetchOpinionSubjects = createRequestBound('SUBJECTS_FETCH');
-// export const fetchOpinionTopics = createRequestBound('TOPICS_FETCH');
 
 function* fetchOpinionSubjectsWorker({ payload: { data } }) {
   yield put(fetchOpinionSubjects.request());

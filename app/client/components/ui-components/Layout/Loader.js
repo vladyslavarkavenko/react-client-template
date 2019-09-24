@@ -13,11 +13,15 @@ export function InlineLoader() {
   return <div className="preloader" />;
 }
 
-// style={{ height: '50px', width: '50px' }}
-//style={{ width: '100%' }}
-export function LoaderImg() {
+export function LoaderBlock({ width = '100%', height = 'auto' }) {
   return (
-    <div className="loader-block">
+    <div
+      className="loader-block"
+      style={{
+        width,
+        height
+      }}
+    >
       <LoaderSvg className="loader-svg" />
     </div>
   );

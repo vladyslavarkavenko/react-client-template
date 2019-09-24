@@ -1,27 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { selectOpinionTopic } from '../../../../modules/shareOpinion/shareOpinionActions';
 import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
 
 import RateDetails from './RateDetails';
 
-function RateDetailsContainer({ selectedProfile, subjectsStatus, subjectsData }) {
-  return (
-    <RateDetails
-      selectedProfile={selectedProfile}
-      subjectsStatus={subjectsStatus}
-      subjectsData={subjectsData}
-    />
-  );
+function RateDetailsContainer(props) {
+  return <RateDetails {...props} />;
 }
 
 const mapStateToProps = (state) => ({
   selectedProfile: shareOpinionSelectors.selectedProfile(state),
+  selectedTopicsId: shareOpinionSelectors.selectedTopicsId(state),
+
   subjectsStatus: shareOpinionSelectors.subjectsStatus(state),
   subjectsData: shareOpinionSelectors.subjectsData(state)
 });
 
 const mapDispatchToProps = {
-  // selectOpinionProfile
+  selectOpinionTopic
 };
 
 export default connect(

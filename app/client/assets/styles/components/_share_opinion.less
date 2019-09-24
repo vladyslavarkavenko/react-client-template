@@ -1,13 +1,6 @@
 
 // from _userpropfile.less
 .content .share-opinion .content-body {
-  //&.content-body {
-  //  display: flex;
-  //}
-  //.content-body {
-  //  //padding: ;
-  //}
-
   display: flex;
   padding: 0;
   height: 100%;
@@ -15,7 +8,7 @@
   .rate {
     &-list {
       flex-direction: column;
-      flex-grow: 1;
+      flex-grow: 0;
       background-color: #2bbd73;
       // fixed search 60px and header 82px;
       min-height: calc(100vh - 142px);
@@ -45,6 +38,10 @@
         border-bottom: 1px solid @border-color-list;
 
         cursor: pointer;
+
+        &.active {
+          background-color: @border-color-list;
+        }
 
         &:hover {
           background-color: @border-color-list;
@@ -100,7 +97,7 @@
     }
     &-details {
       background-color: @primary-bg-color;
-      flex-grow: 2;
+      flex-grow: 1;
 
       .selected-profile {
         width: 100%;
