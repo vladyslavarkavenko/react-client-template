@@ -10,11 +10,11 @@ export default function TopicItem({
   selectedTopicsId,
   handleSelect
 }) {
-  const { name, id, dateLastOption } = data;
+  const { name, id, dateLastOpinion } = data;
 
   const isChecked = selectedTopicsId.includes(id);
   const isExpired = Array.isArray(expiredTopics) && expiredTopics.includes(id);
-  const isFilled = !isExpired && dateLastOption;
+  const isFilled = !isExpired && dateLastOpinion;
 
   return (
     <li className="topic">
