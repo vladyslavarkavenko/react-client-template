@@ -4,25 +4,18 @@ import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinion
 
 import RateDetails from './RateDetails';
 
-function RateDetailsContainer({ selectedProfile, subjectsStatus, subjectsData }) {
-  return (
-    <RateDetails
-      selectedProfile={selectedProfile}
-      subjectsStatus={subjectsStatus}
-      subjectsData={subjectsData}
-    />
-  );
+function RateDetailsContainer(props) {
+  return <RateDetails {...props} />;
 }
 
 const mapStateToProps = (state) => ({
   selectedProfile: shareOpinionSelectors.selectedProfile(state),
+
   subjectsStatus: shareOpinionSelectors.subjectsStatus(state),
   subjectsData: shareOpinionSelectors.subjectsData(state)
 });
 
-const mapDispatchToProps = {
-  // selectOpinionProfile
-};
+const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,

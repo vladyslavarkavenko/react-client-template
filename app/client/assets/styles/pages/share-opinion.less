@@ -1,13 +1,6 @@
 
 // from _userpropfile.less
 .content .share-opinion .content-body {
-  //&.content-body {
-  //  display: flex;
-  //}
-  //.content-body {
-  //  //padding: ;
-  //}
-
   display: flex;
   padding: 0;
   height: 100%;
@@ -15,7 +8,7 @@
   .rate {
     &-list {
       flex-direction: column;
-      flex-grow: 1;
+      flex-grow: 0;
       background-color: #2bbd73;
       // fixed search 60px and header 82px;
       min-height: calc(100vh - 142px);
@@ -45,6 +38,10 @@
         border-bottom: 1px solid @border-color-list;
 
         cursor: pointer;
+
+        &.active {
+          background-color: @border-color-list;
+        }
 
         &:hover {
           background-color: @border-color-list;
@@ -100,7 +97,7 @@
     }
     &-details {
       background-color: @primary-bg-color;
-      flex-grow: 2;
+      flex-grow: 1;
 
       .selected-profile {
         width: 100%;
@@ -122,12 +119,39 @@
       }
 
       .details-list {
-        padding: 15px;
-        margin-bottom: 15px;
+        position: relative;
+        padding: 15px 15px 0 15px;
+
+        &__block {
+          position: sticky;
+          background-color: @secondary-bg-color;
+          bottom: 0px;
+          left: 0;
+          right: 0;
+          min-height: 72px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+
+          .share-btn {
+            background-color: transparent;
+            border-radius: @border-radius-block;
+            border: 2px solid @border-color-list;
+            text-align: center;
+            padding: 10px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: bold;
+            line-height: 20px;
+          }
+        }
 
         &__btn {
           margin-bottom: 15px;
-          .add-new {
+
+
+          .add-new-btn {
             min-height: 70px;
             width: 100%;
             background-color: white;
@@ -344,9 +368,20 @@
                 align-content: center;
                 margin-left: 20px;
 
+                &.red {
+                  svg {
+                    fill: @alert-color-red;
+                  }
+                }
+
+                &.green {
+                  svg {
+                    fill: @alert-color-green;
+                  }
+                }
+
                 svg {
                   width: 20px;
-                  fill: @alert-color-red;
                 }
               }
             }
