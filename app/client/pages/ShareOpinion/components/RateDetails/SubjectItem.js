@@ -2,6 +2,7 @@ import React from 'react';
 import ListArrowDownSvg from '../../../../../../public/assets/svg/arrow-down.svg';
 import ExclamationCircleEmptySvg from '../../../../../../public/assets/svg/exclamation-circle-empty.svg';
 import TopicItem from './TopicItem';
+import SubjectProgress from './SubjectProgress';
 
 export default class SubjectItem extends React.Component {
   constructor(props) {
@@ -25,9 +26,11 @@ export default class SubjectItem extends React.Component {
     const { data } = this.props;
     const { id, name, image, topics } = data;
 
-    console.log(id, topics);
+    const topicsList = topics.map((topic) => {
+      const key = `${id}_${topic.id}`;
 
-    const topicsList = topics.map((topic) => <TopicItem title={topic.name} />);
+      return <TopicItem key={key} chekboxId={key} title={topic.name} />;
+    });
 
     return (
       <li className={`details-list__subject ${isOpen ? 'active' : ''}`}>
@@ -49,10 +52,7 @@ export default class SubjectItem extends React.Component {
                 <ExclamationCircleEmptySvg />
               </span>
             </div>
-            <div className="subject-count">7 of 25</div>
-            <div className="subject-progress-bar">
-              <div className="fill-bar" style={{ width: '30%' }} />
-            </div>
+            <SubjectProgress topics={topics} />
           </div>
         </div>
 
