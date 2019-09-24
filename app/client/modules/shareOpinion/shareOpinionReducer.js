@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
+import { differenceInMonths } from 'date-fns';
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
 
 import * as actions from './shareOpinionActions';
@@ -32,11 +33,48 @@ const selectedTopics = handleActions(
 
       return [...state, payload];
     },
+    [actions.selectOpinionExpired.SUCCESS](state, { payload }) {
+      return payload;
+    },
     [actions.selectOpinionProfile.TRIGGER]() {
       return [];
     }
   },
   []
+);
+
+const expiredOpinions = handleActions(
+  {
+    [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
+      const expired = {};
+      const now = new Date();
+
+      payload.forEach((subject) => {
+        // for every topic
+        subject.topics.forEach((topic) => {
+          // check time
+          if (!topic.dateLastOpinion) {
+            return;
+          }
+
+          const isExpired =
+            differenceInMonths(now, new Date(topic.dateLastOpinion.split('-'))) >= 6;
+          // push if expired
+          if (isExpired) {
+            expired[subject.id]
+              ? expired[subject.id].push(topic.id)
+              : (expired[subject.id] = [topic.id]);
+          }
+        });
+      });
+
+      return expired;
+    },
+    [actions.selectOpinionProfile.TRIGGER]() {
+      return {};
+    }
+  },
+  {}
 );
 
 const subjectsStatus = makeStatusWithResetReducer(
@@ -66,6 +104,7 @@ const subjects = combineReducers({
 const shareOpinion = combineReducers({
   selectedProfile,
   selectedTopics,
+  expiredOpinions,
   subjects
 });
 

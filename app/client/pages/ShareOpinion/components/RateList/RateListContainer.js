@@ -6,15 +6,8 @@ import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinion
 import { selectOpinionProfile } from '../../../../modules/shareOpinion/shareOpinionActions';
 
 /* eslint-disable */
-function RateListContainer({ companies, managers, selected, selectOpinionProfile }) {
-  return (
-    <RateList
-      companies={companies}
-      managers={managers}
-      selected={selected}
-      handleSelect={selectOpinionProfile}
-    />
-  );
+function RateListContainer(props) {
+  return <RateList {...props} />;
 }
 
 const mapStateToProps = (state) => ({
@@ -24,7 +17,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  selectOpinionProfile
+  handleSelect: selectOpinionProfile
 };
 
 export default connect(

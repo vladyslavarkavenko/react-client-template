@@ -23,7 +23,7 @@ export default class SubjectItem extends React.Component {
 
   render() {
     const { isOpen } = this.state;
-    const { data, handleSelect, selectedTopicsId } = this.props;
+    const { data, handleSelect, selectedTopicsId, expiredTopics } = this.props;
     const { id, name, image, topics } = data;
 
     const topicsList = topics.map((topic) => {
@@ -32,8 +32,9 @@ export default class SubjectItem extends React.Component {
       return (
         <TopicItem
           key={key}
-          chekboxId={key}
+          checkboxId={key}
           data={topic}
+          expiredTopics={expiredTopics}
           selectedTopicsId={selectedTopicsId}
           handleSelect={handleSelect}
         />
@@ -56,9 +57,12 @@ export default class SubjectItem extends React.Component {
           <div className="subject-info">
             <div className="subject-title">
               {name}
-              <span>
-                <ExclamationCircleEmptySvg />
-              </span>
+
+              {expiredTopics && (
+                <span>
+                  <ExclamationCircleEmptySvg />
+                </span>
+              )}
             </div>
             <SubjectProgress topics={topics} />
           </div>

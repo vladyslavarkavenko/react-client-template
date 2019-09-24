@@ -2,25 +2,18 @@ import React from 'react';
 import RateHeader from './RateHeader';
 import NewSubjectButton from './NewSubjectButton';
 import RateNotification from './RateNotification';
-import SubjectItem from './SubjectItem';
 import { LoaderBlock } from '../../../../components/ui-components/Layout/Loader';
+import SubjectItemContainer from '../Subject/SubjectItemContainer';
+import ShareOpinionBlock from './ShareOpinionBlock';
 
 export default function RateDetails({
   selectedProfile,
-  selectedTopicsId,
 
   subjectsStatus,
-  subjectsData,
-
-  selectOpinionTopic
+  subjectsData
 }) {
   const subjectList = subjectsData.map((sub) => (
-    <SubjectItem
-      key={`${sub.id}_sub`}
-      data={sub}
-      handleSelect={selectOpinionTopic}
-      selectedTopicsId={selectedTopicsId}
-    />
+    <SubjectItemContainer key={`${sub.id}_sub`} data={sub} />
   ));
 
   return (
@@ -36,6 +29,8 @@ export default function RateDetails({
             <RateNotification />
             <NewSubjectButton />
             {subjectList}
+
+            <ShareOpinionBlock />
           </>
         )}
       </ul>

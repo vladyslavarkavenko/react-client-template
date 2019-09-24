@@ -1,25 +1,42 @@
 import React from 'react';
 import RateListHeading from './RateListHeading';
 import RateListItem from './RateListItem';
+import { RATE_PROFILE_TYPE } from '../../../../utils/constants';
 
-export default function RateList({ companies, managers, selected, handleSelect }) {
-  console.log(companies, managers);
+const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 
-  const companiesList = companies.map((company) => (
-    <RateListItem data={company} selected={selected} handleSelect={handleSelect} isCompany />
-  ));
+export default class RateList extends React.Component {
+  componentDidMount() {
+    const { companies, managers, handleSelect } = this.props;
 
-  const managersList = managers.map((manager) => (
-    <RateListItem data={manager} selected={selected} handleSelect={handleSelect} />
-  ));
+    if (managers.length) {
+      //select first manager in the list
+      handleSelect({ data: managers[0], type: MANAGER });
+    } else if (companies.length) {
+      //select first company in the list
+      handleSelect({ data: companies[0], type: COMPANY });
+    }
+  }
 
-  return (
-    <ul className="rate-list">
-      <RateListHeading>My companies</RateListHeading>
-      {companiesList}
+  render() {
+    const { companies, managers, selected, handleSelect } = this.props;
 
-      <RateListHeading>My managers</RateListHeading>
-      {managersList}
-    </ul>
-  );
+    const companiesList = companies.map((company) => (
+      <RateListItem data={company} selected={selected} handleSelect={handleSelect} isCompany />
+    ));
+
+    const managersList = managers.map((manager) => (
+      <RateListItem data={manager} selected={selected} handleSelect={handleSelect} />
+    ));
+
+    return (
+      <ul className="rate-list">
+        <RateListHeading>My companies</RateListHeading>
+        {companiesList}
+
+        <RateListHeading>My managers</RateListHeading>
+        {managersList}
+      </ul>
+    );
+  }
 }
