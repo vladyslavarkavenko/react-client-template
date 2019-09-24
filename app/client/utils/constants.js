@@ -23,5 +23,9 @@ module.exports = {
     BLUE: 'blue',
     WHITE: 'white',
     TRANSPARENT: 'transparent'
+  },
+  RATE_PROFILE_TYPE: {
+    MANAGER: 'MANAGER',
+    COMPANY: 'COMPANY'
   }
 };
