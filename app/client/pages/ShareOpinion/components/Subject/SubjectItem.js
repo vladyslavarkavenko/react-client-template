@@ -23,7 +23,7 @@ export default class SubjectItem extends React.Component {
 
   render() {
     const { isOpen } = this.state;
-    const { data, handleSelect, selectedTopicsId, expiredTopics } = this.props;
+    const { data, handleSelect, selectedTopicsId, expiredTopics, handleModal } = this.props;
     const { id, name, image, topics } = data;
 
     const topicsList = topics.map((topic) => {
@@ -66,6 +66,9 @@ export default class SubjectItem extends React.Component {
             </div>
             <SubjectProgress topics={topics} />
           </div>
+          <button type="button" className="subject-add" onClick={() => handleModal(data)}>
+            +
+          </button>
         </div>
 
         {isOpen && <ul className="topics-list">{topicsList}</ul>}

@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { selectOpinionTopic } from '../../../../modules/shareOpinion/shareOpinionActions';
+import {
+  pushNewTopic,
+  selectOpinionTopic
+} from '../../../../modules/shareOpinion/shareOpinionActions';
 import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
 
 import SubjectItem from './SubjectItem';
@@ -19,7 +22,8 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  handleSelect: selectOpinionTopic
+  handleSelect: selectOpinionTopic,
+  handleModal: pushNewTopic
 };
 
 export default connect(

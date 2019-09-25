@@ -12,7 +12,9 @@ const mapStateToProps = (state) => ({
   selectedProfile: shareOpinionSelectors.selectedProfile(state),
 
   subjectsStatus: shareOpinionSelectors.subjectsStatus(state),
-  subjectsData: shareOpinionSelectors.subjectsData(state)
+  subjectsData: shareOpinionSelectors.subjectsData(state),
+
+  newTopicShowModal: shareOpinionSelectors.newTopicShowModal(state)
 });
 
 const mapDispatchToProps = {};

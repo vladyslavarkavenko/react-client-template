@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import RateHeader from './RateHeader';
 import NewSubjectButton from './NewSubjectButton';
 import RateNotification from './RateNotification';
@@ -9,62 +9,36 @@ import CreateTopicModal from '../Modals/CreateTopicModal';
 
 /* eslint-disable */
 
-export default class RateDetails extends Component {
-  constructor(props) {
-    super(props);
+export default function RateDetails({
+  newTopicShowModal,
+  selectedProfile,
+  subjectsStatus,
+  subjectsData
+}) {
+  const subjectList = subjectsData.map((sub) => (
+    <SubjectItemContainer key={`${sub.id}_sub`} data={sub} />
+  ));
 
-    this.state = {
-      showCreateTopicModal: false,
-      withSubject: false
-    };
+  return (
+    <div className="rate-details">
+      <RateHeader profile={selectedProfile} />
+      <ul className="details-list">
+        {subjectsStatus === 'request' ? (
+          <div className="details-list__preloader">
+            <LoaderBlock height="50vh" />
+          </div>
+        ) : (
+          <>
+            {newTopicShowModal && <CreateTopicModal />}
 
-    this.handleTopicModal = this.handleTopicModal.bind(this);
-  }
+            <RateNotification />
+            <NewSubjectButton />
+            {subjectList}
 
-  handleTopicModal(withSubject = false) {
-    this.setState((prevState) => ({
-      showCreateTopicModal: !prevState.showCreateTopicModal,
-      withSubject: withSubject
-    }));
-  }
-
-  render() {
-    const {
-      selectedProfile,
-
-      subjectsStatus,
-      subjectsData
-    } = this.props;
-
-    const { showCreateTopicModal, withSubject } = this.state;
-
-    const subjectList = subjectsData.map((sub) => (
-      <SubjectItemContainer key={`${sub.id}_sub`} data={sub} />
-    ));
-
-    return (
-      <div className="rate-details">
-        <RateHeader profile={selectedProfile} />
-        <ul className="details-list">
-          {subjectsStatus === 'request' ? (
-            <div className="details-list__preloader">
-              <LoaderBlock height="50vh" />
-            </div>
-          ) : (
-            <>
-              {showCreateTopicModal && (
-                <CreateTopicModal withSubject={withSubject} handleModal={this.handleTopicModal} />
-              )}
-
-              <RateNotification />
-              <NewSubjectButton handleModal={this.handleTopicModal} />
-              {subjectList}
-
-              <ShareOpinionBlock />
-            </>
-          )}
-        </ul>
-      </div>
-    );
-  }
+            <ShareOpinionBlock />
+          </>
+        )}
+      </ul>
+    </div>
+  );
 }

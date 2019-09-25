@@ -9,6 +9,8 @@ export default class RateList extends React.Component {
   componentDidMount() {
     const { companies, managers, handleSelect } = this.props;
 
+    console.log(companies, managers);
+
     if (managers.length) {
       //select first manager in the list
       handleSelect({ data: managers[0], type: MANAGER });
@@ -33,7 +35,6 @@ export default class RateList extends React.Component {
       <ul className="rate-list">
         <RateListHeading>My companies</RateListHeading>
         {companiesList}
-
         <RateListHeading>My managers</RateListHeading>
         {managersList}
       </ul>

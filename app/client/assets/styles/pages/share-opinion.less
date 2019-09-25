@@ -268,6 +268,28 @@
             margin-right: 20px;
           }
 
+          .subject-add {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 1px solid @border-color-list;
+            color: @font-color-blue;
+            font-size: 1.25rem;
+            font-weight: bold;
+            line-height: 32px;
+            text-align: center;
+            cursor: pointer;
+
+            &:hover {
+              border: 1px solid @button-bg-dark-blue_hover;
+              background-color: @button-bg-dark-blue_hover;
+              color: white;
+            }
+          }
+
           .subject-main {
             display: flex;
             flex-grow: 1;

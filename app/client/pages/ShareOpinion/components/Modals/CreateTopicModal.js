@@ -1,36 +1,79 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ModalWrapper from '../../../../components/ui-components/Modal/ModalWrapper';
 import ModalWhiteButton from '../../../../components/ui-components/Modal/ModalWhiteButton';
 import ModalThemeButton from '../../../../components/ui-components/Modal/ModalThemeButton';
 import TextInput from '../../../../components/ui-components/Form/TextInput';
+import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
+import {
+  pushNewTopic,
+  saveNewTopicField,
+  selectSubjectForNewTopic
+} from '../../../../modules/shareOpinion/shareOpinionActions';
 
 /* eslint-disable */
-export default class CreateTopicModal extends React.Component {
-  render() {
-    const { handleModal } = this.props;
-    return (
-      <ModalWrapper
-        title="Add new topic to Morgages"
-        subtitle="Describe the need on which you want to Share your opinion"
-        handleModal={handleModal}
-      >
-        <div className="m-create-subject">
-          <div className="input-group">
-            <TextInput labelText="Formulate Subject">
-              {/*<select>*/}
-              {/*  <option>1</option>*/}
-              {/*  <option>2</option>*/}
-              {/*  <option>3</option>*/}
-              {/*</select>*/}
-            </TextInput>
-            <TextInput labelText="Formulate Topic" />
-          </div>
+function CreateTopicModal({ handleModal, save, input, errors, selected, status, createNewTopic }) {
+  const isSubjectSelected = Boolean(selected);
+
+  const isRequest = status === 'request';
+
+  return (
+    <ModalWrapper
+      title="Add new topic"
+      subtitle="Describe the need on which you want to Share your opinion"
+      handleModal={() => handleModal()}
+    >
+      <div className="m-create-subject">
+        <div className="input-group">
+          <TextInput
+            labelText={isSubjectSelected ? 'Selected subject' : 'Formulate Subject'}
+            name="subject"
+            onChange={({ currentTarget }) => save({ type: 'subject', value: currentTarget.value })}
+            value={input.subject}
+            error={errors.subject}
+            readOnly={isSubjectSelected || isRequest}
+          />
+          <TextInput
+            labelText="Formulate Topic"
+            name="topic"
+            onChange={({ currentTarget }) => save({ type: 'topic', value: currentTarget.value })}
+            value={input.topic}
+            error={errors.topic}
+            readOnly={isRequest}
+          />
         </div>
-        <div className="m-btn-list">
-          <ModalWhiteButton onClick={handleModal}>Cancel</ModalWhiteButton>
-          <ModalThemeButton>Add</ModalThemeButton>
-        </div>
-      </ModalWrapper>
-    );
-  }
+      </div>
+      <div className="m-btn-list">
+        <ModalWhiteButton onClick={() => handleModal()}>Cancel</ModalWhiteButton>
+        <ModalThemeButton onClick={() => createNewTopic()} disabled={isRequest}>
+          Add
+        </ModalThemeButton>
+      </div>
+    </ModalWrapper>
+  );
 }
+
+const mapStateToProps = (state) => ({
+  input: shareOpinionSelectors.newTopicInput(state),
+  errors: shareOpinionSelectors.newTopicErrors(state),
+  status: shareOpinionSelectors.newTopicStatus(state),
+  selected: shareOpinionSelectors.newTopicSelected(state)
+});
+
+// close modal and clear state;
+const handleModal = pushNewTopic.fulfill;
+const createNewTopic = pushNewTopic.request;
+
+const mapDispatchToProps = {
+  selectSubject: selectSubjectForNewTopic,
+  save: saveNewTopicField,
+
+  handleModal,
+  createNewTopic,
+  pushNewTopic
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateTopicModal);

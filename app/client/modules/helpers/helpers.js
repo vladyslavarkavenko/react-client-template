@@ -43,11 +43,11 @@ export const formatRolesPayload = ({ customers, staff }) => {
 
   if (customers.length) {
     rolesPermissions[CUSTOMER] = [];
-    customers.forEach(({ company, manager }) => {
-      const { id } = company;
+    customers.forEach(({ company, manager, id }) => {
+      const newManager = { ...manager, customerId: id };
 
-      companies[id] = { ...company, manager };
-      rolesPermissions[CUSTOMER].push(id);
+      companies[company.id] = { ...company, manager: newManager, customerId: id };
+      rolesPermissions[CUSTOMER].push(company.id);
     });
   }
 

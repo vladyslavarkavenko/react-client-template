@@ -5,7 +5,13 @@ const getSelectedTopicsId = (state) => getSelectedTopics(state).map((topic) => t
 
 const getExpiredOpinions = (state) => state.shareOpinion.expiredOpinions;
 const getExpiredOpinionsBySubject = (state, subjectId) => getExpiredOpinions(state)[subjectId];
-// const
+
+const getNewTopic = (state) => state.shareOpinion.newTopic;
+const getNewTopicInput = (state) => getNewTopic(state).input;
+const getNewTopicErrors = (state) => getNewTopic(state).errors;
+const getNewTopicSelected = (state) => getNewTopic(state).selected;
+const getNewTopicStatus = (state) => getNewTopic(state).status;
+const getNewTopicShowModal = (state) => getNewTopic(state).showModal;
 
 export default {
   selectedTopics: getSelectedTopics,
@@ -15,5 +21,12 @@ export default {
   expiredOpinionsById: getExpiredOpinionsBySubject,
 
   subjectsStatus: (state) => state.shareOpinion.subjects.status,
-  subjectsData: getSubjectsData
+  subjectsData: getSubjectsData,
+
+  newTopic: getNewTopic,
+  newTopicInput: getNewTopicInput,
+  newTopicErrors: getNewTopicErrors,
+  newTopicSelected: getNewTopicSelected,
+  newTopicStatus: getNewTopicStatus,
+  newTopicShowModal: getNewTopicShowModal
 };
