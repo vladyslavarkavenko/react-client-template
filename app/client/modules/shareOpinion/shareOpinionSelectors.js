@@ -11,6 +11,7 @@ const getNewTopicInput = (state) => getNewTopic(state).input;
 const getNewTopicErrors = (state) => getNewTopic(state).errors;
 const getNewTopicSelected = (state) => getNewTopic(state).selected;
 const getNewTopicStatus = (state) => getNewTopic(state).status;
+const getNewTopicHints = (state) => getNewTopic(state).hints;
 const getNewTopicShowModal = (state) => getNewTopic(state).showModal;
 
 export default {
@@ -28,5 +29,6 @@ export default {
   newTopicErrors: getNewTopicErrors,
   newTopicSelected: getNewTopicSelected,
   newTopicStatus: getNewTopicStatus,
-  newTopicShowModal: getNewTopicShowModal
+  newTopicShowModal: getNewTopicShowModal,
+  newTopicHints: getNewTopicHints
 };

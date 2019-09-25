@@ -33,6 +33,18 @@ const selectedTopics = handleActions(
 
       return [...state, payload];
     },
+
+    [actions.pushNewTopic.SUCCESS](state, { payload }) {
+      const newTopic = {
+        name: payload.name,
+        id: payload.id,
+        dateLastOpinion: null,
+        satisfaction: null,
+        importance: null
+      };
+
+      return [newTopic, ...state];
+    },
     [actions.selectOpinionExpired.SUCCESS](state, { payload }) {
       return payload;
     },
@@ -116,8 +128,26 @@ const newTopicInput = handleActions(
   newTopicInputInitial
 );
 
+const newTopicHints = handleActions(
+  {
+    [actions.saveNewTopicField.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.saveNewTopicField.FULFILL]() {
+      return [];
+    },
+    [actions.pushNewTopic.FULFILL]() {
+      return [];
+    }
+  },
+  []
+);
+
 const newTopicErrors = handleActions(
   {
+    [actions.pushNewTopic.TRIGGER]() {
+      return {};
+    },
     [actions.pushNewTopic.FAILURE](state, { payload }) {
       if (payload) {
         return payload;
@@ -166,7 +196,8 @@ const newTopic = combineReducers({
   status: newTopicStatus,
   selected: newTopicSelectedSubject,
   input: newTopicInput,
-  errors: newTopicErrors
+  errors: newTopicErrors,
+  hints: newTopicHints
 });
 
 const shareOpinion = combineReducers({

@@ -8,6 +8,11 @@
         "loading": "Loading"
       },
       "validation": {
+        "default": {
+          "length": "The {{field}} must be {{min}}-{{max}} characters long",
+          "required": "The {{field}} is required",
+          "info": "The {{field}} is invalid"
+        },
         "email": {
           "long": "Email is too long",
           "required": "Email is required",
@@ -62,6 +67,12 @@
             "required": "Last name is required",
             "length": "Last name must be {{min}}-{{max}} characters long"
           }
+        },
+        "subject": {
+          "exist": "The subject with this name already exist"
+        },
+        "topic": {
+          "exist": "The topic with this name already exist"
         }
       },
       "notification": {

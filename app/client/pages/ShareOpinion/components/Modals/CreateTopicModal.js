@@ -10,9 +10,20 @@ import {
   saveNewTopicField,
   selectSubjectForNewTopic
 } from '../../../../modules/shareOpinion/shareOpinionActions';
+import SubjectHintsDropdown from '../Dropdown/SubjectHintsDropdown';
 
 /* eslint-disable */
-function CreateTopicModal({ handleModal, save, input, errors, selected, status, createNewTopic }) {
+function CreateTopicModal({
+  handleModal,
+  selectSubject,
+  save,
+  input,
+  errors,
+  selected,
+  status,
+  createNewTopic,
+  hints
+}) {
   const isSubjectSelected = Boolean(selected);
 
   const isRequest = status === 'request';
@@ -32,7 +43,15 @@ function CreateTopicModal({ handleModal, save, input, errors, selected, status, 
             value={input.subject}
             error={errors.subject}
             readOnly={isSubjectSelected || isRequest}
-          />
+            autoComplete="off"
+          >
+            <SubjectHintsDropdown
+              hints={hints}
+              disabled={isSubjectSelected || isRequest}
+              save={selectSubject}
+              autoComplete="off"
+            />
+          </TextInput>
           <TextInput
             labelText="Formulate Topic"
             name="topic"
@@ -57,7 +76,8 @@ const mapStateToProps = (state) => ({
   input: shareOpinionSelectors.newTopicInput(state),
   errors: shareOpinionSelectors.newTopicErrors(state),
   status: shareOpinionSelectors.newTopicStatus(state),
-  selected: shareOpinionSelectors.newTopicSelected(state)
+  selected: shareOpinionSelectors.newTopicSelected(state),
+  hints: shareOpinionSelectors.newTopicHints(state)
 });
 
 // close modal and clear state;
