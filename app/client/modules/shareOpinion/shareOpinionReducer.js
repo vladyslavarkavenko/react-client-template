@@ -194,6 +194,9 @@ const newTopicModal = handleActions(
     [actions.pushNewTopic.TRIGGER]() {
       return true;
     },
+    [actions.pushNewTopic.SUCCESS]() {
+      return false;
+    },
     [actions.pushNewTopic.FULFILL]() {
       return false;
     }
