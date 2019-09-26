@@ -1,15 +1,45 @@
 import React from 'react';
-import TextInput from '../../components/ui-components/Form/TextInput';
+import { connect } from 'react-redux';
 import Button from '../../components/ui-components/Form/Button';
+import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
+import { pushRateTopic } from '../../modules/shareOpinion/shareOpinionActions';
 
-export default function ShareOpinionChart() {
+function ShareOpinionChart({ selectedTopics, nextUnratedTopic, pushRateTopic }) {
+  if (!nextUnratedTopic) {
+    //redirect in saga
+    return null;
+  }
+
   return (
     <div>
+      List of selected topics
+      <ul>
+        {selectedTopics.map((topic) => (
+          <li
+            key={topic.id}
+            style={{ backgroundColor: nextUnratedTopic.id === topic.id ? 'green' : '' }}
+          >
+            {topic.name}; {topic.isRated && `Rating: [${topic.satisfaction}, ${topic.importance}]`}
+          </li>
+        ))}
+      </ul>
+      Current unrated topic: {nextUnratedTopic && nextUnratedTopic.name}
+      <Button onClick={() => pushRateTopic({ satisfaction: 6, importance: 4 })}>Next</Button>
       <Button>Cancel</Button>
-      <TextInput title="Satisfaction" value={0} />
-      <TextInput labelText="Importance" value={0} />
-      <Button>Next</Button>
-      <Button>Save</Button>
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  selectedTopics: shareOpinionSelectors.selectedTopics(state),
+  nextUnratedTopic: shareOpinionSelectors.nextUnratedTopic(state)
+});
+
+const mapDispatchToProps = {
+  pushRateTopic
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ShareOpinionChart);

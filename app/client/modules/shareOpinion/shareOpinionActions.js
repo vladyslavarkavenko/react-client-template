@@ -7,6 +7,8 @@ import shareOpinionSelectors from './shareOpinionSelectors';
 
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import { validateCreateNewTopic } from '../../utils/validator';
+import { historyPush } from '../redirect/redirectActions';
+import routing from '../../utils/routing';
 
 export const prefix = 'shareOpinion';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -19,6 +21,8 @@ export const fetchOpinionSubjects = createRequestBound('SUBJECTS_FETCH');
 export const pushNewTopic = createRequestBound('TOPIC_CREATE');
 export const selectSubjectForNewTopic = createRequestBound('TOPIC_WITH_SUBJECT_SELECT');
 export const saveNewTopicField = createRequestBound('TOPIC_FIELD_SAVE');
+
+export const pushRateTopic = createRequestBound('TOPIC_CURRENT_RATE');
 
 function* fetchOpinionSubjectsWorker({ payload: { data } }) {
   yield put(fetchOpinionSubjects.request());
@@ -157,10 +161,45 @@ function* newTopicWorker() {
       //send new topic id and title
       yield put(pushNewTopic.success(newTopic));
     }
+
+    yield put(historyPush(routing().shareOpinionChart));
   } catch (err) {
     console.error(err);
     Notification.error(err);
     yield put(pushNewTopic.failure());
+  }
+}
+
+function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
+  yield put(pushRateTopic.request());
+  try {
+    const currentTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
+    const selectedProfile = yield select(shareOpinionSelectors.selectedProfile);
+
+    const ratedTopic = yield call(() =>
+      ShareOpinionService.pushRateTopic({
+        topic: currentTopic.id, //topic_id,
+        manager:
+          selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined, // manager or company_id,
+        company:
+          selectedProfile.type === RATE_PROFILE_TYPE.COMPANY ? selectedProfile.id : undefined,
+        customer: selectedProfile.customerId, //customer id
+        satisfaction,
+        importance
+      })
+    );
+
+    yield put(pushRateTopic.success(ratedTopic));
+
+    const nextTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
+
+    if (!nextTopic) {
+      yield put(historyPush({ to: routing().shareOpinionMessage, method: 'replace' }));
+    }
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(pushRateTopic.failure());
   }
 }
 //
@@ -170,6 +209,8 @@ export function* shareOpinionWatcher() {
     takeLatest(selectOpinionExpired.TRIGGER, selectExpiredOpinionsWorker),
     takeLatest(pushNewTopic.TRIGGER, newTopicModalWorker),
     takeLatest(pushNewTopic.REQUEST, newTopicWorker),
-    takeLatest(saveNewTopicField.TRIGGER, subjectHintsWorker)
+    takeLatest(saveNewTopicField.TRIGGER, subjectHintsWorker),
+
+    takeLatest(pushRateTopic.TRIGGER, pushRateTopicWorker)
   ]);
 }

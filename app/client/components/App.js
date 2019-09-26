@@ -7,6 +7,7 @@ import SignInRoute from './Wrappers/SignInRoute';
 import WrappedRoute from './Wrappers/WrappedRoute';
 import AuthRoute from './Wrappers/AuthRoute';
 import RolesRoute from './Wrappers/RolesRoute';
+import ShareOpinionRoute from './Wrappers/ShareOpinionRoute';
 
 const Login = customLoadable({ loader: () => import('../pages/Auth/Login') });
 const Register = customLoadable({ loader: () => import('../pages/Auth/SignUp') });
@@ -30,6 +31,9 @@ const Dashboard = customLoadable({ loader: () => import('../pages/Dashboard') })
 const ShareOpinion = customLoadable({ loader: () => import('../pages/ShareOpinion/ShareOpinion') });
 const ShareOpinionChart = customLoadable({
   loader: () => import('../pages/ShareOpinionChart/ShareOpinionChart')
+});
+const ShareOpinionMessage = customLoadable({
+  loader: () => import('../pages/ShareOpinionMessage/ShareOpinionMessage')
 });
 
 const ForgotPassword = customLoadable({
@@ -57,11 +61,8 @@ export default function App() {
       <SignInRoute exact path={routing().chooseRole} component={ChooseRole} />
       <SignInRoute exact path={routing().forgotPassword} component={ForgotPassword} />
       <SignInRoute exact path={routing().resetPassword} component={ResetPassword} />
-
       <AuthRoute exact path={routing().account} component={Account} />
-
       <AuthRoute exact path={routing().dashboard} component={Dashboard} />
-
       {/*<AuthRoute exact path={routing().profile} component={Profile} />*/}
       <RolesRoute
         exact
@@ -71,12 +72,23 @@ export default function App() {
         forManager={ProfileForManager}
         forCustomer={ProfileForCustomer}
       />
+      {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />
-      <AuthRoute exact path={routing().shareOpinionChart} component={ShareOpinionChart} />
-
+      <ShareOpinionRoute
+        exact
+        path={routing().shareOpinionChart}
+        step={2}
+        component={ShareOpinionChart}
+      />
+      <ShareOpinionRoute
+        exact
+        path={routing().shareOpinionMessage}
+        step={3}
+        component={ShareOpinionMessage}
+      />
+      {/*<AuthRoute exact path={routing().shareOpinionChart} component={ShareOpinionChart} />*/}
       {/* TODO: Change to actual root */}
       <AuthRoute exact path={routing().root} component={Account} />
-
       <WrappedRoute exact path={routing().notFound} component={PageNotFound} />
       <WrappedRoute component={PageNotFound} />
     </Switch>

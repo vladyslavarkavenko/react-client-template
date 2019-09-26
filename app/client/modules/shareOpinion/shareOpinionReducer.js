@@ -45,6 +45,21 @@ const selectedTopics = handleActions(
 
       return [newTopic, ...state];
     },
+    [actions.pushRateTopic.SUCCESS](state, { payload }) {
+      const cloned = [...state];
+
+      const currentTopicIndex = cloned.findIndex((topic) => topic.id === payload.topic);
+
+      cloned[currentTopicIndex] = {
+        ...cloned[currentTopicIndex],
+        satisfaction: payload.satisfaction,
+        importance: payload.importance,
+        dateLastOpinion: payload.dateLastOpinion,
+        isRated: true
+      };
+
+      return cloned;
+    },
     [actions.selectOpinionExpired.SUCCESS](state, { payload }) {
       return payload;
     },

@@ -14,6 +14,8 @@ const getNewTopicStatus = (state) => getNewTopic(state).status;
 const getNewTopicHints = (state) => getNewTopic(state).hints;
 const getNewTopicShowModal = (state) => getNewTopic(state).showModal;
 
+const getUnratedTopic = (state) => getSelectedTopics(state).find((topic) => topic.isRated !== true);
+
 export default {
   selectedTopics: getSelectedTopics,
   selectedTopicsId: getSelectedTopicsId,
@@ -30,5 +32,7 @@ export default {
   newTopicSelected: getNewTopicSelected,
   newTopicStatus: getNewTopicStatus,
   newTopicShowModal: getNewTopicShowModal,
-  newTopicHints: getNewTopicHints
+  newTopicHints: getNewTopicHints,
+
+  nextUnratedTopic: getUnratedTopic
 };

@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { historyPush } from '../../../../modules/redirect/redirectActions';
 import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
+import routing from '../../../../utils/routing';
 
-function ShareOpinionBlock({ selectedTopicsId }) {
+function ShareOpinionBlock({ selectedTopicsId, historyPush }) {
   const count = selectedTopicsId.length;
 
   if (!count) {
@@ -11,8 +13,12 @@ function ShareOpinionBlock({ selectedTopicsId }) {
 
   return (
     <div className="details-list__block">
-      <button type="button" className="share-btn">
-        Share opinion on {selectedTopicsId.length} topics
+      <button
+        type="button"
+        className="share-btn"
+        onClick={() => historyPush(routing().shareOpinionChart)}
+      >
+        Share opinion on {count} {count > 1 ? 'topics' : 'topic'}
       </button>
     </div>
   );
@@ -23,7 +29,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  // handleSelect: selectOpinionTopic
+  historyPush
 };
 
 export default connect(
