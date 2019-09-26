@@ -8,11 +8,18 @@ import WrappedRoute from './Wrappers/WrappedRoute';
 import AuthRoute from './Wrappers/AuthRoute';
 import RolesRoute from './Wrappers/RolesRoute';
 
-const Login = customLoadable({ loader: () => import('../pages/Auth/Login') });
-const Register = customLoadable({ loader: () => import('../pages/Auth/SignUp') });
-const ChooseRole = customLoadable({ loader: () => import('../pages/Auth/ChooseRole') });
-const Account = customLoadable({ loader: () => import('../pages/Account') });
-// const Profile = customLoadable({ loader: () => import('../pages/Profile') });
+const Login = customLoadable({
+  loader: () => import('../pages/Auth/Login')
+});
+const Register = customLoadable({
+  loader: () => import('../pages/Auth/SignUp')
+});
+const ChooseRole = customLoadable({
+  loader: () => import('../pages/Auth/ChooseRole')
+});
+const Account = customLoadable({
+  loader: () => import('../pages/Account')
+});
 const ProfileForAdmin = customLoadable({
   loader: () => import('../pages/profile/ProfileForAdmin')
 });
@@ -25,16 +32,24 @@ const ProfileForManager = customLoadable({
 const ProfileForCustomer = customLoadable({
   loader: () => import('../pages/profile/ProfileForCustomer')
 });
-
-const Dashboard = customLoadable({ loader: () => import('../pages/Dashboard') });
-const ShareOpinion = customLoadable({ loader: () => import('../pages/ShareOpinion/ShareOpinion') });
+const Dashboard = customLoadable({
+  loader: () => import('../pages/Dashboard')
+});
+const ShareOpinion = customLoadable({
+  loader: () => import('../pages/ShareOpinion/ShareOpinion')
+});
+const ShareOpinionChart = customLoadable({
+  loader: () => import('../pages/ShareOpinionChart')
+});
 const ForgotPassword = customLoadable({
   loader: () => import('../pages/Auth/ForgotPassword')
 });
 const ResetPassword = customLoadable({
   loader: () => import('../pages/Auth/ResetPassword')
 });
-const PageNotFound = customLoadable({ loader: () => import('../pages/PageNotFound') });
+const PageNotFound = customLoadable({
+  loader: () => import('../pages/PageNotFound')
+});
 
 // additional subroutes
 // Overview, CompanyAbout
@@ -59,6 +74,12 @@ export default function App() {
       <AuthRoute exact path={routing().dashboard} component={Dashboard} />
 
       {/*<AuthRoute exact path={routing().profile} component={Profile} />*/}
+      <RolesRoute
+        exact
+        fullscreen
+        path={routing().shareOpinionChart}
+        forCustomer={ShareOpinionChart}
+      />
       <RolesRoute
         exact
         path={routing().profile}

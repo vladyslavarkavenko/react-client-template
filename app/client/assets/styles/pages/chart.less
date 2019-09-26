@@ -1,0 +1,45 @@
+.chart-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: rgb(51, 153, 255);
+  transition: background-color 0.3s ease-out;
+
+  .info-msg {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .emoji svg {
+      height: 112px;
+      width: 112px;
+      fill: white;
+      box-shadow: 0 0 4px 1px #000;
+    }
+
+    h1, h3, button, .emoji {
+      color: white;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      border: 1px solid white;
+      border-radius: 4px;
+      color: white;
+      font-size: 1rem;
+      width: 100%;
+      padding: 0.75rem;
+
+      &:hover {
+        box-shadow: 0 0 3px 1px rgba(255, 255, 255, .5);
+        font-weight: bold;
+      }
+    }
+  }
+}
