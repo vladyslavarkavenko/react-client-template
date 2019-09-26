@@ -8,6 +8,7 @@ export default function TextInput({
   error,
   className,
   forwardRef,
+  children,
   ...rest
 }) {
   const key = `${name}_${type}_input`;
@@ -28,6 +29,7 @@ export default function TextInput({
         ref={forwardRef}
         {...rest}
       />
+      {children}
     </div>
   );
 }

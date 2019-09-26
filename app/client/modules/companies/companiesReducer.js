@@ -4,7 +4,6 @@ import { combineReducers } from 'redux';
 
 import * as actions from './companiesActions';
 import * as auth from '../auth/authActions';
-import { formatRolesPayload } from '../helpers/helpers';
 
 const companiesInitial = null; // { id1: {}, id2: {}, ... }
 
@@ -12,12 +11,10 @@ const companiesInitial = null; // { id1: {}, id2: {}, ... }
 const companiesReducer = handleActions(
   {
     [auth.pushLogin.SUCCESS](state, { payload }) {
-      const { companies } = formatRolesPayload(payload.roles);
-      return companies;
+      return payload.companies;
     },
     [auth.pushLoginByToken.SUCCESS](state, { payload }) {
-      const { companies } = formatRolesPayload(payload.roles);
-      return companies;
+      return payload.companies;
     },
     [actions.setCompanies.SUCCESS](state, { payload }) {
       return payload;
@@ -57,12 +54,12 @@ const errors = handleActions(
 const activeEditCompany = handleActions(
   {
     [auth.pushLoginByToken.SUCCESS](state, { payload }) {
-      const { companies, rolesPermissions, activeRole } = formatRolesPayload(payload.roles);
+      const { companies, rolesPermissions, activeRole } = payload;
 
       return companies[rolesPermissions[activeRole]];
     },
     [auth.pushLogin.SUCCESS](state, { payload }) {
-      const { companies, rolesPermissions, activeRole } = formatRolesPayload(payload.roles);
+      const { companies, rolesPermissions, activeRole } = payload;
 
       return companies[rolesPermissions[activeRole]];
     },

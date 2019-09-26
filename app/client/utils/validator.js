@@ -266,6 +266,33 @@ function validateUserFirstName(value, messages = {}) {
   return errors;
 }
 
+function validateUserSubjectOrTopic(data, messages = {}) {
+  const { list = [], title, field = 'subject' } = data;
+
+  const limit = {
+    min: 2,
+    max: 120
+  };
+
+  const {
+    length = i18next.t('validation.default.length', { ...limit, field }),
+    required = i18next.t('validation.default.required', { ...limit, field }),
+    exist = i18next.t(`validation.${field}.exist`, limit)
+  } = messages;
+
+  const errors = {};
+
+  if (!title) {
+    errors[field] = required;
+  } else if (!validateText({ value: title, ...limit })) {
+    errors[field] = length;
+  } else if (list.includes(title)) {
+    errors[field] = exist;
+  }
+
+  return errors;
+}
+
 // External validators
 export function validateUser(data) {
   const { email, phone, about, firstName, lastName, title, location } = data;
@@ -345,6 +372,30 @@ export function validateUserResetPassword(data) {
 export function validateUserForgotPassword(data) {
   const errors = {
     ...validateEmail(data)
+  };
+
+  return {
+    errors,
+    isValid: !Object.keys(errors).length
+  };
+}
+
+export function validateCreateNewTopic(data) {
+  const { subject, topic, subjectList, topicList } = data;
+
+  console.log(topicList);
+
+  const errors = {
+    ...validateUserSubjectOrTopic({
+      field: 'subject',
+      list: subjectList,
+      title: subject
+    }),
+    ...validateUserSubjectOrTopic({
+      field: 'topic',
+      list: topicList,
+      title: topic
+    })
   };
 
   return {

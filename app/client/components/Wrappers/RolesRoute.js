@@ -12,15 +12,7 @@ const { ADMIN, MANAGER, ANALYST, CUSTOMER } = ROLES;
 function RolesRoute(props) {
   let PageComponent = null;
 
-  const {
-    fullscreen,
-    forAdmin,
-    forManager,
-    forAnalyst,
-    forCustomer,
-    activeRole,
-    ...otherProps
-  } = props;
+  const { forAdmin, forManager, forAnalyst, forCustomer, activeRole, ...otherProps } = props;
 
   switch (activeRole) {
     case ADMIN:
@@ -45,13 +37,9 @@ function RolesRoute(props) {
 
   return (
     <>
-      {!fullscreen && (
-        <>
-          <TopBarWithProfile />
-          <Sidebar />
-        </>
-      )}
-      <div className={fullscreen ? 'fullscreen' : 'content'}>
+      <TopBarWithProfile />
+      <Sidebar />
+      <div className="content">
         <Route component={PageComponent} activeRole={activeRole} {...otherProps} />
       </div>
     </>

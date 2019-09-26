@@ -3,7 +3,6 @@ import { combineReducers } from 'redux';
 // import reducerRegistry from '../../utils/reducerRegistry';
 
 import * as actions from './authActions';
-import { formatRolesPayload } from '../helpers/helpers';
 import { makeStatusReducer } from '../../utils/reduxHelpers';
 
 const userInitial = null;
@@ -95,14 +94,10 @@ const roleInitial = null;
 const roleReducer = handleActions(
   {
     [actions.pushLoginByToken.SUCCESS](state, { payload }) {
-      const { activeRole } = formatRolesPayload(payload.roles);
-
-      return activeRole || state;
+      return payload.activeRole || state;
     },
     [actions.pushLogin.SUCCESS](state, { payload }) {
-      const { activeRole } = formatRolesPayload(payload.roles);
-
-      return activeRole || roleInitial;
+      return payload.activeRole || state;
     },
     [actions.setActiveRole.SUCCESS](state, { payload }) {
       return payload.role;
@@ -119,12 +114,10 @@ const permissionsInitial = null;
 const permissionsReducer = handleActions(
   {
     [actions.pushLogin.SUCCESS](state, { payload }) {
-      const { rolesPermissions } = formatRolesPayload(payload.roles);
-      return rolesPermissions;
+      return payload.rolesPermissions;
     },
     [actions.pushLoginByToken.SUCCESS](state, { payload }) {
-      const { rolesPermissions } = formatRolesPayload(payload.roles);
-      return rolesPermissions;
+      return payload.rolesPermissions;
     },
     [actions.pushLogin.FAILURE]() {
       return permissionsInitial;

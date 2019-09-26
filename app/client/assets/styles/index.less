@@ -9,12 +9,13 @@
 @import "ui/_form";
 @import "ui/_inputs";
 @import "ui/_loader";
+@import "ui/_modal";
 @import "ui/_notifications";
 
 // Components
 @import "components/_navbar";
 @import "components/_userprofile";
-@import "components/_share_opinion";
+
 
 // TODO: Add code splitting.
 // TODO: Reorganize styling and prepare it for adaptive layout.
@@ -26,6 +27,7 @@
 //@import "pages/chart";
 @import "pages/profile";
 @import "pages/choose-role-page";
+@import "pages/share-opinion";
 
 * {
   box-sizing: border-box;
@@ -127,5 +129,9 @@ ul, ol {
 
 .p-absolute {
   position: absolute;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 

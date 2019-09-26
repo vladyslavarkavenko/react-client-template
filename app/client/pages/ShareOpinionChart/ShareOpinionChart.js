@@ -3,7 +3,10 @@ import React from 'react';
 import ReactSVG from 'react-svg';
 import { VictoryScatter, VictoryChart, VictoryVoronoiContainer, VictoryAxis } from 'victory';
 
-import '../assets/styles/pages/chart.less';
+import '../../assets/styles/pages/chart.less';
+import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
+import { pushRateTopic } from '../../modules/shareOpinion/shareOpinionActions';
+import { connect } from 'react-redux';
 
 const ticks = 10;
 const padding = 50;
@@ -98,20 +101,25 @@ function calculateColor(x, y, width, height) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+const initialState = {
+  x: undefined,
+  y: undefined,
+  activePoint: {},
+  showOpinions: false
+};
+
 class ShareOpinionChart extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      x: undefined,
-      y: undefined,
-      activePoint: {},
-      showOpinions: false
+      ...initialState
     };
 
     this.chartWrapper = React.createRef();
 
     this.updateBG = this.updateBG.bind(this);
+    this.onNextClick = this.onNextClick.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onActivated = this.onActivated.bind(this);
     this.saveOpinion = this.saveOpinion.bind(this);
@@ -119,7 +127,7 @@ class ShareOpinionChart extends React.Component {
 
   onActivated(points) {
     const { satisfaction, importance } = points[0];
-    console.log('points', points);
+
     this.setState({
       activePoint: {
         satisfaction,
@@ -133,15 +141,9 @@ class ShareOpinionChart extends React.Component {
     const x = e.pageX - rect.left;
     const y = e.pageY - rect.top; // To reverse y-axis
 
-    this.setState(
-      {
-        x,
-        y
-      },
-      () => {
-        window.requestAnimationFrame(this.updateBG);
-      }
-    );
+    this.setState({ x, y }, () => {
+      window.requestAnimationFrame(this.updateBG);
+    });
   }
 
   updateBG() {
@@ -168,17 +170,25 @@ class ShareOpinionChart extends React.Component {
   }
 
   saveOpinion() {
-    // const { activePoint } = this.state;
-    // TODO: Save in Redux.
     this.setState({
       showOpinions: true
     });
+  }
+
+  onNextClick() {
+    const { activePoint } = this.state;
+    const { pushRateTopic } = this.props;
+
+    pushRateTopic(activePoint);
+    this.setState({ ...initialState });
   }
 
   render() {
     const { activePoint, showOpinions } = this.state;
 
     const Indicator = () => {
+      if (!Object.keys(activePoint).length) return null;
+
       const { importance: i, satisfaction: s } = activePoint;
 
       return (
@@ -203,7 +213,7 @@ class ShareOpinionChart extends React.Component {
     return (
       <div className="chart-wrapper" ref={this.chartWrapper}>
         <div
-          className="p-relative"
+          className="p-relative cursor-pointer"
           width={width}
           height={height}
           onMouseMove={showOpinions ? null : this.onMouseMove}
@@ -259,7 +269,7 @@ class ShareOpinionChart extends React.Component {
                 <h3>
                   Importance {activePoint.importance} & Satisfaction {activePoint.satisfaction}
                 </h3>
-                <button> Next</button>
+                <button onClick={this.onNextClick}>Next</button>
               </div>
             </>
           ) : (
@@ -316,4 +326,11 @@ class ShareOpinionChart extends React.Component {
   }
 }
 
-export default ShareOpinionChart;
+const mapDispatchToProps = {
+  pushRateTopic
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ShareOpinionChart);
