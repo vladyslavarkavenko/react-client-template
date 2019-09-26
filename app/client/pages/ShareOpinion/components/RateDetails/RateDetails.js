@@ -7,8 +7,6 @@ import SubjectItemContainer from '../Subject/SubjectItemContainer';
 import ShareOpinionBlock from './ShareOpinionBlock';
 import CreateTopicModal from '../Modals/CreateTopicModal';
 
-/* eslint-disable */
-
 export default function RateDetails({
   newTopicShowModal,
   selectedProfile,

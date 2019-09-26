@@ -4,6 +4,7 @@ import { InlineLoader } from '../Layout/Loader';
 
 export default function Button({
   title,
+  children,
   loadingTitle = i18next.t('default.loading'),
   type = 'button',
   theme,
@@ -25,7 +26,7 @@ export default function Button({
           {loadingTitle}
         </>
       ) : (
-        title
+        children || title
       )}
     </button>
   );

@@ -28,6 +28,10 @@ const ProfileForCustomer = customLoadable({
 
 const Dashboard = customLoadable({ loader: () => import('../pages/Dashboard') });
 const ShareOpinion = customLoadable({ loader: () => import('../pages/ShareOpinion/ShareOpinion') });
+const ShareOpinionChart = customLoadable({
+  loader: () => import('../pages/ShareOpinionChart/ShareOpinionChart')
+});
+
 const ForgotPassword = customLoadable({
   loader: () => import('../pages/Auth/ForgotPassword')
 });
@@ -68,6 +72,7 @@ export default function App() {
         forCustomer={ProfileForCustomer}
       />
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />
+      <AuthRoute exact path={routing().shareOpinionChart} component={ShareOpinionChart} />
 
       {/* TODO: Change to actual root */}
       <AuthRoute exact path={routing().root} component={Account} />

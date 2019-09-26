@@ -22,8 +22,7 @@ export default class ModalWrapper extends React.Component {
   closeModalHandler({ target }) {
     if (!target.closest('.modal-wrapper__body')) {
       const { handleModal } = this.props;
-      console.log('Success', handleModal());
-      // this.props.handleModal();
+      handleModal();
     }
   }
 

@@ -9,8 +9,6 @@ export default class RateList extends React.Component {
   componentDidMount() {
     const { companies, managers, handleSelect } = this.props;
 
-    console.log(companies, managers);
-
     if (managers.length) {
       //select first manager in the list
       handleSelect({ data: managers[0], type: MANAGER });
@@ -24,11 +22,22 @@ export default class RateList extends React.Component {
     const { companies, managers, selected, handleSelect } = this.props;
 
     const companiesList = companies.map((company) => (
-      <RateListItem data={company} selected={selected} handleSelect={handleSelect} isCompany />
+      <RateListItem
+        key={`${company.id}_c`}
+        data={company}
+        selected={selected}
+        handleSelect={handleSelect}
+        isCompany
+      />
     ));
 
     const managersList = managers.map((manager) => (
-      <RateListItem data={manager} selected={selected} handleSelect={handleSelect} />
+      <RateListItem
+        key={`${manager.id}_m`}
+        data={manager}
+        selected={selected}
+        handleSelect={handleSelect}
+      />
     ));
 
     return (

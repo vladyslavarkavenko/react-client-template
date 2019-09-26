@@ -5,7 +5,6 @@ import companiesSelectors from '../../../../modules/companies/companiesSelectors
 import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
 import { selectOpinionProfile } from '../../../../modules/shareOpinion/shareOpinionActions';
 
-/* eslint-disable */
 function RateListContainer(props) {
   return <RateList {...props} />;
 }

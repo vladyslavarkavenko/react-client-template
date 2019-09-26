@@ -93,11 +93,14 @@
             border: 1px solid black;
             color: black;
           }
-
           &:active {
             background-color: @font-color-lighter;
             border: 1px solid @font-color-lighter;
             color: white;
+          }
+          &:disabled {
+            border: 1px solid @font-color-lighter;
+            color: @font-color-lighter;
           }
         }
 
@@ -116,11 +119,15 @@
             border: 1px solid @button-bg-dark-blue_hover;
             color: @button-bg-dark-blue_hover;
           }
+          &:disabled {
+              border: 1px solid @font-color-lighter;
+              background-color: @font-color-lighter;
+              color: white;
+          }
         }
       }
 
       &-drop {
-        background-color: #2bbd73;
         position: relative;
 
         .drop-list {

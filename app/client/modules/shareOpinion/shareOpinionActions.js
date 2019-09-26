@@ -73,7 +73,6 @@ function* subjectHintsWorker({ payload }) {
       }
     });
 
-    console.log(hints);
     yield put(saveNewTopicField.success(hints));
   } else {
     yield put(saveNewTopicField.fulfill());

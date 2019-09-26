@@ -353,16 +353,24 @@
 
           .topics-list {
             margin: 20px 0 0 0;
+            padding-left: 20px;
             background-color: white;
 
             .topic {
-              padding: 0 10px;
               display: flex;
               align-items: center;
               justify-content: space-between;
               min-height: 50px;
               margin: 5px 5px;
+              padding: 0 10px;
               background-color: white;
+              border-top: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+
+              &:hover {
+                border-top: 1px solid @font-color-light;
+                border-bottom: 1px solid @font-color-light;
+              }
 
               &-name {
                 font-size: 1rem;

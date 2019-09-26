@@ -12,7 +12,6 @@ import {
 } from '../../../../modules/shareOpinion/shareOpinionActions';
 import SubjectHintsDropdown from '../Dropdown/SubjectHintsDropdown';
 
-/* eslint-disable */
 function CreateTopicModal({
   handleModal,
   selectSubject,
@@ -63,7 +62,9 @@ function CreateTopicModal({
         </div>
       </div>
       <div className="m-btn-list">
-        <ModalWhiteButton onClick={() => handleModal()}>Cancel</ModalWhiteButton>
+        <ModalWhiteButton onClick={() => handleModal()} disabled={isRequest}>
+          Cancel
+        </ModalWhiteButton>
         <ModalThemeButton onClick={() => createNewTopic()} disabled={isRequest}>
           Add
         </ModalThemeButton>
