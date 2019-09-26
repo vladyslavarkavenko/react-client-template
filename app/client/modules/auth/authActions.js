@@ -3,7 +3,7 @@ import { call, select, put, takeLatest, all } from 'redux-saga/effects';
 import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import AuthService from '../../services/auth';
-import { setTokens, removeTokens } from '../helpers/helpers';
+import { setTokens, removeTokens, formatRolesPayload } from '../helpers/helpers';
 import { TOKENS } from '../../utils/constants';
 import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
@@ -94,13 +94,24 @@ function* loginByTokenWorker() {
         call(() => AuthService.getRoles())
       ]);
 
-      yield put(pushLoginByToken.success({ user, roles }));
+      // if (role) {
+      //   yield put(setActiveRole.trigger(role));
+      // }
+      const {
+        companies,
+        rolesPermissions,
+        activeRole = localStorage.getItem('role')
+      } = formatRolesPayload(roles);
 
-      const role = localStorage.getItem('role');
-
-      if (role) {
-        yield put(setActiveRole.trigger(role));
-      }
+      yield put(
+        pushLoginByToken.success({
+          user,
+          roles,
+          companies,
+          activeRole,
+          rolesPermissions
+        })
+      );
     } catch (err) {
       console.error(err);
       removeTokens();
@@ -120,16 +131,25 @@ function* loginWorker({ payload: { email, password } }) {
       call(() => AuthService.getRoles())
     ]);
     // format roles by formatRolesPayload in reducer;
-    const role = localStorage.getItem('role');
+    // const role = localStorage.getItem('role');
+    //
+    // if (role) {
+    //   yield put(setActiveRole.success(role));
+    // }
 
-    if (role) {
-      yield put(setActiveRole.success(role));
-    }
+    const {
+      companies,
+      rolesPermissions,
+      activeRole = localStorage.getItem('role')
+    } = formatRolesPayload(roles);
 
     yield put(
       pushLogin.success({
         user,
-        roles
+        roles,
+        companies,
+        activeRole,
+        rolesPermissions
       })
     );
 

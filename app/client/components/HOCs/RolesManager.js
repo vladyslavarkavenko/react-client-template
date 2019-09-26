@@ -8,9 +8,9 @@ import authSelectors from '../../modules/auth/authSelectors';
 
 export default (OriginalComponent) => {
   const RolesManagerHOC = (props) => {
-    const { rolesPermissions, activeRole, authStatus } = props;
+    const { rolesPermissions, activeRole } = props;
 
-    if (rolesPermissions === null || authStatus === 'request') {
+    if (rolesPermissions === null) {
       return <Loader />;
     }
 
