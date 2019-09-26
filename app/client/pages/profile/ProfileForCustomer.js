@@ -14,7 +14,6 @@ const AboutForCustomer = ForCustomer(customLoadable({ loader: () => import('./Us
 // eslint-disable-next-line react/prefer-stateless-function
 class ProfileForCustomer extends React.Component {
   render() {
-    console.log(this.props);
     const {
       data: { avatar, newAvatar, firstName, lastName, location }
     } = this.props;

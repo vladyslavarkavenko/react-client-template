@@ -383,8 +383,6 @@ export function validateUserForgotPassword(data) {
 export function validateCreateNewTopic(data) {
   const { subject, topic, subjectList, topicList } = data;
 
-  console.log(topicList);
-
   const errors = {
     ...validateUserSubjectOrTopic({
       field: 'subject',

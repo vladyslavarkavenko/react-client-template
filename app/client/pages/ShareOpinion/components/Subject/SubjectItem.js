@@ -54,7 +54,7 @@ export default class SubjectItem extends React.Component {
             />
           </div>
 
-          <div className="subject-info">
+          <div className="subject-info" onClick={this.handleOpen}>
             <div className="subject-title">
               {name}
 

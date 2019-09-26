@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Button from '../../components/ui-components/Form/Button';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
 import { pushRateTopic } from '../../modules/shareOpinion/shareOpinionActions';
+import OpinionAboutBlock from '../ShareOpinionMessage/OpinionAboutList';
 
 function ShareOpinionChart({ selectedTopics, nextUnratedTopic, pushRateTopic }) {
   if (!nextUnratedTopic) {
@@ -11,7 +12,8 @@ function ShareOpinionChart({ selectedTopics, nextUnratedTopic, pushRateTopic }) 
   }
 
   return (
-    <div>
+    <div className="rate-opinion content">
+      <OpinionAboutBlock />
       List of selected topics
       <ul>
         {selectedTopics.map((topic) => (
