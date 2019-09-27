@@ -189,65 +189,21 @@
         }
 
         &__notify {
-          position: relative;
-          display: flex;
-          margin-bottom: 15px;
-          align-items: center;
-          min-height: 70px;
-          background-color: white;
-          border: 1px solid @border-color-list;
-          border-left: 0;
-          //border-left: 3px solid @alert-color-red;
-          padding: 10px 15px;
+          .notify-btn {
+            margin: 0 0 0 auto;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+            background-color: @button-bg-dark-blue;
+            border-radius: 5px;
+            cursor: pointer;
 
-          .notify {
-            &-label {
-              position: absolute;
-              top: -1px;
-              bottom: -1px;
-              left: 0;
-
-              background-color: @alert-color-red;
-              width: 3px;
-            }
-
-            &-icon {
-              margin-right: 1rem;
-              display: flex;
-              >svg {
-                align-self: center;
-                width: 1.25rem;
-                fill: @alert-color-red;
-              }
-
-            }
-
-            &-message {
-              font-weight: bold;
-              font-size: 1rem;
-              //line-height: 26px;
-            }
-
-            &-btn {
-              //justify-self: flex-end;
-              margin: 0 0 0 auto;
-              padding: 10px 15px;
-              font-size: 0.9rem;
-              font-weight: bold;
-              color: white;
-              background-color: @button-bg-dark-blue;
-              border-radius: 5px;
-              cursor: pointer;
-
-              &:hover {
-                background-color: @button-bg-dark-blue_hover;
-              }
+            &:hover {
+              background-color: @button-bg-dark-blue_hover;
             }
           }
-
         }
-
-
 
         &__subject {
           position: relative;
@@ -450,6 +406,9 @@
 
 
 .rate-opinion {
+  .container {
+    max-width: 700px;
+  }
   &.header {
     position: fixed;
     top: 0;
@@ -520,6 +479,86 @@
         .score {
           font-weight: bold;
           margin-left: 0.25rem;
+        }
+      }
+    }
+
+    .opinion-rec {
+      &__title {
+        margin: 1.5rem 0;
+        text-align: center;
+        font-weight: bold;
+        line-height: 2rem;
+        font-size: 1.25rem;
+      }
+
+      &__list {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 1rem 0;
+      }
+
+      &__btn {
+        height: 140px;
+        width: 140px;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 1.4rem;
+        color: @font-color-lighter;
+        border-radius: @border-radius-block;
+        border: 1px solid @font-color-light;
+        font-size: 0.95rem;
+        line-height: 0.95rem;
+        font-weight: bold;
+
+        svg {
+          width: 60px;
+          height: 60px;
+          fill: @font-color-lighter;
+        }
+
+        &:hover {
+          border: 1px solid @button-bg-dark-blue_hover;
+          color:  @button-bg-dark-blue_hover;
+          svg {
+            fill:  @button-bg-dark-blue_hover;
+          }
+        }
+
+        &.active {
+          border: 1px solid @button-bg-dark-blue_hover;
+          background-color: @button-bg-dark-blue_hover;
+          color: white;
+
+
+          svg {
+            fill: white;
+          }
+        }
+
+      }
+
+      &__remind {
+        margin: 40px 0 80px 0;
+        display: flex;
+        justify-content: center;
+        .ask-btn {
+          min-width: 140px;
+          padding: 10px 20px;
+          color: @font-color-lighter;
+          border: 1px solid @font-color-lighter;
+          border-radius: @border-radius-block;
+          font-size: 1rem;
+          line-height: 1.2rem;
+          font-weight: bold;
+
+          &:hover {
+            color:white ;
+            background-color: @font-color-lighter;
+          }
         }
       }
     }

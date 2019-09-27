@@ -1,0 +1,66 @@
+.notify {
+  position: relative;
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+  min-height: 70px;
+  width: 100%;
+  background-color: white;
+  border: 1px solid @border-color-list;
+  border-left: 0;
+  padding: 10px 15px;
+
+  &.success {
+      .notify-label {
+        background-color: @alert-color-green;
+      }
+      .notify-icon > svg {
+        fill: @alert-color-green;
+      }
+    }
+
+  &.failure {
+      .notify-label {
+        background-color: @alert-color-red;
+      }
+      .notify-icon > svg {
+        fill: @alert-color-red;
+      }
+    }
+
+  &.info {
+      .notify-label {
+        background-color: @alert-color-blue;
+      }
+      .notify-icon > svg {
+        fill: @alert-color-blue;
+      }
+    }
+
+    &-label {
+      position: absolute;
+      top: -1px;
+      bottom: -1px;
+      left: 0;
+
+      background-color: @alert-color-red;
+      width: 3px;
+
+    }
+
+    &-icon {
+      margin-right: 1rem;
+      display: flex;
+      >svg {
+        align-self: center;
+        width: 1.25rem;
+        fill: @alert-color-red;
+      }
+
+    }
+
+    &-message {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+}
