@@ -24,6 +24,12 @@ export const saveNewTopicField = createRequestBound('TOPIC_FIELD_SAVE');
 
 export const pushRateTopic = createRequestBound('TOPIC_CURRENT_RATE');
 
+export const selectReviewRecommend = createRequestBound('REVIEW_RECOMMEND_SELECT');
+export const selectWhoCanSee = createRequestBound('REVIEW_CAN_SEE_SELECT');
+export const selectExpectAction = createRequestBound('REVIEW_EXPECT_ACTION_SELECT');
+
+export const pushUpdateTopics = createRequestBound('TOPIC_UPDATE_SEND');
+
 function* fetchOpinionSubjectsWorker({ payload: { data } }) {
   yield put(fetchOpinionSubjects.request());
   try {

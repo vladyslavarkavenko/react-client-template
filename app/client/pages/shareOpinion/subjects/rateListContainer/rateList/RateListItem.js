@@ -1,6 +1,6 @@
 import React from 'react';
 import { RATE_PROFILE_TYPE } from '../../../../../utils/constants';
-import ExclamationCircleEmptySvg from '../../../../../../../public/assets/svg/exclamation-circle-empty.svg';
+import ExclamationCircleEmptySvg from '../../../../../../../public/assets/svg/exclamation-circle.svg';
 
 const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 

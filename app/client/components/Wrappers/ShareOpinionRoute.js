@@ -21,9 +21,11 @@ function ShareOpinionRoute({
   //   return <Redirect to={routing().shareOpinion} />;
   // }
   // Step after chart
-  if (step === 3 && nextUnratedTopic) {
-    return <Redirect to={routing().shareOpinionChart} />;
-  }
+  // if (step === 3 && nextUnratedTopic) {
+  //   return <Redirect to={routing().shareOpinionChart} />;
+  // }
+
+  console.log(Redirect);
 
   return (
     <>

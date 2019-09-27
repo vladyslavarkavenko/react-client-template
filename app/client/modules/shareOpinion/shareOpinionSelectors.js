@@ -20,6 +20,7 @@ export default {
   selectedTopics: getSelectedTopics,
   selectedTopicsId: getSelectedTopicsId,
   selectedProfile: (state) => state.shareOpinion.selectedProfile,
+  selectedOptions: (state) => state.shareOpinion.selectedOptions,
   expiredOpinions: getExpiredOpinions,
   expiredOpinionsById: getExpiredOpinionsBySubject,
 

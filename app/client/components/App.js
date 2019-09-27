@@ -35,7 +35,7 @@ const ShareOpinionChart = customLoadable({
   loader: () => import('../pages/shareOpinion/Chart')
 });
 const ShareOpinionMessage = customLoadable({
-  loader: () => import('../pages/shareOpinion/Comments')
+  loader: () => import('../pages/shareOpinion/Reviews')
 });
 
 const ForgotPassword = customLoadable({

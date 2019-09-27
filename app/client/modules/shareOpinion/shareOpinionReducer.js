@@ -204,9 +204,55 @@ const newTopicModal = handleActions(
   false
 );
 
+const withComments = handleActions(
+  {
+    [actions.selectReviewRecommend.SUCCESS]() {
+      return true;
+    }
+  },
+  false
+);
+
+const isRecommended = handleActions(
+  {
+    [actions.selectReviewRecommend.TRIGGER](state, { payload }) {
+      return payload;
+    }
+  },
+  1
+);
+
+const whoCanSee = handleActions(
+  {
+    [actions.selectWhoCanSee.TRIGGER](state, { payload }) {
+      return payload;
+    }
+  },
+  3
+);
+
+const isExpectingAction = handleActions(
+  {
+    [actions.selectExpectAction.TRIGGER](state, { payload }) {
+      return payload;
+    }
+  },
+  false
+);
+
+const finishStatus = makeStatusReducer(actions.pushUpdateTopics);
+
 const subjects = combineReducers({
   status: subjectsStatus,
   data: subjectsData
+});
+
+const selectedOptions = combineReducers({
+  isExpectingAction,
+  isRecommended,
+  whoCanSee,
+  withComments,
+  status: finishStatus
 });
 
 const newTopic = combineReducers({
@@ -221,6 +267,7 @@ const newTopic = combineReducers({
 const shareOpinion = combineReducers({
   selectedProfile,
   selectedTopics,
+  selectedOptions,
   expiredOpinions,
   subjects,
   newTopic
