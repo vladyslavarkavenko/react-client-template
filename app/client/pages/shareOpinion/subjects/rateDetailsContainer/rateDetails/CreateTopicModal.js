@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import ModalWrapper from '../../../../components/ui-components/Modal/ModalWrapper';
-import ModalWhiteButton from '../../../../components/ui-components/Modal/ModalWhiteButton';
-import ModalThemeButton from '../../../../components/ui-components/Modal/ModalThemeButton';
-import TextInput from '../../../../components/ui-components/Form/TextInput';
-import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
+import ModalWrapper from '../../../../../components/ui-components/Modal/ModalWrapper';
+import ModalWhiteButton from '../../../../../components/ui-components/Modal/ModalWhiteButton';
+import ModalThemeButton from '../../../../../components/ui-components/Modal/ModalThemeButton';
+import TextInput from '../../../../../components/ui-components/Form/TextInput';
+import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
 import {
   pushNewTopic,
   saveNewTopicField,
   selectSubjectForNewTopic
-} from '../../../../modules/shareOpinion/shareOpinionActions';
-import SubjectHintsDropdown from '../Dropdown/SubjectHintsDropdown';
+} from '../../../../../modules/shareOpinion/shareOpinionActions';
+import SubjectHintsDropdown from './createTopicModal/SubjectHintsDropdown';
 
 function CreateTopicModal({
   handleModal,

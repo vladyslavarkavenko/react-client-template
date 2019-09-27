@@ -1,7 +1,7 @@
 import React from 'react';
-import OpinionAboutBlock from './OpinionAboutList';
+import OpinionAboutBlock from './OpinionAboutBlock';
 
-export default function ShareOpinionMessage() {
+export default function Comments() {
   return (
     <div className="rate-opinion content">
       <OpinionAboutBlock />

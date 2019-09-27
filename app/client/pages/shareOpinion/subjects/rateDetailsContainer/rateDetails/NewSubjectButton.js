@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { pushNewTopic } from '../../../../modules/shareOpinion/shareOpinionActions';
+import { pushNewTopic } from '../../../../../modules/shareOpinion/shareOpinionActions';
 
 function NewSubjectButton({ handleModal }) {
   return (

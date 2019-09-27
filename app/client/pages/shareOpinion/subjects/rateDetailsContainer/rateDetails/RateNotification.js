@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import ExclamationCircleSvg from '../../../../../../public/assets/svg/exclamation-circle.svg';
-import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
-import { selectOpinionExpired } from '../../../../modules/shareOpinion/shareOpinionActions';
+import ExclamationCircleSvg from '../../../../../../../public/assets/svg/exclamation-circle.svg';
+import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
+import { selectOpinionExpired } from '../../../../../modules/shareOpinion/shareOpinionActions';
 
 function RateNotification({ expiredTopics, selectOpinionExpired }) {
   if (!Object.keys(expiredTopics).length) {

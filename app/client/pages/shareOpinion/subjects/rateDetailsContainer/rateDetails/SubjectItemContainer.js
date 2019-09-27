@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import {
   pushNewTopic,
   selectOpinionTopic
-} from '../../../../modules/shareOpinion/shareOpinionActions';
-import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
+} from '../../../../../modules/shareOpinion/shareOpinionActions';
+import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
 
-import SubjectItem from './SubjectItem';
+import SubjectItem from './subjectItemContainer/SubjectItem';
 
 function SubjectItemContainer(props) {
   return <SubjectItem {...props} />;

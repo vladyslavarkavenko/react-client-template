@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import Button from '../../components/ui-components/Form/Button';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
 import { pushRateTopic } from '../../modules/shareOpinion/shareOpinionActions';
-import OpinionAboutBlock from '../ShareOpinionMessage/OpinionAboutList';
+import OpinionAboutBlock from './OpinionAboutBlock';
 
-function ShareOpinionChart({ selectedTopics, nextUnratedTopic, pushRateTopic }) {
+function Chart({ selectedTopics, nextUnratedTopic, pushRateTopic }) {
   if (!nextUnratedTopic) {
     //redirect in saga
     return null;
@@ -44,4 +44,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ShareOpinionChart);
+)(Chart);

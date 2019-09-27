@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import RateList from './RateList';
-import companiesSelectors from '../../../../modules/companies/companiesSelectors';
-import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
-import { selectOpinionProfile } from '../../../../modules/shareOpinion/shareOpinionActions';
+import RateList from './rateListContainer/RateList';
+import companiesSelectors from '../../../modules/companies/companiesSelectors';
+import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
+import { selectOpinionProfile } from '../../../modules/shareOpinion/shareOpinionActions';
 
 function RateListContainer(props) {
   return <RateList {...props} />;

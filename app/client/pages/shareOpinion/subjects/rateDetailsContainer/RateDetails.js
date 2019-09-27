@@ -1,11 +1,11 @@
 import React from 'react';
-import RateHeader from './RateHeader';
-import NewSubjectButton from './NewSubjectButton';
-import RateNotification from './RateNotification';
+import RateHeader from './rateDetails/RateHeader';
+import NewSubjectButton from './rateDetails/NewSubjectButton';
+import RateNotification from './rateDetails/RateNotification';
 import { LoaderBlock } from '../../../../components/ui-components/Layout/Loader';
-import SubjectItemContainer from '../Subject/SubjectItemContainer';
-import ShareOpinionBlock from './ShareOpinionBlock';
-import CreateTopicModal from '../Modals/CreateTopicModal';
+import SubjectItemContainer from './rateDetails/SubjectItemContainer';
+import ShareOpinionBlock from './rateDetails/ShareOpinionBlock';
+import CreateTopicModal from './rateDetails/CreateTopicModal';
 
 export default function RateDetails({
   newTopicShowModal,
