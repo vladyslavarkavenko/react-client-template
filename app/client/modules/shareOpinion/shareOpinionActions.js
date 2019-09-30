@@ -1,4 +1,4 @@
-import { call, put, takeLatest, all, select } from 'redux-saga/effects';
+import { call, put, takeLatest, all, fork, select } from 'redux-saga/effects';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import ShareOpinionService from '../../services/shareOpinion';
@@ -18,16 +18,18 @@ export const selectOpinionTopic = createRequestBound('TOPIC_SELECT');
 export const selectOpinionExpired = createRequestBound('TOPIC_EXPIRED_SELECT');
 export const fetchOpinionSubjects = createRequestBound('SUBJECTS_FETCH');
 
-export const pushNewTopic = createRequestBound('TOPIC_CREATE');
-export const selectSubjectForNewTopic = createRequestBound('TOPIC_WITH_SUBJECT_SELECT');
-export const saveNewTopicField = createRequestBound('TOPIC_FIELD_SAVE');
+export const pushNewTopic = createRequestBound('TOPIC_NEW_CREATE');
+export const selectSubjectForNewTopic = createRequestBound('TOPIC_NEW_WITH_SUBJECT_SELECT');
+export const saveNewTopicField = createRequestBound('TOPIC_NEW_FIELD_SAVE');
 
 export const pushRateTopic = createRequestBound('TOPIC_CURRENT_RATE');
 
+export const selectTopicReview = createRequestBound('REVIEW_SELECT');
 export const selectReviewRecommend = createRequestBound('REVIEW_RECOMMEND_SELECT');
 export const selectWhoCanSee = createRequestBound('REVIEW_CAN_SEE_SELECT');
 export const selectExpectAction = createRequestBound('REVIEW_EXPECT_ACTION_SELECT');
 
+export const saveTopicField = createRequestBound('TOPIC_FIELD_SAVE');
 export const pushUpdateTopics = createRequestBound('TOPIC_UPDATE_SEND');
 
 function* fetchOpinionSubjectsWorker({ payload: { data } }) {
@@ -208,7 +210,65 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
     yield put(pushRateTopic.failure());
   }
 }
-//
+
+function* patchTopicFieldsWorker({ fields, file, isChecked }) {
+  try {
+    const { id } = yield call(() => ShareOpinionService.pushRateTopic(fields));
+
+    if (file && isChecked) {
+      const data = new window.FormData();
+
+      data.append('file', file.file, file.fileName);
+
+      yield call(() => ShareOpinionService.pushFileToTopic({ id, data }));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function* pushUpdateTopicsWorker({ payload }) {
+  yield put(pushUpdateTopics.request());
+  try {
+    const selectedProfile = yield select(shareOpinionSelectors.selectedProfile);
+    const selectedTopics = yield select(shareOpinionSelectors.selectedTopics);
+    const selectedOptions = yield select(shareOpinionSelectors.selectedOptions);
+
+    const { withComments } = selectedOptions;
+
+    const tasks = selectedTopics.map((topic) => {
+      const { isChecked } = topic;
+
+      const fields = {
+        topic: topic.id,
+        manager:
+          selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined, // manager or company_id,
+        company:
+          selectedProfile.type === RATE_PROFILE_TYPE.COMPANY ? selectedProfile.id : undefined,
+        customer: selectedProfile.customerId, //customer id
+        comment: withComments && isChecked ? topic.comment : undefined,
+        expectActionProvider: selectedOptions.isExpectingAction,
+        isRecommended: selectedOptions.isRecommended,
+        statusSharedComment: selectedOptions.whoCanSee
+      };
+
+      const file = withComments ? payload[topic.id] : null;
+
+      return fork(patchTopicFieldsWorker, { fields, file, isChecked });
+    });
+
+    yield all(tasks);
+
+    yield put(pushUpdateTopics.success());
+    yield put(historyPush({ method: 'replace', to: routing().shareOpinion }));
+    Notification.success('Thank you for your feedback');
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(pushUpdateTopics.failure());
+  }
+}
+
 export function* shareOpinionWatcher() {
   yield all([
     takeLatest(selectOpinionProfile.TRIGGER, fetchOpinionSubjectsWorker),
@@ -217,6 +277,8 @@ export function* shareOpinionWatcher() {
     takeLatest(pushNewTopic.REQUEST, newTopicWorker),
     takeLatest(saveNewTopicField.TRIGGER, subjectHintsWorker),
 
-    takeLatest(pushRateTopic.TRIGGER, pushRateTopicWorker)
+    takeLatest(pushRateTopic.TRIGGER, pushRateTopicWorker),
+
+    takeLatest(pushUpdateTopics.TRIGGER, pushUpdateTopicsWorker)
   ]);
 }

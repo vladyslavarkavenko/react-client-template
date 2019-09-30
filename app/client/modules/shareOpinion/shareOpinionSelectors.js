@@ -35,5 +35,7 @@ export default {
   newTopicShowModal: getNewTopicShowModal,
   newTopicHints: getNewTopicHints,
 
-  nextUnratedTopic: getUnratedTopic
+  nextUnratedTopic: getUnratedTopic,
+
+  finishStatus: (state) => state.shareOpinion.selectedOptions.status
 };

@@ -1,36 +1,22 @@
 import React from 'react';
 import { Route, Redirect, Link } from 'react-router-dom';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
 import routing from '../../utils/routing';
 import Logo from '../ui-components/Layout/Logo';
+import AuthGuard from '../HOCs/AuthGuard';
+import RolesManager from '../HOCs/RolesManager';
 
-function ShareOpinionRoute({
-  step,
-  selectedProfile,
-  selectedTopics,
-  nextUnratedTopic,
-  ...otherProps
-}) {
-  // if (!selectedProfile || !selectedTopics.length) {
-  //   return <Redirect to={routing().shareOpinion} />;
-  // }
-
-  // TODO: Make redirect if user has used history.back
-  // if (step === 2 && !nextUnratedTopic) {
-  //   return <Redirect to={routing().shareOpinion} />;
-  // }
-  // Step after chart
-  // if (step === 3 && nextUnratedTopic) {
-  //   return <Redirect to={routing().shareOpinionChart} />;
-  // }
-
-  console.log(Redirect);
+function ShareOpinionRoute({ step, selectedProfile, selectedTopics, ...otherProps }) {
+  if (!selectedProfile || !selectedTopics.length) {
+    return <Redirect to={routing().shareOpinion} />;
+  }
 
   return (
     <>
       <header className="rate-opinion header">
-        <Link to={routing().shareOpinion} replace type="button" className="header-btn">
+        <Link to={routing().shareOpinion} replace className="header-btn">
           Cancel
         </Link>
         <Logo className="header-logo" replace />
@@ -45,9 +31,11 @@ function ShareOpinionRoute({
 
 const mapStateToProps = (state) => ({
   selectedProfile: shareOpinionSelectors.selectedProfile(state),
-  selectedTopics: shareOpinionSelectors.selectedTopics(state),
-
-  nextUnratedTopic: shareOpinionSelectors.nextUnratedTopic(state)
+  selectedTopics: shareOpinionSelectors.selectedTopics(state)
 });
 
-export default connect(mapStateToProps)(ShareOpinionRoute);
+export default compose(
+  AuthGuard,
+  RolesManager,
+  connect(mapStateToProps)
+)(ShareOpinionRoute);

@@ -49,5 +49,41 @@
       }
     }
   }
+
+  &.btn-full-block {
+    position: sticky;
+    background-color: @secondary-bg-color;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    min-height: 72px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .btn {
+      background-color: transparent;
+      border-radius: @border-radius-block;
+      border: 2px solid @border-color-list;
+      text-align: center;
+      padding: 10px;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: bold;
+      line-height: 20px;
+
+      &:hover {
+        background-color: @border-color-list;
+        color: @secondary-bg-color
+      }
+      &:active {
+        border: 2px solid @button-bg-dark-blue;
+        background-color: @button-bg-dark-blue;
+        color:white;
+      }
+    }
+
+  }
+
 }
 

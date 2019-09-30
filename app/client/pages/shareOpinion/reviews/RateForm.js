@@ -1,76 +1,139 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import RateComment from './RateComment';
-import RadioGroup from './RadioGroup';
+import RateComment from './rateForm/RateComment';
+import RadioGroup from './rateForm/RadioGroup';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
 import {
   pushUpdateTopics,
   selectWhoCanSee,
-  selectExpectAction
+  selectExpectAction,
+  saveTopicField,
+  selectTopicReview
 } from '../../../modules/shareOpinion/shareOpinionActions';
+import ButtonFullBlock from '../../../components/ui-components/Form/ButtonFullBlock';
 
-/* eslint-disable */
+const whoCanSeeOptions = [
+  { value: 1, title: 'All' },
+  { value: 2, title: 'Provider' },
+  { value: 3, title: 'Only cTRU' }
+];
+
+const expectActionOptions = [{ value: true, title: 'Yes' }, { value: false, title: 'No' }];
+
 class RateForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      files: {}
+    };
+
+    this.handleChangeFile = this.handleChangeFile.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChangeFile({ id, file, fileName, isDelete }) {
+    this.setState((prevState) => {
+      let files = {};
+
+      if (isDelete) {
+        Object.keys(prevState.files).forEach((stateId) => {
+          if (Number(stateId) !== id) {
+            files[stateId] = prevState.files[stateId];
+          }
+        });
+      } else {
+        files = { ...prevState.files, [id]: { file, fileName } };
+      }
+
+      return { files };
+    });
+  }
+
+  handleSubmit(e) {
+    if (e) {
+      e.preventDefault();
+    }
+    const { handleFinish } = this.props;
+    const { files } = this.state;
+
+    handleFinish(files);
+  }
+
   render() {
     const {
       whoCanSee,
       selectWhoCanSee,
       expectingAction,
       selectExpectAction,
+      saveTopicField,
+      selectTopicReview,
       topics,
-      withComments
+      status
     } = this.props;
 
-    if (!withComments) {
-      return null;
-    }
+    const { files } = this.state;
 
-    const options = topics.map((topic) => <RateComment key={topic.id} topic={topic} />);
+    const isRequest = status === 'request';
+
+    const options = topics.map((topic) => (
+      <RateComment
+        key={topic.id}
+        file={files[topic.id]}
+        topic={topic}
+        handleChangeFile={this.handleChangeFile}
+        handleChangeText={saveTopicField}
+        handleCheck={selectTopicReview}
+        disabled={isRequest}
+      />
+    ));
 
     return (
-      <form onSubmit={null} className="opinion-form">
-        <div className="container">
-          <p className="opinion-form__title">Add Comment</p>
-          <div className="opinion-form__block">
-            <p className="opinion-form__subtitle">
-              Select criterias that connect to this situation
-            </p>
+      <>
+        <form onSubmit={this.handleSubmit} className="opinion-form">
+          <div className="container">
+            <p className="opinion-form__title">Add Comment</p>
+            <div className="opinion-form__block">
+              <p className="opinion-form__subtitle">
+                Select criterias that connect to this situation
+              </p>
 
-            {options}
+              {options}
 
-            {/*<RateComment topic={{ title: 'test 1' }} />*/}
-            {/*<RateComment topic={{ title: 'test 2' }} />*/}
-            {/*<RateComment topic={{ title: 'test 3' }} />*/}
+              <p className="opinion-form__subtitle">Who can see the comment?</p>
+              <div className="container half">
+                <RadioGroup
+                  name="see_comment"
+                  options={whoCanSeeOptions}
+                  handleChange={selectWhoCanSee}
+                  selected={whoCanSee}
+                  disabled={isRequest}
+                />
+              </div>
 
-            <p className="opinion-form__subtitle">Who can see the comment?</p>
-            <RadioGroup
-              name="see_comment"
-              options={[
-                { value: 1, title: 'All' },
-                { value: 2, title: 'Provider' },
-                { value: 3, title: 'Only cTRU' }
-              ]}
-              handleChange={selectWhoCanSee}
-              selected={whoCanSee}
-            />
-            <p className="opinion-form__subtitle">
-              Do you expect for actions from the service provider?
-            </p>
+              <p className="opinion-form__subtitle">
+                Do you expect for actions from the service provider?
+              </p>
 
-            <RadioGroup
-              name="see_comment"
-              options={[{ value: true, title: 'Yes' }, { value: false, title: 'No' }]}
-              handleChange={selectExpectAction}
-              selected={expectingAction}
-            />
-            <div className="opinion-form__send">
-              <button type="button" className="send-btn">
-                Send comment
-              </button>
+              <div className="container half">
+                <RadioGroup
+                  name="see_comment"
+                  options={expectActionOptions}
+                  handleChange={selectExpectAction}
+                  selected={expectingAction}
+                  disabled={isRequest}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+
+        <ButtonFullBlock
+          title={isRequest ? 'Sending' : 'Send comment'}
+          handleClick={this.handleSubmit}
+          disabled={isRequest}
+        />
+      </>
     );
   }
 }
@@ -88,8 +151,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   handleFinish: pushUpdateTopics,
+  saveTopicField,
   selectWhoCanSee,
-  selectExpectAction
+  selectExpectAction,
+  selectTopicReview
 };
 
 export default connect(

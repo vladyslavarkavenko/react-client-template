@@ -29,7 +29,7 @@ const ProfileForCustomer = customLoadable({
 
 const Dashboard = customLoadable({ loader: () => import('../pages/dashboard/Dashboard') });
 const ShareOpinion = customLoadable({
-  loader: () => /* webpackChunkName: 'share_opinion'*/ import('../pages/shareOpinion/Subjects')
+  loader: () => import('../pages/shareOpinion/Subjects')
 });
 const ShareOpinionChart = customLoadable({
   loader: () => import('../pages/shareOpinion/Chart')

@@ -1,26 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { historyPush } from '../../../../../modules/redirect/redirectActions';
+import { withRouter } from 'react-router-dom';
 import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
 import routing from '../../../../../utils/routing';
+import ButtonFullBlock from '../../../../../components/ui-components/Form/ButtonFullBlock';
 
-function ShareOpinionBlock({ selectedTopicsId, historyPush }) {
+function ShareOpinionBlock({ selectedTopicsId, history }) {
   const count = selectedTopicsId.length;
 
   if (!count) {
     return null;
   }
 
+  const title = `Share opinion on ${count} ${count > 1 ? 'topics' : 'topic'}`;
+
   return (
-    <div className="details-list__block">
-      <button
-        type="button"
-        className="share-btn"
-        onClick={() => historyPush(routing().shareOpinionChart)}
-      >
-        Share opinion on {count} {count > 1 ? 'topics' : 'topic'}
-      </button>
-    </div>
+    <ButtonFullBlock title={title} handleClick={() => history.push(routing().shareOpinionChart)} />
   );
 }
 
@@ -28,11 +23,4 @@ const mapStateToProps = (state) => ({
   selectedTopicsId: shareOpinionSelectors.selectedTopicsId(state)
 });
 
-const mapDispatchToProps = {
-  historyPush
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ShareOpinionBlock);
+export default withRouter(connect(mapStateToProps)(ShareOpinionBlock));

@@ -353,15 +353,25 @@
                   font-family: 'Muli', sans-serif;
                   color: black;
                   font-size: 1rem;
+                  line-height: 20px;
                   padding-left: 2rem;
                   font-weight: normal;
                 }
-                [type="checkbox"]:not(:checked) + label:after,
-                [type="checkbox"]:checked + label:after {
-                  //font-size: 1.25rem;
-                  //color:black;
 
+                [type="checkbox"]:checked + label {
+                  &:before {
+                    background-color: @font-color-blue;
+                    color: white;
+                    border: 1px solid @font-color-blue;
+                    box-shadow: unset;
+                  }
+
+                  &:after {
+                    color: white;
+                    box-shadow: unset;
+                  }
                 }
+
 
               }
               &-status {
@@ -411,6 +421,11 @@
 .rate-opinion {
   .container {
     max-width: 700px;
+
+    &.half {
+      max-width: 350px;
+      margin: unset;
+    }
   }
   &.header {
     position: fixed;
@@ -447,6 +462,7 @@
   }
 
   &.content {
+
     .opinion-about {
       background-color: transparent;
       padding: 1.75rem 0;
@@ -637,6 +653,7 @@
     }
 
     .opinion-form {
+      min-height: 75vh;
       background-color: white;
 
       input[type="file"] {
@@ -654,12 +671,93 @@
       &__subtitle {
         font-size: 1rem;
         font-weight: bold;
-        padding: 0.5rem 0;
+        padding: 1rem 0;
       }
 
       &__block {
         //padding: 24px;
         //margin:
+      }
+
+      &__check {
+        //Custom check
+        padding: 1.5rem 0;
+        margin: unset;
+        border-bottom: 1px solid @font-color-light;
+
+        [type="checkbox"]:checked + label {
+          color: black;
+          font-size: 16px;
+          line-height: 20px;
+
+          &:before {
+            background-color: @font-color-blue;
+            color: white;
+            border: 1px solid @font-color-blue;
+            box-shadow: unset;
+          }
+          &:after {
+            left: 0.15em;
+            color: white;
+            box-shadow: unset;
+          }
+        }
+
+        [type="checkbox"]:not(:checked) + label {
+          color: black;
+          font-size: 16px;
+          line-height: 20px;
+        }
+
+      }
+
+      &__fields {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .file-upload {
+          position:relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          border: 1px solid @border-color-list;
+          cursor: pointer;
+
+          svg {
+            width: 15px;
+            height: 15px;
+            fill: @font-color-blue;
+          }
+
+          &.filled {
+            border: 1px solid @alert-color-red;
+            svg {
+              width: 20px;
+              height: 20px;
+              fill: @alert-color-red;
+            }
+            &:hover {
+              border: 1px solid @alert-color-red;
+              background-color: @alert-color-red;
+              svg {
+                fill: white;
+              }
+            }
+          }
+
+          &:hover {
+            border: 1px solid @button-bg-dark-blue_hover;
+            background-color: @button-bg-dark-blue_hover;
+            color: white;
+            svg {
+              fill: white;
+            }
+          }
+        }
       }
 
       &__text {
@@ -676,7 +774,15 @@
 
         &::placeholder {
           color: @font-color-lighter;
+          font-family: 'Muli', sans-serif;
+          letter-spacing: 0.5px;
         }
+      }
+
+      &__send {
+        position: sticky;
+        bottom: 0;
+        background-color: @secondary-bg-color;
       }
 
 

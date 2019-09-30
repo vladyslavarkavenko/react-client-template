@@ -16,6 +16,9 @@ const selectedProfile = handleActions(
       const title = type === RATE_PROFILE_TYPE.COMPANY ? data.name : data.firstName;
 
       return { type, id, avatar, title, customerId };
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return null;
     }
   },
   null
@@ -60,8 +63,35 @@ const selectedTopics = handleActions(
 
       return cloned;
     },
+    [actions.selectTopicReview.TRIGGER](state, { payload }) {
+      const cloned = [...state];
+
+      const currentTopicIndex = cloned.findIndex((topic) => topic.id === payload);
+
+      cloned[currentTopicIndex] = {
+        ...cloned[currentTopicIndex],
+        isChecked: !cloned[currentTopicIndex].isChecked
+      };
+
+      return cloned;
+    },
+    [actions.saveTopicField.TRIGGER](state, { payload }) {
+      const cloned = [...state];
+
+      const currentTopicIndex = cloned.findIndex((topic) => topic.id === payload.id);
+
+      cloned[currentTopicIndex] = {
+        ...cloned[currentTopicIndex],
+        comment: payload.value
+      };
+
+      return cloned;
+    },
     [actions.selectOpinionExpired.SUCCESS](state, { payload }) {
       return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return [];
     },
     [actions.selectOpinionProfile.TRIGGER]() {
       return [];
@@ -97,6 +127,9 @@ const expiredOpinions = handleActions(
 
       return expired;
     },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return {};
+    },
     [actions.selectOpinionProfile.TRIGGER]() {
       return {};
     }
@@ -116,6 +149,9 @@ const subjectsData = handleActions(
     },
     [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
       return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return [];
     }
   },
   []
@@ -136,6 +172,9 @@ const newTopicInput = handleActions(
     [actions.selectSubjectForNewTopic.TRIGGER](state, { payload }) {
       return { ...state, subject: payload.name };
     },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return newTopicInputInitial;
+    },
     [actions.pushNewTopic.FULFILL]() {
       return newTopicInputInitial;
     }
@@ -152,6 +191,9 @@ const newTopicHints = handleActions(
       return [];
     },
     [actions.pushNewTopic.FULFILL]() {
+      return [];
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
       return [];
     }
   },
@@ -172,6 +214,9 @@ const newTopicErrors = handleActions(
     },
     [actions.pushNewTopic.FULFILL]() {
       return {};
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return {};
     }
   },
   {}
@@ -183,6 +228,9 @@ const newTopicSelectedSubject = handleActions(
       return payload;
     },
     [actions.pushNewTopic.FULFILL]() {
+      return null;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
       return null;
     }
   },
@@ -199,6 +247,9 @@ const newTopicModal = handleActions(
     },
     [actions.pushNewTopic.FULFILL]() {
       return false;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return false;
     }
   },
   false
@@ -208,6 +259,9 @@ const withComments = handleActions(
   {
     [actions.selectReviewRecommend.SUCCESS]() {
       return true;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return false;
     }
   },
   false
@@ -217,6 +271,9 @@ const isRecommended = handleActions(
   {
     [actions.selectReviewRecommend.TRIGGER](state, { payload }) {
       return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return 1;
     }
   },
   1
@@ -226,6 +283,9 @@ const whoCanSee = handleActions(
   {
     [actions.selectWhoCanSee.TRIGGER](state, { payload }) {
       return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return 3;
     }
   },
   3
@@ -235,6 +295,9 @@ const isExpectingAction = handleActions(
   {
     [actions.selectExpectAction.TRIGGER](state, { payload }) {
       return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return false;
     }
   },
   false

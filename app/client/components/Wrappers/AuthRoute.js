@@ -5,7 +5,6 @@ import RolesManager from '../HOCs/RolesManager';
 import TopBarWithProfile from '../ui-components/Layout/TopBarWithProfile';
 import Sidebar from '../ui-components/Layout/Sidebar/Sidebar';
 
-// TODO: Make different layout for login and other pages
 function AuthRoute(props) {
   return (
     <>
