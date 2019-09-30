@@ -9,7 +9,6 @@ import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import { validateCreateNewTopic } from '../../utils/validator';
 import { historyPush } from '../redirect/redirectActions';
 import routing from '../../utils/routing';
-import companiesSelectors from '../companies/companiesSelectors';
 
 export const prefix = 'shareOpinion';
 const createRequestBound = createRequestRoutine.bind(null, prefix);

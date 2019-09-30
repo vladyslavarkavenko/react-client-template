@@ -124,7 +124,7 @@ class ShareOpinionChart extends React.Component {
     const rateText = `${i18next.t('shareOpinion.i')} ${i} & ${i18next.t('shareOpinion.s')} ${s}`;
 
     return (
-      <div ref={this.chartWrapper} className="chart-wrapper">
+      <div ref={this.chartWrapper} className="chart-wrapper content">
         <OpinionAboutBlock backgroundColor="transparent" />
         <div
           style={{ width: w, height: h }}
