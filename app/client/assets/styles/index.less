@@ -3,7 +3,6 @@
 @import "common/_mixins";
 @import "common/_reset";
 @import "common/_utils";
-
 // UI
 @import "ui/_button";
 @import "ui/_form";
@@ -11,18 +10,13 @@
 @import "ui/_loader";
 @import "ui/_modal";
 @import "ui/_notifications";
-
 // Components
 @import "components/_navbar";
 @import "components/_userprofile";
-
-
 // TODO: Add code splitting.
 // TODO: Reorganize styling and prepare it for adaptive layout.
 // TODO: Make another file for styling svg and one more for export.
 // NOTES: Font size(line height): 24(30), 20(28), 16(20/22), 13(18/13), 14(22)
-
-
 // Pages
 //@import "pages/chart";
 @import "pages/profile";
@@ -105,10 +99,12 @@ ul, ol {
 .decor {
   position: absolute;
   z-index: -1;
+
   &-rt {
     top: 0;
     right: 0;
   }
+
   &-lb {
     bottom: 0;
     left: 0;
@@ -124,7 +120,7 @@ ul, ol {
 }
 
 .uppercase {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 .p-absolute {
@@ -135,3 +131,10 @@ ul, ol {
   cursor: pointer;
 }
 
+.disable-events {
+  pointer-events: none !important;
+}
+
+.translate-center {
+  transform: translate(-50%, -50%);
+}

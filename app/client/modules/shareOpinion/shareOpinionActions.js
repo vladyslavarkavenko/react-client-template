@@ -9,6 +9,7 @@ import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import { validateCreateNewTopic } from '../../utils/validator';
 import { historyPush } from '../redirect/redirectActions';
 import routing from '../../utils/routing';
+import companiesSelectors from '../companies/companiesSelectors';
 
 export const prefix = 'shareOpinion';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -17,6 +18,7 @@ export const selectOpinionProfile = createRequestBound('PROFILE_SELECT');
 export const selectOpinionTopic = createRequestBound('TOPIC_SELECT');
 export const selectOpinionExpired = createRequestBound('TOPIC_EXPIRED_SELECT');
 export const fetchOpinionSubjects = createRequestBound('SUBJECTS_FETCH');
+export const fetchTopicOpinions = createRequestBound('TOPIC_OPINIONS_FETCH');
 
 export const pushNewTopic = createRequestBound('TOPIC_CREATE');
 export const selectSubjectForNewTopic = createRequestBound('TOPIC_WITH_SUBJECT_SELECT');
@@ -202,6 +204,23 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
     yield put(pushRateTopic.failure());
   }
 }
+
+function* fetchTopicOpinionsWorker() {
+  yield put(fetchTopicOpinions.request());
+  try {
+    const manager = yield select(companiesSelectors.getCurrentManager);
+    const topic = yield select(shareOpinionSelectors.nextUnratedTopic);
+
+    const opinions = yield call(() =>
+      ShareOpinionService.getTopicOpinions({ id: manager.id, topic: topic.id })
+    );
+
+    yield put(fetchTopicOpinions.success(opinions));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 //
 export function* shareOpinionWatcher() {
   yield all([
@@ -210,7 +229,7 @@ export function* shareOpinionWatcher() {
     takeLatest(pushNewTopic.TRIGGER, newTopicModalWorker),
     takeLatest(pushNewTopic.REQUEST, newTopicWorker),
     takeLatest(saveNewTopicField.TRIGGER, subjectHintsWorker),
-
+    takeLatest(fetchTopicOpinions.TRIGGER, fetchTopicOpinionsWorker),
     takeLatest(pushRateTopic.TRIGGER, pushRateTopicWorker)
   ]);
 }

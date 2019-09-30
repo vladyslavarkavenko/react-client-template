@@ -1,17 +1,31 @@
 /* eslint-disable */
 import React from 'react';
 import ReactSVG from 'react-svg';
-import { VictoryScatter, VictoryChart, VictoryVoronoiContainer, VictoryAxis } from 'victory';
+import {
+  VictoryScatter,
+  VictoryChart,
+  VictoryVoronoiContainer,
+  VictoryAxis,
+  VictoryTooltip,
+  Flyout
+} from 'victory';
 
 import '../../assets/styles/pages/chart.less';
-import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
-import { pushRateTopic } from '../../modules/shareOpinion/shareOpinionActions';
+import { pushRateTopic, fetchTopicOpinions } from '../../modules/shareOpinion/shareOpinionActions';
 import { connect } from 'react-redux';
+import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
+
+import StarSvg from '../../../../public/assets/svg/star.svg';
+import SmileSvg from '../../../../public/assets/svg/smile.svg';
 
 const ticks = 10;
 const padding = 50;
 const height = 600;
 const width = 1500;
+
+const maxBubbleSize = 70;
+const minBubbleSize = 10;
+const activeBubbleSize = minBubbleSize - 5;
 
 const allPoints = [];
 for (let i = 1; i <= ticks; i += 1) {
@@ -22,29 +36,6 @@ for (let i = 1; i <= ticks; i += 1) {
     });
   }
 }
-
-const data = [
-  {
-    importance: 1,
-    satisfaction: 5,
-    opinions: 1
-  },
-  {
-    importance: 2,
-    satisfaction: 7,
-    opinions: 50
-  },
-  {
-    importance: 3,
-    satisfaction: 4,
-    opinions: 75
-  },
-  {
-    importance: 8,
-    satisfaction: 4,
-    opinions: 100
-  }
-];
 
 const colors = {
   lt: {
@@ -101,11 +92,24 @@ function calculateColor(x, y, width, height) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+function getCoordByPoint({ importance: i, satisfaction: s }) {
+  const top = ((ticks - i) * (height - 2 * padding)) / ticks + padding;
+  const right = ((ticks - s) * (width - 2 * padding)) / ticks + padding;
+
+  return {
+    top,
+    right,
+    left: width - right,
+    bottom: height - top
+  };
+}
+
 const initialState = {
   x: undefined,
   y: undefined,
   activePoint: {},
-  showOpinions: false
+  showOpinions: false,
+  tooltipData: null
 };
 
 class ShareOpinionChart extends React.Component {
@@ -123,6 +127,36 @@ class ShareOpinionChart extends React.Component {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onActivated = this.onActivated.bind(this);
     this.saveOpinion = this.saveOpinion.bind(this);
+    this.showTooltip = this.showTooltip.bind(this);
+    this.hideTooltip = this.hideTooltip.bind(this);
+  }
+
+  showTooltip(points) {
+    if (!points.length) {
+      return;
+    }
+    const { satisfaction, importance, quantity, eventKey } = points[0];
+
+    console.log('here1');
+    this.setState({
+      tooltipData: {
+        satisfaction,
+        importance,
+        quantity,
+        eventKey
+      }
+    });
+  }
+
+  hideTooltip(points) {
+    const { tooltipData } = this.state;
+
+    if (tooltipData && points.length && tooltipData.eventKey === points[0].eventKey) {
+      console.log('here2');
+      this.setState({
+        tooltipData: null
+      });
+    }
   }
 
   onActivated(points) {
@@ -170,6 +204,9 @@ class ShareOpinionChart extends React.Component {
   }
 
   saveOpinion() {
+    const { fetchTopicOpinions } = this.props;
+
+    fetchTopicOpinions();
     this.setState({
       showOpinions: true
     });
@@ -184,12 +221,16 @@ class ShareOpinionChart extends React.Component {
   }
 
   render() {
-    const { activePoint, showOpinions } = this.state;
+    const { opinions } = this.props;
+    const { activePoint, showOpinions, tooltipData } = this.state;
+
+    console.log('tooltipData', tooltipData);
 
     const Indicator = () => {
       if (!Object.keys(activePoint).length) return null;
 
-      const { importance: i, satisfaction: s } = activePoint;
+      const { importance, satisfaction } = activePoint;
+      const { top, right } = getCoordByPoint(activePoint);
 
       return (
         <div
@@ -197,15 +238,55 @@ class ShareOpinionChart extends React.Component {
           style={{
             bottom: padding,
             left: padding,
-            top: ((ticks - i) * (height - 2 * padding)) / ticks + padding,
-            right: ((ticks - s) * (width - 2 * padding)) / ticks + padding
+            top,
+            right
           }}
         >
-          <div className="circle lt">{i}</div>
-          <div className="circle rb">{s}</div>
+          <div className="circle lt">{importance}</div>
+          <div className="circle rb">{satisfaction}</div>
           <div className="circle rt big" />
           <div className="circle rt medium" />
           <div className="circle rt small" />
+        </div>
+      );
+    };
+
+    const Tooltip = ({ data }) => {
+      console.log('data', data);
+      if (!data) return null;
+
+      const { importance, satisfaction, quantity } = data;
+      const { top, left } = getCoordByPoint(data);
+
+      return (
+        <div
+          className="p-absolute tooltip"
+          style={{
+            top: top - 5,
+            left: left + 15
+          }}
+        >
+          <h6>{quantity} opinions</h6>
+          <p>Importance {importance}</p>
+          <p>Satisfaction {satisfaction}</p>
+        </div>
+      );
+    };
+
+    const CustomLabelX = () => {
+      return (
+        <div className="label p-absolute" style={{ top: height - padding / 2, left: width / 2 }}>
+          <SmileSvg />
+          Satisfaction
+        </div>
+      );
+    };
+
+    const CustomLabelY = () => {
+      return (
+        <div className="label label-y p-absolute" style={{ top: height / 2, left: padding / 2 }}>
+          <StarSvg />
+          Importance
         </div>
       );
     };
@@ -219,6 +300,9 @@ class ShareOpinionChart extends React.Component {
           onMouseMove={showOpinions ? null : this.onMouseMove}
         >
           <Indicator />
+          <Tooltip data={tooltipData} />
+          <CustomLabelX />
+          <CustomLabelY />
           {showOpinions ? (
             <>
               <VictoryChart
@@ -228,36 +312,42 @@ class ShareOpinionChart extends React.Component {
                 domain={[0, ticks]}
                 containerComponent={
                   <VictoryVoronoiContainer
+                    radius={50}
                     responsive={false}
-                    voronoiBlacklist={['activePoint']}
-                    labels={({ datum: { importance, satisfaction, opinions } }) =>
-                      `Importance: ${importance}\nSatisfaction: ${satisfaction}\nOpinions: ${opinions}`
-                    }
+                    onActivated={this.showTooltip}
+                    onDeactivated={this.hideTooltip}
+                    voronoiBlacklist={['active-tooltip']}
                   />
                 }
               >
-                <VictoryAxis
-                  tickFormat={() => ''}
-                  offsetY={padding}
-                  label="Satisfaction"
-                  style={axisStyle}
-                />
+                <VictoryAxis tickFormat={() => ''} offsetY={padding} style={axisStyle} />
                 <VictoryAxis
                   style={axisStyle}
                   dependentAxis
                   tickFormat={() => ''}
                   offsetX={padding}
-                  label="Importance"
                 />
                 <VictoryScatter
                   style={{ data: { fill: 'rgba(255, 255, 255, .5)' } }}
-                  data={data}
+                  bubbleProperty="quantity"
                   y="importance"
                   x="satisfaction"
-                  bubbleProperty="opinions"
-                  maxBubbleSize={70}
-                  minBubbleSize={10}
+                  data={opinions}
+                  maxBubbleSize={maxBubbleSize}
+                  minBubbleSize={minBubbleSize}
                 />
+                {tooltipData && (
+                  <VictoryScatter
+                    name="active-tooltip"
+                    data={[tooltipData]}
+                    y="importance"
+                    x="satisfaction"
+                    size={activeBubbleSize}
+                    style={{
+                      data: { fill: 'white' }
+                    }}
+                  />
+                )}
               </VictoryChart>
 
               <div className="info-msg">
@@ -288,27 +378,12 @@ class ShareOpinionChart extends React.Component {
                 />
               }
             >
-              <VictoryAxis
-                tickFormat={() => ''}
-                offsetY={padding}
-                label="Satisfaction"
-                style={axisStyle}
-              />
+              <VictoryAxis tickFormat={() => ''} offsetY={padding} style={axisStyle} />
               <VictoryAxis
                 dependentAxis
                 tickFormat={() => ''}
                 offsetX={padding}
-                label="Importance"
                 style={axisStyle}
-              />
-              <VictoryScatter
-                name="activePoint"
-                data={[activePoint]}
-                y="importance"
-                x="satisfaction"
-                style={{
-                  data: { fill: 'white' }
-                }}
               />
               <VictoryScatter
                 data={allPoints}
@@ -326,11 +401,16 @@ class ShareOpinionChart extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  opinions: shareOpinionSelectors.topicOpinions(state)
+});
+
 const mapDispatchToProps = {
-  pushRateTopic
+  pushRateTopic,
+  fetchTopicOpinions
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ShareOpinionChart);

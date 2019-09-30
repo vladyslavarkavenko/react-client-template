@@ -6,6 +6,18 @@ import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import { makeStatusReducer, makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 import * as actions from './shareOpinionActions';
 
+const topicOpinions = handleActions(
+  {
+    [actions.fetchTopicOpinions.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.pushRateTopic.SUCCESS]() {
+      return [];
+    }
+  },
+  []
+);
+
 const selectedProfile = handleActions(
   {
     [actions.selectOpinionProfile.TRIGGER](state, { payload }) {
@@ -216,6 +228,7 @@ const newTopic = combineReducers({
 });
 
 const shareOpinion = combineReducers({
+  topicOpinions,
   selectedProfile,
   selectedTopics,
   expiredOpinions,
