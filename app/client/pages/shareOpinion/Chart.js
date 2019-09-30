@@ -56,17 +56,13 @@ class ShareOpinionChart extends React.Component {
   onActivated(points) {
     const { satisfaction, importance } = points[0];
 
-    this.setState({
-      activePoint: {
-        satisfaction,
-        importance
-      }
-    });
+    const activePoint = { importance, satisfaction };
+    this.setState({ activePoint });
   }
 
   onMouseMove(e) {
-    const { pageX, pageY } = e;
-    const { left, top } = e.currentTarget.getBoundingClientRect();
+    const { currentTarget, pageX, pageY } = e;
+    const { left, top } = currentTarget.getBoundingClientRect();
 
     const x = pageX - left;
     const y = pageY - top;
@@ -88,9 +84,7 @@ class ShareOpinionChart extends React.Component {
     const { fetchTopicOpinions } = this.props;
 
     fetchTopicOpinions();
-    this.setState({
-      showOpinions: true
-    });
+    this.setState({ showOpinions: true });
   }
 
   updateBG() {
@@ -100,19 +94,17 @@ class ShareOpinionChart extends React.Component {
   }
 
   showTooltip(points) {
-    if (!points.length) {
-      return;
-    }
-    const { satisfaction, importance, quantity, eventKey } = points[0];
+    if (points.length) {
+      const { satisfaction, importance, quantity, eventKey } = points[0];
 
-    this.setState({
-      tooltipData: {
-        satisfaction,
-        importance,
+      const tooltipData = {
+        eventKey,
         quantity,
-        eventKey
-      }
-    });
+        importance,
+        satisfaction
+      };
+      this.setState({ tooltipData });
+    }
   }
 
   hideTooltip(points) {
@@ -132,11 +124,10 @@ class ShareOpinionChart extends React.Component {
     const rateText = `${i18next.t('shareOpinion.i')} ${i} & ${i18next.t('shareOpinion.s')} ${s}`;
 
     return (
-      <div className="chart-wrapper" ref={this.chartWrapper}>
+      <div ref={this.chartWrapper} className="chart-wrapper">
         <OpinionAboutBlock backgroundColor="transparent" />
         <div
-          width={w}
-          height={h}
+          style={{ width: w, height: h }}
           className="p-relative cursor-pointer"
           onMouseMove={showOpinions ? null : this.onMouseMove}
         >
@@ -145,6 +136,13 @@ class ShareOpinionChart extends React.Component {
           <Indicator activePoint={activePoint} />
           {showOpinions ? (
             <>
+              <div className="info-msg">
+                <h1 className="uppercase">{i18next.t('shareOpinion.rate')}</h1>
+                <ReactSVG className="emoji" src={`/assets/svg/emoji/${s}_${i}.svg`} />
+                <h3>{rateText}</h3>
+                <button onClick={this.onNextClick}>{i18next.t('shareOpinion.next')}</button>
+              </div>
+
               <VictoryChart
                 width={w}
                 height={h}
@@ -182,13 +180,6 @@ class ShareOpinionChart extends React.Component {
                   />
                 )}
               </VictoryChart>
-
-              <div className="info-msg">
-                <h1 className="uppercase">{i18next.t('shareOpinion.rate')}</h1>
-                <ReactSVG className="emoji" src={`/assets/svg/emoji/${s}_${i}.svg`} />
-                <h3>{rateText}</h3>
-                <button onClick={this.onNextClick}>{i18next.t('shareOpinion.next')}</button>
-              </div>
             </>
           ) : (
             <VictoryChart
@@ -220,16 +211,9 @@ class ShareOpinionChart extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  opinions: shareOpinionSelectors.topicOpinions(state)
-});
-
-const mapDispatchToProps = {
-  pushRateTopic,
-  fetchTopicOpinions
-};
+const mapStateToProps = (state) => ({ opinions: shareOpinionSelectors.topicOpinions(state) });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { pushRateTopic, fetchTopicOpinions }
 )(ShareOpinionChart);
