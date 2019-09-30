@@ -1,6 +1,6 @@
 import React from 'react';
-import ListArrowDownSvg from '../../../../../../public/assets/svg/arrow-down.svg';
-import ExclamationCircleEmptySvg from '../../../../../../public/assets/svg/exclamation-circle-empty.svg';
+import ListArrowDownSvg from '../../../../../../../../public/assets/svg/arrow-down.svg';
+import ExclamationCircleEmptySvg from '../../../../../../../../public/assets/svg/exclamation-circle-empty.svg';
 import TopicItem from './TopicItem';
 import SubjectProgress from './SubjectProgress';
 
@@ -54,7 +54,7 @@ export default class SubjectItem extends React.Component {
             />
           </div>
 
-          <div className="subject-info">
+          <div className="subject-info" onClick={this.handleOpen}>
             <div className="subject-title">
               {name}
 

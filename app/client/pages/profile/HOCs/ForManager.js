@@ -48,7 +48,6 @@ export default (OriginalComponent) => {
       const { setUserErrors, pushUpdateUser, activeEditUser } = this.props;
       const { errors, isValid } = validateUser(activeEditUser);
 
-      console.log('here', errors, isValid);
       if (!isValid) {
         return setUserErrors(errors);
       }

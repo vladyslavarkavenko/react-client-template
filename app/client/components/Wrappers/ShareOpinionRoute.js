@@ -1,8 +1,9 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
 import routing from '../../utils/routing';
+import Logo from '../ui-components/Layout/Logo';
 
 function ShareOpinionRoute({
   step,
@@ -11,9 +12,9 @@ function ShareOpinionRoute({
   nextUnratedTopic,
   ...otherProps
 }) {
-  if (!selectedProfile || !selectedTopics.length) {
-    return <Redirect to={routing().shareOpinion} />;
-  }
+  // if (!selectedProfile || !selectedTopics.length) {
+  //   return <Redirect to={routing().shareOpinion} />;
+  // }
 
   // TODO: Make redirect if user has used history.back
   // if (step === 2 && !nextUnratedTopic) {
@@ -25,10 +26,18 @@ function ShareOpinionRoute({
   }
 
   return (
-    <div className="fullscreen">
-      <div className="chart-header p-absolute">Header</div>
+    <>
+      <header className="rate-opinion header">
+        <Link to={routing().shareOpinion} replace type="button" className="header-btn">
+          Cancel
+        </Link>
+        <Logo className="header-logo" replace />
+        <button type="button" className="header-btn">
+          Help
+        </button>
+      </header>
       <Route {...otherProps} />
-    </div>
+    </>
   );
 }
 

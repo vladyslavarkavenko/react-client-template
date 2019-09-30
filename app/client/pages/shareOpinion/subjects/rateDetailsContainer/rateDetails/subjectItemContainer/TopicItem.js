@@ -1,7 +1,7 @@
 import React from 'react';
-import SuccessCircleSvg from '../../../../../../public/assets/svg/check-circle.svg';
-import ExclamationCircleEmptySvg from '../../../../../../public/assets/svg/exclamation-circle-empty.svg';
-import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
+import SuccessCircleSvg from '../../../../../../../../public/assets/svg/check-circle.svg';
+import ExclamationCircleEmptySvg from '../../../../../../../../public/assets/svg/exclamation-circle-empty.svg';
+import CheckboxInput from '../../../../../../components/ui-components/Form/CheckboxInput';
 
 export default function TopicItem({
   checkboxId,

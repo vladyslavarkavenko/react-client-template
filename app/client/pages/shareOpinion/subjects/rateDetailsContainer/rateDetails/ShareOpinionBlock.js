@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { historyPush } from '../../../../modules/redirect/redirectActions';
-import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
-import routing from '../../../../utils/routing';
+import { historyPush } from '../../../../../modules/redirect/redirectActions';
+import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
+import routing from '../../../../../utils/routing';
 
 function ShareOpinionBlock({ selectedTopicsId, historyPush }) {
   const count = selectedTopicsId.length;

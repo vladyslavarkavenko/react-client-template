@@ -10,16 +10,16 @@ import RolesRoute from './Wrappers/RolesRoute';
 import ShareOpinionRoute from './Wrappers/ShareOpinionRoute';
 
 const Login = customLoadable({
-  loader: () => import('../pages/Auth/Login')
+  loader: () => import('../pages/auth/Login')
 });
 const Register = customLoadable({
-  loader: () => import('../pages/Auth/SignUp')
+  loader: () => import('../pages/auth/SignUp')
 });
 const ChooseRole = customLoadable({
-  loader: () => import('../pages/Auth/ChooseRole')
+  loader: () => import('../pages/auth/ChooseRole')
 });
 const Account = customLoadable({
-  loader: () => import('../pages/Account')
+  loader: () => import('../pages/account/Account')
 });
 const ProfileForAdmin = customLoadable({
   loader: () => import('../pages/profile/ProfileForAdmin')
@@ -33,31 +33,26 @@ const ProfileForManager = customLoadable({
 const ProfileForCustomer = customLoadable({
   loader: () => import('../pages/profile/ProfileForCustomer')
 });
-const Dashboard = customLoadable({
-  loader: () => import('../pages/Dashboard')
-});
+
+const Dashboard = customLoadable({ loader: () => import('../pages/dashboard/Dashboard') });
 const ShareOpinion = customLoadable({
-  loader: () => import('../pages/ShareOpinion/ShareOpinion')
+  loader: () => import('../pages/shareOpinion/Subjects')
 });
 const ShareOpinionChart = customLoadable({
-  loader: () => import('../pages/ShareOpinionChart/ShareOpinionChart')
+  loader: () => import('../pages/shareOpinion/Chart')
 });
-
-// const ShareOpinionChartProto = customLoadable({
-//   loader: () => import('../pages/ShareOpinionChart/ShareOpinionChart')
-// });
 const ShareOpinionMessage = customLoadable({
-  loader: () => import('../pages/ShareOpinionMessage/ShareOpinionMessage')
+  loader: () => import('../pages/shareOpinion/Comments')
 });
 
 const ForgotPassword = customLoadable({
-  loader: () => import('../pages/Auth/ForgotPassword')
+  loader: () => import('../pages/auth/ForgotPassword')
 });
 const ResetPassword = customLoadable({
-  loader: () => import('../pages/Auth/ResetPassword')
+  loader: () => import('../pages/auth/ResetPassword')
 });
 const PageNotFound = customLoadable({
-  loader: () => import('../pages/PageNotFound')
+  loader: () => import('../pages/notFound/NotFound')
 });
 
 // additional subroutes

@@ -1,6 +1,6 @@
 import React from 'react';
-import RateListHeading from './RateListHeading';
-import RateListItem from './RateListItem';
+import RateListHeading from './rateList/RateListHeading';
+import RateListItem from './rateList/RateListItem';
 import { RATE_PROFILE_TYPE } from '../../../../utils/constants';
 
 const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;

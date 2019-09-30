@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import shareOpinionSelectors from '../../../../modules/shareOpinion/shareOpinionSelectors';
+import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
 
-import RateDetails from './RateDetails';
+import RateDetails from './rateDetailsContainer/RateDetails';
 
 function RateDetailsContainer(props) {
   return <RateDetails {...props} />;

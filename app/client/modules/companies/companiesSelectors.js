@@ -25,8 +25,6 @@ const getManagersWithCompanies = (state) => {
     list[companyId] = getCompanyData(state).manager;
   });
 
-  console.log(list);
-
   return list;
 };
 

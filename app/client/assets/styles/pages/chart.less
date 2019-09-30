@@ -1,6 +1,5 @@
 .chart-wrapper {
   width: 100vw;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,68 +7,53 @@
   background-color: rgb(51, 153, 255);
   transition: background-color 0.3s ease-out;
 
-  .info-msg {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  .opinion-about {
+    top: 0;
     position: absolute;
-    top: 50%;
-    left: 50%;
+  }
+
+  .label {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transform: translate(-50%, -50%);
-    z-index: 2;
-    //padding: 20px;
-    //background: rgba(0, 0, 0, .25);
-    //border-radius: 16px;
-    //border: 2px solid white;
-    //box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, .25);
 
-    .emoji svg {
-      height: 112px;
-      width: 112px;
+    svg {
       fill: white;
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-right: 0.5rem;
     }
 
-    h1, h3, button, .emoji {
-      color: white;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
+    &-y {
+      transform: translate(-50%, -50%) rotate(-90deg);
 
-    button {
-      border: 1px solid white;
-      border-radius: 4px;
-      color: white;
-      font-size: 1rem;
-      width: 100%;
-      padding: 0.75rem;
-
-      &:hover {
-        box-shadow: 0 0 3px 1px rgba(255, 255, 255, .5);
-        font-weight: bold;
+      svg {
+        transform: rotate(17deg)
       }
     }
   }
 
   .custom-indicator {
+    pointer-events: none;
+    margin: -1px -1px -2px -2px;
     border-left: 4px solid white;
     border-bottom: 4px solid white;
-    border-top: 2px dashed rgba(255, 255, 255, 0.75);
-    border-right: 2px dashed rgba(255, 255, 255, 0.75);
-    margin: -1px -1px -2px -2px;
-    pointer-events: none;
+    border-top: 2px dashed rgba(255, 255, 255, .75);
+    border-right: 2px dashed rgba(255, 255, 255, .75);
 
     .circle {
-      width: 24px;
-      height: 24px;
-      background: white;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      font-weight: bold;
       z-index: 1;
+      display: flex;
+      width: 1.5rem;
+      height: 1.5rem;
+      background: white;
+      font-weight: bold;
+      position: absolute;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
 
       &.big {
         opacity: .15;
@@ -87,56 +71,71 @@
       }
 
       &.rb {
-        transform: translate(50%, 50%);
         right: 0;
         bottom: -2px;
+        transform: translate(50%, 50%);
       }
 
       &.rt {
-        transform: translate(50%, -50%);
-        right: -1px;
         top: -1px;
+        right: -1px;
+        transform: translate(50%, -50%);
       }
 
       &.lt {
-        transform: translate(-50%, -50%);
-        left: -2px;
         top: 0;
+        left: -2px;
+        transform: translate(-50%, -50%);
       }
     }
   }
 
   .tooltip {
-    background-color: rgba(255, 255, 255, .9);
-    padding: 0.75rem;
     z-index: 1;
+    padding: 0.75rem;
     border-radius: 4px;
     pointer-events: none;
+    background-color: rgba(255, 255, 255, .9);
 
     h6 {
       margin-bottom: 0.5rem;
     }
   }
 
-  .label {
-    transform: translate(-50%, -50%);
-    color: white;
+  .info-msg {
+    top: 50%;
+    left: 50%;
+    z-index: 2;
     display: flex;
+    position: absolute;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
+    transform: translate(-50%, -50%);
 
-    svg {
+    .emoji svg {
       fill: white;
-      width: 1.25rem;
-      height: 1.25rem;
-      margin-right: 0.5rem;
+      width: 7rem;
+      height: 7rem;
     }
 
-    &-y {
-      transform: translate(-50%, -50%) rotate(-90deg);
+    h1, h3, button, .emoji {
+      color: white;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
 
-      svg {
-        transform: rotate(17deg)
+    button {
+      width: 100%;
+      color: white;
+      font-size: 1rem;
+      padding: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid white;
+
+      &:hover {
+        font-weight: bold;
+        box-shadow: 0 0 3px 1px rgba(255, 255, 255, .5);
       }
     }
   }
