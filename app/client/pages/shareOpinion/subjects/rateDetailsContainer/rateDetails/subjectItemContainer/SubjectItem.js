@@ -1,6 +1,6 @@
 import React from 'react';
 import ListArrowDownSvg from '../../../../../../../../public/assets/svg/arrow-down.svg';
-import ExclamationCircleEmptySvg from '../../../../../../../../public/assets/svg/exclamation-circle-empty.svg';
+import ExclamationCircleEmptySvg from '../../../../../../../../public/assets/svg/exclamation-circle.svg';
 import TopicItem from './TopicItem';
 import SubjectProgress from './SubjectProgress';
 

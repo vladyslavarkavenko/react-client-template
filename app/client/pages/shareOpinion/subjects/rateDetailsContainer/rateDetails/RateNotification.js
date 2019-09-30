@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import ExclamationCircleSvg from '../../../../../../../public/assets/svg/exclamation-circle.svg';
 import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
 import { selectOpinionExpired } from '../../../../../modules/shareOpinion/shareOpinionActions';
+import Alert from '../../../../../components/ui-components/Alert';
 
 function RateNotification({ expiredTopics, selectOpinionExpired }) {
   if (!Object.keys(expiredTopics).length) {
@@ -11,14 +11,11 @@ function RateNotification({ expiredTopics, selectOpinionExpired }) {
 
   return (
     <li className="details-list__notify">
-      <span className="notify-label" />
-      <span className="notify-icon">
-        <ExclamationCircleSvg />
-      </span>
-      <span className="notify-message">Some of your feedbacks has lost its impact</span>
-      <button type="button" className="notify-btn" onClick={() => selectOpinionExpired()}>
-        Update now
-      </button>
+      <Alert type={Alert.failure} message="Some of your feedbacks has lost its impact">
+        <button type="button" className="notify-btn" onClick={() => selectOpinionExpired()}>
+          Update now
+        </button>
+      </Alert>
     </li>
   );
 }

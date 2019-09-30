@@ -9,16 +9,21 @@ export const historyWatcherInit = createInitRoutine(prefix, 'WATCHER');
 export const historyPush = createRequestRoutine(prefix, 'PUSH');
 
 function* redirectWorker({ payload: { history } }) {
-  while (true) {
-    const action = yield take(historyPush.TRIGGER);
+  try {
+    while (true) {
+      const action = yield take(historyPush.TRIGGER);
 
-    // if we want use replace
-    if (typeof action.payload === 'object') {
-      history[action.payload.method](action.payload.to);
-      return;
+      console.log(typeof action.payload === 'object', action);
+
+      // if we want use replace
+      if (typeof action.payload === 'object') {
+        history[action.payload.method](action.payload.to);
+      } else {
+        history.push(action.payload);
+      }
     }
-
-    history.push(action.payload);
+  } catch (err) {
+    console.error(err);
   }
 }
 

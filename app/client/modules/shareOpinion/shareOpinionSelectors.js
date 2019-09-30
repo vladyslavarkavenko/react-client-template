@@ -21,6 +21,7 @@ export default {
   selectedTopics: getSelectedTopics,
   selectedTopicsId: getSelectedTopicsId,
   selectedProfile: (state) => state.shareOpinion.selectedProfile,
+  selectedOptions: (state) => state.shareOpinion.selectedOptions,
   expiredOpinions: getExpiredOpinions,
   expiredOpinionsById: getExpiredOpinionsBySubject,
 
@@ -35,5 +36,7 @@ export default {
   newTopicShowModal: getNewTopicShowModal,
   newTopicHints: getNewTopicHints,
 
-  nextUnratedTopic: getUnratedTopic
+  nextUnratedTopic: getUnratedTopic,
+
+  finishStatus: (state) => state.shareOpinion.selectedOptions.status
 };

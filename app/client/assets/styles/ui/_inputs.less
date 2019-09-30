@@ -77,3 +77,77 @@ label:hover:before {
 
 
 }
+
+.radio-group {
+  padding: 10px 0;
+  position: relative;
+  display: flex;
+  vertical-align: middle;
+  .btn {
+    //TODO: Improve borders
+    //@color-gray: red;
+    //@color-blue: green;
+
+    @color-gray: @font-color-lighter;
+    @color-blue: @secondary-bg-color;
+
+    line-height: 1.5;
+    text-align: center;
+    padding: 0.25rem 0.5rem;
+    flex-grow: 1;
+    cursor: pointer;
+    color:  @font-color-dark;
+    border-right: 1px solid @color-gray;
+    border-top: 1px solid @color-gray;
+    border-bottom: 1px solid @color-gray;
+    font-weight: bold;
+
+    //&:hover {
+    //  border-color: black;
+    //  &:first-child {
+    //    border-left: 1px solid black;
+    //  }
+    //  &:last-child {
+    //    border-right: 1px solid black;
+    //  }
+    //}
+
+    &.active {
+      &:not(:first-child) {
+        //color: red;
+      }
+      background-color: @color-blue;
+      border-right: 1px solid @color-blue;
+      border-top: 1px solid @color-blue;
+      border-bottom: 1px solid @color-blue;
+      color: white;
+
+      &:first-child {
+        border-left: 1px solid @color-blue;
+      }
+
+      &:last-child {
+        border-right: 1px solid @color-blue;
+      }
+    }
+
+    &:first-child {
+      border-left: 1px solid @color-gray;
+      border-top-left-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+    }
+
+    &:last-child {
+      border-right: 1px solid @color-gray;
+      border-top-right-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      clip: rect(0,0,0,0);
+      pointer-events: none;
+      padding: 0;
+    }
+  }
+}
