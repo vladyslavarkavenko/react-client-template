@@ -10,13 +10,7 @@ const { height: h, width: w, padding: p } = chartProperties;
 
 const CustomLabelX = () => {
   return (
-    <div
-      className="label p-absolute"
-      style={{
-        top: h - p / 2,
-        left: w / 2
-      }}
-    >
+    <div className="label p-absolute" style={{ top: h - p / 2, left: w / 2 }}>
       <SmileSvg />
       {i18next.t('shareOpinion.s')}
     </div>
@@ -25,13 +19,7 @@ const CustomLabelX = () => {
 
 const CustomLabelY = () => {
   return (
-    <div
-      className="label label-y p-absolute"
-      style={{
-        top: h / 2,
-        left: p / 2
-      }}
-    >
+    <div className="label label-y p-absolute" style={{ top: h / 2, left: p / 2 }}>
       <StarSvg />
       {i18next.t('shareOpinion.i')}
     </div>

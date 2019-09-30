@@ -17,10 +17,10 @@ const Indicator = ({ activePoint }) => {
     <div
       className="custom-indicator p-absolute"
       style={{
-        bottom: p,
-        left: p,
         top,
-        right
+        right,
+        left: p,
+        bottom: p
       }}
     >
       <div className="circle lt">{importance}</div>

@@ -10,9 +10,11 @@ const PROPS = {
 };
 export default PROPS;
 
+const { ticks: t } = PROPS;
+
 const allPoints = [];
-for (let i = 1; i <= PROPS.ticks; i += 1) {
-  for (let s = 1; s <= PROPS.ticks; s += 1) {
+for (let i = 1; i <= t; i += 1) {
+  for (let s = 1; s <= t; s += 1) {
     allPoints.push({
       importance: i,
       satisfaction: s
