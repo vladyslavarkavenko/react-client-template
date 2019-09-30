@@ -44,7 +44,6 @@ function ShareOpinionRoute({
 const mapStateToProps = (state) => ({
   selectedProfile: shareOpinionSelectors.selectedProfile(state),
   selectedTopics: shareOpinionSelectors.selectedTopics(state),
-
   nextUnratedTopic: shareOpinionSelectors.nextUnratedTopic(state)
 });
 

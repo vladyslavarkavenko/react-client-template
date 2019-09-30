@@ -128,6 +128,13 @@
           "login": "Log in"
         },
         "forgotPassword": "Forgot password?"
+      },
+      "shareOpinion": {
+        "opinions": "opinions",
+        "i": "Importance",
+        "s": "Satisfaction",
+        "rate": "Your rate",
+        "next": "next"
       }
     }
   }

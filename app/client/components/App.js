@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
-import routing from '../utils/routing';
 
+import routing from '../utils/routing';
 import customLoadable from './customLoadable';
 import SignInRoute from './Wrappers/SignInRoute';
 import WrappedRoute from './Wrappers/WrappedRoute';
@@ -9,11 +9,18 @@ import AuthRoute from './Wrappers/AuthRoute';
 import RolesRoute from './Wrappers/RolesRoute';
 import ShareOpinionRoute from './Wrappers/ShareOpinionRoute';
 
-const Login = customLoadable({ loader: () => import('../pages/auth/Login') });
-const Register = customLoadable({ loader: () => import('../pages/auth/SignUp') });
-const ChooseRole = customLoadable({ loader: () => import('../pages/auth/ChooseRole') });
-const Account = customLoadable({ loader: () => import('../pages/account/Account') });
-// const Profile = customLoadable({ loader: () => import('../pages/Profile') });
+const Login = customLoadable({
+  loader: () => import('../pages/auth/Login')
+});
+const Register = customLoadable({
+  loader: () => import('../pages/auth/SignUp')
+});
+const ChooseRole = customLoadable({
+  loader: () => import('../pages/auth/ChooseRole')
+});
+const Account = customLoadable({
+  loader: () => import('../pages/account/Account')
+});
 const ProfileForAdmin = customLoadable({
   loader: () => import('../pages/profile/ProfileForAdmin')
 });
@@ -29,7 +36,7 @@ const ProfileForCustomer = customLoadable({
 
 const Dashboard = customLoadable({ loader: () => import('../pages/dashboard/Dashboard') });
 const ShareOpinion = customLoadable({
-  loader: () => /* webpackChunkName: 'share_opinion'*/ import('../pages/shareOpinion/Subjects')
+  loader: () => import('../pages/shareOpinion/Subjects')
 });
 const ShareOpinionChart = customLoadable({
   loader: () => import('../pages/shareOpinion/Chart')
@@ -44,7 +51,9 @@ const ForgotPassword = customLoadable({
 const ResetPassword = customLoadable({
   loader: () => import('../pages/auth/ResetPassword')
 });
-const PageNotFound = customLoadable({ loader: () => import('../pages/notFound/NotFound') });
+const PageNotFound = customLoadable({
+  loader: () => import('../pages/notFound/NotFound')
+});
 
 // additional subroutes
 // Overview, CompanyAbout

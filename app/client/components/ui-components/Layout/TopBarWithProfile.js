@@ -14,7 +14,6 @@ import routing from '../../../utils/routing';
 import authSelectors from '../../../modules/auth/authSelectors';
 
 // TODO: Split all text to local.
-// TODO: On click outside of menu close it.
 
 class TopBarWithProfile extends React.Component {
   constructor(props) {

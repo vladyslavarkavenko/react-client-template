@@ -28,6 +28,10 @@ class ShareOpinionService {
   static pushFileToTopic({ id, data }) {
     return api.post(`/opinion/opinion/${id}/upload_files/`, data);
   }
+
+  static getTopicOpinions({ id, topic }) {
+    return api.post(`/opinion/manager/${id}/grades/`, { topic });
+  }
 }
 
 export default ShareOpinionService;

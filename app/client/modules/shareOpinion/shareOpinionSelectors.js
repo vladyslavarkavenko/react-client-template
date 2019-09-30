@@ -17,6 +17,7 @@ const getNewTopicShowModal = (state) => getNewTopic(state).showModal;
 const getUnratedTopic = (state) => getSelectedTopics(state).find((topic) => topic.isRated !== true);
 
 export default {
+  topicOpinions: (state) => state.shareOpinion.topicOpinions,
   selectedTopics: getSelectedTopics,
   selectedTopicsId: getSelectedTopicsId,
   selectedProfile: (state) => state.shareOpinion.selectedProfile,
