@@ -11,12 +11,12 @@ export default class RateList extends React.Component {
   componentDidMount() {
     const { companies, managers, handleSelect } = this.props;
 
-    if (managers.length) {
-      //select first manager in the list
-      handleSelect({ data: managers[0], type: MANAGER });
-    } else if (companies.length) {
+    if (companies.length) {
       //select first company in the list
       handleSelect({ data: companies[0], type: COMPANY });
+    } else if (managers.length) {
+      //select first manager in the list
+      handleSelect({ data: managers[0], type: MANAGER });
     }
   }
 

@@ -50,7 +50,7 @@ function RecommendBlock({
                 disabled={isRequest}
               >
                 <YesSvg />
-                {i18next.t('shareOpinion.button.yes')}
+                {i18next.t('shareOpinion.buttons.yes')}
               </button>
 
               <button
@@ -61,7 +61,7 @@ function RecommendBlock({
                 disabled={isRequest}
               >
                 <ThinkSvg />
-                {i18next.t('shareOpinion.button.notSure')}
+                {i18next.t('shareOpinion.buttons.notSure')}
               </button>
 
               <button
@@ -72,11 +72,11 @@ function RecommendBlock({
                 disabled={isRequest}
               >
                 <NoSvg />
-                {i18next.t('shareOpinion.button.no')}
+                {i18next.t('shareOpinion.buttons.no')}
               </button>
             </div>
             <div className="opinion-rec__remind">
-              <button className="ask-btn">{i18next.t('shareOpinion.button.askLater')}</button>
+              <button className="ask-btn">{i18next.t('shareOpinion.buttons.askLater')}</button>
               {false && (
                 <Alert
                   type={Alert.info}
@@ -87,11 +87,11 @@ function RecommendBlock({
             </div>
             <div className="opinion-rec__actions">
               <button className="action white" onClick={() => handleFinish()} disabled={isRequest}>
-                {i18next.t('shareOpinion.button.save')}
+                {i18next.t('shareOpinion.buttons.save')}
               </button>
               <span className="or">or</span>
               <button className="action blue" onClick={() => handleProceed()} disabled={isRequest}>
-                {i18next.t('shareOpinion.button.saveAndAdd')}
+                {i18next.t('shareOpinion.buttons.saveAndAdd')}
               </button>
             </div>
           </>

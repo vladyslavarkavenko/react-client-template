@@ -34,10 +34,18 @@ export const selectExpectAction = createRequestBound('REVIEW_EXPECT_ACTION_SELEC
 export const saveTopicField = createRequestBound('TOPIC_FIELD_SAVE');
 export const pushUpdateTopics = createRequestBound('TOPIC_UPDATE_SEND');
 
-function* fetchOpinionSubjectsWorker({ payload: { data } }) {
+function* fetchOpinionSubjectsWorker() {
   yield put(fetchOpinionSubjects.request());
   try {
-    const subjects = yield call(() => ShareOpinionService.getSubjectsByManager(data.id));
+    const { id, type } = yield select(shareOpinionSelectors.selectedProfile);
+
+    let subjects;
+
+    if (type === RATE_PROFILE_TYPE.MANAGER) {
+      subjects = yield call(() => ShareOpinionService.getSubjectsByManager(id));
+    } else {
+      subjects = yield call(() => ShareOpinionService.getSubjectsByCompany(id));
+    }
 
     yield put(fetchOpinionSubjects.success(subjects));
   } catch (err) {
@@ -182,20 +190,30 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
   yield put(pushRateTopic.request());
   try {
     const currentTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
-    const selectedProfile = yield select(shareOpinionSelectors.selectedProfile);
+    const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
+    let ratedTopic;
 
-    const ratedTopic = yield call(() =>
-      ShareOpinionService.pushRateTopic({
-        topic: currentTopic.id, //topic_id,
-        manager:
-          selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined, // manager or company_id,
-        company:
-          selectedProfile.type === RATE_PROFILE_TYPE.COMPANY ? selectedProfile.id : undefined,
-        customer: selectedProfile.customerId, //customer id
-        satisfaction,
-        importance
-      })
-    );
+    if (type === RATE_PROFILE_TYPE.MANAGER) {
+      ratedTopic = yield call(() =>
+        ShareOpinionService.pushRateTopicByManager({
+          manager: id,
+          topic: currentTopic.id, //topic_id,
+          customer: customerId, //customer id
+          satisfaction,
+          importance
+        })
+      );
+    } else {
+      ratedTopic = yield call(() =>
+        ShareOpinionService.pushRateTopicByCompany({
+          company: id,
+          topic: currentTopic.id,
+          customer: customerId,
+          satisfaction,
+          importance
+        })
+      );
+    }
 
     yield put(pushRateTopic.success(ratedTopic));
 
@@ -214,12 +232,19 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
 function* fetchTopicOpinionsWorker() {
   yield put(fetchTopicOpinions.request());
   try {
-    const manager = yield select(shareOpinionSelectors.selectedProfile);
+    const { id, type } = yield select(shareOpinionSelectors.selectedProfile);
     const topic = yield select(shareOpinionSelectors.nextUnratedTopic);
+    let opinions;
 
-    const opinions = yield call(() =>
-      ShareOpinionService.getTopicOpinions({ id: manager.id, topic: topic.id })
-    );
+    if (type === RATE_PROFILE_TYPE.MANAGER) {
+      opinions = yield call(() =>
+        ShareOpinionService.getTopicOpinionsByManager({ id, topic: topic.id })
+      );
+    } else {
+      opinions = yield call(() =>
+        ShareOpinionService.getTopicOpinionsByCompany({ id, topic: topic.id })
+      );
+    }
 
     yield put(fetchTopicOpinions.success(opinions));
   } catch (err) {
@@ -227,18 +252,28 @@ function* fetchTopicOpinionsWorker() {
   }
 }
 
-//
-
 function* patchTopicFieldsWorker({ fields, file, isChecked }) {
   try {
-    const { id } = yield call(() => ShareOpinionService.pushRateTopic(fields));
+    let opinion;
+
+    if (fields.manager) {
+      opinion = yield call(() => ShareOpinionService.pushRateTopicByManager(fields));
+    } else {
+      opinion = yield call(() => ShareOpinionService.pushRateTopicByCompany(fields));
+    }
+
+    const { id } = opinion;
 
     if (file && isChecked) {
       const data = new window.FormData();
 
       data.append('file', file.file, file.fileName);
 
-      yield call(() => ShareOpinionService.pushFileToTopic({ id, data }));
+      if (fields.manager) {
+        yield call(() => ShareOpinionService.pushFileToTopicByManager({ id, data }));
+      } else {
+        yield call(() => ShareOpinionService.pushFileToTopicByCompany({ id, data }));
+      }
     }
   } catch (err) {
     console.error(err);
@@ -248,7 +283,7 @@ function* patchTopicFieldsWorker({ fields, file, isChecked }) {
 function* pushUpdateTopicsWorker({ payload }) {
   yield put(pushUpdateTopics.request());
   try {
-    const selectedProfile = yield select(shareOpinionSelectors.selectedProfile);
+    const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
     const selectedTopics = yield select(shareOpinionSelectors.selectedTopics);
     const selectedOptions = yield select(shareOpinionSelectors.selectedOptions);
 
@@ -259,11 +294,9 @@ function* pushUpdateTopicsWorker({ payload }) {
 
       const fields = {
         topic: topic.id,
-        manager:
-          selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined, // manager or company_id,
-        company:
-          selectedProfile.type === RATE_PROFILE_TYPE.COMPANY ? selectedProfile.id : undefined,
-        customer: selectedProfile.customerId, //customer id
+        manager: type === RATE_PROFILE_TYPE.MANAGER ? id : undefined, // manager or company_id,
+        company: type === RATE_PROFILE_TYPE.COMPANY ? id : undefined,
+        customer: customerId, //customer id
         comment: withComments && isChecked ? topic.comment : undefined,
         expectActionProvider: selectedOptions.isExpectingAction,
         isRecommended: selectedOptions.isRecommended,

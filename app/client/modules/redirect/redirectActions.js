@@ -13,8 +13,6 @@ function* redirectWorker({ payload: { history } }) {
     while (true) {
       const action = yield take(historyPush.TRIGGER);
 
-      console.log(typeof action.payload === 'object', action);
-
       // if we want use replace
       if (typeof action.payload === 'object') {
         history[action.payload.method](action.payload.to);

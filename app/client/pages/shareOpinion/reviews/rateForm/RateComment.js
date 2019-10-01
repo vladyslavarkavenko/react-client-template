@@ -69,8 +69,7 @@ export default class RateComment extends React.Component {
           className="opinion-form__check"
           name={checkBoxKey}
           labelText={name}
-          checked={isChecked}
-          onClick={this.handleCheck}
+          onChange={this.handleCheck}
           disabled={disabled}
         />
 
@@ -78,7 +77,7 @@ export default class RateComment extends React.Component {
           <>
             <div className="opinion-form__fields">
               <p className="opinion-form__subtitle">{i18next.t('shareOpinion.yourComment')}</p>
-              {file && <span className="file-name">{file.name}</span>}
+              {file && <span className="file-name">{file.fileName}</span>}
               <label htmlFor={fileKey} className={`file-upload ${file ? 'filled' : ''}`}>
                 {file ? <TimesSvg /> : <FileSvg />}
 
