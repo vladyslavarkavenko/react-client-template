@@ -1,4 +1,6 @@
 import React from 'react';
+import i18next from 'i18next';
+
 import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
 import Notification from '../../../../utils/notifications';
 import FileSvg from '../../../../../../public/assets/svg/file-medical.light.svg';
@@ -7,7 +9,6 @@ import { FILE_MIMES, FILE_SIZES } from '../../../../utils/constants';
 
 const { DOCUMENTS, IMAGES, ARCHIVES } = FILE_MIMES;
 
-/* eslint-disable */
 export default class RateComment extends React.Component {
   constructor(props) {
     super(props);
@@ -36,16 +37,16 @@ export default class RateComment extends React.Component {
     const file = currentTarget.files[0];
 
     if (!this.allowedMimes.includes(file.type)) {
-      Notification.error('This type of file is not allowed');
+      Notification.error(i18next.t('validation.file.invalid'));
       return;
     }
 
     if (file.size > this.maxSize) {
-      Notification.error(`File ${file.name} is bigger than 7mb`);
+      Notification.error(i18next.t('validation.file.size', { name: file.name, maxSize: '7mb' }));
       return;
     }
 
-    handleChangeFile({ file: file, fileName: file.name, id: topic.id });
+    handleChangeFile({ file, fileName: file.name, id: topic.id });
   }
 
   handleDeleteFile(e) {
@@ -76,7 +77,7 @@ export default class RateComment extends React.Component {
         {isChecked && (
           <>
             <div className="opinion-form__fields">
-              <p className="opinion-form__subtitle">Your comment</p>
+              <p className="opinion-form__subtitle">{i18next.t('shareOpinion.yourComment')}</p>
               {file && <span className="file-name">{file.name}</span>}
               <label htmlFor={fileKey} className={`file-upload ${file ? 'filled' : ''}`}>
                 {file ? <TimesSvg /> : <FileSvg />}
@@ -98,8 +99,8 @@ export default class RateComment extends React.Component {
               maxLength={450}
               onBlur={this.handleChangeText}
               className="opinion-form__text"
-              placeholder={`Please, describe your situation, action.\nWhat were the consequences?\nShare all your opinion about the situation.`}
-            ></textarea>
+              placeholder={i18next.t('shareOpinion.commentPlaceholder')}
+            />
           </>
         )}
       </div>

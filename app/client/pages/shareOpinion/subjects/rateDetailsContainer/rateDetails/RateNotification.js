@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import i18next from 'i18next';
+
 import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
 import { selectOpinionExpired } from '../../../../../modules/shareOpinion/shareOpinionActions';
 import Alert from '../../../../../components/ui-components/Alert';
@@ -11,9 +13,9 @@ function RateNotification({ expiredTopics, selectOpinionExpired }) {
 
   return (
     <li className="details-list__notify">
-      <Alert type={Alert.failure} message="Some of your feedbacks has lost its impact">
+      <Alert type={Alert.failure} message={i18next.t('shareOpinion.alert.impact')}>
         <button type="button" className="notify-btn" onClick={() => selectOpinionExpired()}>
-          Update now
+          {i18next.t('shareOpinion.buttons.updateNow')}
         </button>
       </Alert>
     </li>

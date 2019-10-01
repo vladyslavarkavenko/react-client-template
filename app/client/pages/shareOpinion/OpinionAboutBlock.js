@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import i18next from 'i18next';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
 
 function OpinionAboutBlock({ topics, activeTopic = {}, profile, backgroundColor = '#13C29B' }) {
@@ -20,7 +21,9 @@ function OpinionAboutBlock({ topics, activeTopic = {}, profile, backgroundColor 
   return (
     <div className="opinion-about" style={{ backgroundColor }}>
       <div className="container">
-        <p className="opinion-about__title">Opinion about {profile.title}</p>
+        <p className="opinion-about__title">
+          {i18next.t('shareOpinion.opinionAbout')} {profile.title}
+        </p>
         <ul className="opinion-about__list">{list}</ul>
       </div>
     </div>

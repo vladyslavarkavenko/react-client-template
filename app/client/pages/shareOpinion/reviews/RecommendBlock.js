@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import i18next from 'i18next';
+
 import Alert from '../../../components/ui-components/Alert';
 import YesSvg from '../../../../../public/assets/svg/check-circle.light.svg';
 import ThinkSvg from '../../../../../public/assets/svg/emoji/3_1.svg';
@@ -30,13 +32,15 @@ function RecommendBlock({
       <div className="opinion-rec">
         {withComments ? (
           <p className="opinion-rec__title">
-            {rate === 1 && `You are going to recommend ${title} to friends`}
-            {rate === 2 && `You are not sure about ${title}`}
-            {rate === 3 && `You are not going to recommend ${title} to friends`}
+            {rate === 1 && i18next.t('shareOpinion.rate.recommend', { title })}
+            {rate === 2 && i18next.t('shareOpinion.rate.notSure', { title })}
+            {rate === 3 && i18next.t('shareOpinion.rate.notRecommend', { title })}
           </p>
         ) : (
           <>
-            <p className="opinion-rec__title">Are you going to recommend {title} to friends?</p>
+            <p className="opinion-rec__title">
+              {i18next.t('shareOpinion.rate.question', { title })}
+            </p>
             <div className="opinion-rec__list">
               <button
                 type="button"
@@ -46,7 +50,7 @@ function RecommendBlock({
                 disabled={isRequest}
               >
                 <YesSvg />
-                Yes
+                {i18next.t('shareOpinion.button.yes')}
               </button>
 
               <button
@@ -57,7 +61,7 @@ function RecommendBlock({
                 disabled={isRequest}
               >
                 <ThinkSvg />
-                Not sure
+                {i18next.t('shareOpinion.button.notSure')}
               </button>
 
               <button
@@ -68,22 +72,26 @@ function RecommendBlock({
                 disabled={isRequest}
               >
                 <NoSvg />
-                No
+                {i18next.t('shareOpinion.button.no')}
               </button>
             </div>
             <div className="opinion-rec__remind">
-              <button className="ask-btn">Ask me later</button>
+              <button className="ask-btn">{i18next.t('shareOpinion.button.askLater')}</button>
               {false && (
-                <Alert type={Alert.info} icon={<AlarmClockSvg />} message="We will ask you later" />
+                <Alert
+                  type={Alert.info}
+                  icon={<AlarmClockSvg />}
+                  message={i18next.t('shareOpinion.alert.askLater')}
+                />
               )}
             </div>
             <div className="opinion-rec__actions">
               <button className="action white" onClick={() => handleFinish()} disabled={isRequest}>
-                Save
+                {i18next.t('shareOpinion.button.save')}
               </button>
               <span className="or">or</span>
               <button className="action blue" onClick={() => handleProceed()} disabled={isRequest}>
-                Save and add comment
+                {i18next.t('shareOpinion.button.saveAndAdd')}
               </button>
             </div>
           </>

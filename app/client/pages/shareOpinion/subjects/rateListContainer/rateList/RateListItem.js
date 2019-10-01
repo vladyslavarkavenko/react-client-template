@@ -1,4 +1,6 @@
 import React from 'react';
+import i18next from 'i18next';
+
 import { RATE_PROFILE_TYPE } from '../../../../../utils/constants';
 import ExclamationCircleEmptySvg from '../../../../../../../public/assets/svg/exclamation-circle.svg';
 
@@ -25,8 +27,8 @@ export default function RateListItem({ data = {}, selected, withAlert, isCompany
         <div className="company-title">{isCompany ? name : `${firstName} ${lastName}`}</div>
         <div className="company-subtitle">
           {isCompany
-            ? `93% clients satisfied with the bank`
-            : `75% clients satisfied with this manager`}
+            ? i18next.t('shareOpinion.satisfaction', { percent: 93, with: 'the bank' })
+            : i18next.t('shareOpinion.satisfaction', { percent: 75, with: 'this manager' })}
         </div>
         {withAlert && (
           <span className="company-alert">

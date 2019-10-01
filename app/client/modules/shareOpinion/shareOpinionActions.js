@@ -1,4 +1,5 @@
 import { call, put, takeLatest, all, fork, select } from 'redux-saga/effects';
+import i18next from 'i18next';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import ShareOpinionService from '../../services/shareOpinion';
@@ -134,9 +135,7 @@ function* newTopicWorker() {
       const newSubject = yield call(() =>
         ShareOpinionService.pushCreateSubject({
           name: input.subject,
-          author: selectedProfile.customerId,
-          //TODO: Remove criteria field after backend fix
-          criteria: [1]
+          author: selectedProfile.customerId
         })
       );
 
@@ -280,7 +279,7 @@ function* pushUpdateTopicsWorker({ payload }) {
 
     yield put(pushUpdateTopics.success());
     yield put(historyPush({ method: 'replace', to: routing().shareOpinion }));
-    Notification.success('Thank you for your feedback');
+    Notification.success(i18next.t('shareOpinion.notification.thanksForFeedback'));
   } catch (err) {
     console.error(err);
     Notification.error(err);

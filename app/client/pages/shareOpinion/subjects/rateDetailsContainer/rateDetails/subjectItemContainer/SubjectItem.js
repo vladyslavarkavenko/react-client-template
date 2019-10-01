@@ -36,8 +36,6 @@ export default class SubjectItem extends React.Component {
 
     const isActual = actualSubjectsId.includes(id);
 
-    console.log(isActual);
-
     const topicsList = topics.map((topic) => {
       const key = `${id}_${topic.id}`;
 

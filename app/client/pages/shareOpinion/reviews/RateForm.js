@@ -1,5 +1,7 @@
 import React from 'react';
+import i18next from 'i18next';
 import { connect } from 'react-redux';
+
 import RateComment from './rateForm/RateComment';
 import RadioGroup from './rateForm/RadioGroup';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
@@ -13,12 +15,15 @@ import {
 import ButtonFullBlock from '../../../components/ui-components/Form/ButtonFullBlock';
 
 const whoCanSeeOptions = [
-  { value: 1, title: 'All' },
-  { value: 2, title: 'Provider' },
-  { value: 3, title: 'Only cTRU' }
+  { value: 1, title: i18next.t('shareOpinion.whoCanSee.all') },
+  { value: 2, title: i18next.t('shareOpinion.whoCanSee.provider') },
+  { value: 3, title: i18next.t('shareOpinion.whoCanSee.ctru') }
 ];
 
-const expectActionOptions = [{ value: true, title: 'Yes' }, { value: false, title: 'No' }];
+const expectActionOptions = [
+  { value: true, title: i18next.t('shareOpinion.buttons.yes') },
+  { value: false, title: i18next.t('shareOpinion.buttons.no') }
+];
 
 class RateForm extends React.Component {
   constructor(props) {
@@ -92,15 +97,13 @@ class RateForm extends React.Component {
       <>
         <form onSubmit={this.handleSubmit} className="opinion-form">
           <div className="container">
-            <p className="opinion-form__title">Add Comment</p>
+            <p className="opinion-form__title">{i18next.t('shareOpinion.addComment')}</p>
             <div className="opinion-form__block">
-              <p className="opinion-form__subtitle">
-                Select criterias that connect to this situation
-              </p>
+              <p className="opinion-form__subtitle">{i18next.t('shareOpinion.criteria')}</p>
 
               {options}
 
-              <p className="opinion-form__subtitle">Who can see the comment?</p>
+              <p className="opinion-form__subtitle">{i18next.t('shareOpinion.whoCanSee.title')}</p>
               <div className="container half">
                 <RadioGroup
                   name="see_comment"
@@ -111,9 +114,7 @@ class RateForm extends React.Component {
                 />
               </div>
 
-              <p className="opinion-form__subtitle">
-                Do you expect for actions from the service provider?
-              </p>
+              <p className="opinion-form__subtitle">{i18next.t('shareOpinion.expectAction')}</p>
 
               <div className="container half">
                 <RadioGroup
@@ -129,7 +130,11 @@ class RateForm extends React.Component {
         </form>
 
         <ButtonFullBlock
-          title={isRequest ? 'Sending' : 'Send comment'}
+          title={
+            isRequest
+              ? i18next.t('shareOpinion.buttons.sending')
+              : i18next.t('shareOpinion.buttons.send')
+          }
           handleClick={this.handleSubmit}
           disabled={isRequest}
         />

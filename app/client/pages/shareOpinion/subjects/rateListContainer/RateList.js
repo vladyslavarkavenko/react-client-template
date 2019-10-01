@@ -1,4 +1,6 @@
 import React from 'react';
+import i18next from 'i18next';
+
 import RateListHeading from './rateList/RateListHeading';
 import RateListItem from './rateList/RateListItem';
 import { RATE_PROFILE_TYPE } from '../../../../utils/constants';
@@ -42,9 +44,9 @@ export default class RateList extends React.Component {
 
     return (
       <ul className="rate-list">
-        <RateListHeading>My companies</RateListHeading>
+        <RateListHeading>{i18next.t('shareOpinion.my.companies')}</RateListHeading>
         {companiesList}
-        <RateListHeading>My managers</RateListHeading>
+        <RateListHeading>{i18next.t('shareOpinion.my.managers')}</RateListHeading>
         {managersList}
       </ul>
     );
