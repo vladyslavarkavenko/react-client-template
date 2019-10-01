@@ -145,19 +145,15 @@ function validatePassword(value, messages = {}) {
 
   const errors = {};
 
-  if (!password.length) {
-    errors.password = required;
-  }
-
-  if (!validateText({ value: password, ...limit })) {
-    errors.password = length;
-  }
-
   const lowerCaseUsed = /[a-z]/.test(password);
   const upperCaseUsed = /[A-Z]/.test(password);
   const specSymbolsUsed = /[0-9!@#$%^&*.]/.test(password);
 
-  if (!lowerCaseUsed || !upperCaseUsed || !specSymbolsUsed) {
+  if (!password.length) {
+    errors.password = required;
+  } else if (!validateText({ value: password, ...limit })) {
+    errors.password = length;
+  } else if (!lowerCaseUsed || !upperCaseUsed || !specSymbolsUsed) {
     errors.password = info;
   }
 
@@ -165,10 +161,7 @@ function validatePassword(value, messages = {}) {
   if (typeof confirmPassword === 'string') {
     if (!confirmPassword.length) {
       errors.confirmPassword = required;
-      return errors;
-    }
-
-    if (confirmPassword !== password) {
+    } else if (confirmPassword !== password) {
       errors.confirmPassword = match;
     }
   }
