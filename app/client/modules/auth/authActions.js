@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import AuthService from '../../services/auth';
 import { setTokens, removeTokens, formatRolesPayload } from '../helpers/helpers';
-import { TOKENS } from '../../utils/constants';
+import { TOKENS, ROLES } from '../../utils/constants';
 import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
 import authSelectors from './authSelectors';
@@ -153,7 +153,12 @@ function* loginWorker({ payload: { email, password } }) {
       })
     );
 
-    yield put(historyPush(routing().account));
+    console.log(activeRole);
+    if (activeRole === ROLES.CUSTOMER) {
+      yield put(historyPush(routing().shareOpinion));
+    } else {
+      yield put(historyPush(routing().account));
+    }
   } catch (err) {
     Notification.error(err);
     yield put(pushLogin.failure());

@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import i18next from 'i18next';
 
 import ChooseRoleIcon from './chooseRole/ChooseRoleIcon';
 import { setActiveRole } from '../../modules/auth/authActions';
 import Loader from '../../components/ui-components/Layout/Loader';
 import routing from '../../utils/routing';
 import authSelectors from '../../modules/auth/authSelectors';
+import { ROLES } from '../../utils/constants';
 
 // TODO: Split text to locales file.
 class ChooseRole extends React.Component {
@@ -25,6 +27,10 @@ class ChooseRole extends React.Component {
   render() {
     const { activeRole, rolesPermissions } = this.props;
 
+    if (activeRole === ROLES.CUSTOMER) {
+      return <Redirect to={routing().shareOpinion} />;
+    }
+
     if (activeRole) {
       return <Redirect to={routing().about} />;
     }
@@ -36,7 +42,7 @@ class ChooseRole extends React.Component {
     return (
       <div className="form-page choose-role-page">
         <div className="roles-content">
-          <h1 className="form-page__title"> Choose your role </h1>
+          <h1 className="form-page__title">{i18next.t('login.chooseRole')}</h1>
           <div className="cards">
             {Object.keys(rolesPermissions).map((role) => (
               <button key={role} onClick={() => this.setActiveRole(role)}>
