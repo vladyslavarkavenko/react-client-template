@@ -25,6 +25,8 @@ export default {
   expiredOpinions: getExpiredOpinions,
   expiredOpinionsById: getExpiredOpinionsBySubject,
 
+  actualSubjectsId: (state) => state.shareOpinion.actualSubjects,
+
   subjectsStatus: (state) => state.shareOpinion.subjects.status,
   subjectsData: getSubjectsData,
 

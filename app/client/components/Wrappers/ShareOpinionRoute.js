@@ -2,31 +2,42 @@ import React from 'react';
 import { Route, Redirect, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { pushUpdateTopics } from '../../modules/shareOpinion/shareOpinionActions';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
 import routing from '../../utils/routing';
 import Logo from '../ui-components/Layout/Logo';
 import AuthGuard from '../HOCs/AuthGuard';
 import RolesManager from '../HOCs/RolesManager';
 
-function ShareOpinionRoute({ step, selectedProfile, selectedTopics, ...otherProps }) {
-  if (!selectedProfile || !selectedTopics.length) {
-    return <Redirect to={routing().shareOpinion} />;
+class ShareOpinionRoute extends React.Component {
+  componentWillUnmount() {
+    const { clearState } = this.props;
+
+    clearState();
   }
 
-  return (
-    <>
-      <header className="rate-opinion header">
-        <Link to={routing().shareOpinion} replace className="header-btn">
-          Cancel
-        </Link>
-        <Logo className="header-logo" replace />
-        <button type="button" className="header-btn">
-          Help
-        </button>
-      </header>
-      <Route {...otherProps} />
-    </>
-  );
+  render() {
+    const { step, selectedProfile, selectedTopics, ...otherProps } = this.props;
+
+    if (!selectedProfile || !selectedTopics.length) {
+      return <Redirect to={routing().shareOpinion} />;
+    }
+
+    return (
+      <>
+        <header className="rate-opinion header">
+          <Link to={routing().shareOpinion} replace className="header-btn">
+            Cancel
+          </Link>
+          <Logo className="header-logo" replace />
+          <button type="button" className="header-btn">
+            Help
+          </button>
+        </header>
+        <Route {...otherProps} />
+      </>
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({
@@ -34,8 +45,17 @@ const mapStateToProps = (state) => ({
   selectedTopics: shareOpinionSelectors.selectedTopics(state)
 });
 
+const clearState = pushUpdateTopics.success;
+
+const mapDispatchToProps = {
+  clearState
+};
+
 export default compose(
   AuthGuard,
   RolesManager,
-  connect(mapStateToProps)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )(ShareOpinionRoute);

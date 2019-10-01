@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Alert from '../../../components/ui-components/Alert';
 import YesSvg from '../../../../../public/assets/svg/check-circle.light.svg';
+import ThinkSvg from '../../../../../public/assets/svg/emoji/3_1.svg';
 import NoSvg from '../../../../../public/assets/svg/times-circle.light.svg';
 import AlarmClockSvg from '../../../../../public/assets/svg/alarm-clock.svg';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
@@ -55,7 +56,7 @@ function RecommendBlock({
                 onClick={handleRateBound}
                 disabled={isRequest}
               >
-                <YesSvg />
+                <ThinkSvg />
                 Not sure
               </button>
 

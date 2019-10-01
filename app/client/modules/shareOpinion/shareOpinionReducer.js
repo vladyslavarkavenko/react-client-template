@@ -25,7 +25,8 @@ const selectedProfile = handleActions(
 
       const { id, avatar, customerId } = data;
 
-      const title = type === RATE_PROFILE_TYPE.COMPANY ? data.name : data.firstName;
+      const title =
+        type === RATE_PROFILE_TYPE.COMPANY ? data.name : `${data.firstName} ${data.lastName}`;
 
       return { type, id, avatar, title, customerId };
     },
@@ -101,6 +102,39 @@ const selectedTopics = handleActions(
     },
     [actions.selectOpinionExpired.SUCCESS](state, { payload }) {
       return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return [];
+    },
+    [actions.selectOpinionProfile.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const actualSubjects = handleActions(
+  {
+    [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
+      const actual = [];
+      const now = new Date();
+
+      payload.forEach((subject) => {
+        // for every topic check if its expired
+        const haveExpired = subject.topics.some((topic) => {
+          if (!topic.dateLastOpinion) {
+            return true;
+          }
+
+          return differenceInMonths(now, new Date(topic.dateLastOpinion.split('-'))) >= 6;
+        });
+
+        if (!haveExpired) {
+          actual.push(subject.id);
+        }
+      });
+
+      return actual;
     },
     [actions.pushUpdateTopics.SUCCESS]() {
       return [];
@@ -345,6 +379,7 @@ const shareOpinion = combineReducers({
   selectedTopics,
   selectedOptions,
   expiredOpinions,
+  actualSubjects,
   subjects,
   newTopic
 });

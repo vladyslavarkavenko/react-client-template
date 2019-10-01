@@ -17,7 +17,8 @@ const mapStateToProps = (state, props) => {
 
   return {
     selectedTopicsId: shareOpinionSelectors.selectedTopicsId(state),
-    expiredTopics: shareOpinionSelectors.expiredOpinionsById(state, id)
+    expiredTopics: shareOpinionSelectors.expiredOpinionsById(state, id),
+    actualSubjectsId: shareOpinionSelectors.actualSubjectsId(state)
   };
 };
 

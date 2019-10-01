@@ -5,7 +5,7 @@ import ExclamationCircleEmptySvg from '../../../../../../../public/assets/svg/ex
 const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 
 export default function RateListItem({ data = {}, selected, withAlert, isCompany, handleSelect }) {
-  const { avatar, name, firstName, id } = data;
+  const { avatar, name, firstName, lastName, id } = data;
 
   const type = isCompany ? COMPANY : MANAGER;
 
@@ -22,8 +22,12 @@ export default function RateListItem({ data = {}, selected, withAlert, isCompany
         <img src={avatar} alt="" />
       </div>
       <div className="company-info">
-        <div className="company-title">{isCompany ? name : firstName}</div>
-        <div className="company-subtitle">89% clients satisfied with the bank</div>
+        <div className="company-title">{isCompany ? name : `${firstName} ${lastName}`}</div>
+        <div className="company-subtitle">
+          {isCompany
+            ? `93% clients satisfied with the bank`
+            : `75% clients satisfied with this manager`}
+        </div>
         {withAlert && (
           <span className="company-alert">
             <ExclamationCircleEmptySvg />
