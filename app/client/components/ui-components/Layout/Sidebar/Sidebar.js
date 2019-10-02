@@ -1,16 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import navLinks from './navLinks';
 
 const Sidebar = () => (
-  <ul className="left-bar">
+  <ul className="nav-side-bar">
     {navLinks.map(({ title, Icon, to }) => (
       <li key={title}>
-        <Link to={to}>
+        <NavLink to={to} activeClassName="active" className="nav-link">
           <Icon />
           {title}
-        </Link>
+        </NavLink>
       </li>
     ))}
   </ul>

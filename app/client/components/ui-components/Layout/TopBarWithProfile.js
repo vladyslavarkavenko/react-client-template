@@ -75,24 +75,26 @@ class TopBarWithProfile extends React.Component {
     const isCustomer = activeRole === ROLES.CUSTOMER;
 
     return (
-      <div className="nav-bar nav-bar-profile">
-        <Logo />
-        <div className="search">
+      <header className="header-bar">
+        <Logo className="header-bar__logo" />
+        <div className="header-bar__search">
           <SvgSearch />
-          <input placeholder="Search" />
+          <input className="input" placeholder="Search" />
         </div>
         {isCustomer && (
-          <Link to={routing().shareOpinion} className="share-opinion-btn">
+          <Link to={routing().shareOpinion} className="header-bar__share-opinion">
             Share your opinion
           </Link>
         )}
-        <button>
+        <button className="header-bar__question">
           <SvgQuestion />
         </button>
-        <button>
+
+        <button className="header-bar__notify">
           <SvgBell />
         </button>
-        <div className="menu-wrapper" onClick={this.toggleMenu} ref={this.menuBtn}>
+
+        <div className="header-bar__menu" onClick={this.toggleMenu} ref={this.menuBtn}>
           <div className="avatar">
             <img src={user.avatar || '/assets/img/empty-avatar.jpg'} alt="Avatar" />
           </div>
@@ -101,7 +103,7 @@ class TopBarWithProfile extends React.Component {
           </button>
         </div>
         {showMenu && (
-          <ul className="menu" ref={this.menu}>
+          <ul className="header-bar__menu-drop" ref={this.menu}>
             <li onClick={this.toggleMenu}>
               <Link to={routing().about}>Profile</Link>
             </li>
@@ -112,7 +114,7 @@ class TopBarWithProfile extends React.Component {
             <li onClick={this.logOut}>Log out</li>
           </ul>
         )}
-      </div>
+      </header>
     );
   }
 }
