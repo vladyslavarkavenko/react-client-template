@@ -1,4 +1,4 @@
-import { call, select, put, takeLatest, all, fork } from 'redux-saga/effects';
+import { call, select, put, takeLatest, all } from 'redux-saga/effects';
 
 import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
@@ -58,7 +58,7 @@ function* setActiveRoleWorker({ payload }) {
   yield put(setActiveRole.success(data));
 }
 
-export function* refreshTokenWorker({ request }) {
+export function* refreshTokenWorker() {
   let tokens;
   const refreshToken = localStorage.getItem(TOKENS.REFRESH);
 
@@ -72,21 +72,17 @@ export function* refreshTokenWorker({ request }) {
     }
   }
 
-  return { request, tokens };
+  return { tokens };
 }
 
 // Running once at application start
 function* loginByTokenWorker() {
   const accessToken = localStorage.getItem(TOKENS.ACCESS);
   const refreshToken = localStorage.getItem(TOKENS.REFRESH);
-  // proceed login
+
   if (accessToken) {
     yield put(pushLoginByToken.request());
     setTokens({ access: accessToken, refresh: refreshToken });
-
-    if (!accessToken && refreshToken) {
-      yield fork(refreshTokenWorker);
-    }
 
     try {
       const [user, roles] = yield all([
@@ -94,9 +90,6 @@ function* loginByTokenWorker() {
         call(() => AuthService.getRoles())
       ]);
 
-      // if (role) {
-      //   yield put(setActiveRole.trigger(role));
-      // }
       const {
         companies,
         rolesPermissions,

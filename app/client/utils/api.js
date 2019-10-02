@@ -37,7 +37,6 @@ export function setApiHeaders(headers) {
   });
 }
 
-/* eslint-disable */
 export function addResponseIntercept(store) {
   instance.interceptors.response.use(
     (response) => response,
@@ -56,13 +55,10 @@ export function addResponseIntercept(store) {
         originalRequest._retry = true;
 
         return store
-          .runSaga(refreshTokenWorker, { request: originalRequest })
+          .runSaga(refreshTokenWorker)
           .toPromise()
-          .then(({ request, tokens }) => {
-            console.log('res', request, tokens);
-
+          .then(({ tokens }) => {
             originalRequest.headers.Authorization = `Bearer ${tokens.access}`;
-
             return instance(originalRequest);
           })
           .catch((sagaErr) => {
