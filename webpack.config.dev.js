@@ -40,7 +40,7 @@ const config = {
           // {
           //   loader: MiniCssExtractPlugin.loader,
           // },
-          'css-loader',
+          'css-loader'
         ]
       },
       {

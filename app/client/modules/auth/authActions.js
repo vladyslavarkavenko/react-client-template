@@ -1,4 +1,4 @@
-import { call, select, put, takeLatest, all } from 'redux-saga/effects';
+import { call, select, put, takeLatest, all, fork } from 'redux-saga/effects';
 
 import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
@@ -58,19 +58,21 @@ function* setActiveRoleWorker({ payload }) {
   yield put(setActiveRole.success(data));
 }
 
-function* refreshTokenWorker() {
+export function* refreshTokenWorker({ request }) {
+  let tokens;
   const refreshToken = localStorage.getItem(TOKENS.REFRESH);
 
   if (refreshToken) {
     try {
-      const res = yield call(() => AuthService.refresh({ refresh: refreshToken }));
-      setTokens(res.data.tokens);
+      tokens = yield call(() => AuthService.refresh({ refresh: refreshToken }));
+      setTokens(tokens);
     } catch (err) {
       removeTokens();
-      Notification.error(err);
       console.error(err);
     }
   }
+
+  return { request, tokens };
 }
 
 // Running once at application start
@@ -82,11 +84,9 @@ function* loginByTokenWorker() {
     yield put(pushLoginByToken.request());
     setTokens({ access: accessToken, refresh: refreshToken });
 
-    // TODO: Invalid token refreshing logic
-    // if (!accessToken && refreshToken) {
-    //   // wait until tokens are refreshing
-    //   yield fork(refreshTokenWorker);
-    // }
+    if (!accessToken && refreshToken) {
+      yield fork(refreshTokenWorker);
+    }
 
     try {
       const [user, roles] = yield all([

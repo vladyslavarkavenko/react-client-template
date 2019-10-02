@@ -1,10 +1,7 @@
 import axios from 'axios';
 
 import CONFIG from './config';
-// import { redirectTo } from '../modules/redirect';
-// import routing from './routing';
-import { pushRefreshToken } from '../modules/auth/authActions';
-// import { useRefreshToken } from '../modules/_auth';
+import { refreshTokenWorker } from '../modules/auth/authActions';
 
 const instance = axios.create({ baseURL: `${CONFIG.APP_URL}/api` });
 
@@ -40,25 +37,40 @@ export function setApiHeaders(headers) {
   });
 }
 
+/* eslint-disable */
 export function addResponseIntercept(store) {
   instance.interceptors.response.use(
     (response) => response,
     (err) => {
+      const originalRequest = err.config;
       const {
         response: { status }
       } = err;
 
-      if (status === 404) {
-        // store.dispatch(redirectTo(routing().notFound));
+      //not axios error
+      if (!err.response) {
+        return Promise.reject(err);
       }
 
-      if (status === 401) {
-        // TODO: Need improvements
-        store.dispatch(pushRefreshToken());
-        // store.dispatch(useRefreshToken());
+      if (status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+
+        return store
+          .runSaga(refreshTokenWorker, { request: originalRequest })
+          .toPromise()
+          .then(({ request, tokens }) => {
+            console.log('res', request, tokens);
+
+            originalRequest.headers.Authorization = `Bearer ${tokens.access}`;
+
+            return instance(originalRequest);
+          })
+          .catch((sagaErr) => {
+            console.error(sagaErr);
+          });
       }
 
-      return Promise.reject(err);
+      return err.response;
     }
   );
 }
