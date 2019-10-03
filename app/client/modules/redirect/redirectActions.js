@@ -25,6 +25,6 @@ function* redirectWorker({ payload: { history } }) {
   }
 }
 
-export default function* redirectWatcher() {
+export function* redirectWatcher() {
   yield takeLatest(historyWatcherInit, redirectWorker);
 }

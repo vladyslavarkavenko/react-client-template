@@ -160,7 +160,7 @@
         },
         "expectAction": "Do you expect for actions from the service provider?",
         "rate": {
-          "question": "Are you going to recommend {{title}} to friends",
+          "question": "Are you going to recommend {{title}} to friends?",
           "recommend" : "You are going to recommend {{title}} to friends",
           "notSure": "You are not sure about {{title}}",
           "notRecommend": "You are not going to recommend {{title}} to friends"

@@ -40,5 +40,7 @@ export default {
 
   nextUnratedTopic: getUnratedTopic,
 
+  averageRate: (state) => state.shareOpinion.averageRate,
+
   finishStatus: (state) => state.shareOpinion.selectedOptions.status
 };

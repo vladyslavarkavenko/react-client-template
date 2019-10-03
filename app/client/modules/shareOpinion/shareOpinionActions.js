@@ -34,6 +34,8 @@ export const selectExpectAction = createRequestBound('REVIEW_EXPECT_ACTION_SELEC
 export const saveTopicField = createRequestBound('TOPIC_FIELD_SAVE');
 export const pushUpdateTopics = createRequestBound('TOPIC_UPDATE_SEND');
 
+export const calcAverageRate = createRequestBound('AVERAGE_RATE_CALC');
+
 function* fetchOpinionSubjectsWorker() {
   yield put(fetchOpinionSubjects.request());
   try {
@@ -220,6 +222,11 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
     const nextTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
 
     if (!nextTopic) {
+      const topics = yield select(shareOpinionSelectors.selectedTopics);
+      const rate =
+        Math.round(10 * (topics.reduce((acc, topic) => acc + topic.score, 0) / topics.length)) / 10;
+
+      yield put(calcAverageRate.trigger(rate));
       yield put(historyPush({ to: routing().shareOpinionMessage, method: 'replace' }));
     }
   } catch (err) {

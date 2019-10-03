@@ -1,4 +1,40 @@
-const calculateColorParam = (param, x, y, width, height, colors) => {
+const defaultColors = {
+  lt: { r: 255, g: 0, b: 0 }, //    left-top
+  rt: { r: 255, g: 153, b: 0 }, //  right-top
+  rb: { r: 51, g: 204, b: 51 }, //  right-bottom
+  lb: { r: 51, g: 51, b: 255 }, //   left-bottom
+
+  l: { r: 255, g: 0, b: 0 }, //   left-bottom
+  r: { r: 0, g: 255, b: 0 } //  right-bottom
+};
+
+export const calculateColorByPointHSL = (point, maxValue, color = {}) => {
+  const { l = 120, r = 360 } = color;
+
+  const hue = ((maxValue - point + 1) * (r - l)) / maxValue + l;
+
+  return `hsl(${hue}, 50%, 50%)`;
+};
+
+const calculateColorParamByPoint = (param, point, ticks, colors = defaultColors) => {
+  const { l, r } = colors;
+
+  const lFactor = (l[param] * (ticks - point)) / ticks;
+  const rFactor = (r[param] * point) / ticks;
+
+  return Math.round(lFactor + rFactor);
+};
+
+export function calculateColorByPoint(...arg) {
+  // arg = { point, ticks, colors };
+  const r = calculateColorParamByPoint('r', ...arg);
+  const g = calculateColorParamByPoint('g', ...arg);
+  const b = calculateColorParamByPoint('b', ...arg);
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+const calculateColorParam = (param, x, y, width, height, colors = defaultColors) => {
   const { lt, rt, rb, lb } = colors;
 
   const ltFactor = lt[param] * (width - x) * y;
