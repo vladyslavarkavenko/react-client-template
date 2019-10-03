@@ -73,6 +73,7 @@
     "redux-saga-routines": "^3.2.1",
     "redux-thunk": "^2.3.0",
     "serialize-javascript": "^1.5.0",
+    "uuid": "^3.3.3",
     "validator": "^11.1.0",
     "victory": "^33.0.6"
   },
