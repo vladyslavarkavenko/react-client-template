@@ -243,6 +243,11 @@ function* fetchTopicOpinionsWorker() {
     const topic = yield select(shareOpinionSelectors.nextUnratedTopic);
     let opinions;
 
+    if (topic._isCreated) {
+      yield put(fetchTopicOpinions.success());
+      return;
+    }
+
     if (type === RATE_PROFILE_TYPE.MANAGER) {
       opinions = yield call(() =>
         ShareOpinionService.getTopicOpinionsByManager({ id, topic: topic.id })
@@ -256,6 +261,7 @@ function* fetchTopicOpinionsWorker() {
     yield put(fetchTopicOpinions.success(opinions));
   } catch (err) {
     console.error(err);
+    yield put(fetchTopicOpinions.failure());
   }
 }
 

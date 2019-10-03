@@ -11,7 +11,16 @@ const topicOpinions = handleActions(
     [actions.fetchTopicOpinions.SUCCESS](state, { payload }) {
       return payload;
     },
+    [actions.fetchTopicOpinions.FAILURE]() {
+      return [];
+    },
     [actions.pushRateTopic.SUCCESS]() {
+      return [];
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return [];
+    },
+    [actions.selectOpinionProfile.TRIGGER]() {
       return [];
     }
   },
@@ -56,7 +65,8 @@ const selectedTopics = handleActions(
         id: payload.id,
         dateLastOpinion: null,
         satisfaction: null,
-        importance: null
+        importance: null,
+        _isCreated: true
       };
 
       return [newTopic, ...state];
@@ -320,11 +330,11 @@ const isRecommended = handleActions(
       return payload;
     },
     [actions.calcAverageRate.TRIGGER](state, { payload }) {
-      if (payload <= 4) {
+      if (payload < 6) {
         return 3; // not recommend
       }
 
-      if (payload > 4 && payload < 6) {
+      if (payload >= 6 && payload < 8) {
         return 2; // not sure
       }
 
