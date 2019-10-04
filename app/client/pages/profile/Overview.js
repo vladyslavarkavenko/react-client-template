@@ -79,97 +79,203 @@ const CATEGORIES_COLORS = {
 };
 
 const realData = {
-  category: [{ x: 0, y: 0 }]
-};
-// The order is important!!!
-const data = [
-  [
-    // importance
+  [CLEAR]: [
     {
-      x: FEATURES.CLEAR,
-      y: 2
+      importance: 2,
+      satisfaction: 6
     },
     {
-      x: FEATURES.CREATIVE,
-      y: 5
+      importance: 10,
+      satisfaction: 3
     },
     {
-      x: FEATURES.CONVENIENT,
-      y: 4
+      importance: 10,
+      satisfaction: 8
     },
     {
-      x: FEATURES.CARING,
-      y: 8
-    },
-    {
-      x: FEATURES.COURTEGIOUS,
-      y: 5
-    },
-    {
-      x: FEATURES.CONFIDENT,
-      y: 2
-    },
-    {
-      x: FEATURES.COMPENSATING,
-      y: 7
-    },
-    {
-      x: FEATURES.COST_CONSCIOUS,
-      y: 9
+      importance: 2,
+      satisfaction: 3
     }
   ],
-  [
-    // satisfaction
+  [CREATIVE]: [
     {
-      x: FEATURES.CLEAR,
-      y: 3
+      importance: 2,
+      satisfaction: 6
     },
     {
-      x: FEATURES.CREATIVE,
-      y: 10
+      importance: 10,
+      satisfaction: 3
     },
     {
-      x: FEATURES.CONVENIENT,
-      y: 6
+      importance: 10,
+      satisfaction: 8
     },
     {
-      x: FEATURES.CARING,
-      y: 3
+      importance: 2,
+      satisfaction: 3
+    }
+  ],
+  [CONVENIENT]: [
+    {
+      importance: 2,
+      satisfaction: 6
     },
     {
-      x: FEATURES.COURTEGIOUS,
-      y: 6
+      importance: 7,
+      satisfaction: 3
     },
     {
-      x: FEATURES.CONFIDENT,
-      y: 9
+      importance: 10,
+      satisfaction: 8
     },
     {
-      x: FEATURES.COMPENSATING,
-      y: 8
+      importance: 9,
+      satisfaction: 3
+    }
+  ],
+  [CARING]: [
+    {
+      importance: 2,
+      satisfaction: 6
     },
     {
-      x: FEATURES.COST_CONSCIOUS,
-      y: 10
+      importance: 4,
+      satisfaction: 8
+    },
+    {
+      importance: 10,
+      satisfaction: 8
+    },
+    {
+      importance: 2,
+      satisfaction: 3
+    }
+  ],
+  [COURTEGIOUS]: [
+    {
+      importance: 2,
+      satisfaction: 6
+    },
+    {
+      importance: 7,
+      satisfaction: 3
+    },
+    {
+      importance: 10,
+      satisfaction: 2
+    },
+    {
+      importance: 2,
+      satisfaction: 3
+    }
+  ],
+  [CONFIDENT]: [
+    {
+      importance: 2,
+      satisfaction: 6
+    },
+    {
+      importance: 7,
+      satisfaction: 2
+    },
+    {
+      importance: 10,
+      satisfaction: 8
+    },
+    {
+      importance: 2,
+      satisfaction: 3
+    }
+  ],
+  [COMPENSATING]: [
+    {
+      importance: 2,
+      satisfaction: 3
+    },
+    {
+      importance: 4,
+      satisfaction: 5
+    },
+    {
+      importance: 10,
+      satisfaction: 8
+    },
+    {
+      importance: 2,
+      satisfaction: 3
+    }
+  ],
+  [COST_CONSCIOUS]: [
+    {
+      importance: 6,
+      satisfaction: 6
+    },
+    {
+      importance: 2,
+      satisfaction: 9
+    },
+    {
+      importance: 10,
+      satisfaction: 8
+    },
+    {
+      importance: 2,
+      satisfaction: 8
     }
   ]
-];
+};
+
+function parseData(realData) {
+  const data = [
+    [], // Importance
+    [] //  Satisfaction
+  ];
+
+  Object.keys(realData).forEach((feature) => {
+    const opinions = realData[feature];
+
+    let i = 0;
+    let s = 0;
+
+    opinions.forEach(({ importance, satisfaction }) => {
+      i += importance;
+      s += satisfaction;
+    });
+
+    data[0].push({
+      x: feature,
+      y: i / opinions.length
+    });
+    data[1].push({
+      x: feature,
+      y: s / opinions.length
+    });
+  });
+
+  console.log('data', data);
+  return data;
+}
 
 const styles = {
   lines: {
     data: {
       fillOpacity: 0.2,
-      strokeWidth: 2
+      strokeWidth: 2,
+      pointerEvents: 'none'
     }
   },
   dots: {
     data: {
       strokeWidth: 1,
-      stroke: 'white'
+      stroke: 'white',
+      pointerEvents: 'none'
     }
   },
   dependentAxis: {
-    axisLabel: { padding: 10, cursor: 'pointer' },
+    axisLabel: {
+      padding: 10,
+      cursor: 'pointer'
+    },
     axis: { stroke: 'none' },
     grid: {
       stroke: 'grey',
@@ -182,10 +288,59 @@ const styles = {
     axis: { stroke: 'none ' },
     grid: {
       stroke: 'grey',
-      opacity: 0.5
+      opacity: 0.4
     },
     tickLabels: { fill: 'none' }
   }
+};
+
+const Tooltip = ({ data, tooltipData }) => {
+  const { x, y, childName } = tooltipData;
+  const features = Object.values(FEATURES);
+
+  // Calculate position
+  const center = {
+    x: a / 2,
+    y: a / 2
+  };
+  const point = {
+    x: a / 2 + (y / domain.y[1]) * (a / 2 - p),
+    y: a / 2
+  };
+
+  const angle = features.indexOf(x) * (360 / features.length) * (Math.PI / 180);
+  const s = Math.sin(angle);
+  const c = Math.cos(angle);
+
+  const realX = c * (point.x - center.x) - s * (point.y - center.y) + center.x;
+  const realY = s * (point.x - center.x) + c * (point.y - center.y) + center.y;
+
+  // Calculate values
+  let importance, satisfaction;
+
+  if (childName === 'satisfaction') {
+    satisfaction = y;
+    importance = data[0].find((item) => item.x === x).y;
+  } else {
+    importance = y;
+    satisfaction = data[1].find((item) => item.x === x).y;
+  }
+
+  return (
+    <div className="radar-tooltip" style={{ top: a - realY - 10, left: realX + 10 }}>
+      <h5>{x}</h5>
+      <div className="info-line">
+        <span className="dot" style={{ backgroundColor: COLORS.SATISFACTION }} />
+        <p>Satisfaction</p>
+        <h6>{Math.round(satisfaction * 10) / 10}</h6>
+      </div>
+      <div className="info-line">
+        <span className="dot" style={{ backgroundColor: COLORS.IMPORTANCE }} />
+        <p>Importance</p>
+        <h6>{Math.round(importance * 10) / 10}</h6>
+      </div>
+    </div>
+  );
 };
 
 class Overview extends React.Component {
@@ -193,7 +348,7 @@ class Overview extends React.Component {
     super(props);
 
     this.state = {
-      data,
+      data: parseData(realData),
       activeSector: null,
       activeCategory: null
     };
@@ -255,19 +410,38 @@ class Overview extends React.Component {
   }
 
   showTooltip(points) {
-    console.log('points', points);
+    if (points.length) {
+      const { eventKey, childName, x, y } = points[0];
+
+      const tooltipData = { eventKey, childName, x, y };
+
+      this.setState({ tooltipData });
+    }
   }
 
   hideTooltip(points) {
-    console.log('points', points);
+    // To change state only when showTooltip has already finished executing.
+    setTimeout(() => {
+      const { tooltipData } = this.state;
+
+      if (
+        tooltipData &&
+        points.length &&
+        points[0].eventKey === tooltipData.eventKey &&
+        points[0].childName === tooltipData.childName
+      ) {
+        this.setState({ tooltipData: null });
+      }
+    }, 0);
   }
 
   render() {
-    const { data, activeSector, activeCategory } = this.state;
+    const { data, activeSector, activeCategory, tooltipData } = this.state;
 
     return (
       <div className="content-body">
-        <div className="radar">
+        <div className="radar p-relative">
+          {tooltipData && <Tooltip data={data} tooltipData={tooltipData} />}
           <VictoryChart
             polar
             domain={domain}
@@ -279,6 +453,7 @@ class Overview extends React.Component {
                 responsive={false}
                 onActivated={this.showTooltip}
                 onDeactivated={this.hideTooltip}
+                radius={20}
                 voronoiBlacklist={['lines']}
               />
             }
