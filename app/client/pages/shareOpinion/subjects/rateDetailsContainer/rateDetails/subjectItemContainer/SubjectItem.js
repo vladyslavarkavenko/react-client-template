@@ -1,6 +1,7 @@
 import React from 'react';
 import ListArrowDownSvg from '../../../../../../../../public/assets/svg/arrow-down.svg';
 import ExclamationCircleEmptySvg from '../../../../../../../../public/assets/svg/exclamation-circle.svg';
+import CheckCircleEmptySvg from '../../../../../../../../public/assets/svg/check-circle.svg';
 import TopicItem from './TopicItem';
 import SubjectProgress from './SubjectProgress';
 
@@ -23,8 +24,17 @@ export default class SubjectItem extends React.Component {
 
   render() {
     const { isOpen } = this.state;
-    const { data, handleSelect, selectedTopicsId, expiredTopics, handleModal } = this.props;
+    const {
+      data,
+      handleSelect,
+      selectedTopicsId,
+      actualSubjectsId,
+      expiredTopics,
+      handleModal
+    } = this.props;
     const { id, name, image, topics } = data;
+
+    const isActual = actualSubjectsId.includes(id);
 
     const topicsList = topics.map((topic) => {
       const key = `${id}_${topic.id}`;
@@ -59,8 +69,14 @@ export default class SubjectItem extends React.Component {
               {name}
 
               {expiredTopics && (
-                <span>
+                <span className="red">
                   <ExclamationCircleEmptySvg />
+                </span>
+              )}
+
+              {isActual && (
+                <span className="green">
+                  <CheckCircleEmptySvg />
                 </span>
               )}
             </div>

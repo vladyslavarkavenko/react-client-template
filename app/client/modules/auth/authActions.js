@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import AuthService from '../../services/auth';
 import { setTokens, removeTokens, formatRolesPayload } from '../helpers/helpers';
-import { TOKENS } from '../../utils/constants';
+import { TOKENS, ROLES } from '../../utils/constants';
 import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
 import authSelectors from './authSelectors';
@@ -58,35 +58,31 @@ function* setActiveRoleWorker({ payload }) {
   yield put(setActiveRole.success(data));
 }
 
-function* refreshTokenWorker() {
+export function* refreshTokenWorker() {
+  let tokens;
   const refreshToken = localStorage.getItem(TOKENS.REFRESH);
 
   if (refreshToken) {
     try {
-      const res = yield call(() => AuthService.refresh({ refresh: refreshToken }));
-      setTokens(res.data.tokens);
+      tokens = yield call(() => AuthService.refresh({ refresh: refreshToken }));
+      setTokens(tokens);
     } catch (err) {
       removeTokens();
-      Notification.error(err);
       console.error(err);
     }
   }
+
+  return { tokens };
 }
 
 // Running once at application start
 function* loginByTokenWorker() {
   const accessToken = localStorage.getItem(TOKENS.ACCESS);
   const refreshToken = localStorage.getItem(TOKENS.REFRESH);
-  // proceed login
+
   if (accessToken) {
     yield put(pushLoginByToken.request());
     setTokens({ access: accessToken, refresh: refreshToken });
-
-    // TODO: Invalid token refreshing logic
-    // if (!accessToken && refreshToken) {
-    //   // wait until tokens are refreshing
-    //   yield fork(refreshTokenWorker);
-    // }
 
     try {
       const [user, roles] = yield all([
@@ -94,9 +90,6 @@ function* loginByTokenWorker() {
         call(() => AuthService.getRoles())
       ]);
 
-      // if (role) {
-      //   yield put(setActiveRole.trigger(role));
-      // }
       const {
         companies,
         rolesPermissions,
@@ -153,7 +146,12 @@ function* loginWorker({ payload: { email, password } }) {
       })
     );
 
-    yield put(historyPush(routing().account));
+    console.log(activeRole);
+    if (activeRole === ROLES.CUSTOMER) {
+      yield put(historyPush(routing().shareOpinion));
+    } else {
+      yield put(historyPush(routing().account));
+    }
   } catch (err) {
     Notification.error(err);
     yield put(pushLogin.failure());

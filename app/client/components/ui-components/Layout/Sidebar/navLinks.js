@@ -17,37 +17,37 @@ const navLinks = [
   {
     title: 'Opinions',
     Icon: SvgEyeEmpty,
-    to: '/'
+    to: routing().shareOpinion
   },
   {
     title: 'Matching',
     Icon: SvgMatch,
-    to: '/'
+    to: routing().notFound
   },
   {
     title: 'Benchmarks',
     Icon: SvgAnalyst,
-    to: '/'
+    to: routing().notFound
   },
   {
     title: 'Staff',
     Icon: SvgStaff,
-    to: '/'
+    to: routing().staff
   },
   {
     title: 'My clients',
     Icon: SvgClients,
-    to: '/'
+    to: routing().notFound
   },
   {
     title: 'Community',
     Icon: SvgMegaphone,
-    to: '/'
+    to: routing().notFound
   },
   {
     title: 'Subjects',
     Icon: SvgLightbulb,
-    to: '/'
+    to: routing().notFound
   }
 ];
 

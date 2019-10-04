@@ -1,4 +1,6 @@
 import React from 'react';
+import i18next from 'i18next';
+
 import RateListHeading from './rateList/RateListHeading';
 import RateListItem from './rateList/RateListItem';
 import { RATE_PROFILE_TYPE } from '../../../../utils/constants';
@@ -9,12 +11,12 @@ export default class RateList extends React.Component {
   componentDidMount() {
     const { companies, managers, handleSelect } = this.props;
 
-    if (managers.length) {
-      //select first manager in the list
-      handleSelect({ data: managers[0], type: MANAGER });
-    } else if (companies.length) {
+    if (companies.length) {
       //select first company in the list
       handleSelect({ data: companies[0], type: COMPANY });
+    } else if (managers.length) {
+      //select first manager in the list
+      handleSelect({ data: managers[0], type: MANAGER });
     }
   }
 
@@ -42,9 +44,9 @@ export default class RateList extends React.Component {
 
     return (
       <ul className="rate-list">
-        <RateListHeading>My companies</RateListHeading>
+        <RateListHeading>{i18next.t('shareOpinion.my.companies')}</RateListHeading>
         {companiesList}
-        <RateListHeading>My managers</RateListHeading>
+        <RateListHeading>{i18next.t('shareOpinion.my.managers')}</RateListHeading>
         {managersList}
       </ul>
     );

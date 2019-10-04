@@ -1,4 +1,5 @@
 import { call, put, takeLatest, all, fork, select } from 'redux-saga/effects';
+import i18next from 'i18next';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import ShareOpinionService from '../../services/shareOpinion';
@@ -33,10 +34,20 @@ export const selectExpectAction = createRequestBound('REVIEW_EXPECT_ACTION_SELEC
 export const saveTopicField = createRequestBound('TOPIC_FIELD_SAVE');
 export const pushUpdateTopics = createRequestBound('TOPIC_UPDATE_SEND');
 
-function* fetchOpinionSubjectsWorker({ payload: { data } }) {
+export const calcAverageRate = createRequestBound('AVERAGE_RATE_CALC');
+
+function* fetchOpinionSubjectsWorker() {
   yield put(fetchOpinionSubjects.request());
   try {
-    const subjects = yield call(() => ShareOpinionService.getSubjectsByManager(data.id));
+    const { id, type } = yield select(shareOpinionSelectors.selectedProfile);
+
+    let subjects;
+
+    if (type === RATE_PROFILE_TYPE.MANAGER) {
+      subjects = yield call(() => ShareOpinionService.getSubjectsByManager(id));
+    } else {
+      subjects = yield call(() => ShareOpinionService.getSubjectsByCompany(id));
+    }
 
     yield put(fetchOpinionSubjects.success(subjects));
   } catch (err) {
@@ -134,9 +145,7 @@ function* newTopicWorker() {
       const newSubject = yield call(() =>
         ShareOpinionService.pushCreateSubject({
           name: input.subject,
-          author: selectedProfile.customerId,
-          //TODO: Remove criteria field after backend fix
-          criteria: [1]
+          author: selectedProfile.customerId
         })
       );
 
@@ -183,26 +192,41 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
   yield put(pushRateTopic.request());
   try {
     const currentTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
-    const selectedProfile = yield select(shareOpinionSelectors.selectedProfile);
+    const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
+    let ratedTopic;
 
-    const ratedTopic = yield call(() =>
-      ShareOpinionService.pushRateTopic({
-        topic: currentTopic.id, //topic_id,
-        manager:
-          selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined, // manager or company_id,
-        company:
-          selectedProfile.type === RATE_PROFILE_TYPE.COMPANY ? selectedProfile.id : undefined,
-        customer: selectedProfile.customerId, //customer id
-        satisfaction,
-        importance
-      })
-    );
+    if (type === RATE_PROFILE_TYPE.MANAGER) {
+      ratedTopic = yield call(() =>
+        ShareOpinionService.pushRateTopicByManager({
+          manager: id,
+          topic: currentTopic.id, //topic_id,
+          customer: customerId, //customer id
+          satisfaction,
+          importance
+        })
+      );
+    } else {
+      ratedTopic = yield call(() =>
+        ShareOpinionService.pushRateTopicByCompany({
+          company: id,
+          topic: currentTopic.id,
+          customer: customerId,
+          satisfaction,
+          importance
+        })
+      );
+    }
 
     yield put(pushRateTopic.success(ratedTopic));
 
     const nextTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
 
     if (!nextTopic) {
+      const topics = yield select(shareOpinionSelectors.selectedTopics);
+      const rate =
+        Math.round(10 * (topics.reduce((acc, topic) => acc + topic.score, 0) / topics.length)) / 10;
+
+      yield put(calcAverageRate.trigger(rate));
       yield put(historyPush({ to: routing().shareOpinionMessage, method: 'replace' }));
     }
   } catch (err) {
@@ -215,31 +239,54 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
 function* fetchTopicOpinionsWorker() {
   yield put(fetchTopicOpinions.request());
   try {
-    const manager = yield select(shareOpinionSelectors.selectedProfile);
+    const { id, type } = yield select(shareOpinionSelectors.selectedProfile);
     const topic = yield select(shareOpinionSelectors.nextUnratedTopic);
+    let opinions;
 
-    const opinions = yield call(() =>
-      ShareOpinionService.getTopicOpinions({ id: manager.id, topic: topic.id })
-    );
+    if (topic._isCreated) {
+      yield put(fetchTopicOpinions.success());
+      return;
+    }
+
+    if (type === RATE_PROFILE_TYPE.MANAGER) {
+      opinions = yield call(() =>
+        ShareOpinionService.getTopicOpinionsByManager({ id, topic: topic.id })
+      );
+    } else {
+      opinions = yield call(() =>
+        ShareOpinionService.getTopicOpinionsByCompany({ id, topic: topic.id })
+      );
+    }
 
     yield put(fetchTopicOpinions.success(opinions));
   } catch (err) {
     console.error(err);
+    yield put(fetchTopicOpinions.failure());
   }
 }
 
-//
-
 function* patchTopicFieldsWorker({ fields, file, isChecked }) {
   try {
-    const { id } = yield call(() => ShareOpinionService.pushRateTopic(fields));
+    let opinion;
+
+    if (fields.manager) {
+      opinion = yield call(() => ShareOpinionService.pushRateTopicByManager(fields));
+    } else {
+      opinion = yield call(() => ShareOpinionService.pushRateTopicByCompany(fields));
+    }
+
+    const { id } = opinion;
 
     if (file && isChecked) {
       const data = new window.FormData();
 
       data.append('file', file.file, file.fileName);
 
-      yield call(() => ShareOpinionService.pushFileToTopic({ id, data }));
+      if (fields.manager) {
+        yield call(() => ShareOpinionService.pushFileToTopicByManager({ id, data }));
+      } else {
+        yield call(() => ShareOpinionService.pushFileToTopicByCompany({ id, data }));
+      }
     }
   } catch (err) {
     console.error(err);
@@ -249,7 +296,7 @@ function* patchTopicFieldsWorker({ fields, file, isChecked }) {
 function* pushUpdateTopicsWorker({ payload }) {
   yield put(pushUpdateTopics.request());
   try {
-    const selectedProfile = yield select(shareOpinionSelectors.selectedProfile);
+    const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
     const selectedTopics = yield select(shareOpinionSelectors.selectedTopics);
     const selectedOptions = yield select(shareOpinionSelectors.selectedOptions);
 
@@ -260,11 +307,9 @@ function* pushUpdateTopicsWorker({ payload }) {
 
       const fields = {
         topic: topic.id,
-        manager:
-          selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined, // manager or company_id,
-        company:
-          selectedProfile.type === RATE_PROFILE_TYPE.COMPANY ? selectedProfile.id : undefined,
-        customer: selectedProfile.customerId, //customer id
+        manager: type === RATE_PROFILE_TYPE.MANAGER ? id : undefined, // manager or company_id,
+        company: type === RATE_PROFILE_TYPE.COMPANY ? id : undefined,
+        customer: customerId, //customer id
         comment: withComments && isChecked ? topic.comment : undefined,
         expectActionProvider: selectedOptions.isExpectingAction,
         isRecommended: selectedOptions.isRecommended,
@@ -280,7 +325,7 @@ function* pushUpdateTopicsWorker({ payload }) {
 
     yield put(pushUpdateTopics.success());
     yield put(historyPush({ method: 'replace', to: routing().shareOpinion }));
-    Notification.success('Thank you for your feedback');
+    Notification.success(i18next.t('shareOpinion.notification.thanksForFeedback'));
   } catch (err) {
     console.error(err);
     Notification.error(err);

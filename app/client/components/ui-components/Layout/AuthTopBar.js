@@ -34,16 +34,16 @@ class AuthTopBar extends React.Component {
 
   render() {
     return (
-      <div className="nav-bar">
-        <Logo />
+      <header className="header-bar auth">
+        <Logo className="header-bar__logo" />
         <Select
           options={options}
           onChange={this.selectLanguage}
           defaultValue={options.find(({ value }) => value === DEFAULT_LANGUAGE)}
-          className="lang-switcher"
-          classNamePrefix="lang-switcher"
+          className="header-bar__lang"
+          classNamePrefix="header-bar__lang"
         />
-      </div>
+      </header>
     );
   }
 }

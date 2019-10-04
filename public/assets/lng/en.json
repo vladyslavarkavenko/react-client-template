@@ -73,6 +73,10 @@
         },
         "topic": {
           "exist": "The topic with this name already exist"
+        },
+        "file": {
+          "invalid": "This type of file is not allowed",
+          "size": "File {{name}} is bigger than {{maxSize}}"
         }
       },
       "notification": {
@@ -124,17 +128,74 @@
         "title": "Log in cTRU",
         "email": "Email address",
         "password": "Password",
+        "chooseRole": "Choose your role",
         "buttons": {
           "login": "Log in"
         },
         "forgotPassword": "Forgot password?"
       },
       "shareOpinion": {
+        "title": "Share your opinion",
+        "profile": "View profile",
+        "satisfaction": "{{percent}}% clients satisfied {{with}}",
+        "my": {
+          "companies": "My companies",
+          "managers": "My managers"
+        },
         "opinions": "opinions",
         "i": "Importance",
         "s": "Satisfaction",
         "rate": "Your rate",
-        "next": "next"
+        "opinionAbout": "Opinion about",
+        "addComment": "Add Comment",
+        "criteria": "Select criteria that connect to this situation",
+        "yourComment": "Your comment",
+        "commentPlaceholder": "Please, describe your situation, action.\nWhat were the consequences?\nShare all your opinion about the situation.",
+
+        "whoCanSee": {
+          "title": "Who can see the comment?",
+          "all": "All",
+          "provider": "Provider",
+          "ctru": "Only cTRU"
+        },
+        "expectAction": "Do you expect for actions from the service provider?",
+        "rate": {
+          "question": "Are you going to recommend {{title}} to friends?",
+          "recommend" : "You are going to recommend {{title}} to friends",
+          "notSure": "You are not sure about {{title}}",
+          "notRecommend": "You are not going to recommend {{title}} to friends"
+        },
+        "notification": {
+          "thanksForFeedback": "Thank you for your feedback"
+        },
+        "alert": {
+          "impact": "Some of your feedbacks has lost its impact",
+          "askLater": "We will ask you later"
+        },
+        "modal": {
+          "title": "Add new topic",
+          "subtitle": "Describe the need on which you want to Share your opinion",
+          "selectedSubject" : "Selected Subject",
+          "formulateSubject" : "Formulate Subject",
+          "formulateTopic": "Formulate Topic"
+        },
+        "buttons": {
+          "updateNow": "Update now",
+          "addNewSubject": "+ Add new",
+          "shareOpinion" : "Share opinion on {{count}} topic",
+          "shareOpinion_plural" : "Share opinion on {{count}} topics",
+          "add": "Add",
+          "cancel": "Cancel",
+          "next": "Next",
+          "yes": "Yes",
+          "no": "No",
+          "notSure": "Not sure",
+          "save": "Save",
+          "saveAndAdd" : "Save and add comment",
+          "askLater": "Ask me later",
+          "sending": "Sending",
+          "send": "Send comment"
+        }
       }
     }
   }

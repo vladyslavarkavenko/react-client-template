@@ -21,7 +21,9 @@ export default (/* params */) => ({
 
   shareOpinion: '/account/share-opinion',
   shareOpinionChart: '/account/share-opinion/rate',
-  shareOpinionMessage: '/account/share-opinion/message'
+  shareOpinionMessage: '/account/share-opinion/message',
+
+  staff: '/manage/staff'
 
   // route with params example:
   // changePassword: `/auth/reset/${params ? params : ':token'}`,

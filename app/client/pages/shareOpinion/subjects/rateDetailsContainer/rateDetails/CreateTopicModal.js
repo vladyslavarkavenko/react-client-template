@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import i18next from 'i18next';
+
 import ModalWrapper from '../../../../../components/ui-components/Modal/ModalWrapper';
 import ModalWhiteButton from '../../../../../components/ui-components/Modal/ModalWhiteButton';
 import ModalThemeButton from '../../../../../components/ui-components/Modal/ModalThemeButton';
@@ -29,14 +31,18 @@ function CreateTopicModal({
 
   return (
     <ModalWrapper
-      title="Add new topic"
-      subtitle="Describe the need on which you want to Share your opinion"
+      title={i18next.t('shareOpinion.modal.title')}
+      subtitle={i18next.t('shareOpinion.modal.subtitle')}
       handleModal={() => handleModal()}
     >
       <div className="m-create-subject">
         <div className="input-group">
           <TextInput
-            labelText={isSubjectSelected ? 'Selected subject' : 'Formulate Subject'}
+            labelText={
+              isSubjectSelected
+                ? i18next.t('shareOpinion.modal.selectedSubject')
+                : i18next.t('shareOpinion.modal.formulateSubject')
+            }
             name="subject"
             onChange={({ currentTarget }) => save({ type: 'subject', value: currentTarget.value })}
             value={input.subject}
@@ -63,10 +69,10 @@ function CreateTopicModal({
       </div>
       <div className="m-btn-list">
         <ModalWhiteButton onClick={() => handleModal()} disabled={isRequest}>
-          Cancel
+          {i18next.t('shareOpinion.buttons.cancel')}
         </ModalWhiteButton>
         <ModalThemeButton onClick={() => createNewTopic()} disabled={isRequest}>
-          Add
+          {i18next.t('shareOpinion.buttons.add')}
         </ModalThemeButton>
       </div>
     </ModalWrapper>

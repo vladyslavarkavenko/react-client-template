@@ -11,7 +11,16 @@ const topicOpinions = handleActions(
     [actions.fetchTopicOpinions.SUCCESS](state, { payload }) {
       return payload;
     },
+    [actions.fetchTopicOpinions.FAILURE]() {
+      return [];
+    },
     [actions.pushRateTopic.SUCCESS]() {
+      return [];
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return [];
+    },
+    [actions.selectOpinionProfile.TRIGGER]() {
       return [];
     }
   },
@@ -25,7 +34,8 @@ const selectedProfile = handleActions(
 
       const { id, avatar, customerId } = data;
 
-      const title = type === RATE_PROFILE_TYPE.COMPANY ? data.name : data.firstName;
+      const title =
+        type === RATE_PROFILE_TYPE.COMPANY ? data.name : `${data.firstName} ${data.lastName}`;
 
       return { type, id, avatar, title, customerId };
     },
@@ -55,7 +65,8 @@ const selectedTopics = handleActions(
         id: payload.id,
         dateLastOpinion: null,
         satisfaction: null,
-        importance: null
+        importance: null,
+        _isCreated: true
       };
 
       return [newTopic, ...state];
@@ -67,6 +78,7 @@ const selectedTopics = handleActions(
 
       cloned[currentTopicIndex] = {
         ...cloned[currentTopicIndex],
+        score: payload.opinionCtruScore,
         satisfaction: payload.satisfaction,
         importance: payload.importance,
         dateLastOpinion: payload.dateLastOpinion,
@@ -101,6 +113,39 @@ const selectedTopics = handleActions(
     },
     [actions.selectOpinionExpired.SUCCESS](state, { payload }) {
       return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return [];
+    },
+    [actions.selectOpinionProfile.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const actualSubjects = handleActions(
+  {
+    [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
+      const actual = [];
+      const now = new Date();
+
+      payload.forEach((subject) => {
+        // for every topic check if its expired
+        const haveExpired = subject.topics.some((topic) => {
+          if (!topic.dateLastOpinion) {
+            return true;
+          }
+
+          return differenceInMonths(now, new Date(topic.dateLastOpinion.split('-'))) >= 6;
+        });
+
+        if (!haveExpired) {
+          actual.push(subject.id);
+        }
+      });
+
+      return actual;
     },
     [actions.pushUpdateTopics.SUCCESS]() {
       return [];
@@ -284,6 +329,17 @@ const isRecommended = handleActions(
     [actions.selectReviewRecommend.TRIGGER](state, { payload }) {
       return payload;
     },
+    [actions.calcAverageRate.TRIGGER](state, { payload }) {
+      if (payload < 6) {
+        return 3; // not recommend
+      }
+
+      if (payload >= 6 && payload < 8) {
+        return 2; // not sure
+      }
+
+      return 1; // will recommend
+    },
     [actions.pushUpdateTopics.SUCCESS]() {
       return 1;
     }
@@ -317,6 +373,18 @@ const isExpectingAction = handleActions(
 
 const finishStatus = makeStatusReducer(actions.pushUpdateTopics);
 
+const averageRate = handleActions(
+  {
+    [actions.calcAverageRate.TRIGGER](state, { payload }) {
+      return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return 0;
+    }
+  },
+  0
+);
+
 const subjects = combineReducers({
   status: subjectsStatus,
   data: subjectsData
@@ -341,10 +409,12 @@ const newTopic = combineReducers({
 
 const shareOpinion = combineReducers({
   topicOpinions,
+  averageRate,
   selectedProfile,
   selectedTopics,
   selectedOptions,
   expiredOpinions,
+  actualSubjects,
   subjects,
   newTopic
 });

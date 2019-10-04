@@ -140,7 +140,7 @@ class ShareOpinionChart extends React.Component {
                 <h1 className="uppercase">{i18next.t('shareOpinion.rate')}</h1>
                 <ReactSVG className="emoji" src={`/assets/svg/emoji/${s}_${i}.svg`} />
                 <h3>{rateText}</h3>
-                <button onClick={this.onNextClick}>{i18next.t('shareOpinion.next')}</button>
+                <button onClick={this.onNextClick}>{i18next.t('shareOpinion.buttons.next')}</button>
               </div>
 
               <VictoryChart

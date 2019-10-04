@@ -28,11 +28,16 @@ module.exports = {
     MANAGER: 'MANAGER',
     COMPANY: 'COMPANY'
   },
+  STAFF_TABLE_TYPE: {
+    INVITATION: 'INVITATION',
+    PENDING: 'PENDING',
+    ACTIVE: 'ACTIVE'
+  },
   FILE_SIZES: {
     DEFAULT: 7340032 // 7mb
   },
   FILE_MIMES: {
-    IMAGES: ['image/jpeg', 'image/png', 'image/png', 'image/webp'],
+    IMAGES: ['image/jpeg', 'image/png', 'image/webp'],
     DOCUMENTS: [
       'application/pdf',
       'text/csv',

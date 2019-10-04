@@ -25,6 +25,8 @@ export default {
   expiredOpinions: getExpiredOpinions,
   expiredOpinionsById: getExpiredOpinionsBySubject,
 
+  actualSubjectsId: (state) => state.shareOpinion.actualSubjects,
+
   subjectsStatus: (state) => state.shareOpinion.subjects.status,
   subjectsData: getSubjectsData,
 
@@ -37,6 +39,8 @@ export default {
   newTopicHints: getNewTopicHints,
 
   nextUnratedTopic: getUnratedTopic,
+
+  averageRate: (state) => state.shareOpinion.averageRate,
 
   finishStatus: (state) => state.shareOpinion.selectedOptions.status
 };

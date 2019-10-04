@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import i18next from 'i18next';
+
 import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
 import routing from '../../../../../utils/routing';
 import ButtonFullBlock from '../../../../../components/ui-components/Form/ButtonFullBlock';
@@ -12,7 +14,7 @@ function ShareOpinionBlock({ selectedTopicsId, history }) {
     return null;
   }
 
-  const title = `Share opinion on ${count} ${count > 1 ? 'topics' : 'topic'}`;
+  const title = i18next.t('shareOpinion.buttons.shareOpinion', { count });
 
   return (
     <ButtonFullBlock title={title} handleClick={() => history.push(routing().shareOpinionChart)} />

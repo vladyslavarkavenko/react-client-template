@@ -8,7 +8,7 @@ import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelect
 function Reviews({ withComments }) {
   return (
     <section className="rate-opinion content">
-      <OpinionAboutBlock />
+      <OpinionAboutBlock withScore />
       <RecommendBlock withComments={withComments} />
       {withComments && <RateForm />}
     </section>
