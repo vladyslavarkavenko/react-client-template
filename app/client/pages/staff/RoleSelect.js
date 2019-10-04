@@ -39,15 +39,20 @@ export default class RoleSelect extends React.Component {
   }
 
   render() {
-    const { roles } = this.props;
+    const { roles, readOnly } = this.props;
 
     const values = this.getOptions(roles);
 
     return (
       <Select
+        placeholder="Select role..."
         options={options}
         value={values}
         onChange={this.onChange}
+        isDisabled={readOnly}
+        // components={{
+        //   Control: () => <div />
+        // }}
         isMulti
         classNamePrefix="roles-select"
       />

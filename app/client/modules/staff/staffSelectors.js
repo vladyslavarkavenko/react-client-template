@@ -2,6 +2,11 @@ const tableStatus = (state) => state.staff.status;
 
 const invitationsStatus = (state) => state.staff.invitations.status;
 const invitationsData = (state) => state.staff.invitations.data;
+const invitationsErrors = (state) => state.staff.invitations.errors;
+
+const pendingStatus = (state) => state.staff.pending.status;
+const pendingData = (state) => state.staff.pending.data;
+const pendingErrors = (state) => state.staff.pending.errors;
 
 const subjectList = (state) => state.staff.subjectList;
 const getTopicsByRowId = (state, id) => {
@@ -18,6 +23,11 @@ export default {
 
   invitationsStatus,
   invitationsData,
+  invitationsErrors,
+
+  pendingStatus,
+  pendingData,
+  pendingErrors,
 
   subjectList,
 

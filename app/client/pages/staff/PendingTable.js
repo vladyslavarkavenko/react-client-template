@@ -11,7 +11,7 @@ import staffSelectors from '../../modules/staff/staffSelectors';
 import Button from '../../components/ui-components/Form/Button';
 
 /* eslint-disable */
-class InvitationTable extends React.Component {
+class PendingTable extends React.Component {
   constructor(props) {
     super(props);
 
@@ -32,13 +32,13 @@ class InvitationTable extends React.Component {
   }
 
   render() {
-    const { list, table, changeTableRole, pushSendInvitations, status, errors } = this.props;
+    const { list, table, changeTableRole, status, errors } = this.props;
 
     const isRequest = status === 'request';
 
     return (
       <div className="table-wrapper">
-        <p className="table-title">Invitations</p>
+        <p className="table-title">Pending</p>
 
         <Table
           table={table}
@@ -47,11 +47,12 @@ class InvitationTable extends React.Component {
           isRequest={isRequest}
           handleEdit={this.handleEdit}
           handleChangeRole={changeTableRole}
+          readOnly
         />
 
         <div className="table-controls">
-          <Button className="table-btn" onClick={() => pushSendInvitations()} isLoading={isRequest}>
-            Send Invite
+          <Button className="table-btn" isLoading={isRequest}>
+            Resend Invite
           </Button>
         </div>
       </div>
@@ -60,10 +61,10 @@ class InvitationTable extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  table: STAFF_TABLE_TYPE.INVITATION,
-  status: staffSelectors.invitationsStatus(state),
-  list: staffSelectors.invitationsData(state),
-  errors: staffSelectors.invitationsErrors(state)
+  table: STAFF_TABLE_TYPE.PENDING,
+  status: staffSelectors.pendingStatus(state),
+  list: staffSelectors.pendingData(state),
+  errors: staffSelectors.pendingErrors(state)
 });
 
 const mapDispatchToProps = {
@@ -75,4 +76,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(InvitationTable);
+)(PendingTable);

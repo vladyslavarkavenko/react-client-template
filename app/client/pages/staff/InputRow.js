@@ -1,14 +1,32 @@
 import React from 'react';
 import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
+import ErrorSvg from '../../../../public/assets/svg/exclamation-circle.svg';
 import RoleSelect from './RoleSelect';
 import TopicSelect from './TopicSelect';
+import Notification from '../../utils/notifications';
 
-export default function InputRow({ table, data, handleEdit, handleChangeRole }) {
-  const { id, firstName, lastName, email, isChecked, roles } = data;
+const handleNotify = (field, errors) => Notification.info(errors[field]);
+
+const ErrorCircle = ({ field, errors }) => {
+  if (errors[field]) {
+    return (
+      <span className="error-notify" onClick={() => handleNotify(field, errors)}>
+        <ErrorSvg />
+      </span>
+    );
+  }
+
+  return null;
+};
+
+export default function InputRow({ table, errors = {}, data, handleEdit, handleChangeRole }) {
+  const { id, firstName, lastName, email, isChecked, roles, status } = data;
+
+  const withErrors = Object.keys(errors).length;
 
   return (
-    <li className="row">
-      <div className="item">
+    <li className={`row ${withErrors ? 'withErrors' : ''}`}>
+      <div className={`item ${errors.firstName ? 'error' : ''}`}>
         <CheckboxInput
           labelText=" "
           name={id}
@@ -18,7 +36,7 @@ export default function InputRow({ table, data, handleEdit, handleChangeRole }) 
           data-field="isChecked"
         />
       </div>
-      <div className="item">
+      <div className={`item ${errors.firstName ? 'error' : ''}`}>
         <input
           type="text"
           defaultValue={firstName}
@@ -26,8 +44,9 @@ export default function InputRow({ table, data, handleEdit, handleChangeRole }) 
           data-field="firstName"
           onBlur={handleEdit}
         />
+        <ErrorCircle field="firstName" errors={errors} />
       </div>
-      <div className="item">
+      <div className={`item ${errors.lastName ? 'error' : ''}`}>
         <input
           type="text"
           defaultValue={lastName}
@@ -35,8 +54,9 @@ export default function InputRow({ table, data, handleEdit, handleChangeRole }) 
           data-field="lastName"
           onBlur={handleEdit}
         />
+        <ErrorCircle field="lastName" errors={errors} />
       </div>
-      <div className="item">
+      <div className={`item ${errors.email ? 'error' : ''}`}>
         <input
           type="text"
           defaultValue={email}
@@ -44,16 +64,17 @@ export default function InputRow({ table, data, handleEdit, handleChangeRole }) 
           data-field="email"
           onBlur={handleEdit}
         />
+        <ErrorCircle field="email" errors={errors} />
       </div>
-      <div className="item drop">
+      <div className={`item drop ${errors.role ? 'error' : ''}`}>
         <RoleSelect handleChange={handleChangeRole} rowId={id} table={table} roles={roles} />
+        <ErrorCircle field="role" errors={errors} />
       </div>
       <div className="item drop">
         <TopicSelect rowId={id} table={table} />
       </div>
-      <div className="item">
-        <input type="text" defaultValue="-" />
-      </div>
+
+      <div className="item">{status || '-'}</div>
     </li>
   );
 }

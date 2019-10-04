@@ -1,15 +1,24 @@
 import React from 'react';
 import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
-import Row from './Row';
+import ReadRow from './ReadRow';
 import InputRow from './InputRow';
 
-export default function Table({ list, handleEdit, handleChangeRole, readOnly, table }) {
+export default function Table({
+  list,
+  errors,
+  handleEdit,
+  handleChangeRole,
+  readOnly,
+  table
+  // isRequest
+}) {
   const rows = list.map((item) =>
     readOnly ? (
-      <Row />
+      <ReadRow data={item} />
     ) : (
       <InputRow
         data={item}
+        errors={errors[item.id]}
         key={item.id}
         table={table}
         handleEdit={handleEdit}
@@ -29,13 +38,6 @@ export default function Table({ list, handleEdit, handleChangeRole, readOnly, ta
         <li className="item">Email</li>
         <li className="item">Roles</li>
         <li className="item">Topics</li>
-
-        {/*<li className="item nested">*/}
-        {/*  <div className="item main">Access Level</div>*/}
-        {/*  <div className="item">Object</div>*/}
-        {/*  <div className="item">Manager</div>*/}
-        {/*  <div className="item">Admin</div>*/}
-        {/*</li>*/}
         <li className="item">Status</li>
       </ul>
       <ul className="body">{rows}</ul>

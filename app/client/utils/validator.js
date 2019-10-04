@@ -286,6 +286,21 @@ function validateUserSubjectOrTopic(data, messages = {}) {
   return errors;
 }
 
+function validateSelectedRoles(data, messages = {}) {
+  const { roles, isMultiple } = data;
+  const { required = 'Select role', length = 'Multiple roles not allowed' } = messages;
+
+  const errors = {};
+
+  if (!roles.length) {
+    errors.role = required;
+  } else if (!isMultiple && roles.length > 1) {
+    errors.role = length;
+  }
+
+  return errors;
+}
+
 // External validators
 export function validateUser(data) {
   const { email, phone, about, firstName, lastName, title, location } = data;
@@ -388,6 +403,28 @@ export function validateCreateNewTopic(data) {
       title: topic
     })
   };
+
+  return {
+    errors,
+    isValid: !Object.keys(errors).length
+  };
+}
+
+export function validateInviteStaffRow(rows) {
+  const errors = {};
+
+  rows.forEach(({ email, firstName, lastName, roles, id }) => {
+    const rowErrors = {
+      ...validateEmail(email),
+      ...validateUserFirstName(firstName),
+      ...validateUserLastName(lastName),
+      ...validateSelectedRoles({ roles, isMultiple: true })
+    };
+
+    if (Object.keys(rowErrors).length) {
+      errors[id] = rowErrors;
+    }
+  });
 
   return {
     errors,
