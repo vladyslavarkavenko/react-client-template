@@ -64,8 +64,16 @@ class SignUp extends React.Component {
       this.setState({ errors });
     }
 
-    const { firstName, lastName, email, phone, password, token } = this.state;
-    const input = { firstName, lastName, phone, email, password, token };
+    const { firstName, lastName, email, phone, password, token, policy } = this.state;
+    const input = {
+      firstName,
+      lastName,
+      phone,
+      email,
+      password,
+      token,
+      processPersonalData: policy
+    };
 
     return pushSignUp({ input, history });
   }
