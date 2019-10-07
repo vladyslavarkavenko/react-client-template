@@ -59,20 +59,20 @@ function* setActiveRoleWorker({ payload }) {
 }
 
 export function* refreshTokenWorker() {
-  let tokens;
-  const refreshToken = localStorage.getItem(TOKENS.REFRESH);
+  try {
+    let tokens;
+    const refreshToken = localStorage.getItem(TOKENS.REFRESH);
 
-  if (refreshToken) {
-    try {
+    if (refreshToken) {
       tokens = yield call(() => AuthService.refresh({ refresh: refreshToken }));
       setTokens(tokens);
-    } catch (err) {
-      removeTokens();
-      console.error(err);
     }
-  }
 
-  return { tokens };
+    return tokens;
+  } catch (err) {
+    removeTokens();
+    throw err;
+  }
 }
 
 // Running once at application start
@@ -85,10 +85,7 @@ function* loginByTokenWorker() {
     setTokens({ access: accessToken, refresh: refreshToken });
 
     try {
-      const [user, roles] = yield all([
-        call(() => AuthService.getUser()),
-        call(() => AuthService.getRoles())
-      ]);
+      const [user, roles] = yield all([call(AuthService.getUser), call(AuthService.getRoles)]);
 
       const {
         companies,
@@ -140,7 +137,6 @@ function* loginWorker({ payload: { email, password } }) {
       })
     );
 
-    console.log(activeRole);
     if (activeRole === ROLES.CUSTOMER) {
       yield put(historyPush(routing().shareOpinion));
     } else {

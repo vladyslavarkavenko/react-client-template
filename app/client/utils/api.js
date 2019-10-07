@@ -47,18 +47,21 @@ export function addResponseIntercept(store) {
         response: { status }
       } = err;
 
-      if (status === 401 && !originalRequest._retry) {
+      if (
+        status === 401 &&
+        !originalRequest.url.includes('/core/token/refresh/') &&
+        !originalRequest._retry
+      ) {
         originalRequest._retry = true;
-
         return store
           .runSaga(refreshTokenWorker)
           .toPromise()
-          .then(({ tokens }) => {
+          .then((tokens) => {
             originalRequest.headers.Authorization = `Bearer ${tokens.access}`;
             return instance(originalRequest);
           })
           .catch((sagaErr) => {
-            console.error(sagaErr);
+            Promise.reject(sagaErr);
           });
       }
 
