@@ -145,7 +145,7 @@ class TopicSelect extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  selected: staffSelectors.getTopicsByRowId(state, props.rowId),
+  selected: staffSelectors.getTopicsByRowId(state, { id: props.rowId, table: props.table }),
   subjects: staffSelectors.subjectList(state)
 });
 

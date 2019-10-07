@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import { differenceInMonths } from 'date-fns';
 import getId from 'uuid/v4';
 
-import { ROLES, STAFF_TABLE_TYPE } from '../../utils/constants';
+import { ROLES, STAFF_TABLE_TYPE, STAFF_TABLE_STATUS } from '../../utils/constants';
 import { makeStatusReducer } from '../../utils/reduxHelpers';
 import * as actions from './staffActions';
 
@@ -21,7 +21,7 @@ const userScheme = {
 
 const minRowCount = 5;
 
-const normalizeUserData = (user, isActive) => {
+const normalizeUserData = (user, forceStatus) => {
   const roles = [];
   let status = null;
 
@@ -39,16 +39,16 @@ const normalizeUserData = (user, isActive) => {
 
   if (user.expiredIn) {
     differenceInMonths(new Date(), user.expiredIn) > 6
-      ? (status = 'Expired')
-      : (status = 'Pending');
-  }
-
-  if (isActive) {
-    status = 'Active';
+      ? (status = STAFF_TABLE_STATUS.EXPIRED)
+      : (status = STAFF_TABLE_STATUS.PENDING);
   }
 
   if (!roles.length) {
-    status = 'Blocked';
+    status = STAFF_TABLE_STATUS.BLOCKED;
+  }
+
+  if (forceStatus) {
+    status = forceStatus;
   }
 
   return {
@@ -69,15 +69,11 @@ const invitationsInitial = Array(minRowCount)
 
 const invitationsData = handleActions(
   {
-    [actions.fetchStaffTables.SUCCESS](state) {
-      return state;
-    },
     [actions.saveTableField.TRIGGER](state, { payload }) {
       const { table, field, id, value } = payload;
 
-      if (table === STAFF_TABLE_TYPE.INVITATION) {
+      if (table === STAFF_TABLE_TYPE.INVITATIONS) {
         const row = state.findIndex((item) => item.id === id);
-        console.log(row, payload);
 
         if (row !== undefined) {
           const cloned = [...state];
@@ -93,7 +89,7 @@ const invitationsData = handleActions(
     [actions.changeTableRole.TRIGGER](state, { payload }) {
       const { table, id, values } = payload;
 
-      if (table === STAFF_TABLE_TYPE.INVITATION) {
+      if (table === STAFF_TABLE_TYPE.INVITATIONS) {
         const row = state.findIndex((item) => item.id === id);
 
         if (row !== -1) {
@@ -109,7 +105,7 @@ const invitationsData = handleActions(
     [actions.changeTableTopic.TRIGGER](state, { payload }) {
       const { table, id, values, action } = payload;
 
-      if (table === STAFF_TABLE_TYPE.INVITATION) {
+      if (table === STAFF_TABLE_TYPE.INVITATIONS) {
         const row = state.findIndex((item) => item.id === id);
 
         if (row !== -1) {
@@ -149,6 +145,19 @@ const invitationsData = handleActions(
       console.log(emptyRows);
 
       return [...clearedState, ...emptyRows];
+    },
+    [actions.selectAllRows.TRIGGER](state, { payload }) {
+      const { table, checked } = payload;
+
+      if (table === STAFF_TABLE_TYPE.INVITATIONS) {
+        if (checked) {
+          return state.map((row) => ({ ...row, isChecked: true }));
+        }
+
+        return state.map((row) => ({ ...row, isChecked: false }));
+      }
+
+      return state;
     }
   },
   invitationsInitial
@@ -183,7 +192,9 @@ const pendingData = handleActions(
       return payload.pending.map((user) => normalizeUserData(user));
     },
     [actions.pushSendInvitations.SUCCESS](state, { payload }) {
-      const createdUsers = payload.map((item) => ({ ...item.user, topics: item.topics }));
+      const createdUsers = payload.map((item) =>
+        normalizeUserData({ ...item.user, topics: item.topics }, STAFF_TABLE_STATUS.PENDING)
+      );
 
       return [...createdUsers, ...state];
     }

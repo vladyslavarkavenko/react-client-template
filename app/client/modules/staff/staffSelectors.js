@@ -1,16 +1,12 @@
 const tableStatus = (state) => state.staff.status;
 
-const invitationsStatus = (state) => state.staff.invitations.status;
-const invitationsData = (state) => state.staff.invitations.data;
-const invitationsErrors = (state) => state.staff.invitations.errors;
-
-const pendingStatus = (state) => state.staff.pending.status;
-const pendingData = (state) => state.staff.pending.data;
-const pendingErrors = (state) => state.staff.pending.errors;
+const getTableData = (state, table) => state.staff[table.toLowerCase()].data;
+const getTableStatus = (state, table) => state.staff[table.toLowerCase()].status;
+const getTableErrors = (state, table) => state.staff[table.toLowerCase()].errors;
 
 const subjectList = (state) => state.staff.subjectList;
-const getTopicsByRowId = (state, id) => {
-  const row = invitationsData(state).find((item) => item.id === id);
+const getTopicsByRowId = (state, { id, table }) => {
+  const row = getTableData(state, table).find((item) => item.id === id);
 
   return row !== -1 ? row.topics : [];
 };
@@ -21,13 +17,9 @@ const getOnlyCheckedRows = (state, table) =>
 export default {
   tableStatus,
 
-  invitationsStatus,
-  invitationsData,
-  invitationsErrors,
-
-  pendingStatus,
-  pendingData,
-  pendingErrors,
+  getTableData,
+  getTableStatus,
+  getTableErrors,
 
   subjectList,
 

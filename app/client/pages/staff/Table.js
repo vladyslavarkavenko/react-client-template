@@ -6,6 +6,7 @@ import InputRow from './InputRow';
 export default function Table({
   list,
   errors,
+  handleSelectAll,
   handleEdit,
   handleChangeRole,
   readOnly,
@@ -30,14 +31,14 @@ export default function Table({
   return (
     <div className="table">
       <ul className="head">
-        <li className="item">
-          <CheckboxInput labelText=" " name="all" />
+        <li className="item item-check">
+          <CheckboxInput withFill onlyCheck name={`${table}_all`} onChange={handleSelectAll} />
         </li>
         <li className="item">Name</li>
         <li className="item">Surname</li>
         <li className="item">Email</li>
-        <li className="item">Roles</li>
-        <li className="item">Topics</li>
+        <li className="item item-x2">Roles</li>
+        <li className="item item-x3">Topics</li>
         <li className="item">Status</li>
       </ul>
       <ul className="body">{rows}</ul>

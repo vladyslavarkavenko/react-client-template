@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
 import ErrorSvg from '../../../../public/assets/svg/exclamation-circle.svg';
@@ -26,10 +27,11 @@ export default function InputRow({ table, errors = {}, data, handleEdit, handleC
 
   return (
     <li className={`row ${withErrors ? 'withErrors' : ''}`}>
-      <div className={`item ${errors.firstName ? 'error' : ''}`}>
+      <div className={`item item-check ${errors.firstName ? 'error' : ''}`}>
         <CheckboxInput
-          labelText=" "
           name={id}
+          withFill
+          onlyCheck
           onChange={handleEdit}
           data-id={id}
           checked={isChecked}
@@ -66,11 +68,11 @@ export default function InputRow({ table, errors = {}, data, handleEdit, handleC
         />
         <ErrorCircle field="email" errors={errors} />
       </div>
-      <div className={`item drop ${errors.role ? 'error' : ''}`}>
+      <div className={`item item-x2 drop ${errors.role ? 'error' : ''}`}>
         <RoleSelect handleChange={handleChangeRole} rowId={id} table={table} roles={roles} />
         <ErrorCircle field="role" errors={errors} />
       </div>
-      <div className="item drop">
+      <div className="item item-x3 drop">
         <TopicSelect rowId={id} table={table} />
       </div>
 

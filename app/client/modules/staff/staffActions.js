@@ -21,6 +21,7 @@ export const fetchPendingTable = createRequestBound('PENDING_FETCH');
 export const pushSendInvitations = createRequestBound('INVITATIONS_SEND');
 
 export const saveTableField = createOnlyTriggerBound('FIELD_SAVE');
+export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
 export const changeTableRole = createOnlyTriggerBound('ROLE_CHANGE');
 export const changeTableTopic = createOnlyTriggerBound('TOPIC_CHANGE');
 
@@ -50,11 +51,6 @@ function* createStaffTask({ fields, topics, tempId }) {
 
     console.log(user);
 
-    //TODO: Catch error in forked saga
-    if (!user.id) {
-      return { _isFail: true, _message: user };
-    }
-
     if (topics.length) {
       createdTopics = yield call(StaffService.setTopicsPermission, {
         staff: user.id,
@@ -64,9 +60,9 @@ function* createStaffTask({ fields, topics, tempId }) {
 
     return { user, createdTopics, tempId };
   } catch (err) {
-    console.log('ERROR');
-    console.log(err);
-    Notification.error(err);
+    Notification.error(
+      `Failed to send invitation to ${fields.userData.firstName} ${fields.userData.lastName}`
+    );
     return null;
   }
 }
@@ -95,19 +91,11 @@ function* staffInvitationsWorker() {
 
       // const result = yield join(onlySuccessTasks);
 
-      console.log(tasks);
-      console.log(resolvedTasks);
-
-      const onlySuccess = resolvedTasks.filter((item) => {
-        if (item._isFail) {
-          Notification.error(item._message);
-          return false;
-        }
-
-        return true;
-      });
+      const onlySuccess = resolvedTasks.filter((item) => item !== null);
       // console.log(onlySuccessTasks);
       // console.log(result);
+
+      console.log(onlySuccess);
 
       yield put(pushSendInvitations.success(onlySuccess));
     } else {

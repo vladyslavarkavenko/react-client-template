@@ -60,12 +60,15 @@ class PendingTable extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  table: STAFF_TABLE_TYPE.PENDING,
-  status: staffSelectors.pendingStatus(state),
-  list: staffSelectors.pendingData(state),
-  errors: staffSelectors.pendingErrors(state)
-});
+const mapStateToProps = (state) => {
+  const table = STAFF_TABLE_TYPE.PENDING;
+  return {
+    table,
+    status: staffSelectors.getTableStatus(state, table),
+    list: staffSelectors.getTableData(state, table),
+    errors: staffSelectors.getTableErrors(state, table)
+  };
+};
 
 const mapDispatchToProps = {
   saveTableField,

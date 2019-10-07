@@ -4,7 +4,8 @@ import { STAFF_TABLE_TYPE } from '../../utils/constants';
 import {
   saveTableField,
   changeTableRole,
-  pushSendInvitations
+  pushSendInvitations,
+  selectAllRows
 } from '../../modules/staff/staffActions';
 import Table from './Table';
 import staffSelectors from '../../modules/staff/staffSelectors';
@@ -16,6 +17,7 @@ class InvitationTable extends React.Component {
     super(props);
 
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleSelectAll = this.handleSelectAll.bind(this);
   }
 
   handleEdit({ currentTarget }) {
@@ -29,6 +31,12 @@ class InvitationTable extends React.Component {
       field,
       value: currentTarget.type === 'checkbox' ? checked : value
     });
+  }
+
+  handleSelectAll({ currentTarget }) {
+    const { table, selectAllRows } = this.props;
+    const { checked } = currentTarget;
+    selectAllRows({ table, checked });
   }
 
   render() {
@@ -45,6 +53,7 @@ class InvitationTable extends React.Component {
           list={list}
           errors={errors}
           isRequest={isRequest}
+          handleSelectAll={this.handleSelectAll}
           handleEdit={this.handleEdit}
           handleChangeRole={changeTableRole}
         />
@@ -59,17 +68,21 @@ class InvitationTable extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  table: STAFF_TABLE_TYPE.INVITATION,
-  status: staffSelectors.invitationsStatus(state),
-  list: staffSelectors.invitationsData(state),
-  errors: staffSelectors.invitationsErrors(state)
-});
+const mapStateToProps = (state) => {
+  const table = STAFF_TABLE_TYPE.INVITATIONS;
+  return {
+    table,
+    status: staffSelectors.getTableStatus(state, table),
+    list: staffSelectors.getTableData(state, table),
+    errors: staffSelectors.getTableErrors(state, table)
+  };
+};
 
 const mapDispatchToProps = {
   saveTableField,
   changeTableRole,
-  pushSendInvitations
+  pushSendInvitations,
+  selectAllRows
 };
 
 export default connect(

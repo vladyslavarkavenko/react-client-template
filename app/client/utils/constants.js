@@ -28,8 +28,14 @@ module.exports = {
     MANAGER: 'MANAGER',
     COMPANY: 'COMPANY'
   },
+  STAFF_TABLE_STATUS: {
+    PENDING: 'Pending',
+    ACTIVE: 'Active',
+    BLOCKED: 'Blocked',
+    EXPIRED: 'Expired'
+  },
   STAFF_TABLE_TYPE: {
-    INVITATION: 'INVITATION',
+    INVITATIONS: 'INVITATIONS',
     PENDING: 'PENDING',
     ACTIVE: 'ACTIVE'
   },
