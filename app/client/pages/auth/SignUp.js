@@ -122,7 +122,7 @@ class SignUp extends React.Component {
                 name="policy"
                 checked={policy}
                 onChange={this.onChange}
-                className="policy-agreement"
+                className="policy-agreement checkbox-form"
                 type="checkbox"
                 error={errors.policy}
                 labelText={i18next.t('register.policy')}
