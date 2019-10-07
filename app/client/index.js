@@ -9,7 +9,6 @@ import store from './utils/configureStore';
 
 import './assets/styles/index.less';
 import 'react-toastify/dist/ReactToastify.min.css';
-// import 'react-toastify/dist/ReactToastify.css';
 import AppWrapper from './components/Wrappers/AppWrapper';
 
 const place = document.getElementById('app');

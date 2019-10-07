@@ -123,12 +123,6 @@ function* loginWorker({ payload: { email, password } }) {
       call(() => AuthService.getUser()),
       call(() => AuthService.getRoles())
     ]);
-    // format roles by formatRolesPayload in reducer;
-    // const role = localStorage.getItem('role');
-    //
-    // if (role) {
-    //   yield put(setActiveRole.success(role));
-    // }
 
     const {
       companies,

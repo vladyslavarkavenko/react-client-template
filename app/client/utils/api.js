@@ -3,33 +3,34 @@ import axios from 'axios';
 import CONFIG from './config';
 import { refreshTokenWorker } from '../modules/auth/authActions';
 
-const instance = axios.create({ baseURL: `${CONFIG.APP_URL}/api` });
+const instance = axios.create({
+  baseURL: `${CONFIG.APP_URL}/api`
+});
 
-const request = (method, url, data) =>
-  new Promise((resolve, reject) => {
-    (() => {
-      if (method === 'get') {
-        return instance.request({
-          url,
-          method,
-          params: data,
-          headers: {}
-        });
-      }
-      return instance.request({
-        url,
-        method,
-        data,
-        headers: {}
-      });
-    })()
-      .then((res) => {
-        resolve(res.data);
-      })
-      .catch((err) => {
-        reject(err.response);
-      });
-  });
+// const request = (method, url, data) =>
+//   new Promise((resolve) => {
+//     if (method === 'get') {
+//       return instance
+//         .request({
+//           url,
+//           method,
+//           params: data,
+//           headers: {}
+//         })
+//         .then((res) => resolve(res.data));
+//     }
+//     return instance
+//       .request({
+//         url,
+//         method,
+//         data,
+//         headers: {}
+//       })
+//       .then((res) => resolve(res.data));
+//   });
+// // .catch((err) => {
+// //   reject(err.response);
+// // });
 
 export function setApiHeaders(headers) {
   Object.keys(headers).forEach((header) => {
@@ -39,17 +40,12 @@ export function setApiHeaders(headers) {
 
 export function addResponseIntercept(store) {
   instance.interceptors.response.use(
-    (response) => response,
+    (response) => response.data,
     (err) => {
       const originalRequest = err.config;
       const {
         response: { status }
       } = err;
-
-      //not axios error
-      if (!err.response) {
-        return Promise.reject(err);
-      }
 
       if (status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
@@ -66,15 +62,10 @@ export function addResponseIntercept(store) {
           });
       }
 
-      return err.response;
+      //other errors
+      return Promise.reject(err);
     }
   );
 }
 
-export default {
-  get: (endpoint, data) => request('get', endpoint, data),
-  post: (endpoint, data) => request('post', endpoint, data),
-  put: (endpoint, data) => request('put', endpoint, data),
-  del: (endpoint, data) => request('delete', endpoint, data),
-  patch: (endpoint, data) => request('patch', endpoint, data)
-};
+export default instance;
