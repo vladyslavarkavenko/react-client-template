@@ -1,4 +1,4 @@
-import { call, put, takeLatest, all, select, fork } from 'redux-saga/effects';
+import { call, put, takeLatest, all, select } from 'redux-saga/effects';
 // import i18next from 'i18next';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
@@ -6,32 +6,49 @@ import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 import Notification from '../../utils/notifications';
 import StaffService from '../../services/staff';
 import ShareOpinionService from '../../services/shareOpinion';
-import { ROLES } from '../../utils/constants';
+import { ROLES, STAFF_TABLE_STATUS, STAFF_TABLE_TYPE } from '../../utils/constants';
 import staffSelectors from './staffSelectors';
+import { validateInviteStaffRow } from '../../utils/validator';
+import { normalizeUserData, normalizeTopics } from './staffHelpers';
+import companiesSelectors from '../companies/companiesSelectors';
 
 export const prefix = 'staff';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 
 export const fetchStaffTables = createRequestBound('TABLES_FETCH');
+
+export const fetchPendingTable = createRequestBound('PENDING_FETCH');
+
 export const pushSendInvitations = createRequestBound('INVITATIONS_SEND');
+export const pushResendInvitations = createRequestBound('INVITATIONS_RESEND');
 
 export const saveTableField = createOnlyTriggerBound('FIELD_SAVE');
+export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
 export const changeTableRole = createOnlyTriggerBound('ROLE_CHANGE');
 export const changeTableTopic = createOnlyTriggerBound('TOPIC_CHANGE');
 
 function* staffTablesWorker() {
   yield put(fetchStaffTables.request());
   try {
-    const [pending, active, subjects] = yield all([
+    const [pendingData, activeData, subjects] = yield all([
       call(StaffService.getPendingStaff),
       call(StaffService.getActiveStaff),
       call(ShareOpinionService.getAllowedSubjects)
     ]);
 
-    console.log(pending, active, subjects);
+    const t0 = window.performance.now();
 
-    yield put(fetchStaffTables.success({ pending, active, subjects }));
+    const subjectsFlatten = normalizeTopics(subjects);
+
+    const pending = pendingData.map((userData) => normalizeUserData(userData, subjectsFlatten));
+
+    const active = activeData.map((userData) =>
+      normalizeUserData(userData, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE)
+    );
+
+    console.log('TIMING:', window.performance.now() - t0);
+    yield put(fetchStaffTables.success({ pending, active, subjects, subjectsFlatten }));
   } catch (err) {
     console.error(err);
     Notification.error(err);
@@ -39,47 +56,75 @@ function* staffTablesWorker() {
   }
 }
 
-function* createStaffTask({ fields, topics }) {
+function* createStaffTask({ fields, topics, tempId }) {
   try {
     const user = yield call(StaffService.sendInvite, fields);
-    let createdTopics = [];
+    const topicsId = topics.map((topic) => topic.value);
 
     if (topics.length) {
-      createdTopics = yield call(StaffService.setTopicsPermission, {
+      yield call(StaffService.setTopicsPermission, {
         staff: user.id,
-        topics: topics.map((topic) => topic.value)
+        topics: topicsId
       });
     }
 
-    yield { user, createdTopics };
+    user.topics = topicsId;
+    user.tempId = tempId;
+
+    return user;
   } catch (err) {
-    console.error(err);
+    Notification.error(
+      `Failed to send invitation to ${fields.userData.firstName} ${fields.userData.lastName}`
+    );
+    return null;
   }
 }
 
 function* staffInvitationsWorker() {
   yield put(pushSendInvitations.request());
   try {
-    const selectedRows = yield select(staffSelectors.getOnlyCheckedRows, 'invitations');
+    const selectedRows = yield select(
+      staffSelectors.getOnlyCheckedRows,
+      STAFF_TABLE_TYPE.INVITATIONS
+    );
 
-    // add validation
+    const company = yield select(companiesSelectors.getCurrentCompany);
 
-    const tasks = selectedRows.map((item) => {
-      const { email, firstName, lastName, topics, roles } = item;
-      const fields = {
-        userData: { email, firstName, lastName },
-        isManager: roles.includes(ROLES.MANAGER),
-        isAnalyst: roles.includes(ROLES.ANALYST),
-        isAdmin: roles.includes(ROLES.ADMIN)
-      };
+    const { errors, isValid } = validateInviteStaffRow(selectedRows, company.hasAllAccess);
 
-      return fork(createStaffTask, { fields, topics });
-    });
+    if (isValid) {
+      const tasks = selectedRows.map((item) => {
+        const { email, firstName, lastName, topics, roles, id } = item;
+        const fields = {
+          userData: { email, firstName, lastName },
+          isManager: roles.includes(ROLES.MANAGER),
+          isAnalyst: roles.includes(ROLES.ANALYST),
+          isAdmin: roles.includes(ROLES.ADMIN)
+        };
 
-    const resolved = yield all(tasks);
+        return call(createStaffTask, { fields, topics, tempId: id });
+      });
 
-    console.log(resolved);
-    yield put(pushSendInvitations.success(resolved));
+      const resolvedTasks = yield all(tasks);
+
+      // const result = yield join(onlySuccessTasks);
+
+      const onlySuccess = resolvedTasks.filter((item) => item !== null);
+
+      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+      const normalized = onlySuccess.map((user) => ({
+        ...normalizeUserData(user, subjectsFlatten, STAFF_TABLE_STATUS.PENDING),
+        tempId: user.tempId
+      }));
+      // console.log(onlySuccessTasks);
+      // console.log(result);
+
+      Notification.success('Invitations has been sent');
+      yield put(pushSendInvitations.success(normalized));
+    } else {
+      console.log(errors);
+      yield put(pushSendInvitations.failure(errors));
+    }
   } catch (err) {
     console.error(err);
     Notification.error(err);
@@ -87,9 +132,29 @@ function* staffInvitationsWorker() {
   }
 }
 
+function* staffResendWorker() {
+  const selectedRows = yield select(staffSelectors.getTableChecked, STAFF_TABLE_TYPE.PENDING);
+
+  if (selectedRows.length) {
+    yield put(pushResendInvitations.request());
+    try {
+      yield call(StaffService.resendInvite, {
+        emails: selectedRows.map((row) => row.email)
+      });
+
+      Notification.success('Invitations has been resent');
+      yield put(pushResendInvitations.success(selectedRows));
+    } catch (err) {
+      Notification.error(err);
+      yield put(pushResendInvitations.failure());
+    }
+  }
+}
+
 export function* staffWatcher() {
   yield all([
     takeLatest(fetchStaffTables.TRIGGER, staffTablesWorker),
-    takeLatest(pushSendInvitations.TRIGGER, staffInvitationsWorker)
+    takeLatest(pushSendInvitations.TRIGGER, staffInvitationsWorker),
+    takeLatest(pushResendInvitations.TRIGGER, staffResendWorker)
   ]);
 }

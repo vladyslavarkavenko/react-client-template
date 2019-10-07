@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import { ROLES } from '../../utils/constants';
+import { ROLES } from '../../../utils/constants';
 
 const options = [
   { value: ROLES.MANAGER, label: 'Manager' },
@@ -17,16 +17,14 @@ export default class RoleSelect extends React.Component {
   }
 
   onChange(values, { action, option }) {
-    const { handleChange, rowId, table } = this.props;
+    console.log(values);
+    const { handleChange, rowId, table, multipleRoles } = this.props;
     switch (action) {
       case 'clear':
         handleChange({ id: rowId, table, values: [] });
         break;
-      case 'select-option':
-        handleChange({ id: rowId, table, values });
-        break;
       default:
-        handleChange({ id: rowId, table, values });
+        handleChange({ id: rowId, table, values: multipleRoles ? values : [values] });
     }
 
     console.log(rowId, table, values, action);
@@ -39,18 +37,25 @@ export default class RoleSelect extends React.Component {
   }
 
   render() {
-    const { roles } = this.props;
+    const { roles, readOnly, multipleRoles } = this.props;
 
     const values = this.getOptions(roles);
 
     return (
-      <Select
-        options={options}
-        value={values}
-        onChange={this.onChange}
-        isMulti
-        classNamePrefix="roles-select"
-      />
+      <div className="role-select-wrapper">
+        <Select
+          placeholder={readOnly ? 'None' : 'Select role...'}
+          options={options}
+          value={values}
+          onChange={this.onChange}
+          isDisabled={readOnly}
+          // components={{
+          //   Control: () => <div />
+          // }}
+          isMulti={multipleRoles}
+          classNamePrefix="role-select"
+        />
+      </div>
     );
   }
 }

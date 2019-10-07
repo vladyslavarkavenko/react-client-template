@@ -22,6 +22,7 @@ export default function TopicItem({
         name={checkboxId}
         labelText={name}
         className="topic-checkbox"
+        withFill
         onChange={() => handleSelect(data)}
         checked={isChecked}
       />
