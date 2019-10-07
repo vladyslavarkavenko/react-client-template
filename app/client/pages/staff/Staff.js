@@ -5,6 +5,7 @@ import staffSelectors from '../../modules/staff/staffSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 import InvitationTable from './InvitationTable';
 import PendingTable from './PendingTable';
+import StaffTable from './StaffTable';
 
 /* eslint-disable */
 class Staff extends React.Component {
@@ -24,11 +25,11 @@ class Staff extends React.Component {
     }
 
     return (
-      <div className="content staff">
-        {/*Staff page*/}
+      <div className="staff">
         <section className="table-list">
           <InvitationTable />
           <PendingTable />
+          <StaffTable />
         </section>
       </div>
     );

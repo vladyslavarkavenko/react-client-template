@@ -1,9 +1,9 @@
 import React from 'react';
 import Select, { components } from 'react-select';
 import { connect } from 'react-redux';
-import staffSelectors from '../../modules/staff/staffSelectors';
-import { changeTableTopic } from '../../modules/staff/staffActions';
-import Button from '../../components/ui-components/Form/Button';
+import staffSelectors from '../../../modules/staff/staffSelectors';
+import { changeTableTopic } from '../../../modules/staff/staffActions';
+import Button from '../../../components/ui-components/Form/Button';
 
 /* eslint-disable */
 
@@ -105,7 +105,7 @@ class TopicSelect extends React.Component {
 
   render() {
     const { isExpanded } = this.state;
-    const { subjects, selected } = this.props;
+    const { subjects, selected, readOnly } = this.props;
 
     const options = this.createOptions(subjects);
 
@@ -118,10 +118,10 @@ class TopicSelect extends React.Component {
     // // );
 
     return (
-      <div className="role-select-wrapper">
+      <div className="topic-select-wrapper">
         <div className="select">
           <Select
-            placeholder="Select topics..."
+            placeholder={readOnly ? 'None' : 'Select topics...'}
             options={options}
             value={selected}
             onChange={this.onChange}
@@ -130,14 +130,14 @@ class TopicSelect extends React.Component {
             }}
             // formatGroupLabel={formatGroupLabel}
             isMulti
-            isDisabled={!isExpanded}
+            isDisabled={!isExpanded || readOnly}
             className={isExpanded ? '' : 'collapsed'}
-            classNamePrefix="roles-select"
+            classNamePrefix="topic-select"
           />
         </div>
 
-        <Button onClick={this.handleExpand} className="role-expand-btn">
-          {isExpanded ? 'Close' : `Edit ${selected.length ? `${selected.length} items` : ''}`}
+        <Button onClick={this.handleExpand} className="topic-expand-btn">
+          {isExpanded ? 'Close' : `Show ${selected.length ? `${selected.length} items` : ''}`}
         </Button>
       </div>
     );

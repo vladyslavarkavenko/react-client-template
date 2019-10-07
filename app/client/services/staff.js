@@ -13,6 +13,10 @@ class StaffService {
     return api.post('/company/staff/invite/', data);
   }
 
+  static resendInvite(data) {
+    return api.post('/company/company/ping/', data);
+  }
+
   static setTopicsPermission(data) {
     return api.post('/opinion/permissions/set/', data);
   }

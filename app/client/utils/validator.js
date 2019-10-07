@@ -413,12 +413,12 @@ export function validateCreateNewTopic(data) {
 export function validateInviteStaffRow(rows) {
   const errors = {};
 
-  rows.forEach(({ email, firstName, lastName, roles, id }) => {
+  rows.forEach(({ email, firstName, lastName, roles, id }, multipleRoles) => {
     const rowErrors = {
       ...validateEmail(email),
       ...validateUserFirstName(firstName),
       ...validateUserLastName(lastName),
-      ...validateSelectedRoles({ roles, isMultiple: true })
+      ...validateSelectedRoles({ roles, isMultiple: multipleRoles })
     };
 
     if (Object.keys(rowErrors).length) {

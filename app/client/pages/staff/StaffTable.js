@@ -5,16 +5,14 @@ import {
   saveTableField,
   changeTableRole,
   pushSendInvitations,
-  selectAllRows,
-  pushResendInvitations
+  selectAllRows
 } from '../../modules/staff/staffActions';
 import Table from './table/Table';
 import staffSelectors from '../../modules/staff/staffSelectors';
 import Button from '../../components/ui-components/Form/Button';
-import companiesSelectors from '../../modules/companies/companiesSelectors';
 
 /* eslint-disable */
-class PendingTable extends React.Component {
+class StaffTable extends React.Component {
   constructor(props) {
     super(props);
 
@@ -24,14 +22,14 @@ class PendingTable extends React.Component {
 
   handleEdit({ currentTarget }) {
     const { table, saveTableField } = this.props;
-    const { dataset, checked } = currentTarget;
+    const { value, dataset, checked } = currentTarget;
     const { id, field } = dataset;
 
     saveTableField({
       table,
-      id: Number(id),
+      id,
       field,
-      value: checked
+      value: currentTarget.type === 'checkbox' ? checked : value
     });
   }
 
@@ -46,39 +44,38 @@ class PendingTable extends React.Component {
       list,
       table,
       changeTableRole,
+      pushSendInvitations,
+      multipleRoles,
       status,
       errors,
-      checked,
-      multipleRoles,
-      pushResendInvitations
+      checked
     } = this.props;
 
     const isRequest = status === 'request';
 
     return (
       <div className="table-wrapper">
-        <p className="table-title">Pending</p>
+        <p className="table-title">Staff</p>
 
         <Table
           table={table}
           list={list}
           errors={errors}
           isRequest={isRequest}
-          handleEdit={this.handleEdit}
           handleSelectAll={this.handleSelectAll}
+          handleEdit={this.handleEdit}
           handleChangeRole={changeTableRole}
           multipleRoles={multipleRoles}
-          readOnly
         />
 
         <div className="table-controls">
           {checked.length !== 0 && (
             <Button
               className="table-btn"
+              onClick={() => pushSendInvitations()}
               isLoading={isRequest}
-              onClick={() => pushResendInvitations()}
             >
-              Resend Invites
+              Send Invite
             </Button>
           )}
         </div>
@@ -88,12 +85,9 @@ class PendingTable extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const table = STAFF_TABLE_TYPE.PENDING;
-
-  const multipleRoles = companiesSelectors.getCurrentCompany(state).hasAllAccess;
+  const table = STAFF_TABLE_TYPE.ACTIVE;
   return {
     table,
-    multipleRoles,
     status: staffSelectors.getTableStatus(state, table),
     list: staffSelectors.getTableData(state, table),
     errors: staffSelectors.getTableErrors(state, table),
@@ -105,11 +99,10 @@ const mapDispatchToProps = {
   saveTableField,
   changeTableRole,
   pushSendInvitations,
-  selectAllRows,
-  pushResendInvitations
+  selectAllRows
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PendingTable);
+)(StaffTable);

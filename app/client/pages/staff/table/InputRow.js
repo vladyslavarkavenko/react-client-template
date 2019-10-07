@@ -1,10 +1,10 @@
 /* eslint-disable */
 import React from 'react';
-import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
-import ErrorSvg from '../../../../public/assets/svg/exclamation-circle.svg';
+import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
+import ErrorSvg from '../../../../../public/assets/svg/exclamation-circle.svg';
 import RoleSelect from './RoleSelect';
 import TopicSelect from './TopicSelect';
-import Notification from '../../utils/notifications';
+import Notification from '../../../utils/notifications';
 
 const handleNotify = (field, errors) => Notification.info(errors[field]);
 
@@ -20,7 +20,14 @@ const ErrorCircle = ({ field, errors }) => {
   return null;
 };
 
-export default function InputRow({ table, errors = {}, data, handleEdit, handleChangeRole }) {
+export default function InputRow({
+  table,
+  errors = {},
+  data,
+  handleEdit,
+  handleChangeRole,
+  multipleRoles
+}) {
   const { id, firstName, lastName, email, isChecked, roles, status } = data;
 
   const withErrors = Object.keys(errors).length;
@@ -69,7 +76,13 @@ export default function InputRow({ table, errors = {}, data, handleEdit, handleC
         <ErrorCircle field="email" errors={errors} />
       </div>
       <div className={`item item-x2 drop ${errors.role ? 'error' : ''}`}>
-        <RoleSelect handleChange={handleChangeRole} rowId={id} table={table} roles={roles} />
+        <RoleSelect
+          handleChange={handleChangeRole}
+          rowId={id}
+          table={table}
+          roles={roles}
+          multipleRoles={multipleRoles}
+        />
         <ErrorCircle field="role" errors={errors} />
       </div>
       <div className="item item-x3 drop">

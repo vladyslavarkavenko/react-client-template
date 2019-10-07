@@ -7,7 +7,7 @@ import {
   pushSendInvitations,
   selectAllRows
 } from '../../modules/staff/staffActions';
-import Table from './Table';
+import Table from './table/Table';
 import staffSelectors from '../../modules/staff/staffSelectors';
 import Button from '../../components/ui-components/Form/Button';
 
@@ -40,7 +40,16 @@ class InvitationTable extends React.Component {
   }
 
   render() {
-    const { list, table, changeTableRole, pushSendInvitations, status, errors } = this.props;
+    const {
+      list,
+      table,
+      changeTableRole,
+      pushSendInvitations,
+      multipleRoles,
+      status,
+      errors,
+      checked
+    } = this.props;
 
     const isRequest = status === 'request';
 
@@ -56,12 +65,19 @@ class InvitationTable extends React.Component {
           handleSelectAll={this.handleSelectAll}
           handleEdit={this.handleEdit}
           handleChangeRole={changeTableRole}
+          multipleRoles={multipleRoles}
         />
 
         <div className="table-controls">
-          <Button className="table-btn" onClick={() => pushSendInvitations()} isLoading={isRequest}>
-            Send Invite
-          </Button>
+          {checked.length !== 0 && (
+            <Button
+              className="table-btn"
+              onClick={() => pushSendInvitations()}
+              isLoading={isRequest}
+            >
+              Send Invite
+            </Button>
+          )}
         </div>
       </div>
     );
@@ -74,7 +90,8 @@ const mapStateToProps = (state) => {
     table,
     status: staffSelectors.getTableStatus(state, table),
     list: staffSelectors.getTableData(state, table),
-    errors: staffSelectors.getTableErrors(state, table)
+    errors: staffSelectors.getTableErrors(state, table),
+    checked: staffSelectors.getTableChecked(state, table)
   };
 };
 
