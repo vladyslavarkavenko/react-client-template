@@ -5,26 +5,6 @@ import staffSelectors from '../../../modules/staff/staffSelectors';
 import { changeTableTopic } from '../../../modules/staff/staffActions';
 import Button from '../../../components/ui-components/Form/Button';
 
-/* eslint-disable */
-
-const groupStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between'
-};
-const groupBadgeStyles = {
-  backgroundColor: '#EBECF0',
-  borderRadius: '2em',
-  color: '#172B4D',
-  display: 'inline-block',
-  fontSize: 12,
-  fontWeight: 'normal',
-  lineHeight: '1',
-  minWidth: 1,
-  padding: '0.16666666666667em 0.5em',
-  textAlign: 'center'
-};
-
 const GroupHeading = (props) => {
   const action = 'select-group';
   const { children: label, selectProps } = props;
@@ -37,8 +17,6 @@ const GroupHeading = (props) => {
     0
   );
 
-  console.log();
-
   return (
     <div className="roles-select__group-head" onClick={() => onChange(groupOptions, action)}>
       <components.GroupHeading {...props} />
@@ -46,6 +24,21 @@ const GroupHeading = (props) => {
     </div>
   );
 };
+
+function createOptions(subjects) {
+  const options = subjects.map((subject) => {
+    const topics = subject.topics.map((topic) => {
+      return { label: topic.name, value: topic.id, group: subject.name };
+    });
+
+    return {
+      label: subject.name,
+      options: topics
+    };
+  });
+
+  return options;
+}
 
 class TopicSelect extends React.Component {
   constructor(props) {
@@ -60,41 +53,9 @@ class TopicSelect extends React.Component {
   }
 
   onChange(values, action) {
-    console.log(values);
-    // console.log(values, action, option);
     const { handleChange, rowId, table } = this.props;
 
     handleChange({ id: rowId, table, values, action });
-    // const { handleChange, rowId, table } = this.props;
-    // switch (action) {
-    //   case 'clear':
-    //     handleChange({ id: rowId, table, values: [] });
-    //     break;
-    //   case 'select-option':
-    //     handleChange({ id: rowId, table, values });
-    //     break;
-    //   default:
-    //     handleChange({ id: rowId, table, values });
-    // }
-    //
-    // console.log(rowId, table, values, action);
-    //
-    // // handleChange({ id: rowId, table, value });
-  }
-
-  createOptions(subjects) {
-    const options = subjects.map((subject) => {
-      const topics = subject.topics.map((topic) => {
-        return { label: topic.name, value: topic.id, group: subject.name };
-      });
-
-      return {
-        label: subject.name,
-        options: topics
-      };
-    });
-
-    return options;
   }
 
   handleExpand() {
@@ -107,15 +68,7 @@ class TopicSelect extends React.Component {
     const { isExpanded } = this.state;
     const { subjects, selected, readOnly } = this.props;
 
-    const options = this.createOptions(subjects);
-
-    // <div onClick={() => args[0].setValue(args[0].options)}>
-    // </div>;
-    //   {/*<div onClick={() => this.onChange(group.options)} style={groupStyles}>*/}
-    //   {/*  <span>{group.label}</span>*/}
-    //     // <span style={groupBadgeStyles}>{group.options.length}</span>
-    //   // </div>
-    // // );
+    const options = createOptions(subjects);
 
     return (
       <div className="topic-select-wrapper">
@@ -128,7 +81,6 @@ class TopicSelect extends React.Component {
             components={{
               GroupHeading
             }}
-            // formatGroupLabel={formatGroupLabel}
             isMulti
             isDisabled={!isExpanded || readOnly}
             className={isExpanded ? '' : 'collapsed'}

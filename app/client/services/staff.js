@@ -13,6 +13,14 @@ class StaffService {
     return api.post('/company/staff/invite/', data);
   }
 
+  static blockUser(userId) {
+    return api.get(`/company/staff/${userId}/deactivate/`);
+  }
+
+  static updateUser({ userId, data }) {
+    return api.patch(`/company/staff/${userId}/`, data);
+  }
+
   static resendInvite(data) {
     return api.post('/company/company/ping/', data);
   }
