@@ -56,6 +56,10 @@ class ShareOpinionService {
   static getAllowedSubjects() {
     return api.get('/opinion/permissions/');
   }
+
+  static getOpinionScore(data) {
+    return api.post('/formula/calculator/topic_score/', data);
+  }
 }
 
 export default ShareOpinionService;
