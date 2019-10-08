@@ -25,7 +25,7 @@ const GroupHeading = (props) => {
   );
 };
 
-const createOptions = (subjects) => {
+function createOptions(subjects) {
   const options = subjects.map((subject) => {
     const topics = subject.topics.map((topic) => {
       return { label: topic.name, value: topic.id, group: subject.name };
@@ -38,7 +38,7 @@ const createOptions = (subjects) => {
   });
 
   return options;
-};
+}
 
 class TopicSelect extends React.Component {
   constructor(props) {
