@@ -17,6 +17,28 @@ const getManagersList = (state) => {
   return managers;
 };
 
+const getCurrentManager = (state) => {
+  const companies = getCompanyData(state);
+  const permissions = authSelectors.rolesPermissions(state);
+  const role = authSelectors.activeRole(state);
+
+  return companies[permissions[role][0]].manager;
+};
+
+const getManagersWithCompanies = (state) => {
+  const data = getCompanyData(state);
+
+  const companyIds = Object.keys(data);
+
+  const list = {};
+
+  companyIds.forEach((companyId) => {
+    list[companyId] = getCompanyData(state).manager;
+  });
+
+  return list;
+};
+
 const getCurrentCompany = (state) => {
   const companies = getCompanyData(state);
   const permissions = authSelectors.rolesPermissions(state);
@@ -28,6 +50,8 @@ const getCurrentCompany = (state) => {
 export default {
   getCompaniesList,
   getManagersList,
+  getManagersWithCompanies,
+  getCurrentManager,
   getCurrentCompany,
   data: getCompanyData,
   errors: (state) => state.companies.errors,

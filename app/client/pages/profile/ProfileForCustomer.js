@@ -8,7 +8,7 @@ import EditForm from './components/EditForm';
 import ContentHeader from './components/ContentHeader';
 import ForCustomer from './HOCs/ForCustomer';
 
-const Overview = customLoadable({ loader: () => import('./Overview') });
+const OverviewForCustomer = ForCustomer(customLoadable({ loader: () => import('./Overview') }));
 const AboutForCustomer = ForCustomer(customLoadable({ loader: () => import('./UserAbout') }));
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -57,7 +57,7 @@ class ProfileForCustomer extends React.Component {
         />
         <Switch>
           <WrappedRoute exact path={routing().about} render={() => <AboutForCustomer />} />
-          <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
+          <WrappedRoute exact path={routing().overview} render={() => <OverviewForCustomer />} />
         </Switch>
       </div>
     );
