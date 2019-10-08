@@ -69,7 +69,7 @@ function* createStaffTask({ fields, topics, tempId }) {
 
     if (topics.length) {
       yield call(StaffService.setTopicsPermission, {
-        staff: user.id,
+        staff: String(user.id),
         topics: topicsId
       });
     }
@@ -168,7 +168,7 @@ function* updateStaffTask({ fields, topics, id, originalUser }) {
     }
 
     yield call(StaffService.setTopicsPermission, {
-      staff: id,
+      staff: String(id),
       topics: topicsId
     });
     // attach topics to model then normalize
