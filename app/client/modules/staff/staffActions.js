@@ -9,7 +9,11 @@ import ShareOpinionService from '../../services/shareOpinion';
 import { ROLES, STAFF_TABLE_STATUS, STAFF_TABLE_TYPE } from '../../utils/constants';
 import staffSelectors from './staffSelectors';
 import { validateInviteStaffRow, validateUpdateStaffRow } from '../../utils/validator';
-import { normalizeUserData, normalizeTopics, sortUserRowsByDate } from './staffHelpers';
+
+import normalizeTopics from './helpers/normalizeTopics';
+import normalizeUserData from './helpers/normalizeUserData';
+import sortUserRowsByDate from './helpers/sortUserRowsByDate';
+
 import companiesSelectors from '../companies/companiesSelectors';
 import authSelectors from '../auth/authSelectors';
 

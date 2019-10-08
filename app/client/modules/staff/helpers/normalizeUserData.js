@@ -1,27 +1,7 @@
 import { differenceInMonths } from 'date-fns';
-import { ROLES, STAFF_TABLE_STATUS } from '../../utils/constants';
+import { ROLES, STAFF_TABLE_STATUS } from '../../../utils/constants';
 
-export const sortUserRowsByDate = (a, b) => {
-  return new Date(a.expiredIn) - new Date(b.expiredIn) > 0 ? -1 : 1;
-};
-
-export const normalizeTopics = (subjects) => {
-  let allTopics = [];
-
-  subjects.forEach((subject) => {
-    const partial = subject.topics.map((topic) => ({
-      label: topic.name,
-      value: topic.id,
-      group: subject.name
-    }));
-
-    allTopics = [...allTopics, ...partial];
-  });
-
-  return allTopics;
-};
-
-export const findTopics = (topicListId, subjectList) => {
+function findTopics(topicListId, subjectList) {
   const topics = [];
 
   topicListId.forEach((topicId) => {
@@ -32,9 +12,9 @@ export const findTopics = (topicListId, subjectList) => {
   });
 
   return topics;
-};
+}
 
-export const normalizeUserData = (user, subjectList, forceStatus) => {
+export default function normalizeUserData(user, subjectList, forceStatus) {
   const roles = user.roles || [];
   const topics = findTopics(user.topics, subjectList);
   let status = STAFF_TABLE_STATUS.ACTIVE;
@@ -78,4 +58,4 @@ export const normalizeUserData = (user, subjectList, forceStatus) => {
     isChecked: false,
     isChanged: false
   };
-};
+}
