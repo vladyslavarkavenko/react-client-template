@@ -59,7 +59,6 @@ export default function Table({
         <li className="item">Status</li>
       </ul>
       <ul className="body">{rows}</ul>
-      {/*<button className="add-new-btn">Add New</button>*/}
     </div>
   );
 }

@@ -13,7 +13,6 @@ import staffSelectors from '../../../modules/staff/staffSelectors';
 import Button from '../../../components/ui-components/Form/Button';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
-/* eslint-disable */
 class StaffTable extends React.Component {
   constructor(props) {
     super(props);

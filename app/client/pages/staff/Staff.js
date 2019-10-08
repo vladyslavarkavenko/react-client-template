@@ -7,10 +7,10 @@ import InvitationTable from './invitationTable/InvitationTable';
 import PendingTable from './pendingTable/PendingTable';
 import StaffTable from './staffTable/StaffTable';
 
-/* eslint-disable */
 class Staff extends React.Component {
   componentDidMount() {
-    this.props.fetchStaffTables();
+    const { fetchStaffTables } = this.props;
+    fetchStaffTables();
   }
 
   render() {

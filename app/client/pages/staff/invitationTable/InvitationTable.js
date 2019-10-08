@@ -11,7 +11,6 @@ import Table from '../components/Table';
 import staffSelectors from '../../../modules/staff/staffSelectors';
 import Button from '../../../components/ui-components/Form/Button';
 
-/* eslint-disable */
 class InvitationTable extends React.Component {
   constructor(props) {
     super(props);
