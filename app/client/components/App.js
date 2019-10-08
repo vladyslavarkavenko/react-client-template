@@ -87,7 +87,7 @@ export default function App() {
         forManager={ProfileForManager}
         forCustomer={ProfileForCustomer}
       />
-      <RolesRoute exact path={routing().staff} forAdmin={Staff} forManager={Staff} />
+      <RolesRoute exact path={routing().staff} forAdmin={Staff} />
 
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />

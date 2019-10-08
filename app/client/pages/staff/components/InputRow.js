@@ -26,11 +26,14 @@ export default function InputRow({
   data,
   handleEdit,
   handleChangeRole,
-  multipleRoles
+  multipleRoles,
+  onlyDropEdit
 }) {
-  const { id, firstName, lastName, email, isChecked, roles, status } = data;
+  const { id, firstName, lastName, email, isChecked, roles, status, _changes = {} } = data;
 
   const withErrors = Object.keys(errors).length;
+
+  // if you want to control input in realtime use value and onChange
 
   return (
     <li className={`row ${withErrors ? 'withErrors' : ''}`}>
@@ -45,42 +48,54 @@ export default function InputRow({
           data-field="isChecked"
         />
       </div>
-      <div className={`item ${errors.firstName ? 'error' : ''}`}>
-        <input
-          type="text"
-          defaultValue={firstName}
-          data-id={id}
-          data-field="firstName"
-          onBlur={handleEdit}
-        />
-        <ErrorCircle field="firstName" errors={errors} />
-      </div>
-      <div className={`item ${errors.lastName ? 'error' : ''}`}>
-        <input
-          type="text"
-          defaultValue={lastName}
-          data-id={id}
-          data-field="lastName"
-          onBlur={handleEdit}
-        />
-        <ErrorCircle field="lastName" errors={errors} />
-      </div>
-      <div className={`item ${errors.email ? 'error' : ''}`}>
-        <input
-          type="text"
-          defaultValue={email}
-          data-id={id}
-          data-field="email"
-          onBlur={handleEdit}
-        />
-        <ErrorCircle field="email" errors={errors} />
-      </div>
+      {onlyDropEdit ? (
+        <>
+          <div className="item">{firstName}</div>
+          <div className="item">{lastName}</div>
+          <div className="item">{email}</div>
+        </>
+      ) : (
+        <>
+          <div className={`item ${errors.firstName ? 'error' : ''}`}>
+            <input
+              type="text"
+              defaultValue={_changes.firstName || firstName}
+              data-id={id}
+              data-field="firstName"
+              onBlur={handleEdit}
+            />
+            <ErrorCircle field="firstName" errors={errors} />
+          </div>
+          <div className={`item ${errors.lastName ? 'error' : ''}`}>
+            <input
+              type="text"
+              defaultValue={_changes.lastName || lastName}
+              data-id={id}
+              data-field="lastName"
+              onBlur={handleEdit}
+            />
+            <ErrorCircle field="lastName" errors={errors} />
+          </div>
+          <div className={`item ${errors.email ? 'error' : ''}`}>
+            <input
+              type="text"
+              defaultValue={_changes.email || email}
+              data-id={id}
+              data-field="email"
+              onBlur={handleEdit}
+            />
+            <ErrorCircle field="email" errors={errors} />
+          </div>
+        </>
+      )}
+
       <div className={`item item-x2 drop ${errors.role ? 'error' : ''}`}>
         <RoleSelect
           handleChange={handleChangeRole}
           rowId={id}
           table={table}
           roles={roles}
+          tempRoles={_changes.roles}
           multipleRoles={multipleRoles}
         />
         <ErrorCircle field="role" errors={errors} />

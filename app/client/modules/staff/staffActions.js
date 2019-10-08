@@ -8,9 +8,10 @@ import StaffService from '../../services/staff';
 import ShareOpinionService from '../../services/shareOpinion';
 import { ROLES, STAFF_TABLE_STATUS, STAFF_TABLE_TYPE } from '../../utils/constants';
 import staffSelectors from './staffSelectors';
-import { validateInviteStaffRow } from '../../utils/validator';
-import { normalizeUserData, normalizeTopics } from './staffHelpers';
+import { validateInviteStaffRow, validateUpdateStaffRow } from '../../utils/validator';
+import { normalizeUserData, normalizeTopics, sortUserRowsByDate } from './staffHelpers';
 import companiesSelectors from '../companies/companiesSelectors';
+import authSelectors from '../auth/authSelectors';
 
 export const prefix = 'staff';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -18,10 +19,11 @@ const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 
 export const fetchStaffTables = createRequestBound('TABLES_FETCH');
 
-export const fetchPendingTable = createRequestBound('PENDING_FETCH');
-
 export const pushSendInvitations = createRequestBound('INVITATIONS_SEND');
 export const pushResendInvitations = createRequestBound('INVITATIONS_RESEND');
+
+export const setUsersStatus = createRequestBound('USER_STATUS_SET');
+export const pushUsersChanges = createRequestBound('USER_CHANGES_PUSH');
 
 export const saveTableField = createOnlyTriggerBound('FIELD_SAVE');
 export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
@@ -41,11 +43,15 @@ function* staffTablesWorker() {
 
     const subjectsFlatten = normalizeTopics(subjects);
 
-    const pending = pendingData.map((userData) => normalizeUserData(userData, subjectsFlatten));
+    const pending = pendingData
+      .map((userData) => normalizeUserData(userData, subjectsFlatten))
+      .sort(sortUserRowsByDate);
 
-    const active = activeData.map((userData) =>
-      normalizeUserData(userData, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE)
-    );
+    const currentUserId = yield select(authSelectors.getCurrentUserId);
+    const active = activeData
+      .filter((userData) => userData.id !== currentUserId)
+      .map((userData) => normalizeUserData(userData, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE))
+      .sort(sortUserRowsByDate);
 
     console.log('TIMING:', window.performance.now() - t0);
     yield put(fetchStaffTables.success({ pending, active, subjects, subjectsFlatten }));
@@ -122,7 +128,7 @@ function* staffInvitationsWorker() {
       Notification.success('Invitations has been sent');
       yield put(pushSendInvitations.success(normalized));
     } else {
-      console.log(errors);
+      console.error(errors);
       yield put(pushSendInvitations.failure(errors));
     }
   } catch (err) {
@@ -133,7 +139,7 @@ function* staffInvitationsWorker() {
 }
 
 function* staffResendWorker() {
-  const selectedRows = yield select(staffSelectors.getTableChecked, STAFF_TABLE_TYPE.PENDING);
+  const selectedRows = yield select(staffSelectors.getOnlyCheckedRows, STAFF_TABLE_TYPE.PENDING);
 
   if (selectedRows.length) {
     yield put(pushResendInvitations.request());
@@ -151,10 +157,178 @@ function* staffResendWorker() {
   }
 }
 
+function* updateStaffTask({ fields, topics, id, originalUser }) {
+  try {
+    const topicsId = topics.map((topic) => topic.value);
+    let user = originalUser;
+
+    if (Object.keys(fields).length) {
+      // returns CompanyStaff model its ok because of normalization after
+      user = yield call(StaffService.updateUser, { userId: id, data: fields });
+    }
+
+    yield call(StaffService.setTopicsPermission, {
+      staff: id,
+      topics: topicsId
+    });
+    // attach topics to model then normalize
+    user.topics = topicsId;
+    return user;
+  } catch (err) {
+    console.error(err);
+    Notification.error(`Failed to update user #${id}`);
+    return null;
+  }
+}
+
+function* staffUpdateWorker() {
+  yield put(pushUsersChanges.request());
+  try {
+    const selectedRows = yield select(staffSelectors.getOnlyChangedRows, 'active');
+
+    const company = yield select(companiesSelectors.getCurrentCompany);
+    //check only roles field
+    const { errors, isValid } = validateUpdateStaffRow(selectedRows, company.hasAllAccess);
+
+    if (isValid) {
+      const tasks = selectedRows.map((item) => {
+        const { id, _changes } = item;
+        const { topics = [], roles } = _changes;
+        const fields = {};
+
+        if (roles) {
+          fields.isManager = roles.includes(ROLES.MANAGER);
+          fields.isAnalyst = roles.includes(ROLES.ANALYST);
+          fields.isAdmin = roles.includes(ROLES.ADMIN);
+        }
+
+        return call(updateStaffTask, { fields, topics, id, originalUser: item });
+      });
+
+      const resolvedTasks = yield all(tasks);
+
+      const onlySuccess = resolvedTasks.filter((item) => item !== null);
+
+      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+
+      const normalized = onlySuccess.map((user) =>
+        normalizeUserData(user, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE)
+      );
+
+      const updatedUsers = {};
+
+      normalized.forEach((user) => {
+        updatedUsers[user.id] = user;
+      });
+
+      Notification.success('Users has been updated');
+      yield put(pushUsersChanges.success(updatedUsers));
+    } else {
+      yield put(pushUsersChanges.failure(errors));
+    }
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(pushUsersChanges.failure());
+  }
+}
+
+function* unblockStaffTask({ id, originalUser }) {
+  try {
+    const user = { ...originalUser, roles: [ROLES.MANAGER] };
+
+    yield call(StaffService.updateUser, {
+      userId: id,
+      data: {
+        isManager: true
+      }
+    });
+
+    return user;
+  } catch (err) {
+    Notification.error(`Failed to unblock user #${id}`);
+    return null;
+  }
+}
+
+function* blockStaffTask({ id, originalUser }) {
+  try {
+    const user = { ...originalUser, roles: [] };
+
+    yield call(StaffService.blockUser, id);
+
+    return user;
+  } catch (err) {
+    Notification.error(`Failed to block user #${id}`);
+    return null;
+  }
+}
+
+function* staffStatusWorker({ payload }) {
+  yield put(setUsersStatus.request());
+  try {
+    const { status } = payload;
+    const checkedRows = yield select(staffSelectors.getOnlyCheckedRows, 'active');
+    const selectedRows = checkedRows.filter((row) => {
+      if (status === STAFF_TABLE_STATUS.BLOCKED) {
+        //select only active users;
+        return row.roles.length !== 0;
+      }
+
+      //select only blocked users;
+      return row.roles.length === 0;
+    });
+
+    if (selectedRows.length) {
+      const tasks = selectedRows.map((item) => {
+        const { id } = item;
+
+        if (status === STAFF_TABLE_STATUS.BLOCKED) {
+          return call(blockStaffTask, { id, originalUser: item });
+        }
+
+        return call(unblockStaffTask, { id, originalUser: item });
+      });
+
+      const resolvedTasks = yield all(tasks);
+
+      const onlySuccess = resolvedTasks.filter((item) => item !== null);
+
+      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+
+      const normalized = onlySuccess.map((user) =>
+        normalizeUserData(user, subjectsFlatten, status)
+      );
+
+      const updatedUsers = {};
+
+      normalized.forEach((user) => {
+        updatedUsers[user.id] = user;
+      });
+
+      Notification.success(
+        `Selected users has been ${status === STAFF_TABLE_STATUS.BLOCKED ? 'blocked' : 'unblocked'}`
+      );
+      yield put(pushUsersChanges.success(updatedUsers));
+    } else {
+      Notification.info(
+        `Select ${status === STAFF_TABLE_STATUS.BLOCKED ? 'unblocked' : 'blocked'} users`
+      );
+      yield put(setUsersStatus.failure());
+    }
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(setUsersStatus.failure());
+  }
+}
+
 export function* staffWatcher() {
   yield all([
     takeLatest(fetchStaffTables.TRIGGER, staffTablesWorker),
     takeLatest(pushSendInvitations.TRIGGER, staffInvitationsWorker),
-    takeLatest(pushResendInvitations.TRIGGER, staffResendWorker)
+    takeLatest(pushResendInvitations.TRIGGER, staffResendWorker),
+    takeLatest(pushUsersChanges.TRIGGER, staffUpdateWorker),
+    takeLatest(setUsersStatus.TRIGGER, staffStatusWorker)
   ]);
 }

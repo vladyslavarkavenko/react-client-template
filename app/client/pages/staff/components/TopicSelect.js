@@ -37,7 +37,6 @@ const GroupHeading = (props) => {
     0
   );
 
-  console.log();
 
   return (
     <div className="roles-select__group-head" onClick={() => onChange(groupOptions, action)}>
@@ -60,7 +59,6 @@ class TopicSelect extends React.Component {
   }
 
   onChange(values, action) {
-    console.log(values);
     // console.log(values, action, option);
     const { handleChange, rowId, table } = this.props;
 

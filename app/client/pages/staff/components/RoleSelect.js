@@ -17,7 +17,6 @@ export default class RoleSelect extends React.Component {
   }
 
   onChange(values, { action, option }) {
-    console.log(values);
     const { handleChange, rowId, table, multipleRoles } = this.props;
     switch (action) {
       case 'clear':
@@ -37,9 +36,9 @@ export default class RoleSelect extends React.Component {
   }
 
   render() {
-    const { roles, readOnly, multipleRoles } = this.props;
+    const { roles, tempRoles, readOnly, multipleRoles } = this.props;
 
-    const values = this.getOptions(roles);
+    const values = this.getOptions(tempRoles || roles);
 
     return (
       <div className="role-select-wrapper">

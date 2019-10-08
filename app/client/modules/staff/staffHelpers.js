@@ -1,6 +1,10 @@
 import { differenceInMonths } from 'date-fns';
 import { ROLES, STAFF_TABLE_STATUS } from '../../utils/constants';
 
+export const sortUserRowsByDate = (a, b) => {
+  return new Date(a.expiredIn) - new Date(b.expiredIn) > 0 ? -1 : 1;
+};
+
 export const normalizeTopics = (subjects) => {
   let allTopics = [];
 
@@ -31,7 +35,8 @@ export const findTopics = (topicListId, subjectList) => {
 };
 
 export const normalizeUserData = (user, subjectList, forceStatus) => {
-  const roles = [];
+  const roles = user.roles || [];
+  const topics = findTopics(user.topics, subjectList);
   let status = STAFF_TABLE_STATUS.ACTIVE;
 
   if (user.isAdmin) {
@@ -61,13 +66,16 @@ export const normalizeUserData = (user, subjectList, forceStatus) => {
   }
 
   return {
-    ...user.userData,
     id: Number(user.id),
+    firstName: user.userData ? user.userData.firstName : user.firstName,
+    lastName: user.userData ? user.userData.lastName : user.lastName,
+    email: user.userData ? user.userData.email : user.email,
     expiredIn: user.expiredIn,
-    topics: findTopics(user.topics, subjectList),
-    isChecked: false,
-    isChanged: false,
+
+    topics,
     status,
-    roles
+    roles,
+    isChecked: false,
+    isChanged: false
   };
 };
