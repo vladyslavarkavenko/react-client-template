@@ -44,10 +44,19 @@ export default class RateList extends React.Component {
 
     return (
       <ul className="rate-list">
-        <RateListHeading>{i18next.t('shareOpinion.my.companies')}</RateListHeading>
-        {companiesList}
-        <RateListHeading>{i18next.t('shareOpinion.my.managers')}</RateListHeading>
-        {managersList}
+        {companiesList.length !== 0 && (
+          <>
+            <RateListHeading>{i18next.t('shareOpinion.my.companies')}</RateListHeading>
+            {companiesList}
+          </>
+        )}
+
+        {managersList.length !== 0 && (
+          <>
+            <RateListHeading>{i18next.t('shareOpinion.my.managers')}</RateListHeading>
+            {managersList}
+          </>
+        )}
       </ul>
     );
   }

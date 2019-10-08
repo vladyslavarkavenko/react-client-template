@@ -361,32 +361,14 @@
               }
 
               &-checkbox {
-                // TODO: create custom checkbox
                 [type="checkbox"]:not(:checked) + label,
                 [type="checkbox"]:checked + label {
-                  font-family: 'Muli', sans-serif;
                   color: black;
                   font-size: 1rem;
                   line-height: 20px;
                   padding-left: 2rem;
                   font-weight: normal;
                 }
-
-                [type="checkbox"]:checked + label {
-                  &:before {
-                    background-color: @font-color-blue;
-                    color: white;
-                    border: 1px solid @font-color-blue;
-                    box-shadow: unset;
-                  }
-
-                  &:after {
-                    color: white;
-                    box-shadow: unset;
-                  }
-                }
-
-
               }
 
               &-status {

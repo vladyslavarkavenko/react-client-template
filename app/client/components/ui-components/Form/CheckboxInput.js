@@ -7,12 +7,34 @@ export default function CheckboxInput({
   error,
   className,
   checked,
+  withFill,
+  onlyCheck,
   forwardRef,
   ...rest
 }) {
   const key = `${name}_check`;
+
+  const style = ['checkbox'];
+
+  if (className) {
+    style.push(className);
+  }
+
+  if (withFill) {
+    style.push('blue-fill');
+  }
+
+  if (onlyCheck) {
+    style.push('check-only');
+  }
+
+  if (error) {
+    style.push('checkbox-error');
+  }
+
+  //checkbox-form
   return (
-    <div className={`checkbox-form ${className || ''} ${error ? 'checkbox-error' : ''}`}>
+    <div className={style.join(' ')}>
       {error && <span className="input-error-message">{error}</span>}
       <input
         id={key}
@@ -23,7 +45,7 @@ export default function CheckboxInput({
         ref={forwardRef}
         {...rest}
       />
-      {labelText && <label htmlFor={key}>{labelText}</label>}
+      <label htmlFor={key}>{labelText}</label>
     </div>
   );
 }

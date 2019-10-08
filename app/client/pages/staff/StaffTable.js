@@ -12,7 +12,7 @@ import staffSelectors from '../../modules/staff/staffSelectors';
 import Button from '../../components/ui-components/Form/Button';
 
 /* eslint-disable */
-class InvitationTable extends React.Component {
+class StaffTable extends React.Component {
   constructor(props) {
     super(props);
 
@@ -55,7 +55,7 @@ class InvitationTable extends React.Component {
 
     return (
       <div className="table-wrapper">
-        <p className="table-title">Invitations</p>
+        <p className="table-title">Staff</p>
 
         <Table
           table={table}
@@ -85,7 +85,7 @@ class InvitationTable extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const table = STAFF_TABLE_TYPE.INVITATIONS;
+  const table = STAFF_TABLE_TYPE.ACTIVE;
   return {
     table,
     status: staffSelectors.getTableStatus(state, table),
@@ -105,4 +105,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(InvitationTable);
+)(StaffTable);
