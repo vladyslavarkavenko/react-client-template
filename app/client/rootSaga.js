@@ -4,6 +4,7 @@ import { authWatcher } from './modules/auth/authActions';
 import { redirectWatcher } from './modules/redirect/redirectActions';
 import { shareOpinionWatcher } from './modules/shareOpinion/shareOpinionActions';
 import { staffWatcher } from './modules/staff/staffActions';
+import { managerWatcher } from './modules/manager/managerActions';
 
 export default function* rootSaga() {
   yield all([
@@ -11,6 +12,7 @@ export default function* rootSaga() {
     fork(companiesWatcher),
     fork(redirectWatcher),
     fork(shareOpinionWatcher),
-    fork(staffWatcher)
+    fork(staffWatcher),
+    fork(managerWatcher)
   ]);
 }

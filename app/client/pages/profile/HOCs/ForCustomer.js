@@ -1,15 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// import {
-//   validateEmail,
-//   validatePhone,
-//   validateLocation,
-//   validateFirstName,
-//   validateLastName,
-//   validateUserAbout,
-// } from '../../../utils/validator';
 import authSelectors from '../../../modules/auth/authSelectors';
+import managerSelectors from '../../../modules/manager/managerSelectors';
 import {
   updateUser,
   setUserErrors,
@@ -17,6 +10,7 @@ import {
   pushUpdateUser
 } from '../../../modules/auth/authActions';
 import { validateUser } from '../../../utils/validator';
+import { getRadarScores, getSatisfiedClients } from '../../../modules/manager/managerActions';
 
 export default (OriginalComponent) => {
   class ForCustomerHOC extends React.Component {
@@ -105,14 +99,18 @@ export default (OriginalComponent) => {
     errors: authSelectors.errors(state),
     user: authSelectors.user(state),
     isEdit: authSelectors.isEdit(state),
-    activeEditUser: authSelectors.activeEditUser(state)
+    activeEditUser: authSelectors.activeEditUser(state),
+    managerGrades: managerSelectors.grades(state),
+    managerSatisfiedClients: managerSelectors.satisfiedClients(state)
   });
 
   const mapDispatchToProps = {
     updateUser,
     setUserErrors,
     editModeUser,
-    pushUpdateUser
+    pushUpdateUser,
+    getRadarScores,
+    getSatisfiedClients
   };
 
   return connect(

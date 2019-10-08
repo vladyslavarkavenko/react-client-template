@@ -11,7 +11,7 @@ const getCurrentManager = (state) => {
   const permissions = authSelectors.rolesPermissions(state);
   const role = authSelectors.activeRole(state);
 
-  return companies[permissions[role]].manager;
+  return companies[permissions[role][0]].manager;
 };
 
 const getManagersWithCompanies = (state) => {
