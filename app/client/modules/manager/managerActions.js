@@ -3,7 +3,7 @@ import { put, takeLatest, all, call } from 'redux-saga/effects';
 import ManagerService from '../../services/manager';
 import Notification from '../../utils/notifications';
 import createRequestRoutine from '../helpers/createRequestRoutine';
-import parseRadarData from './helpers/parseRadarData';
+import parseRadarScores from '../helpers/parseRadarScores';
 
 export const prefix = 'manager';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -16,7 +16,7 @@ function* getRadarScoresWorker({ payload }) {
   try {
     const scores = yield call(ManagerService.getRadarScores, payload);
 
-    const data = parseRadarData(scores);
+    const data = parseRadarScores(scores);
 
     console.log(data);
 

@@ -4,6 +4,7 @@ import companies from './modules/companies/companiesReducer';
 import shareOpinion from './modules/shareOpinion/shareOpinionReducer';
 import staff from './modules/staff/staffReducer';
 import manager from './modules/manager/managerReducer';
+import profile from './modules/profile/profileReducer';
 import { pushLogout } from './modules/auth/authActions';
 
 const appReducer = combineReducers({
@@ -11,7 +12,8 @@ const appReducer = combineReducers({
   companies,
   shareOpinion,
   staff,
-  manager
+  manager,
+  profile
 });
 
 export default (state, action) => {

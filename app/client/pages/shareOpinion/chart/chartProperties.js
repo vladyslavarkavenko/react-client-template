@@ -23,10 +23,10 @@ for (let i = 1; i <= t; i += 1) {
 }
 
 const colors = {
-  lt: { r: 255, g: 0, b: 0 }, //    left-top
-  rt: { r: 255, g: 153, b: 0 }, //  right-top
-  rb: { r: 51, g: 204, b: 51 }, //  right-bottom
-  lb: { r: 51, g: 51, b: 255 } //   left-bottom
+  lt: { r: 204, g: 0, b: 0 }, //  left-top
+  rt: { r: 0, g: 204, b: 0 }, //  right-top
+  rb: { r: 153, g: 255, b: 153 }, //  right-bottom
+  lb: { r: 255, g: 153, b: 153 } //   left-bottom
 };
 
 export { allPoints, colors };

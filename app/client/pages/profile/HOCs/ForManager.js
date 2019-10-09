@@ -9,6 +9,8 @@ import {
   editModeUser,
   pushUpdateUser
 } from '../../../modules/auth/authActions';
+import { getRadarScores, getSatisfiedClients } from '../../../modules/profile/profileActions';
+import profileSelectors from '../../../modules/profile/profileSelectors';
 
 export default (OriginalComponent) => {
   class ForManagerHOC extends React.Component {
@@ -98,14 +100,18 @@ export default (OriginalComponent) => {
     errors: authSelectors.errors(state),
     user: authSelectors.user(state),
     isEdit: authSelectors.isEdit(state),
-    activeEditUser: authSelectors.activeEditUser(state)
+    activeEditUser: authSelectors.activeEditUser(state),
+    grades: profileSelectors.grades(state),
+    satisfiedClients: profileSelectors.satisfiedClients(state)
   });
 
   const mapDispatchToProps = {
     updateUser,
     setUserErrors,
     editModeUser,
-    pushUpdateUser
+    pushUpdateUser,
+    getRadarScores,
+    getSatisfiedClients
   };
 
   return connect(

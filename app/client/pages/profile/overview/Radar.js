@@ -19,7 +19,7 @@ import { LEGEND_COLORS, FEATURES, CATEGORIES, PROPS } from './const';
 
 import '../../../assets/styles/pages/overview.less';
 
-const { a, p, domain, factor, tooltipTriggerRadius } = PROPS;
+const { a, p, domain, factor, tooltipTriggerRadius, emptyData } = PROPS;
 
 class Radar extends React.Component {
   constructor(props) {
@@ -34,6 +34,12 @@ class Radar extends React.Component {
     this.hideTooltip = this.hideTooltip.bind(this);
     this.activateFeature = this.activateFeature.bind(this);
     this.activateCategory = this.activateCategory.bind(this);
+  }
+
+  componentDidMount() {
+    const { getRadarScores } = this.props;
+
+    getRadarScores && getRadarScores();
   }
 
   activateFeature(name) {
@@ -124,7 +130,7 @@ class Radar extends React.Component {
     const colorScale = Object.values(LEGEND_COLORS);
     const { mainAxis, dependentAxis, lines, dots, container } = styles;
 
-    const { data } = this.props;
+    const { data = emptyData } = this.props;
     const { activeFeature, activeCategory, tooltipData } = this.state;
 
     return (

@@ -1,4 +1,4 @@
-import { FEATURES } from '../../../pages/profile/overview/const';
+import { FEATURES } from '../../pages/profile/overview/const';
 
 const {
   CARING,
@@ -23,7 +23,7 @@ const mapIdName = {
   8: COURTEGIOUS
 };
 
-export default function parseRadarData(criteria) {
+export default function parseRadarScores(criteria) {
   if (!criteria.length) {
     return null;
   }

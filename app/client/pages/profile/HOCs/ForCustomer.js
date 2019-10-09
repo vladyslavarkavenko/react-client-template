@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import authSelectors from '../../../modules/auth/authSelectors';
-import managerSelectors from '../../../modules/manager/managerSelectors';
 import {
   updateUser,
   setUserErrors,
@@ -10,7 +9,6 @@ import {
   pushUpdateUser
 } from '../../../modules/auth/authActions';
 import { validateUser } from '../../../utils/validator';
-import { fetchRadarScores, fetchSatisfiedClients } from '../../../modules/manager/managerActions';
 
 export default (OriginalComponent) => {
   class ForCustomerHOC extends React.Component {
@@ -99,18 +97,14 @@ export default (OriginalComponent) => {
     errors: authSelectors.errors(state),
     user: authSelectors.user(state),
     isEdit: authSelectors.isEdit(state),
-    activeEditUser: authSelectors.activeEditUser(state),
-    managerGrades: managerSelectors.grades(state),
-    managerSatisfiedClients: managerSelectors.satisfiedClients(state)
+    activeEditUser: authSelectors.activeEditUser(state)
   });
 
   const mapDispatchToProps = {
     updateUser,
     setUserErrors,
     editModeUser,
-    pushUpdateUser,
-    getRadarScores: fetchRadarScores,
-    getSatisfiedClients: fetchSatisfiedClients
+    pushUpdateUser
   };
 
   return connect(

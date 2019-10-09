@@ -13,13 +13,12 @@ for (let x = 0; x < 8; x += 1) {
   data.push({ x, y: randomInt() });
 }
 
-/* eslint-disable */
 class SatisfiedClients extends React.Component {
-  // componentDidMount() {
-  //   const { getSatisfiedClients } = this.props;
-  //
-  //   getSatisfiedClients();
-  // }
+  componentDidMount() {
+    const { getSatisfiedClients } = this.props;
+
+    getSatisfiedClients && getSatisfiedClients();
+  }
 
   render() {
     const { satisfiedClients } = this.props;

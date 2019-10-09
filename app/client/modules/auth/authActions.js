@@ -88,10 +88,15 @@ function* loginByTokenWorker() {
       const [user, roles] = yield all([call(AuthService.getUser), call(AuthService.getRoles)]);
 
       const {
+        staffId,
         companies,
         rolesPermissions,
         activeRole = localStorage.getItem('role')
       } = formatRolesPayload(roles);
+
+      if (staffId) {
+        user.staffId = staffId;
+      }
 
       yield put(
         pushLoginByToken.success({
@@ -122,10 +127,15 @@ function* loginWorker({ payload: { email, password } }) {
     ]);
 
     const {
+      staffId,
       companies,
       rolesPermissions,
       activeRole = localStorage.getItem('role')
     } = formatRolesPayload(roles);
+
+    if (staffId) {
+      user.staffId = staffId;
+    }
 
     yield put(
       pushLogin.success({
