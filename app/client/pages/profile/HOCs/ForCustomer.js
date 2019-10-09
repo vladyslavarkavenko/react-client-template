@@ -10,7 +10,7 @@ import {
   pushUpdateUser
 } from '../../../modules/auth/authActions';
 import { validateUser } from '../../../utils/validator';
-import { getRadarScores, getSatisfiedClients } from '../../../modules/manager/managerActions';
+import { fetchRadarScores, fetchSatisfiedClients } from '../../../modules/manager/managerActions';
 
 export default (OriginalComponent) => {
   class ForCustomerHOC extends React.Component {
@@ -109,8 +109,8 @@ export default (OriginalComponent) => {
     setUserErrors,
     editModeUser,
     pushUpdateUser,
-    getRadarScores,
-    getSatisfiedClients
+    getRadarScores: fetchRadarScores,
+    getSatisfiedClients: fetchSatisfiedClients
   };
 
   return connect(

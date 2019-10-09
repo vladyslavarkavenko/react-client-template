@@ -23,7 +23,7 @@ const mapIdName = {
   8: COURTEGIOUS
 };
 
-export default function parseData(criteria) {
+export default function parseRadarData(criteria) {
   if (!criteria.length) {
     return null;
   }

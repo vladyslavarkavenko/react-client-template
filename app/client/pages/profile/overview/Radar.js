@@ -36,12 +36,6 @@ class Radar extends React.Component {
     this.activateCategory = this.activateCategory.bind(this);
   }
 
-  componentDidMount() {
-    const { getRadarScores } = this.props;
-
-    getRadarScores();
-  }
-
   activateFeature(name) {
     const { NAMES, COLORS } = FEATURES;
 
