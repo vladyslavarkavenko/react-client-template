@@ -1,5 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import i18next from 'i18next';
+
+import { ROLES } from '../../../../../utils/constants';
+import routing from '../../../../../utils/routing';
 
 export default function RateHeader({ profile }) {
   if (!profile) {
@@ -7,14 +11,14 @@ export default function RateHeader({ profile }) {
   }
 
   const { id, type, title } = profile;
-  const link = `${id}_${type}`;
+  const link = type === ROLES.MANAGER ? routing(id).managerProfileAbout : `${id}_${type}`;
 
   return (
     <div className="rate-details selected-profile">
       <div className="selected-profile__title">{title}</div>
-      <a href={link} className="selected-profile__link">
+      <Link to={link} className="selected-profile__link">
         {i18next.t('shareOpinion.profile')}
-      </a>
+      </Link>
     </div>
   );
 }

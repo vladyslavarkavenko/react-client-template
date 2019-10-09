@@ -2,7 +2,10 @@ import React from 'react';
 
 export default function RadioGroup({ name, options, selected, handleChange }) {
   const buttons = options.map((opt) => (
-    <label className={`btn ${selected === opt.value ? 'active' : ''}`} key={`${name}_${opt.value}`}>
+    <label
+      className={`radio-group__item ${selected === opt.value ? 'active' : ''}`}
+      key={`${name}_${opt.value}`}
+    >
       <input
         type="radio"
         name={name}

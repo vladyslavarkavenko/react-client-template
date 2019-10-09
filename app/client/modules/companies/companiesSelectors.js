@@ -17,12 +17,33 @@ const getManagersList = (state) => {
   return managers;
 };
 
-const getCurrentManager = (state) => {
-  const companies = getCompanyData(state);
-  const permissions = authSelectors.rolesPermissions(state);
-  const role = authSelectors.activeRole(state);
+const getCurrentManager = (state, managerId) => {
+  const companies = getCompanyData(state); //state.companies.data
+  const currentUserId = authSelectors.getCurrentUserId(state); // permission[activeRole];
 
-  return companies[permissions[role][0]].manager;
+  if (Array.isArray(currentUserId)) {
+    // if user is customer with multiple companies
+    const companyWithManager = Object.values(companies).find(
+      (company) => company.manager.id === Number(managerId)
+    );
+    return companyWithManager ? companyWithManager.manager : null;
+  }
+
+  return companies[currentUserId].manager;
+};
+
+const getCurrentCompany = (state, id) => {
+  const companies = getCompanyData(state); //state.companies.data
+  const currentUserId = authSelectors.getCurrentUserId(state); // permission[activeRole];
+
+  if (Array.isArray(currentUserId)) {
+    // if user is customer with multiple companies
+    const key = currentUserId.find((item) => item === id);
+
+    return key ? companies[key] : null;
+  }
+
+  return companies[currentUserId];
 };
 
 const getManagersWithCompanies = (state) => {
@@ -37,14 +58,6 @@ const getManagersWithCompanies = (state) => {
   });
 
   return list;
-};
-
-const getCurrentCompany = (state) => {
-  const companies = getCompanyData(state);
-  const permissions = authSelectors.rolesPermissions(state);
-  const role = authSelectors.activeRole(state);
-
-  return companies[permissions[role]];
 };
 
 export default {

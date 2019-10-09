@@ -1,50 +1,49 @@
-import { put, takeLatest, all, call, select } from 'redux-saga/effects';
+import { put, takeLatest, all, call } from 'redux-saga/effects';
 
-import parseRadarScores from '../helpers/parseRadarScores';
 import ManagerService from '../../services/manager';
 import Notification from '../../utils/notifications';
-import companiesSelectors from '../companies/companiesSelectors';
 import createRequestRoutine from '../helpers/createRequestRoutine';
+import parseRadarScores from '../helpers/parseRadarScores';
 
 export const prefix = 'manager';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
-export const getRadarScores = createRequestBound('RADAR_SCORES_FETCH');
-export const getSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
+export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
+export const fetchSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
 
-function* getRadarScoresWorker() {
-  yield put(getRadarScores.request());
-
+function* getRadarScoresWorker({ payload }) {
+  yield put(fetchRadarScores.request());
   try {
-    const manager = yield select(companiesSelectors.getCurrentManager);
-    const res = yield call(() => ManagerService.getRadarScores(manager.id));
+    const scores = yield call(ManagerService.getRadarScores, payload);
 
-    yield put(getRadarScores.success(parseRadarScores(res)));
+    const data = parseRadarScores(scores);
+
+    console.log(data);
+
+    yield put(fetchRadarScores.success(data));
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(getRadarScores.failure());
+    yield put(fetchRadarScores.failure());
   }
 }
 
-function* getSatisfiedClientsWorker() {
-  yield put(getSatisfiedClients.request());
-
+function* getSatisfiedClientsWorker({ payload }) {
+  yield put(fetchSatisfiedClients.request());
   try {
-    const manager = yield select(companiesSelectors.getCurrentManager);
-    const res = yield call(() => ManagerService.getSatisfiedClients(manager.id));
+    const { avgSatisfaction } = yield call(ManagerService.getSatisfiedClients, payload);
 
-    yield put(getSatisfiedClients.success(res.avgSatisfaction));
+    yield put(fetchSatisfiedClients.success(avgSatisfaction));
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(getSatisfiedClients.failure());
+    yield put(fetchSatisfiedClients.failure());
   }
 }
 
 export function* managerWatcher() {
   yield all([
-    takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker),
-    takeLatest(getSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
+    takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
+    takeLatest(fetchSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
   ]);
 }

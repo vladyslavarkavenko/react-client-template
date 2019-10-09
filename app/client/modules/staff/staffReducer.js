@@ -32,7 +32,7 @@ const invitationsData = handleActions(
       if (table === STAFF_TABLE_TYPE.INVITATIONS) {
         const row = state.findIndex((item) => item.id === id);
 
-        if (row !== undefined) {
+        if (row !== -1) {
           const cloned = [...state];
 
           cloned[row] = { ...cloned[row], [field]: value, isChanged: true };
@@ -174,7 +174,7 @@ const pendingData = handleActions(
       if (table === STAFF_TABLE_TYPE.PENDING) {
         const row = state.findIndex((item) => item.id === id);
 
-        if (row !== undefined) {
+        if (row !== -1) {
           const cloned = [...state];
 
           cloned[row] = { ...cloned[row], [field]: value, isChanged: true };
@@ -214,16 +214,74 @@ const activeData = handleActions(
     [actions.fetchStaffTables.SUCCESS](state, { payload }) {
       return payload.active;
     },
+    [actions.setUsersStatus.SUCCESS](state, { payload }) {
+      const updatedIds = Object.keys(payload).map((key) => Number(key));
+      const cloned = [];
+
+      state.forEach((row) => {
+        if (updatedIds.indexOf(row.id) !== -1) {
+          cloned.push(payload[row.id]);
+        } else {
+          cloned.push(row);
+        }
+      });
+
+      return cloned;
+    },
+    [actions.pushUsersChanges.SUCCESS](state, { payload }) {
+      const updatedIds = Object.keys(payload).map((key) => Number(key));
+      const cloned = [];
+
+      state.forEach((row) => {
+        if (updatedIds.indexOf(row.id) !== -1) {
+          cloned.push(payload[row.id]);
+        } else {
+          cloned.push(row);
+        }
+      });
+
+      return cloned;
+    },
+    [actions.pushUsersChanges.FULFILL](state, { payload }) {
+      const { table } = payload;
+
+      if (table === STAFF_TABLE_TYPE.ACTIVE) {
+        const cloned = state.map((row) => {
+          const oldRow = {};
+
+          Object.keys(row).forEach((key) => {
+            if (key === '_changes') {
+              return;
+            }
+            oldRow[key] = row[key];
+          });
+
+          return oldRow;
+        });
+
+        return cloned;
+      }
+
+      return state;
+    },
     [actions.saveTableField.TRIGGER](state, { payload }) {
       const { table, field, id, value } = payload;
 
       if (table === STAFF_TABLE_TYPE.ACTIVE) {
         const row = state.findIndex((item) => item.id === id);
 
-        if (row !== undefined) {
+        if (row !== -1) {
           const cloned = [...state];
 
-          cloned[row] = { ...cloned[row], [field]: value, isChanged: true };
+          if (field === 'isChecked') {
+            cloned[row] = { ...cloned[row], isChecked: value };
+          } else {
+            const _changes = cloned[row]._changes || {};
+
+            _changes[field] = value;
+
+            cloned[row] = { ...cloned[row], _changes, isChanged: true };
+          }
 
           return cloned;
         }
@@ -239,8 +297,12 @@ const activeData = handleActions(
 
         if (row !== -1) {
           const cloned = [...state];
-          cloned[row].roles = values ? values.map((item) => item.value) : [];
-          cloned[row] = { ...cloned[row], isChanged: true };
+
+          const _changes = cloned[row]._changes || {};
+
+          _changes.roles = values ? values.map((item) => item.value) : [];
+
+          cloned[row] = { ...cloned[row], _changes, isChanged: true };
           return cloned;
         }
       }
@@ -255,19 +317,20 @@ const activeData = handleActions(
 
         if (row !== -1) {
           const cloned = [...state];
+          const _changes = cloned[row]._changes || { topics: [...cloned[row].topics] };
 
           if (action === 'select-group') {
-            const selectedId = cloned[row].topics.map((topic) => topic.value);
+            const selectedId = _changes.topics.map((topic) => topic.value);
             const uniqueOptions = values.filter(
               (option) => selectedId.indexOf(option.value) === -1
             );
 
-            cloned[row].topics = [...cloned[row].topics, ...uniqueOptions];
+            _changes.topics = [..._changes.topics, ...uniqueOptions];
           } else {
-            cloned[row].topics = values || [];
+            _changes.topics = values || [];
           }
 
-          cloned[row] = { ...cloned[row], isChanged: true };
+          cloned[row] = { ...cloned[row], _changes, isChanged: true };
           return cloned;
         }
       }

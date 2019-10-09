@@ -1,4 +1,4 @@
 export default {
-  grades: (state) => state.manager.grades,
-  satisfiedClients: (state) => state.manager.satisfiedClients
+  radar: (state) => state.manager.radar,
+  satisfaction: (state) => state.manager.satisfaction
 };

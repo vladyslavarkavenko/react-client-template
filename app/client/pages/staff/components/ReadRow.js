@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
 import RoleSelect from './RoleSelect';

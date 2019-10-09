@@ -431,3 +431,22 @@ export function validateInviteStaffRow(rows) {
     isValid: !Object.keys(errors).length
   };
 }
+
+export function validateUpdateStaffRow(rows) {
+  const errors = {};
+
+  rows.forEach(({ roles, id }, multipleRoles) => {
+    const rowErrors = {
+      ...validateSelectedRoles({ roles, isMultiple: multipleRoles })
+    };
+
+    if (Object.keys(rowErrors).length) {
+      errors[id] = rowErrors;
+    }
+  });
+
+  return {
+    errors,
+    isValid: !Object.keys(errors).length
+  };
+}

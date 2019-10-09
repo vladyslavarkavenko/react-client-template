@@ -217,7 +217,12 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
       );
     }
 
-    yield put(pushRateTopic.success(ratedTopic));
+    const { result } = yield ShareOpinionService.getOpinionScore({
+      satisfaction,
+      importance
+    });
+
+    yield put(pushRateTopic.success({ ...ratedTopic, score: result }));
 
     const nextTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
 

@@ -1,23 +1,7 @@
 import { differenceInMonths } from 'date-fns';
-import { ROLES, STAFF_TABLE_STATUS } from '../../utils/constants';
+import { ROLES, STAFF_TABLE_STATUS } from '../../../utils/constants';
 
-export const normalizeTopics = (subjects) => {
-  let allTopics = [];
-
-  subjects.forEach((subject) => {
-    const partial = subject.topics.map((topic) => ({
-      label: topic.name,
-      value: topic.id,
-      group: subject.name
-    }));
-
-    allTopics = [...allTopics, ...partial];
-  });
-
-  return allTopics;
-};
-
-export const findTopics = (topicListId, subjectList) => {
+function findTopics(topicListId, subjectList) {
   const topics = [];
 
   topicListId.forEach((topicId) => {
@@ -28,10 +12,11 @@ export const findTopics = (topicListId, subjectList) => {
   });
 
   return topics;
-};
+}
 
-export const normalizeUserData = (user, subjectList, forceStatus) => {
-  const roles = [];
+export default function normalizeUserData(user, subjectList, forceStatus) {
+  const roles = user.roles || [];
+  const topics = findTopics(user.topics, subjectList);
   let status = STAFF_TABLE_STATUS.ACTIVE;
 
   if (user.isAdmin) {
@@ -61,13 +46,16 @@ export const normalizeUserData = (user, subjectList, forceStatus) => {
   }
 
   return {
-    ...user.userData,
     id: Number(user.id),
+    firstName: user.userData ? user.userData.firstName : user.firstName,
+    lastName: user.userData ? user.userData.lastName : user.lastName,
+    email: user.userData ? user.userData.email : user.email,
     expiredIn: user.expiredIn,
-    topics: findTopics(user.topics, subjectList),
-    isChecked: false,
-    isChanged: false,
+
+    topics,
     status,
-    roles
+    roles,
+    isChecked: false,
+    isChanged: false
   };
-};
+}

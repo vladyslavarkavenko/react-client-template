@@ -78,7 +78,7 @@ const selectedTopics = handleActions(
 
       cloned[currentTopicIndex] = {
         ...cloned[currentTopicIndex],
-        score: payload.opinionCtruScore,
+        score: payload.score,
         satisfaction: payload.satisfaction,
         importance: payload.importance,
         dateLastOpinion: payload.dateLastOpinion,

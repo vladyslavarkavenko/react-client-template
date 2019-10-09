@@ -1,12 +1,12 @@
 import api from '../utils/api';
 
 class ManagerService {
-  static getRadarScores(id) {
-    return api.get(`/opinion/manager/${id}/radar_scores/`);
+  static getRadarScores(managerId) {
+    return api.get(`/opinion/manager/${managerId}/radar_scores/`);
   }
 
-  static getSatisfiedClients(id) {
-    return api.get(`/opinion/manager/${id}/avg_satisfaction/`);
+  static getSatisfiedClients(managerId) {
+    return api.get(`/opinion/manager/${managerId}/avg_satisfaction/`);
   }
 }
 

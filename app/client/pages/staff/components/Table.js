@@ -6,16 +6,18 @@ import InputRow from './InputRow';
 export default function Table({
   list,
   errors,
+  checked,
   handleSelectAll,
   handleEdit,
   handleChangeRole,
   readOnly,
   table,
-  multipleRoles
+  multipleRoles,
+  onlyDropEdit
   // isRequest
 }) {
   const rows = list.map((item) =>
-    readOnly ? (
+    readOnly || item.status === 'Blocked' ? (
       <ReadRow
         key={item.id}
         data={item}
@@ -32,6 +34,7 @@ export default function Table({
         handleEdit={handleEdit}
         handleChangeRole={handleChangeRole}
         multipleRoles={multipleRoles}
+        onlyDropEdit={onlyDropEdit}
       />
     )
   );
@@ -40,7 +43,13 @@ export default function Table({
     <div className="table">
       <ul className="head">
         <li className="item item-check">
-          <CheckboxInput withFill onlyCheck name={`${table}_all`} onChange={handleSelectAll} />
+          <CheckboxInput
+            withFill
+            onlyCheck
+            name={`${table}_all`}
+            onChange={handleSelectAll}
+            checked={list.length === checked.length}
+          />
         </li>
         <li className="item">Name</li>
         <li className="item">Surname</li>
@@ -50,7 +59,6 @@ export default function Table({
         <li className="item">Status</li>
       </ul>
       <ul className="body">{rows}</ul>
-      {/*<button className="add-new-btn">Add New</button>*/}
     </div>
   );
 }

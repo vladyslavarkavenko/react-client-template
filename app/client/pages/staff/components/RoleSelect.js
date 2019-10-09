@@ -8,7 +8,10 @@ const options = [
   { value: ROLES.ADMIN, label: 'Admin' }
 ];
 
-/* eslint-disable */
+function getOptions(selected) {
+  return options.filter((item) => selected.includes(item.value));
+}
+
 export default class RoleSelect extends React.Component {
   constructor(props) {
     super(props);
@@ -16,8 +19,7 @@ export default class RoleSelect extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  onChange(values, { action, option }) {
-    console.log(values);
+  onChange(values, { action }) {
     const { handleChange, rowId, table, multipleRoles } = this.props;
     switch (action) {
       case 'clear':
@@ -26,20 +28,12 @@ export default class RoleSelect extends React.Component {
       default:
         handleChange({ id: rowId, table, values: multipleRoles ? values : [values] });
     }
-
-    console.log(rowId, table, values, action);
-
-    // handleChange({ id: rowId, table, value });
-  }
-
-  getOptions(selected) {
-    return options.filter((item) => selected.includes(item.value));
   }
 
   render() {
-    const { roles, readOnly, multipleRoles } = this.props;
+    const { roles, tempRoles, readOnly, multipleRoles } = this.props;
 
-    const values = this.getOptions(roles);
+    const values = getOptions(tempRoles || roles);
 
     return (
       <div className="role-select-wrapper">

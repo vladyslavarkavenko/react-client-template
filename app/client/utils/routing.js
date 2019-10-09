@@ -1,4 +1,4 @@
-export default (/* params */) => ({
+export default (params) => ({
   root: '/',
 
   notFound: '/not-found',
@@ -12,10 +12,13 @@ export default (/* params */) => ({
 
   account: '/account',
 
-  profile: '/account/profile/:type',
-
+  profile: '/account/profile/:tab',
   about: '/account/profile/about',
   overview: '/account/profile/overview',
+
+  managerProfile: `/manager/profile/${params || ':id'}/:tab`,
+  managerProfileAbout: `/manager/profile/${params || ':id'}/about`,
+  managerProfileOverview: `/manager/profile/${params || ':id'}/overview`,
 
   dashboard: '/account/dashboard',
 
