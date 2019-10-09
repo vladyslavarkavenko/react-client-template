@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import authSelectors from '../../../modules/auth/authSelectors';
-import managerSelectors from '../../../modules/manager/managerSelectors';
+import managerSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 import {
   updateUser,
   setUserErrors,
@@ -10,7 +10,10 @@ import {
   pushUpdateUser
 } from '../../../modules/auth/authActions';
 import { validateUser } from '../../../utils/validator';
-import { fetchRadarScores, fetchSatisfiedClients } from '../../../modules/manager/managerActions';
+import {
+  fetchRadarScores,
+  fetchSatisfiedClients
+} from '../../../modules/managerProfile/managerProfileActions';
 
 export default (OriginalComponent) => {
   class ForCustomerHOC extends React.Component {

@@ -5,16 +5,17 @@ import { Switch } from 'react-router-dom';
 import {
   fetchRadarScores,
   fetchSatisfiedClients
-} from '../../modules/managerProfile/managerProfileActions';
+} from '../../modules/companyProfile/companyProfileActions';
 import ContentHeader from '../profile/components/ContentHeader';
 import routing from '../../utils/routing';
 import Overview from './overview/Overview';
 import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 import About from './about/About';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
-import managerProfileSelectors from '../../modules/managerProfile/managerProfileSelectors';
+import companyProfileSelectors from '../../modules/companyProfile/companyProfileSelectors';
+import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 
-class ManagerProfile extends React.Component {
+class CompanyProfile extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,12 +23,12 @@ class ManagerProfile extends React.Component {
   }
 
   componentDidMount() {
-    const { match, history, manager } = this.props;
+    const { match, history, company } = this.props;
     const {
       params: { id }
     } = match;
 
-    if (!id || !manager) {
+    if (!id || !company) {
       history.push(routing().notFound);
       return;
     }
@@ -50,29 +51,29 @@ class ManagerProfile extends React.Component {
   }
 
   render() {
-    const { match, manager, satisfaction } = this.props;
+    const { match, company, satisfaction } = this.props;
     const {
       params: { id }
     } = match;
 
-    if (!manager || !id) {
+    if (!company || !id) {
       // redirect at componentDidMount
-      return null;
+      return <LoaderBlock height="50vh" />;
     }
 
     const navLinks = [
-      { to: routing(id).managerProfileOverview, title: 'Overview' },
-      { to: routing(id).managerProfileAbout, title: 'About' }
+      { to: routing(id).companyProfileOverview, title: 'Overview' },
+      { to: routing(id).companyProfileAbout, title: 'About' }
     ];
 
-    const { firstName, lastName, avatar } = manager;
+    const { name, avatar } = company;
 
     return (
       <section className="manager-profile">
         <ContentHeader
           displayAvatar
           avatar={avatar}
-          title={`${firstName} ${lastName}`}
+          title={name}
           subTitle={
             satisfaction
               ? `${satisfaction}% of clients are satisfied`
@@ -81,8 +82,8 @@ class ManagerProfile extends React.Component {
           navLinks={navLinks}
         />
         <Switch>
-          <WrappedRoute exact path={routing().managerProfileAbout} component={About} />
-          <WrappedRoute exact path={routing().managerProfileOverview} component={Overview} />
+          <WrappedRoute exact path={routing().companyProfileAbout} component={About} />
+          <WrappedRoute exact path={routing().companyProfileOverview} component={Overview} />
         </Switch>
       </section>
     );
@@ -95,12 +96,12 @@ const mapStateToProps = (state, props) => {
     params: { id, tab }
   } = match;
 
-  const satisfaction = managerProfileSelectors.satisfaction(state);
+  const satisfaction = companyProfileSelectors.satisfaction(state);
 
   return {
     id,
     tab,
-    manager: companiesSelectors.getCurrentManager(state, id),
+    company: companiesSelectors.getCurrentCompany(state, id),
     satisfaction: satisfaction.data
   };
 };
@@ -113,4 +114,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ManagerProfile);
+)(CompanyProfile);

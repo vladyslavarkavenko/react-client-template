@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import BlockWrapper from '../../profile/components/BlockWrapper';
 import SatisfiedClients from '../../profile/overview/SatisfiedClients';
-import managerSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
+import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
 
 function SatisfiedClientsContainer({ status, data }) {
   if (status === 'failure') {
@@ -26,7 +26,7 @@ const mapStateToProps = (state, props) => {
   const {
     params: { id }
   } = match;
-  const { status, data } = managerSelectors.satisfaction(state);
+  const { status, data } = companyProfileSelectors.satisfaction(state);
 
   return { status, data, id };
 };

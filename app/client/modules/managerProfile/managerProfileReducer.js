@@ -1,23 +1,18 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 
-import * as actions from './managerActions';
-import { FEATURES } from '../../pages/profile/overview/const';
+import * as actions from './managerProfileActions';
 import { makeStatusReducer } from '../../utils/reduxHelpers';
+import { createRadarInitial } from '../helpers/radarHelpers';
 
-const emptyArr = Object.values(FEATURES.NAMES).map((x) => ({ x, y: null }));
-const initialRadarData = [emptyArr, emptyArr];
+const initialRadarData = createRadarInitial();
 
 const radarStatus = makeStatusReducer(actions.fetchRadarScores);
 
 const radarData = handleActions(
   {
     [actions.fetchRadarScores.SUCCESS](state, { payload }) {
-      if (payload) {
-        return payload;
-      }
-
-      return initialRadarData;
+      return payload || initialRadarData;
     }
   },
   initialRadarData
@@ -44,9 +39,9 @@ const satisfaction = combineReducers({
   data: satisfiedClientsData
 });
 
-const manager = combineReducers({
+const managerProfile = combineReducers({
   radar,
   satisfaction
 });
 
-export default manager;
+export default managerProfile;

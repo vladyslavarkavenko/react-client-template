@@ -3,9 +3,9 @@ import { put, takeLatest, all, call } from 'redux-saga/effects';
 import ManagerService from '../../services/manager';
 import Notification from '../../utils/notifications';
 import createRequestRoutine from '../helpers/createRequestRoutine';
-import parseRadarData from './helpers/parseRadarData';
+import { parseRadarData } from '../helpers/radarHelpers';
 
-export const prefix = 'manager';
+export const prefix = 'managerProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
@@ -17,8 +17,6 @@ function* getRadarScoresWorker({ payload }) {
     const scores = yield call(ManagerService.getRadarScores, payload);
 
     const data = parseRadarData(scores);
-
-    console.log(data);
 
     yield put(fetchRadarScores.success(data));
   } catch (err) {
@@ -41,7 +39,7 @@ function* getSatisfiedClientsWorker({ payload }) {
   }
 }
 
-export function* managerWatcher() {
+export function* managerProfileWatcher() {
   yield all([
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
     takeLatest(fetchSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
