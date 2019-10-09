@@ -22,11 +22,12 @@ export const removeTokens = () => {
 
 export const formatRolesPayload = ({ customers, staff }) => {
   let activeRole = null;
+  const newState = {};
   const companies = {};
   const rolesPermissions = {};
 
   if (staff) {
-    const { company, isAdmin, isAnalyst, isManager } = staff;
+    const { company, isAdmin, isAnalyst, isManager, id: staffId } = staff;
     const { id } = company;
 
     companies[id] = company;
@@ -39,6 +40,8 @@ export const formatRolesPayload = ({ customers, staff }) => {
     if (isAdmin) {
       rolesPermissions[ADMIN] = id;
     }
+
+    newState.staffId = staffId;
   }
 
   if (customers.length) {
@@ -57,7 +60,8 @@ export const formatRolesPayload = ({ customers, staff }) => {
     activeRole = availableRoles[0];
   }
 
-  const newState = { companies, rolesPermissions };
+  newState.companies = companies;
+  newState.rolesPermissions = rolesPermissions;
   if (activeRole) {
     newState.activeRole = activeRole;
   }

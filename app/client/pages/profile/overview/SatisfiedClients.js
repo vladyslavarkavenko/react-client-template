@@ -17,7 +17,7 @@ class SatisfiedClients extends React.Component {
   componentDidMount() {
     const { getSatisfiedClients } = this.props;
 
-    getSatisfiedClients();
+    getSatisfiedClients && getSatisfiedClients();
   }
 
   render() {

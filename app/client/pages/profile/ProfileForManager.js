@@ -8,7 +8,7 @@ import EditForm from './components/EditForm';
 import ContentHeader from './components/ContentHeader';
 import ForManager from './HOCs/ForManager';
 
-const Overview = customLoadable({ loader: () => import('./Overview') });
+const Overview = ForManager(customLoadable({ loader: () => import('./Overview') }));
 const AboutForManager = ForManager(customLoadable({ loader: () => import('./UserAbout') }));
 
 // eslint-disable-next-line react/prefer-stateless-function

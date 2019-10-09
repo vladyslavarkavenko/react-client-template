@@ -3,10 +3,10 @@ import { put, takeLatest, all, call, select } from 'redux-saga/effects';
 import parseRadarScores from '../helpers/parseRadarScores';
 import ManagerService from '../../services/manager';
 import Notification from '../../utils/notifications';
-import companiesSelectors from '../companies/companiesSelectors';
 import createRequestRoutine from '../helpers/createRequestRoutine';
+import authSelectors from '../auth/authSelectors';
 
-export const prefix = 'manager';
+export const prefix = 'profile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const getRadarScores = createRequestBound('RADAR_SCORES_FETCH');
@@ -16,8 +16,8 @@ function* getRadarScoresWorker() {
   yield put(getRadarScores.request());
 
   try {
-    const manager = yield select(companiesSelectors.getCurrentManager);
-    const res = yield call(() => ManagerService.getRadarScores(manager.id));
+    const user = yield select(authSelectors.user);
+    const res = yield call(() => ManagerService.getRadarScores(user.staffId));
 
     yield put(getRadarScores.success(parseRadarScores(res)));
   } catch (err) {
@@ -31,8 +31,8 @@ function* getSatisfiedClientsWorker() {
   yield put(getSatisfiedClients.request());
 
   try {
-    const manager = yield select(companiesSelectors.getCurrentManager);
-    const res = yield call(() => ManagerService.getSatisfiedClients(manager.id));
+    const user = yield select(authSelectors.user);
+    const res = yield call(() => ManagerService.getSatisfiedClients(user.staffId));
 
     yield put(getSatisfiedClients.success(res.avgSatisfaction));
   } catch (err) {
@@ -42,7 +42,7 @@ function* getSatisfiedClientsWorker() {
   }
 }
 
-export function* managerWatcher() {
+export function* profileWatcher() {
   yield all([
     takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker),
     takeLatest(getSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)

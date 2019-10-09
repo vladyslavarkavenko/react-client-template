@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 
-import * as actions from './managerActions';
-import { PROPS } from '../../pages/profile/overview/const';
+import * as actions from './profileActions';
+import { FEATURES } from '../../pages/profile/overview/const';
 
-const { emptyData } = PROPS;
+const emptyArr = Object.values(FEATURES.NAMES).map((x) => ({ x, y: null }));
+const initialData = [emptyArr, emptyArr];
 
 const satisfiedClients = handleActions(
   {
@@ -18,15 +19,15 @@ const satisfiedClients = handleActions(
 const grades = handleActions(
   {
     [actions.getRadarScores.SUCCESS](state, { payload }) {
-      return payload || emptyData;
+      return payload || initialData;
     }
   },
-  emptyData
+  initialData
 );
 
-const managerReducer = combineReducers({
+const profileReducer = combineReducers({
   grades,
   satisfiedClients
 });
 
-export default managerReducer;
+export default profileReducer;

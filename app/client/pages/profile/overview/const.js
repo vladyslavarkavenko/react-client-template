@@ -1,14 +1,3 @@
-const a = 600;
-const factor = 0.4; // For categories bars that overflow chart
-
-export const PROPS = {
-  a,
-  factor,
-  p: (a / 2) * factor, // Padding
-  domain: { y: [0, 10] },
-  tooltipTriggerRadius: 20
-};
-
 export const LEGEND_COLORS = {
   IMPORTANCE: '#0075B7',
   SATISFACTION: '#33BCDB'
@@ -102,4 +91,19 @@ export const CATEGORIES = {
     [FEELING]: [CARING, COURTEGIOUS, CONFIDENT],
     [RESULT]: [CONFIDENT, COMPENSATING, COST_CONSCIOUS]
   }
+};
+
+const a = 600;
+const factor = 0.4; // For categories bars that overflow chart
+
+const emptyArr = Object.values(FEATURES.NAMES).map((x) => ({ x, y: null }));
+const emptyData = [emptyArr, emptyArr];
+
+export const PROPS = {
+  a,
+  factor,
+  emptyData,
+  p: (a / 2) * factor, // Padding
+  domain: { y: [0, 10] },
+  tooltipTriggerRadius: 20
 };

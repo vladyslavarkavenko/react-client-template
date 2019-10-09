@@ -23,7 +23,11 @@ export default (/* params */) => ({
   shareOpinionChart: '/account/share-opinion/rate',
   shareOpinionMessage: '/account/share-opinion/message',
 
-  staff: '/manage/staff'
+  staff: '/manage/staff',
+
+  company: '/account/company',
+  messages: '/account/messages',
+  manager: '/account/manager'
 
   // route with params example:
   // changePassword: `/auth/reset/${params ? params : ':token'}`,
