@@ -5,8 +5,8 @@ import BlockWrapper from '../../profile/components/BlockWrapper';
 import Contacts from '../../profile/components/Contacts';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
-function About({ manager }) {
-  const { email } = manager;
+function About({ company }) {
+  const { email, phone, web } = company;
   return (
     <section className="content-body">
       <main className="main">
@@ -14,7 +14,7 @@ function About({ manager }) {
       </main>
       <aside className="sidebar">
         <BlockWrapper title="Contacts">
-          <Contacts email={email} phone="+380952325" web="https://some.link.com" />
+          <Contacts email={email} phone={phone} web={web} />
         </BlockWrapper>
       </aside>
     </section>
@@ -28,7 +28,7 @@ const mapStateToProps = (state, props) => {
   } = match;
 
   return {
-    manager: companiesSelectors.getCurrentManager(state, id)
+    company: companiesSelectors.getCurrentCompany(state, id)
   };
 };
 

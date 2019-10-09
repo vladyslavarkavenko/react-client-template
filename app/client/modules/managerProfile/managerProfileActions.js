@@ -5,7 +5,7 @@ import Notification from '../../utils/notifications';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import parseRadarScores from '../helpers/parseRadarScores';
 
-export const prefix = 'manager';
+export const prefix = 'managerProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
@@ -17,8 +17,6 @@ function* getRadarScoresWorker({ payload }) {
     const scores = yield call(ManagerService.getRadarScores, payload);
 
     const data = parseRadarScores(scores);
-
-    console.log(data);
 
     yield put(fetchRadarScores.success(data));
   } catch (err) {
@@ -41,7 +39,7 @@ function* getSatisfiedClientsWorker({ payload }) {
   }
 }
 
-export function* managerWatcher() {
+export function* managerProfileWatcher() {
   yield all([
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
     takeLatest(fetchSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)

@@ -1,7 +1,7 @@
 import React from 'react';
 import SatisfiedClientsContainer from './SatisfiedClientsContainer';
 import RadarContainer from './RadarContainer';
-import TopScoresChart from '../../companyProfile/about/TopScoresChart';
+import TopScoresChart from '../about/TopScoresChart';
 import BlockWrapper from '../../profile/components/BlockWrapper';
 
 function Overview({ match }) {

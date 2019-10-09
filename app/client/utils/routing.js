@@ -20,6 +20,10 @@ export default (params) => ({
   managerProfileAbout: `/manager/profile/${params || ':id'}/about`,
   managerProfileOverview: `/manager/profile/${params || ':id'}/overview`,
 
+  companyProfile: `/company/profile/${params || ':id'}/:tab`,
+  companyProfileAbout: `/company/profile/${params || ':id'}/about`,
+  companyProfileOverview: `/company/profile/${params || ':id'}/overview`,
+
   dashboard: '/account/dashboard',
 
   shareOpinion: '/account/share-opinion',

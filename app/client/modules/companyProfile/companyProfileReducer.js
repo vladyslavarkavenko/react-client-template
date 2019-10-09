@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 
-import * as actions from './managerActions';
+import * as actions from './companyProfileActions';
 import { makeStatusReducer } from '../../utils/reduxHelpers';
 
 import { PROPS } from '../../pages/profile/overview/const';
@@ -40,9 +40,9 @@ const satisfaction = combineReducers({
   data: satisfiedClientsData
 });
 
-const manager = combineReducers({
+const companyProfile = combineReducers({
   radar,
   satisfaction
 });
 
-export default manager;
+export default companyProfile;

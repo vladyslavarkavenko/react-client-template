@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import Radar from '../../profile/overview/Radar';
 import RadarTitle from '../../profile/overview/RadarTitle';
 import BlockWrapper from '../../profile/components/BlockWrapper';
-import managerSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
+import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
 
 function RadarContainer({ status, data }) {
   if (status === 'failure') {
@@ -25,7 +25,7 @@ const mapStateToProps = (state, props) => {
   const {
     params: { id }
   } = match;
-  const { status, data } = managerSelectors.radar(state);
+  const { status, data } = companyProfileSelectors.radar(state);
 
   return { status, data, id };
 };

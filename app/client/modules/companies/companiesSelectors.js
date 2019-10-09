@@ -29,21 +29,21 @@ const getCurrentManager = (state, managerId) => {
     return companyWithManager ? companyWithManager.manager : null;
   }
 
-  return companies[currentUserId].manager;
+  return companies[currentUserId].manager || null;
 };
 
-const getCurrentCompany = (state, id) => {
+const getCurrentCompany = (state, companyId) => {
   const companies = getCompanyData(state); //state.companies.data
   const currentUserId = authSelectors.getCurrentUserId(state); // permission[activeRole];
 
-  if (Array.isArray(currentUserId)) {
-    // if user is customer with multiple companies
-    const key = currentUserId.find((item) => item === id);
+  // if (Array.isArray(currentUserId)) {
+  //   // if user is customer with multiple companies
+  //   const company = companies[companyId];
+  //
+  //   return co : null;
+  // }
 
-    return key ? companies[key] : null;
-  }
-
-  return companies[currentUserId];
+  return companies[companyId || currentUserId] || null;
 };
 
 const getManagersWithCompanies = (state) => {

@@ -11,7 +11,10 @@ export default function RateHeader({ profile }) {
   }
 
   const { id, type, title } = profile;
-  const link = type === ROLES.MANAGER ? routing(id).managerProfileAbout : `${id}_${type}`;
+  const link =
+    type === ROLES.MANAGER
+      ? routing(id).managerProfileOverview
+      : routing(id).companyProfileOverview;
 
   return (
     <div className="rate-details selected-profile">

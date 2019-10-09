@@ -38,6 +38,10 @@ const ManagerProfile = customLoadable({
   loader: () => import('../pages/managerProfile/ManagerProfile')
 });
 
+const CompanyProfile = customLoadable({
+  loader: () => import('../pages/companyProfile/CompanyProfile')
+});
+
 const Dashboard = customLoadable({ loader: () => import('../pages/dashboard/Dashboard') });
 const ShareOpinion = customLoadable({
   loader: () => import('../pages/shareOpinion/Subjects')
@@ -93,6 +97,7 @@ export default function App() {
       />
 
       <AuthRoute exact path={routing().managerProfile} component={ManagerProfile} />
+      <AuthRoute exact path={routing().companyProfile} component={CompanyProfile} />
       <RolesRoute exact path={routing().staff} forAdmin={Staff} />
 
       {/* Share your opinion */}
