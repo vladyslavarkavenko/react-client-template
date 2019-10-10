@@ -106,6 +106,8 @@ export default function App() {
 
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />
+      <AuthRoute exact path={routing().shareOpinionWithProfile} component={ShareOpinion} />
+
       <ShareOpinionRoute
         exact
         path={routing().shareOpinionChart}

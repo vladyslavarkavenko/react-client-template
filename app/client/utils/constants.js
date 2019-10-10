@@ -54,5 +54,9 @@ module.exports = {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' //.xlsx
     ],
     ARCHIVES: ['application/zip', 'application/x-7z-compressed', 'application/x-rar-compressed']
+  },
+  ROUTING_PARAMS: {
+    MANAGER: 'manager',
+    COMPANY: 'company'
   }
 };

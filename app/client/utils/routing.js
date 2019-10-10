@@ -1,3 +1,16 @@
+import { RATE_PROFILE_TYPE, ROUTING_PARAMS } from './constants';
+
+function generateProfileLink({ id, type }) {
+  switch (type) {
+    case RATE_PROFILE_TYPE.MANAGER:
+      return `${ROUTING_PARAMS.MANAGER}_${id}`;
+    case RATE_PROFILE_TYPE.COMPANY:
+      return `${ROUTING_PARAMS.COMPANY}_${id}`;
+    default:
+      return '';
+  }
+}
+
 export default (params) => ({
   root: '/',
 
@@ -27,6 +40,9 @@ export default (params) => ({
   dashboard: '/account/dashboard',
 
   shareOpinion: '/account/share-opinion',
+  shareOpinionWithProfile: `/account/share-opinion/${
+    params ? generateProfileLink(params) : ':type\\_:id'
+  }`,
   shareOpinionChart: '/account/share-opinion/rate',
   shareOpinionMessage: '/account/share-opinion/message',
 
