@@ -8,7 +8,7 @@ const InfoBlock = ({ title, body, name, isEdit, onChange, errors, className }) =
     return (
       <div className={`info-block ${className || ''}`}>
         <EditIcon />
-        {typeof title === 'string' ? <h1>{title}</h1> : title}
+        {typeof title === 'string' ? <h2 className="info-block__title">{title}</h2> : title}
         {typeof body === 'string' ? (
           <CustomTextarea name={name} value={body} onChange={onChange} error={errors[name]} />
         ) : (
@@ -20,7 +20,7 @@ const InfoBlock = ({ title, body, name, isEdit, onChange, errors, className }) =
 
   return (
     <div className={`info-block ${className || ''}`}>
-      {typeof title === 'string' ? <h1>{title}</h1> : title}
+      {typeof title === 'string' ? <h2 className="info-block__title">{title}</h2> : title}
       {typeof body === 'string' ? <p>{body || '—'}</p> : body}
     </div>
   );
