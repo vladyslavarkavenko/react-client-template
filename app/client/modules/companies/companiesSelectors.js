@@ -24,8 +24,10 @@ const getCurrentManager = (state, managerId) => {
   if (Array.isArray(currentUserId)) {
     // if user is customer with multiple companies
     const companyWithManager = Object.values(companies).find(
-      (company) => company.manager.id === Number(managerId)
+      // safe check manager
+      (company) => company.manager && company.manager.id === Number(managerId)
     );
+
     return companyWithManager ? companyWithManager.manager : null;
   }
 
