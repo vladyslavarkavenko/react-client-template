@@ -4,7 +4,6 @@ import { Link, Switch } from 'react-router-dom';
 
 import {
   fetchRadarScores,
-  fetchSatisfiedClients,
   fetchTopScores
 } from '../../modules/companyProfile/companyProfileActions';
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
@@ -45,9 +44,8 @@ class CompanyProfile extends React.Component {
   }
 
   fetchData(id) {
-    const { fetchSatisfiedClients, fetchRadarScores, fetchTopScores } = this.props;
+    const { fetchRadarScores, fetchTopScores } = this.props;
 
-    fetchSatisfiedClients(id);
     fetchRadarScores(id);
     fetchTopScores(id);
   }
@@ -72,10 +70,11 @@ class CompanyProfile extends React.Component {
       <Link
         to={routing({ id, type: RATE_PROFILE_TYPE.COMPANY }).shareOpinionWithProfile}
         className="btn btn-transparent"
+        key="header_btn_share"
       >
         Share Opinion
       </Link>,
-      <Link to={navLinks[1].to} className="btn btn-transparent">
+      <Link to={navLinks[1].to} className="btn btn-transparent" key="header_btn_contact">
         Contact
       </Link>
     ];
@@ -115,7 +114,6 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  fetchSatisfiedClients,
   fetchRadarScores,
   fetchTopScores
 };

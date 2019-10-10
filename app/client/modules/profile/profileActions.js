@@ -27,24 +27,6 @@ function* getRadarScoresWorker() {
   }
 }
 
-function* getSatisfiedClientsWorker() {
-  yield put(getSatisfiedClients.request());
-
-  try {
-    const user = yield select(authSelectors.user);
-    const res = yield call(() => ManagerService.getSatisfiedClients(user.staffId));
-
-    yield put(getSatisfiedClients.success(res.avgSatisfaction));
-  } catch (err) {
-    console.error(err);
-    Notification.error(err);
-    yield put(getSatisfiedClients.failure());
-  }
-}
-
 export function* profileWatcher() {
-  yield all([
-    takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker),
-    takeLatest(getSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
-  ]);
+  yield all([takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker)]);
 }

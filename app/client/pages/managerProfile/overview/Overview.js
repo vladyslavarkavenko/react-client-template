@@ -4,7 +4,7 @@ import RadarContainer from './RadarContainer';
 
 import TopScoresContainer from './TopScoresContainer';
 
-function Overview() {
+function Overview({ match }) {
   return (
     <section className="content-body">
       <main className="main">
@@ -12,7 +12,7 @@ function Overview() {
         <RadarContainer />
       </main>
       <aside className="sidebar">
-        <SatisfiedClientsContainer />
+        <SatisfiedClientsContainer match={match} />
       </aside>
     </section>
   );

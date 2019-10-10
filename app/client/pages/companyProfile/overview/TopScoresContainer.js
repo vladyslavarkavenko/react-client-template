@@ -12,8 +12,6 @@ function TopScoresContainer({ status, data }) {
     return null;
   }
 
-  console.log(data);
-
   return (
     <BlockWrapper title={<TopScoresHeader />}>
       {status === 'request' ? <LoaderBlock height="20vh" /> : <TopScoresChart data={data} />}

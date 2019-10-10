@@ -24,22 +24,6 @@ const radar = combineReducers({
   data: radarData
 });
 
-const satisfiedClientsStatus = makeStatusReducer(actions.fetchSatisfiedClients);
-
-const satisfiedClientsData = handleActions(
-  {
-    [actions.fetchSatisfiedClients.SUCCESS](state, { payload }) {
-      return payload;
-    }
-  },
-  null
-);
-
-const satisfaction = combineReducers({
-  status: satisfiedClientsStatus,
-  data: satisfiedClientsData
-});
-
 const topScoresStatus = makeStatusReducer(actions.fetchTopScores);
 
 const topScoresData = handleActions(
@@ -58,7 +42,6 @@ const topScores = combineReducers({
 
 const companyProfile = combineReducers({
   radar,
-  satisfaction,
   topScores
 });
 

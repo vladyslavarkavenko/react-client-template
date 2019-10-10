@@ -8,7 +8,6 @@ export const prefix = 'companyProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
-export const fetchSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
 export const fetchTopScores = createRequestBound('TOP_SCORES_FETCH');
 
 function* getRadarScoresWorker({ payload }) {
@@ -23,19 +22,6 @@ function* getRadarScoresWorker({ payload }) {
     console.error(err);
     // Notification.error(err);
     yield put(fetchRadarScores.failure());
-  }
-}
-
-function* getSatisfiedClientsWorker({ payload }) {
-  yield put(fetchSatisfiedClients.request());
-  try {
-    const { avgSatisfaction } = yield call(CompaniesService.getSatisfiedClients, payload);
-
-    yield put(fetchSatisfiedClients.success(avgSatisfaction));
-  } catch (err) {
-    console.error(err);
-    // Notification.error(err);
-    yield put(fetchSatisfiedClients.failure());
   }
 }
 
@@ -55,7 +41,6 @@ function* getTopScoresWorker({ payload }) {
 export function* companyProfileWatcher() {
   yield all([
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
-    takeLatest(fetchSatisfiedClients.TRIGGER, getSatisfiedClientsWorker),
     takeLatest(fetchTopScores.TRIGGER, getTopScoresWorker)
   ]);
 }

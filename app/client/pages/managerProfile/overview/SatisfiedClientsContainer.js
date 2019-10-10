@@ -2,29 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 import BlockWrapper from '../../profile/components/BlockWrapper';
 import SatisfiedClients from '../../profile/overview/SatisfiedClients';
-import managerSelectors from '../../../modules/managerProfile/managerProfileSelectors';
-import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
+import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
-function SatisfiedClientsContainer({ status, data }) {
-  if (status === 'failure') {
-    return null;
-  }
-
+function SatisfiedClientsContainer({ avgSatisfaction }) {
   return (
     <BlockWrapper>
-      {status === 'request' ? (
-        <LoaderBlock height="20vh" />
-      ) : (
-        <SatisfiedClients satisfiedClients={data} />
-      )}
+      <SatisfiedClients satisfiedClients={avgSatisfaction} />
     </BlockWrapper>
   );
 }
 
-const mapStateToProps = (state) => {
-  const { status, data } = managerSelectors.satisfaction(state);
+const mapStateToProps = (state, props) => {
+  const {
+    match: {
+      params: { id }
+    }
+  } = props;
+  const { avgSatisfaction } = companiesSelectors.getCurrentManager(state, id);
 
-  return { status, data };
+  return { avgSatisfaction };
 };
 
 export default connect(mapStateToProps)(SatisfiedClientsContainer);

@@ -9,8 +9,9 @@ import {
   editModeUser,
   pushUpdateUser
 } from '../../../modules/auth/authActions';
-import { getRadarScores, getSatisfiedClients } from '../../../modules/profile/profileActions';
+import { getRadarScores } from '../../../modules/profile/profileActions';
 import profileSelectors from '../../../modules/profile/profileSelectors';
+import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
 export default (OriginalComponent) => {
   class ForManagerHOC extends React.Component {
@@ -96,22 +97,25 @@ export default (OriginalComponent) => {
     }
   }
 
-  const mapStateToProps = (state) => ({
-    errors: authSelectors.errors(state),
-    user: authSelectors.user(state),
-    isEdit: authSelectors.isEdit(state),
-    activeEditUser: authSelectors.activeEditUser(state),
-    grades: profileSelectors.grades(state),
-    satisfiedClients: profileSelectors.satisfiedClients(state)
-  });
+  const mapStateToProps = (state) => {
+    const { avgSatisfaction } = companiesSelectors.getCurrentManager(state) || {};
+
+    return {
+      errors: authSelectors.errors(state),
+      user: authSelectors.user(state),
+      isEdit: authSelectors.isEdit(state),
+      activeEditUser: authSelectors.activeEditUser(state),
+      grades: profileSelectors.grades(state),
+      satisfiedClients: avgSatisfaction
+    };
+  };
 
   const mapDispatchToProps = {
     updateUser,
     setUserErrors,
     editModeUser,
     pushUpdateUser,
-    getRadarScores,
-    getSatisfiedClients
+    getRadarScores
   };
 
   return connect(
