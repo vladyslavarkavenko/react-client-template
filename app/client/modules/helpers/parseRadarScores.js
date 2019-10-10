@@ -23,8 +23,8 @@ const mapIdName = {
   8: COURTEGIOUS
 };
 
-export default function parseRadarScores(criteria) {
-  if (!criteria.length) {
+export default function parseRadarScores(aspects) {
+  if (!aspects.length) {
     return null;
   }
 
@@ -33,15 +33,17 @@ export default function parseRadarScores(criteria) {
     names.map((x) => ({ x, y: [] })) //  Satisfaction
   ];
 
-  criteria.forEach(({ criteriaId: id, subjects }) => {
-    const i = data[0].find(({ x }) => x === mapIdName[id]).y;
-    const s = data[1].find(({ x }) => x === mapIdName[id]).y;
+  aspects.forEach(({ criteria }) => {
+    criteria.forEach(({ criteriaId: id, subjects }) => {
+      const i = data[0].find(({ x }) => x === mapIdName[id]).y;
+      const s = data[1].find(({ x }) => x === mapIdName[id]).y;
 
-    subjects.forEach(({ topics }) => {
-      topics.forEach(({ grades }) => {
-        grades.forEach(({ importance, satisfaction }) => {
-          i.push(importance);
-          s.push(satisfaction);
+      subjects.forEach(({ topics }) => {
+        topics.forEach(({ grades }) => {
+          grades.forEach(({ importance, satisfaction }) => {
+            i.push(importance);
+            s.push(satisfaction);
+          });
         });
       });
     });

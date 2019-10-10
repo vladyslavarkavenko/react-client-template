@@ -26,7 +26,7 @@ const DASHBOARD = {
 const OPINIONS = {
   title: 'Opinions',
   Icon: SvgEyeEmpty,
-  to: routing().shareOpinion
+  to: routing().opinions
 };
 
 const MATCHING = {

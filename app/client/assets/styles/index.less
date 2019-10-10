@@ -11,7 +11,6 @@
 @import "ui/_modal";
 @import "ui/_notifications";
 @import "ui/_alert";
-
 // Components
 @import "components/_navbar";
 @import "components/_userprofile";
@@ -159,4 +158,37 @@ ul, ol {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.opinions {
+  padding: 1rem;
+  position: relative;
+
+  .empty-header {
+    width: 100%;
+    height: 8.75rem;
+    background: linear-gradient(322.07deg, #51B7EF 0%, #1974B2 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .body {
+    position: relative;
+
+    h1 {
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    li {
+      height: 10rem;
+      background: white;
+      margin-bottom: 2rem;
+      border-radius: 1px;
+      padding: 1rem;
+    }
+
+  }
 }

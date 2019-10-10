@@ -21,6 +21,9 @@ const ChooseRole = customLoadable({
 const Account = customLoadable({
   loader: () => import('../pages/account/Account')
 });
+const Opinions = customLoadable({
+  loader: () => import('../pages/opinions/Opinions')
+});
 const ProfileForAdmin = customLoadable({
   loader: () => import('../pages/profile/ProfileForAdmin')
 });
@@ -98,6 +101,7 @@ export default function App() {
 
       <AuthRoute exact path={routing().managerProfile} component={ManagerProfile} />
       <AuthRoute exact path={routing().companyProfile} component={CompanyProfile} />
+      <AuthRoute exact path={routing().opinions} component={Opinions} />
       <RolesRoute exact path={routing().staff} forAdmin={Staff} />
 
       {/* Share your opinion */}

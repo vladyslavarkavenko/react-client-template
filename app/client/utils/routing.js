@@ -34,7 +34,8 @@ export default (params) => ({
 
   company: '/account/company',
   messages: '/account/messages',
-  manager: '/account/manager'
+  manager: '/account/manager',
+  opinions: '/account/opinions'
 
   // route with params example:
   // changePassword: `/auth/reset/${params ? params : ':token'}`,
