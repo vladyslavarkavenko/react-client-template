@@ -410,10 +410,10 @@ export function validateCreateNewTopic(data) {
   };
 }
 
-export function validateInviteStaffRow(rows) {
+export function validateInviteStaffRow(rows, multipleRoles) {
   const errors = {};
 
-  rows.forEach(({ email, firstName, lastName, roles, id }, multipleRoles) => {
+  rows.forEach(({ email, firstName, lastName, roles, id }) => {
     const rowErrors = {
       ...validateEmail(email),
       ...validateUserFirstName(firstName),
@@ -432,10 +432,10 @@ export function validateInviteStaffRow(rows) {
   };
 }
 
-export function validateUpdateStaffRow(rows) {
+export function validateUpdateStaffRow(rows, multipleRoles) {
   const errors = {};
 
-  rows.forEach(({ roles, id }, multipleRoles) => {
+  rows.forEach(({ roles, id }) => {
     const rowErrors = {
       ...validateSelectedRoles({ roles, isMultiple: multipleRoles })
     };

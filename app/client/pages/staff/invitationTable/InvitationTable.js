@@ -10,6 +10,7 @@ import {
 import Table from '../components/Table';
 import staffSelectors from '../../../modules/staff/staffSelectors';
 import Button from '../../../components/ui-components/Form/Button';
+import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
 class InvitationTable extends React.Component {
   constructor(props) {
@@ -86,8 +87,10 @@ class InvitationTable extends React.Component {
 
 const mapStateToProps = (state) => {
   const table = STAFF_TABLE_TYPE.INVITATIONS;
+  const multipleRoles = companiesSelectors.getCurrentCompany(state).hasAllAccess;
   return {
     table,
+    multipleRoles,
     status: staffSelectors.getTableStatus(state, table),
     list: staffSelectors.getTableData(state, table),
     errors: staffSelectors.getTableErrors(state, table),
