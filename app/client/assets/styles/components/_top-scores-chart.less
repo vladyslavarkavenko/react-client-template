@@ -79,7 +79,6 @@
   &__container {
     display: flex;
     flex-grow: 1;
-    position: relative;
     height: @chart-height;
     overflow-y: scroll;
     margin-bottom: @legend-margin;
@@ -104,8 +103,7 @@
   &__main {
     flex-grow: 1;
     margin: 0 @content-gap;
-    background-size: 100% / 9; // nine lines
-    background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
+    min-height: 100%;
 
     .main-item {
       position: relative;
@@ -113,6 +111,9 @@
       display: flex;
       align-items: center;
       flex-grow: 1;
+      background-size: 100% / 9; // nine lines
+      background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
+
 
       .progress-bar {
         z-index: @z-index-progress;

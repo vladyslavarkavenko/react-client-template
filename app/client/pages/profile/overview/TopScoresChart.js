@@ -1,5 +1,5 @@
 import React from 'react';
-import RateItem from './RateItem';
+import RateItem from './topScores/RateItem';
 
 /* eslint-disable */
 const mockData = [
@@ -83,11 +83,11 @@ const SidebarItem = ({ title }) => (
   </li>
 );
 
-export default function TopScoresChart() {
+export default function TopScoresChart({ data }) {
   const sidebarList = [];
   const rateList = [];
 
-  mockData.forEach(({ min, max, median, customerRate, topicId, topicName }) => {
+  data.slice(0, 10).forEach(({ min, max, median, customerRate, topicId, topicName }) => {
     sidebarList.push(<SidebarItem key={`${topicId}_c_s`} title={topicName} />);
     rateList.push(
       <RateItem

@@ -4,18 +4,12 @@ import { connect } from 'react-redux';
 import BlockWrapper from '../../profile/components/BlockWrapper';
 import Contacts from '../../profile/components/Contacts';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
-import TopScoresChart from './topScrores/TopScoresChart';
-import TopScoresHeader from './topScrores/TopScoresHeader';
 
 function About({ company }) {
   const { email, phone, web } = company;
   return (
     <section className="content-body">
       <main className="main">
-        <BlockWrapper title={<TopScoresHeader />}>
-          <TopScoresChart />
-        </BlockWrapper>
-
         <BlockWrapper title="Portrait">Some text about</BlockWrapper>
       </main>
       <aside className="sidebar">

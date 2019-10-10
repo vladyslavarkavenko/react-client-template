@@ -12,6 +12,10 @@ class CompaniesService {
   static getSatisfiedClients(companyId) {
     return api.get(`/opinion/company/${companyId}/avg_satisfaction/`);
   }
+
+  static getTopScores(companyId) {
+    return api.get(`/opinion/company/${companyId}/topic_scores/`);
+  }
 }
 
 export default CompaniesService;

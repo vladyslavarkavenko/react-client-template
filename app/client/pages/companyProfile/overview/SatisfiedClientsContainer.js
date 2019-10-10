@@ -21,14 +21,10 @@ function SatisfiedClientsContainer({ status, data }) {
   );
 }
 
-const mapStateToProps = (state, props) => {
-  const { match } = props;
-  const {
-    params: { id }
-  } = match;
+const mapStateToProps = (state) => {
   const { status, data } = companyProfileSelectors.satisfaction(state);
 
-  return { status, data, id };
+  return { status, data };
 };
 
 export default connect(mapStateToProps)(SatisfiedClientsContainer);

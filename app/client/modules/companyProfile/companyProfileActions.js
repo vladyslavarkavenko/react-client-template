@@ -1,6 +1,5 @@
 import { put, takeLatest, all, call } from 'redux-saga/effects';
 
-import Notification from '../../utils/notifications';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import CompaniesService from '../../services/companies';
 import parseRadarScores from '../helpers/parseRadarScores';
@@ -10,6 +9,7 @@ const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
 export const fetchSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
+export const fetchTopScores = createRequestBound('TOP_SCORES_FETCH');
 
 function* getRadarScoresWorker({ payload }) {
   yield put(fetchRadarScores.request());
@@ -21,7 +21,7 @@ function* getRadarScoresWorker({ payload }) {
     yield put(fetchRadarScores.success(data));
   } catch (err) {
     console.error(err);
-    Notification.error(err);
+    // Notification.error(err);
     yield put(fetchRadarScores.failure());
   }
 }
@@ -34,14 +34,28 @@ function* getSatisfiedClientsWorker({ payload }) {
     yield put(fetchSatisfiedClients.success(avgSatisfaction));
   } catch (err) {
     console.error(err);
-    Notification.error(err);
+    // Notification.error(err);
     yield put(fetchSatisfiedClients.failure());
+  }
+}
+
+function* getTopScoresWorker({ payload }) {
+  yield put(fetchTopScores.request());
+  try {
+    const scores = yield call(CompaniesService.getTopScores, payload);
+
+    yield put(fetchTopScores.success(scores));
+  } catch (err) {
+    console.error(err);
+    // Notification.error(err);
+    yield put(fetchTopScores.failure());
   }
 }
 
 export function* companyProfileWatcher() {
   yield all([
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
-    takeLatest(fetchSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
+    takeLatest(fetchSatisfiedClients.TRIGGER, getSatisfiedClientsWorker),
+    takeLatest(fetchTopScores.TRIGGER, getTopScoresWorker)
   ]);
 }

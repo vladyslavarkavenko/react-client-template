@@ -40,9 +40,26 @@ const satisfaction = combineReducers({
   data: satisfiedClientsData
 });
 
+const topScoresStatus = makeStatusReducer(actions.fetchTopScores);
+
+const topScoresData = handleActions(
+  {
+    [actions.fetchTopScores.SUCCESS](state, { payload }) {
+      return payload;
+    }
+  },
+  []
+);
+
+const topScores = combineReducers({
+  status: topScoresStatus,
+  data: topScoresData
+});
+
 const managerProfile = combineReducers({
   radar,
-  satisfaction
+  satisfaction,
+  topScores
 });
 
 export default managerProfile;
