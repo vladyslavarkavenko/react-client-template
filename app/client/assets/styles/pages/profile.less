@@ -73,8 +73,8 @@
 
     .avatar {
       position: absolute;
-      top: 25px;
-      left: 20px;
+      top: 1.5rem;
+      left: 1.2rem;
       height: 114px;
       width: 114px;
       border-radius: 50%;
@@ -97,8 +97,8 @@
           min-width: 100%;
           object-fit: cover;
           position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
+          //left: 50%;
+          //transform: translateX(-50%);
         }
       }
     }
@@ -109,38 +109,54 @@
       background: linear-gradient(322.07deg, #51B7EF 0%, #1974B2 100%);
       padding: 20px 20px 20px 150px;
       min-height: 82px;
+      display: flex;
+      justify-content: space-between;
 
       &.simple {
         padding: 24px 20px 18px 20px;
       }
 
-      h1 {
-        font-size: 24px;
-        line-height: 28px;
-      }
+      .text-block {
 
-      h2 {
-        line-height: 26px;
-      }
 
-      p {
-        line-height: 24px;
-      }
+        h1 {
+          font-size: 24px;
+          line-height: 28px;
+        }
 
-      .location {
-        display: flex;
-        align-items: center;
+        h2 {
+          line-height: 26px;
+        }
 
         p {
-          font-size: 14px;
+          line-height: 24px;
         }
+        .location {
+          display: flex;
+          align-items: center;
 
-        svg {
-          fill: #fff;
-          height: 16px;
-          margin-right: 8px;
+          p {
+            font-size: 14px;
+          }
+
+          svg {
+            fill: #fff;
+            height: 16px;
+            margin-right: 8px;
+          }
         }
       }
+
+      .buttons-block {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .btn {
+          margin-left: 1rem;
+        }
+      }
+
     }
 
     .content-edit-info {
