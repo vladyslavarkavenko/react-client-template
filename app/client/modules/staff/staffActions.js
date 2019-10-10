@@ -30,6 +30,7 @@ export const setUsersStatus = createRequestBound('USER_STATUS_SET');
 export const pushUsersChanges = createRequestBound('USER_CHANGES_PUSH');
 
 export const saveTableField = createOnlyTriggerBound('FIELD_SAVE');
+export const createNewRow = createOnlyTriggerBound('NEW_ROW_CREATE');
 export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
 export const changeTableRole = createOnlyTriggerBound('ROLE_CHANGE');
 export const changeTableTopic = createOnlyTriggerBound('TOPIC_CHANGE');

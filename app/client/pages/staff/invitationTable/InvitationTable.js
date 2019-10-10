@@ -5,7 +5,8 @@ import {
   saveTableField,
   changeTableRole,
   pushSendInvitations,
-  selectAllRows
+  selectAllRows,
+  createNewRow
 } from '../../../modules/staff/staffActions';
 import Table from '../components/Table';
 import staffSelectors from '../../../modules/staff/staffSelectors';
@@ -48,7 +49,8 @@ class InvitationTable extends React.Component {
       multipleRoles,
       status,
       errors,
-      checked
+      checked,
+      createNewRow
     } = this.props;
 
     const isRequest = status === 'request';
@@ -67,6 +69,7 @@ class InvitationTable extends React.Component {
           handleEdit={this.handleEdit}
           handleChangeRole={changeTableRole}
           multipleRoles={multipleRoles}
+          handleCreateRow={createNewRow}
         />
 
         <div className="table-controls">
@@ -102,7 +105,8 @@ const mapDispatchToProps = {
   saveTableField,
   changeTableRole,
   pushSendInvitations,
-  selectAllRows
+  selectAllRows,
+  createNewRow
 };
 
 export default connect(

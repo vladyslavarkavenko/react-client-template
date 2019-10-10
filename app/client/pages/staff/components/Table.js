@@ -2,6 +2,7 @@ import React from 'react';
 import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
 import ReadRow from './ReadRow';
 import InputRow from './InputRow';
+import ButtonRow from './ButtonRow';
 
 export default function Table({
   list,
@@ -13,7 +14,8 @@ export default function Table({
   readOnly,
   table,
   multipleRoles,
-  onlyDropEdit
+  onlyDropEdit,
+  handleCreateRow
   // isRequest
 }) {
   const rows = list.map((item) =>
@@ -58,7 +60,10 @@ export default function Table({
         <li className="item item-x3">Topics</li>
         <li className="item">Status</li>
       </ul>
-      <ul className="body">{rows}</ul>
+      <ul className="body">
+        {rows}
+        {handleCreateRow && <ButtonRow handleCreate={handleCreateRow} />}
+      </ul>
     </div>
   );
 }
