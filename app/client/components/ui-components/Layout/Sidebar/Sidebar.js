@@ -9,7 +9,7 @@ const Sidebar = ({ role }) => (
   <ul className="nav-side-bar">
     {NAV_LINKS[role].map(({ title, Icon, to }) => (
       <li key={title}>
-        <NavLink to={to} activeClassName="active" className="nav-link">
+        <NavLink exact to={to} activeClassName="active" className="nav-link">
           <Icon />
           {title}
         </NavLink>
