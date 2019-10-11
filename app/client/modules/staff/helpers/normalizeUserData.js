@@ -1,4 +1,4 @@
-import { differenceInMonths } from 'date-fns';
+import { differenceInDays } from 'date-fns';
 import { ROLES, STAFF_TABLE_STATUS } from '../../../utils/constants';
 
 function findTopics(topicListId, subjectList) {
@@ -32,7 +32,7 @@ export default function normalizeUserData(user, subjectList, forceStatus) {
   }
 
   if (user.expiredIn) {
-    differenceInMonths(new Date(), new Date(user.expiredIn)) > 6
+    differenceInDays(new Date(), new Date(user.expiredIn)) > 7
       ? (status = STAFF_TABLE_STATUS.EXPIRED)
       : (status = STAFF_TABLE_STATUS.PENDING);
   }
