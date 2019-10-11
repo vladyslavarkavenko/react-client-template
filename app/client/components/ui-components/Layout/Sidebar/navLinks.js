@@ -50,7 +50,7 @@ const STAFF = {
 const MY_CLIENTS = {
   title: 'My clients',
   Icon: SvgClients,
-  to: routing().notFound
+  to: routing().clients
 };
 
 const COMMUNITY = {

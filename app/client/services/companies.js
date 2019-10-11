@@ -12,6 +12,10 @@ class CompaniesService {
   static getTopScores(companyId) {
     return api.get(`/opinion/company/${companyId}/topic_scores/`);
   }
+
+  static getManagersList() {
+    return api.get('/company/company/managers/');
+  }
 }
 
 export default CompaniesService;

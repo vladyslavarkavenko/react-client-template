@@ -47,6 +47,7 @@ export default (params) => ({
   shareOpinionMessage: '/account/share-opinion/message',
 
   staff: '/manage/staff',
+  clients: '/manage/clients',
 
   company: '/account/company',
   messages: '/account/messages',
