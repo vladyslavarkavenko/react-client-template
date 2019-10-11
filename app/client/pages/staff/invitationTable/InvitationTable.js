@@ -69,10 +69,17 @@ class InvitationTable extends React.Component {
           handleEdit={this.handleEdit}
           handleChangeRole={changeTableRole}
           multipleRoles={multipleRoles}
-          handleCreateRow={createNewRow}
         />
 
         <div className="table-controls">
+          <Button
+            className="table-btn-transparent"
+            onClick={() => createNewRow()}
+            disabled={isRequest}
+          >
+            + Add a row
+          </Button>
+
           {checked.length !== 0 && (
             <Button
               className="table-btn"

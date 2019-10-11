@@ -3,7 +3,7 @@ import Select, { components } from 'react-select';
 import { connect } from 'react-redux';
 import staffSelectors from '../../../modules/staff/staffSelectors';
 import { changeTableTopic } from '../../../modules/staff/staffActions';
-import Button from '../../../components/ui-components/Form/Button';
+// import Button from '../../../components/ui-components/Form/Button';
 
 const GroupHeading = (props) => {
   const action = 'select-group';
@@ -18,7 +18,7 @@ const GroupHeading = (props) => {
   );
 
   return (
-    <div className="roles-select__group-head" onClick={() => onChange(groupOptions, action)}>
+    <div className="topic-select__group-head" onClick={() => onChange(groupOptions, action)}>
       <components.GroupHeading {...props} />
       <div className="remain">{remainItemsCount}</div>
     </div>
@@ -44,12 +44,12 @@ class TopicSelect extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isExpanded: false
-    };
+    // this.state = {
+    //   isExpanded: false
+    // };
 
     this.onChange = this.onChange.bind(this);
-    this.handleExpand = this.handleExpand.bind(this);
+    // this.handleExpand = this.handleExpand.bind(this);
   }
 
   onChange(values, action) {
@@ -58,14 +58,14 @@ class TopicSelect extends React.Component {
     handleChange({ id: rowId, table, values, action });
   }
 
-  handleExpand() {
-    this.setState((prevState) => ({
-      isExpanded: !prevState.isExpanded
-    }));
-  }
+  // handleExpand() {
+  //   this.setState((prevState) => ({
+  //     isExpanded: !prevState.isExpanded
+  //   }));
+  // }
 
   render() {
-    const { isExpanded } = this.state;
+    // const { isExpanded } = this.state;
     const { subjects, selected, readOnly } = this.props;
 
     const options = createOptions(subjects);
@@ -81,16 +81,16 @@ class TopicSelect extends React.Component {
             components={{
               GroupHeading
             }}
+            closeMenuOnSelect={false}
             isMulti
-            isDisabled={!isExpanded || readOnly}
-            className={isExpanded ? '' : 'collapsed'}
+            isDisabled={readOnly}
             classNamePrefix="topic-select"
           />
         </div>
 
-        <Button onClick={this.handleExpand} className="topic-expand-btn">
-          {isExpanded ? 'Close' : `Show ${selected.length ? `${selected.length} items` : ''}`}
-        </Button>
+        {/*<Button onClick={this.handleExpand} className="topic-expand-btn">*/}
+        {/*  {isExpanded ? 'Close' : `Show ${selected.length ? `${selected.length} items` : ''}`}*/}
+        {/*</Button>*/}
       </div>
     );
   }

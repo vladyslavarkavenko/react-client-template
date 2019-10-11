@@ -43,6 +43,7 @@ export default class RoleSelect extends React.Component {
           value={values}
           onChange={this.onChange}
           isDisabled={readOnly}
+          closeMenuOnSelect={false}
           // components={{
           //   Control: () => <div />
           // }}
