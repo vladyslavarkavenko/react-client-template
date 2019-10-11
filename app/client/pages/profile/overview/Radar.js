@@ -133,6 +133,7 @@ class Radar extends React.Component {
     const { data = emptyData } = this.props;
     const { activeFeature, activeCategory, tooltipData } = this.state;
 
+    console.log('props', this.props);
     return (
       <div className="radar-wrapper">
         <div className="radar p-relative">

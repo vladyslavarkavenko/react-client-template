@@ -31,8 +31,8 @@ class ContentHeader extends React.Component {
     return (
       <div className="content-header">
         {displayAvatar && (
-          <div className="avatar">
-            <div className="img-wrapper">
+          <div className="avatar-wrapper">
+            <div className="avatar circle">
               <img alt="Avatar" src={avatar || '/assets/img/empty-avatar.jpg'} />
             </div>
           </div>

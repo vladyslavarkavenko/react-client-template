@@ -1,31 +1,13 @@
-import { FEATURES } from '../../pages/profile/overview/const';
+import { FEATURES, PROPS } from '../../pages/profile/overview/const';
 
-const {
-  CARING,
-  CLEAR,
-  COMPENSATING,
-  CONFIDENT,
-  CONVENIENT,
-  COST_CONSCIOUS,
-  COURTEGIOUS,
-  CREATIVE
-} = FEATURES.NAMES;
-const names = Object.values(FEATURES.NAMES);
+const { emptyData } = PROPS;
+const { NAMES, ID_NAME } = FEATURES;
 
-const mapIdName = {
-  1: CARING,
-  2: CONVENIENT,
-  3: CREATIVE,
-  4: CLEAR,
-  5: COST_CONSCIOUS,
-  6: COMPENSATING,
-  7: CONFIDENT,
-  8: COURTEGIOUS
-};
+const names = Object.values(NAMES);
 
 export default function parseRadarScores(aspects) {
   if (!aspects.length) {
-    return null;
+    return emptyData;
   }
 
   const data = [
@@ -35,8 +17,8 @@ export default function parseRadarScores(aspects) {
 
   aspects.forEach(({ criteria }) => {
     criteria.forEach(({ criteriaId: id, subjects }) => {
-      const i = data[0].find(({ x }) => x === mapIdName[id]).y;
-      const s = data[1].find(({ x }) => x === mapIdName[id]).y;
+      const i = data[0].find(({ x }) => x === ID_NAME[id]).y;
+      const s = data[1].find(({ x }) => x === ID_NAME[id]).y;
 
       subjects.forEach(({ topics }) => {
         topics.forEach(({ grades }) => {
@@ -49,6 +31,7 @@ export default function parseRadarScores(aspects) {
     });
   });
 
+  console.log('@data', data);
   const cb = ({ x, y }) => ({ x, y: y.length ? y.reduce((a, b) => a + b) / y.length : null });
 
   return [data[0].map(cb), data[1].map(cb)];

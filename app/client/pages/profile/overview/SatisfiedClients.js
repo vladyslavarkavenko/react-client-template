@@ -13,20 +13,15 @@ for (let x = 0; x < 8; x += 1) {
   data.push({ x, y: randomInt() });
 }
 
+// eslint-disable-next-line react/prefer-stateless-function
 class SatisfiedClients extends React.Component {
-  componentDidMount() {
-    const { getSatisfiedClients } = this.props;
-
-    getSatisfiedClients && getSatisfiedClients();
-  }
-
   render() {
-    const { satisfiedClients } = this.props;
+    const { avgSatisfaction } = this.props;
 
     return (
       <div className="d-flex satisfied-clients">
         <div className="info">
-          <h1>{satisfiedClients ? `${satisfiedClients}%` : '—'}</h1>
+          <h1>{avgSatisfaction !== undefined ? `${avgSatisfaction}%` : '—'}</h1>
           <p> Satisfied clients </p>
         </div>
         <VictoryBar

@@ -8,40 +8,40 @@ import parseRadarScores from '../helpers/parseRadarScores';
 export const prefix = 'companyProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
-export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
-export const fetchSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
+export const getRadarScores = createRequestBound('RADAR_SCORES_FETCH');
+export const getSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
 
 function* getRadarScoresWorker({ payload }) {
-  yield put(fetchRadarScores.request());
+  yield put(getRadarScores.request());
   try {
     const scores = yield call(CompaniesService.getRadarScores, payload);
 
     const data = parseRadarScores(scores);
 
-    yield put(fetchRadarScores.success(data));
+    yield put(getRadarScores.success(data));
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(fetchRadarScores.failure());
+    yield put(getRadarScores.failure());
   }
 }
 
 function* getSatisfiedClientsWorker({ payload }) {
-  yield put(fetchSatisfiedClients.request());
+  yield put(getSatisfiedClients.request());
   try {
     const { avgSatisfaction } = yield call(CompaniesService.getSatisfiedClients, payload);
 
-    yield put(fetchSatisfiedClients.success(avgSatisfaction));
+    yield put(getSatisfiedClients.success(avgSatisfaction));
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(fetchSatisfiedClients.failure());
+    yield put(getSatisfiedClients.failure());
   }
 }
 
 export function* companyProfileWatcher() {
   yield all([
-    takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
-    takeLatest(fetchSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
+    takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker),
+    takeLatest(getSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
   ]);
 }

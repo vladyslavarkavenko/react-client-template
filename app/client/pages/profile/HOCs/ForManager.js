@@ -9,7 +9,7 @@ import {
   editModeUser,
   pushUpdateUser
 } from '../../../modules/auth/authActions';
-import { getRadarScores, getSatisfiedClients } from '../../../modules/profile/profileActions';
+import { getRadarScores } from '../../../modules/profile/profileActions';
 import profileSelectors from '../../../modules/profile/profileSelectors';
 
 export default (OriginalComponent) => {
@@ -102,7 +102,7 @@ export default (OriginalComponent) => {
     isEdit: authSelectors.isEdit(state),
     activeEditUser: authSelectors.activeEditUser(state),
     grades: profileSelectors.grades(state),
-    satisfiedClients: profileSelectors.satisfiedClients(state)
+    avgSatisfaction: profileSelectors.avgSatisfaction(state)
   });
 
   const mapDispatchToProps = {
@@ -110,8 +110,7 @@ export default (OriginalComponent) => {
     setUserErrors,
     editModeUser,
     pushUpdateUser,
-    getRadarScores,
-    getSatisfiedClients
+    getRadarScores
   };
 
   return connect(

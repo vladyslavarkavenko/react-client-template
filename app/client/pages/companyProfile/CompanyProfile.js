@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Switch } from 'react-router-dom';
 
 import {
-  fetchRadarScores,
-  fetchSatisfiedClients
+  getRadarScores,
+  getSatisfiedClients
 } from '../../modules/companyProfile/companyProfileActions';
 import ContentHeader from '../profile/components/ContentHeader';
 import routing from '../../utils/routing';
@@ -44,10 +44,10 @@ class CompanyProfile extends React.Component {
   }
 
   fetchData(id) {
-    const { fetchSatisfiedClients, fetchRadarScores } = this.props;
+    const { getRadarScores, getSatisfiedClients } = this.props;
 
-    fetchSatisfiedClients(id);
-    fetchRadarScores(id);
+    getRadarScores(id);
+    getSatisfiedClients(id);
   }
 
   render() {
@@ -107,8 +107,8 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  fetchSatisfiedClients,
-  fetchRadarScores
+  getRadarScores,
+  getSatisfiedClients
 };
 
 export default connect(

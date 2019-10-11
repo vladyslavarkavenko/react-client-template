@@ -95,7 +95,7 @@ class TopBarWithProfile extends React.Component {
         </button>
 
         <div className="header-bar__menu" onClick={this.toggleMenu} ref={this.menuBtn}>
-          <div className="avatar">
+          <div className="avatar circle">
             <img src={user.avatar || '/assets/img/empty-avatar.jpg'} alt="Avatar" />
           </div>
           <button className="menu-btn">
