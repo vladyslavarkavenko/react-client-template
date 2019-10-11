@@ -7,7 +7,7 @@ import companiesSelectors from '../../../modules/companies/companiesSelectors';
 function SatisfiedClientsContainer({ avgSatisfaction }) {
   return (
     <BlockWrapper>
-      <SatisfiedClients satisfiedClients={avgSatisfaction} />
+      <SatisfiedClients avgSatisfaction={avgSatisfaction} />
     </BlockWrapper>
   );
 }

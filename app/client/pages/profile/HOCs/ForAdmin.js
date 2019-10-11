@@ -10,6 +10,10 @@ import {
   updateCompany
 } from '../../../modules/companies/companiesActions';
 
+import { getRadarScores } from '../../../modules/profile/profileActions';
+
+import profileSelectors from '../../../modules/profile/profileSelectors';
+
 export default (OriginalComponent) => {
   class ForAdminHOC extends React.Component {
     constructor(props) {
@@ -29,13 +33,19 @@ export default (OriginalComponent) => {
 
       if (name === 'avatar') {
         if (!files) {
-          return updateCompany({ avatar: '', newAvatar: undefined });
+          return updateCompany({
+            avatar: '',
+            newAvatar: undefined
+          });
         }
         // eslint-disable-next-line no-undef
         const reader = new FileReader();
 
         reader.onload = ({ target: { result } }) => {
-          updateCompany({ newAvatar: result, avatar: files[0] });
+          updateCompany({
+            newAvatar: result,
+            avatar: files[0]
+          });
         };
         reader.readAsDataURL(files[0]);
       } else {
@@ -75,7 +85,10 @@ export default (OriginalComponent) => {
       const { data, activeEditCompany, updateCompany, editModeCompanies } = this.props;
 
       editModeCompanies();
-      updateCompany({ ...data[activeEditCompany.id], newAvatar: undefined });
+      updateCompany({
+        ...data[activeEditCompany.id],
+        newAvatar: undefined
+      });
     }
 
     render() {
@@ -104,11 +117,14 @@ export default (OriginalComponent) => {
     errors: companiesSelectors.errors(state),
     data: companiesSelectors.data(state),
     isEdit: companiesSelectors.isEdit(state),
-    activeEditCompany: companiesSelectors.activeEditCompany(state)
+    activeEditCompany: companiesSelectors.activeEditCompany(state),
+    grades: profileSelectors.grades(state),
+    avgSatisfaction: profileSelectors.avgSatisfaction(state)
   });
 
   const mapDispatchToProps = {
     updateCompany,
+    getRadarScores,
     setCompanyErrors,
     editModeCompanies,
     pushUpdateCompany

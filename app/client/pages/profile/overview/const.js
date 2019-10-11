@@ -18,6 +18,16 @@ const FEELING = 'Feeling';
 const RESULT = 'Result';
 
 export const FEATURES = {
+  ID_NAME: {
+    1: CARING,
+    2: CONVENIENT,
+    3: CREATIVE,
+    4: CLEAR,
+    5: COST_CONSCIOUS,
+    6: COMPENSATING,
+    7: CONFIDENT,
+    8: COURTEGIOUS
+  },
   NAMES: {
     CLEAR,
     CREATIVE,
