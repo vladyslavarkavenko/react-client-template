@@ -32,7 +32,7 @@ export default function normalizeUserData(user, subjectList, forceStatus) {
   }
 
   if (user.expiredIn) {
-    differenceInDays(new Date(), new Date(user.expiredIn)) > 7
+    differenceInDays(new Date(), new Date(user.expiredIn)) >= 7
       ? (status = STAFF_TABLE_STATUS.EXPIRED)
       : (status = STAFF_TABLE_STATUS.PENDING);
   }
