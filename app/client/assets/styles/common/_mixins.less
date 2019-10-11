@@ -61,3 +61,33 @@
     background: #36484e;
   }
 }
+
+.changeCheckboxColor(@color, @color-checked, @font-color: white, @border-color: @color, @border-color-checked: @color-checked) {
+  [type="checkbox"]:not(:checked) + label {
+    &:before {
+      background-color: @color;
+      color: @font-color;
+      border: 1px solid @border-color;
+      box-shadow: unset;
+    }
+
+    &:after {
+      color: @font-color;
+      box-shadow: unset;
+    }
+  }
+
+  [type="checkbox"]:checked + label {
+    &:before {
+      background-color: @color-checked;
+      color: @font-color;
+      border: 1px solid @border-color-checked;
+      box-shadow: unset;
+    }
+
+    &:after {
+      color: @font-color;
+      box-shadow: unset;
+    }
+  }
+}

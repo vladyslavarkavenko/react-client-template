@@ -8,11 +8,11 @@ import { PROPS } from '../../pages/profile/overview/const';
 
 const { emptyData } = PROPS;
 
-const radarStatus = makeStatusReducer(actions.getRadarScores);
+const radarStatus = makeStatusReducer(actions.fetchRadarScores);
 
 const radarData = handleActions(
   {
-    [actions.getRadarScores.SUCCESS](state, { payload }) {
+    [actions.fetchRadarScores.SUCCESS](state, { payload }) {
       return payload || emptyData;
     }
   },
@@ -24,25 +24,25 @@ const radar = combineReducers({
   data: radarData
 });
 
-const satisfiedClientsStatus = makeStatusReducer(actions.getSatisfiedClients);
+const topScoresStatus = makeStatusReducer(actions.fetchTopScores);
 
-const satisfiedClientsData = handleActions(
+const topScoresData = handleActions(
   {
-    [actions.getSatisfiedClients.SUCCESS](state, { payload }) {
+    [actions.fetchTopScores.SUCCESS](state, { payload }) {
       return payload;
     }
   },
-  null
+  []
 );
 
-const satisfaction = combineReducers({
-  status: satisfiedClientsStatus,
-  data: satisfiedClientsData
+const topScores = combineReducers({
+  status: topScoresStatus,
+  data: topScoresData
 });
 
 const companyProfile = combineReducers({
   radar,
-  satisfaction
+  topScores
 });
 
 export default companyProfile;

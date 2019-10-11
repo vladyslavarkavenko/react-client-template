@@ -2,12 +2,13 @@ import React from 'react';
 import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
 import RoleSelect from './RoleSelect';
 import TopicSelect from './TopicSelect';
+import StatusLabel from './StatusLabel';
 
-export default function ReadRow({ table, data, handleEdit }) {
+export default function ReadRow({ table, data, handleEdit, multipleRoles }) {
   const { id, firstName, lastName, email, isChecked, roles, status } = data;
 
   return (
-    <li className="row">
+    <li className={`row ${isChecked ? 'checked' : ''}`}>
       <div className="item item-check">
         <CheckboxInput
           name={id}
@@ -19,16 +20,24 @@ export default function ReadRow({ table, data, handleEdit }) {
           data-field="isChecked"
         />
       </div>
-      <div className="item">{firstName}</div>
-      <div className="item">{lastName}</div>
-      <div className="item">{email}</div>
-      <div className="item item-x2 drop">
-        <RoleSelect rowId={id} table={table} roles={roles} readOnly />
+      <div className="item item-name">
+        <span>{firstName}</span>
       </div>
-      <div className="item item-x3 drop">
+      <div className="item item-surname">
+        <span>{lastName}</span>
+      </div>
+      <div className="item item-email">
+        <span>{email}</span>
+      </div>
+      <div className="item item-roles drop">
+        <RoleSelect rowId={id} table={table} multipleRoles={multipleRoles} roles={roles} readOnly />
+      </div>
+      <div className="item item-topics drop">
         <TopicSelect rowId={id} table={table} readOnly />
       </div>
-      <div className="item">{status || '-'}</div>
+      <div className="item item-status">
+        <StatusLabel status={status} />
+      </div>
     </li>
   );
 }

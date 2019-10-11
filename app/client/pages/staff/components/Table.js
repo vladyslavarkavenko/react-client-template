@@ -51,12 +51,12 @@ export default function Table({
             checked={list.length === checked.length}
           />
         </li>
-        <li className="item">Name</li>
-        <li className="item">Surname</li>
-        <li className="item">Email</li>
-        <li className="item item-x2">Roles</li>
-        <li className="item item-x3">Topics</li>
-        <li className="item">Status</li>
+        <li className="item item-name">Name</li>
+        <li className="item item-surname">Surname</li>
+        <li className="item item-email">Email</li>
+        <li className="item item-roles">Roles</li>
+        <li className="item item-topics">Topics</li>
+        <li className="item item-status">Status</li>
       </ul>
       <ul className="body">{rows}</ul>
     </div>

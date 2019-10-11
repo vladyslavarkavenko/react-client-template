@@ -1,6 +1,5 @@
 import { put, takeLatest, all, call } from 'redux-saga/effects';
 
-import Notification from '../../utils/notifications';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import CompaniesService from '../../services/companies';
 import parseRadarScores from '../helpers/parseRadarScores';
@@ -8,40 +7,40 @@ import parseRadarScores from '../helpers/parseRadarScores';
 export const prefix = 'companyProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
-export const getRadarScores = createRequestBound('RADAR_SCORES_FETCH');
-export const getSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
+export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
+export const fetchTopScores = createRequestBound('TOP_SCORES_FETCH');
 
 function* getRadarScoresWorker({ payload }) {
-  yield put(getRadarScores.request());
+  yield put(fetchRadarScores.request());
   try {
     const scores = yield call(CompaniesService.getRadarScores, payload);
 
     const data = parseRadarScores(scores);
 
-    yield put(getRadarScores.success(data));
+    yield put(fetchRadarScores.success(data));
   } catch (err) {
     console.error(err);
-    Notification.error(err);
-    yield put(getRadarScores.failure());
+    // Notification.error(err);
+    yield put(fetchRadarScores.failure());
   }
 }
 
-function* getSatisfiedClientsWorker({ payload }) {
-  yield put(getSatisfiedClients.request());
+function* getTopScoresWorker({ payload }) {
+  yield put(fetchTopScores.request());
   try {
-    const { avgSatisfaction } = yield call(CompaniesService.getSatisfiedClients, payload);
+    const scores = yield call(CompaniesService.getTopScores, payload);
 
-    yield put(getSatisfiedClients.success(avgSatisfaction));
+    yield put(fetchTopScores.success(scores));
   } catch (err) {
     console.error(err);
-    Notification.error(err);
-    yield put(getSatisfiedClients.failure());
+    // Notification.error(err);
+    yield put(fetchTopScores.failure());
   }
 }
 
 export function* companyProfileWatcher() {
   yield all([
-    takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker),
-    takeLatest(getSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
+    takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
+    takeLatest(fetchTopScores.TRIGGER, getTopScoresWorker)
   ]);
 }

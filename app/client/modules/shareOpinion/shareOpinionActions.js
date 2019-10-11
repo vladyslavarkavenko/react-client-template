@@ -192,37 +192,37 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
   yield put(pushRateTopic.request());
   try {
     const currentTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
-    const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
-    let ratedTopic;
+    // const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
+    // let ratedTopic;
 
-    if (type === RATE_PROFILE_TYPE.MANAGER) {
-      ratedTopic = yield call(() =>
-        ShareOpinionService.pushRateTopicByManager({
-          manager: id,
-          topic: currentTopic.id, //topic_id,
-          customer: customerId, //customer id
-          satisfaction,
-          importance
-        })
-      );
-    } else {
-      ratedTopic = yield call(() =>
-        ShareOpinionService.pushRateTopicByCompany({
-          company: id,
-          topic: currentTopic.id,
-          customer: customerId,
-          satisfaction,
-          importance
-        })
-      );
-    }
+    // if (type === RATE_PROFILE_TYPE.MANAGER) {
+    //   ratedTopic = yield call(() =>
+    //     ShareOpinionService.pushRateTopicByManager({
+    //       manager: id,
+    //       topic: currentTopic.id, //topic_id,
+    //       customer: customerId, //customer id
+    //       satisfaction,
+    //       importance
+    //     })
+    //   );
+    // } else {
+    //   ratedTopic = yield call(() =>
+    //     ShareOpinionService.pushRateTopicByCompany({
+    //       company: id,
+    //       topic: currentTopic.id,
+    //       customer: customerId,
+    //       satisfaction,
+    //       importance
+    //     })
+    //   );
+    // }
 
     const { result } = yield ShareOpinionService.getOpinionScore({
       satisfaction,
       importance
     });
 
-    yield put(pushRateTopic.success({ ...ratedTopic, score: result }));
+    yield put(pushRateTopic.success({ ...currentTopic, satisfaction, importance, score: result }));
 
     const nextTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
 
@@ -312,6 +312,8 @@ function* pushUpdateTopicsWorker({ payload }) {
 
       const fields = {
         topic: topic.id,
+        satisfaction: topic.satisfaction,
+        importance: topic.importance,
         manager: type === RATE_PROFILE_TYPE.MANAGER ? id : undefined, // manager or company_id,
         company: type === RATE_PROFILE_TYPE.COMPANY ? id : undefined,
         customer: customerId, //customer id
@@ -329,7 +331,9 @@ function* pushUpdateTopicsWorker({ payload }) {
     yield all(tasks);
 
     yield put(pushUpdateTopics.success());
-    yield put(historyPush({ method: 'replace', to: routing().shareOpinion }));
+    yield put(
+      historyPush({ method: 'replace', to: routing({ type, id }).shareOpinionWithProfile })
+    );
     Notification.success(i18next.t('shareOpinion.notification.thanksForFeedback'));
   } catch (err) {
     console.error(err);

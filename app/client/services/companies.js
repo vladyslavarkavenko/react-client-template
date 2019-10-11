@@ -9,8 +9,8 @@ class CompaniesService {
     return api.get(`/opinion/company/${companyId}/radar_scores/`);
   }
 
-  static getSatisfiedClients(companyId) {
-    return api.get(`/opinion/company/${companyId}/avg_satisfaction/`);
+  static getTopScores(companyId) {
+    return api.get(`/opinion/company/${companyId}/topic_scores/`);
   }
 }
 

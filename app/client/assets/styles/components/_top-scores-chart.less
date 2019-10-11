@@ -2,12 +2,17 @@
   display: flex;
   flex-direction: column;
 
-  @chart-height: 400px;
+  @grid-color: rgba(0,0,0,0.1);
+  @progress-color: @secondary-bg-color;
+
+  @chart-height: 350px;
   @row-height: 50px;
-  @progress-height: 5px;
-  @point-size: 16px;
+  @progress-height: 6px;
   @progress-line-position: @row-height / 2 - @progress-height / 2;
-  @point-line-position: @row-height / 2 - @point-size / 2;
+
+  @point-size-white: 22px;
+  @point-size-inner: 16px;
+  @point-size-center: 8px;
 
   @scroll-width: 5px;
   @content-gap: 20px;
@@ -15,14 +20,68 @@
   @legend-height: 26px;
   @sidebar-width: 200px;
 
+  @z-index-progress: 1;
+  @z-index-point-white: 2;
+  @z-index-point-median: 3;
+  @z-index-point-my: 4;
+
+  .line-position-calc(@height, @line-height: @row-height) {
+    top: @line-height / 2 - @height / 2;
+  }
+
+  &.title {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .title-label.info-block__title {
+      margin-bottom: unset;
+    }
+  }
+
+  .title-legend {
+    display: flex;
+    justify-content: space-between;
+
+    &__item {
+      @line-height: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      margin: 0 1rem;
+      padding-left: 1.75rem;
+      height: @line-height;
+      color: @font-color-dark;
+
+      .range-dot {
+        width: @point-size-center;
+        height: @point-size-center;
+        background-color: @progress-color;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+      }
+
+      .point {
+        .line-position-calc(@point-size-white, @line-height);
+        &.inner {
+          .line-position-calc(@point-size-inner, @line-height);
+        }
+        &.center {
+          .line-position-calc(@point-size-center, @line-height);
+        }
+      }
+    }
+  }
+
 
   &__container {
     display: flex;
     flex-grow: 1;
-    position: relative;
     height: @chart-height;
     overflow-y: scroll;
-    margin-bottom: 50px;
+    margin-bottom: @legend-margin;
     .makeCustomScrollbar();
   }
 
@@ -31,20 +90,20 @@
     width: @sidebar-width;
     font-size: 1rem;
     line-height: 1.25rem;
+    color: @font-color-dark;
 
     .sidebar-item {
       display: flex;
       padding: 0 10px;
       height: @row-height;
-      //background-color: #6F91BA;
       align-items: center;
     }
   }
 
   &__main {
     flex-grow: 1;
-    margin: 0 20px;
-    //background-color: #2D3E50;
+    margin: 0 @content-gap;
+    min-height: 100%;
 
     .main-item {
       position: relative;
@@ -52,96 +111,121 @@
       display: flex;
       align-items: center;
       flex-grow: 1;
-      //background-color: #22C39A;
+      background-size: 100% / 9; // nine lines
+      background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
+
 
       .progress-bar {
-        //position: absolute;
-        //top: @progress-line-position;
-        //left: 20px;
+        z-index: @z-index-progress;
         border-radius: 10px;
         width: 100%;
-        background-color: @secondary-bg-color;
+        background-color: @progress-color;
         height: @progress-height;
+
       }
 
     }
   }
 
   .point {
+    .line-position-calc(@point-size-white);
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: @point-line-position;
-    //left: 60px;
-    width: @point-size;
-    height: @point-size;
+    z-index: @z-index-point-white;
+    left: 0;
+    width: @point-size-white;
+    height: @point-size-white;
     border-radius: 50%;
-    background-color: aqua;
-    opacity: 0.5;
+    background-color: white;
+
+    &-median {
+      &.inner {
+        border: 1px solid @chart-point-median;
+        z-index: @z-index-point-median;
+      }
+      &.center {
+        background-color: @chart-point-median;
+        z-index: @z-index-point-median;
+      }
+    }
 
     &-my {
-      background-color: darkmagenta;
-    }
-    &-median {
-      background-color: gold;
+      &.inner {
+        border: 1px solid @chart-point-my;
+        z-index: @z-index-point-my;
+      }
+      &.center {
+        background-color: @chart-point-my;
+        z-index: @z-index-point-my;
+      }
     }
 
-    .inner {
-      position: absolute;
-      top: @point-line-position - 2px;
-      width: @point-size * 2 / 3;
-      height: @point-size * 2 / 3;
+    &.inner {
+      .line-position-calc(@point-size-inner);
+      left: @point-size-inner / 4;
+      width: @point-size-inner;
+      height: @point-size-inner;
       background-color: white;
       border-radius: 50%;
+    }
+    &.center {
+      .line-position-calc(@point-size-center);
+      left: @point-size-center;
+      width: @point-size-center;
+      height: @point-size-center;
     }
   }
 
   .legend {
     &-wrapper {
       display: flex;
-      margin-right: @content-gap + @scroll-width;
+      margin-right: @content-gap / 2;
     }
     &-container {
       display: flex;
       flex-grow: 1;
     }
+    &-spacer {
+      height: @legend-height;
+      width: @sidebar-width;
+      margin-right: @content-gap / 2;
+    }
+
     &-content {
-      //position: absolute;
       display: flex;
       opacity: 0.9;
-      //bottom: 0;
-      //left: -2px;
-      //right: -2px;
       flex-grow: 1;
-      //background-color: #EF5050;
       height: @legend-height;
+      color: @font-color-lighter;
 
       justify-content: space-between;
 
       span {
-        width: 5px;
+        width: 6px;
         position: relative;
-        display: flex;
+        display: inline-flex;
         justify-content: center;
 
-        &:before {
-          content: "";
-          top: -@chart-height - @legend-margin *2;
-          left: 0px;
-          right: 4px;
-          //width: 2px;
-          height: @chart-height;
-          position: absolute;
-          background-color: @font-color-light;
+        &:first-child {
+          padding-left: 10px;
+        }
+
+        &:last-child {
+          padding-right: 14px;
+          position: relative;
+          &:before {
+            content: "";
+            top: -@chart-height - @legend-margin;
+            left: 0;
+            width: 1px;
+            height: @chart-height;
+            position: absolute;
+            background-color: @grid-color;
+          }
         }
       }
-    }
-
-    &-spacer {
-      height: @legend-height;
-      width: @sidebar-width;
-      margin-right: @content-gap;
     }
   }
 }

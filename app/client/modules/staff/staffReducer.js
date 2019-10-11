@@ -26,6 +26,9 @@ const invitationsInitial = Array(minRowCount)
 
 const invitationsData = handleActions(
   {
+    [actions.createNewRow.TRIGGER](state) {
+      return [...state, { ...userScheme, id: getId() }];
+    },
     [actions.saveTableField.TRIGGER](state, { payload }) {
       const { table, field, id, value } = payload;
 

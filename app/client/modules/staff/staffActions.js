@@ -30,6 +30,7 @@ export const setUsersStatus = createRequestBound('USER_STATUS_SET');
 export const pushUsersChanges = createRequestBound('USER_CHANGES_PUSH');
 
 export const saveTableField = createOnlyTriggerBound('FIELD_SAVE');
+export const createNewRow = createOnlyTriggerBound('NEW_ROW_CREATE');
 export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
 export const changeTableRole = createOnlyTriggerBound('ROLE_CHANGE');
 export const changeTableTopic = createOnlyTriggerBound('TOPIC_CHANGE');
@@ -81,11 +82,13 @@ function* createStaffTask({ fields, topics, tempId }) {
     user.topics = topicsId;
     user.tempId = tempId;
 
+    Notification.success(
+      `Invitations has been sent to ${fields.userData.firstName} ${fields.userData.lastName}`
+    );
+
     return user;
   } catch (err) {
-    Notification.error(
-      `Failed to send invitation to ${fields.userData.firstName} ${fields.userData.lastName}`
-    );
+    Notification.error(err);
     return null;
   }
 }
@@ -128,8 +131,6 @@ function* staffInvitationsWorker() {
       }));
       // console.log(onlySuccessTasks);
       // console.log(result);
-
-      Notification.success('Invitations has been sent');
       yield put(pushSendInvitations.success(normalized));
     } else {
       console.error(errors);
@@ -151,7 +152,6 @@ function* staffResendWorker() {
       yield call(StaffService.resendInvite, {
         emails: selectedRows.map((row) => row.email)
       });
-
       Notification.success('Invitations has been resent');
       yield put(pushResendInvitations.success(selectedRows));
     } catch (err) {
@@ -163,6 +163,7 @@ function* staffResendWorker() {
 
 function* updateStaffTask({ fields, topics, id, originalUser }) {
   try {
+    const { firstName, lastName } = originalUser;
     const topicsId = topics.map((topic) => topic.value);
     let user = originalUser;
 
@@ -177,10 +178,13 @@ function* updateStaffTask({ fields, topics, id, originalUser }) {
     });
     // attach topics to model then normalize
     user.topics = topicsId;
+
+    Notification.success(`User ${firstName} ${lastName} has been updated`);
+
     return user;
   } catch (err) {
     console.error(err);
-    Notification.error(`Failed to update user #${id}`);
+    Notification.error(err);
     return null;
   }
 }
@@ -225,20 +229,19 @@ function* staffUpdateWorker() {
         updatedUsers[user.id] = user;
       });
 
-      Notification.success('Users has been updated');
       yield put(pushUsersChanges.success(updatedUsers));
     } else {
       yield put(pushUsersChanges.failure(errors));
     }
   } catch (err) {
     console.error(err);
-    Notification.error(err);
     yield put(pushUsersChanges.failure());
   }
 }
 
 function* unblockStaffTask({ id, originalUser }) {
   try {
+    const { firstName, lastName } = originalUser;
     const user = { ...originalUser, roles: [ROLES.MANAGER] };
 
     yield call(StaffService.updateUser, {
@@ -247,23 +250,25 @@ function* unblockStaffTask({ id, originalUser }) {
         isManager: true
       }
     });
-
+    Notification.success(`User ${firstName} ${lastName} has been unblocked`);
     return user;
   } catch (err) {
-    Notification.error(`Failed to unblock user #${id}`);
+    Notification.error(`Failed to unblock ${originalUser.firstName} ${originalUser.lastName}`);
     return null;
   }
 }
 
 function* blockStaffTask({ id, originalUser }) {
   try {
+    const { firstName, lastName } = originalUser;
     const user = { ...originalUser, roles: [] };
 
     yield call(StaffService.blockUser, id);
 
+    Notification.success(`User ${firstName} ${lastName} has been blocked`);
     return user;
   } catch (err) {
-    Notification.error(`Failed to block user #${id}`);
+    Notification.error(`Failed to block ${originalUser.firstName} ${originalUser.lastName}`);
     return null;
   }
 }
@@ -310,14 +315,8 @@ function* staffStatusWorker({ payload }) {
         updatedUsers[user.id] = user;
       });
 
-      Notification.success(
-        `Selected users has been ${status === STAFF_TABLE_STATUS.BLOCKED ? 'blocked' : 'unblocked'}`
-      );
       yield put(pushUsersChanges.success(updatedUsers));
     } else {
-      Notification.info(
-        `Select ${status === STAFF_TABLE_STATUS.BLOCKED ? 'unblocked' : 'blocked'} users`
-      );
       yield put(setUsersStatus.failure());
     }
   } catch (err) {

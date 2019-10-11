@@ -4,6 +4,7 @@ import ErrorSvg from '../../../../../public/assets/svg/exclamation-circle.svg';
 import RoleSelect from './RoleSelect';
 import TopicSelect from './TopicSelect';
 import Notification from '../../../utils/notifications';
+import StatusLabel from './StatusLabel';
 
 const handleNotify = (field, errors) => Notification.info(errors[field]);
 
@@ -35,7 +36,7 @@ export default function InputRow({
   // if you want to control input in realtime use value and onChange
 
   return (
-    <li className={`row ${withErrors ? 'withErrors' : ''}`}>
+    <li className={`row ${withErrors ? 'withErrors' : ''} ${isChecked ? 'checked' : ''}`}>
       <div className={`item item-check ${errors.firstName ? 'error' : ''}`}>
         <CheckboxInput
           name={id}
@@ -49,13 +50,13 @@ export default function InputRow({
       </div>
       {onlyDropEdit ? (
         <>
-          <div className="item">{firstName}</div>
-          <div className="item">{lastName}</div>
-          <div className="item">{email}</div>
+          <div className="item item-name">{firstName}</div>
+          <div className="item item-surname">{lastName}</div>
+          <div className="item item-email">{email}</div>
         </>
       ) : (
         <>
-          <div className={`item ${errors.firstName ? 'error' : ''}`}>
+          <div className={`item item-name ${errors.firstName ? 'error' : ''}`}>
             <input
               type="text"
               defaultValue={_changes.firstName || firstName}
@@ -65,7 +66,7 @@ export default function InputRow({
             />
             <ErrorCircle field="firstName" errors={errors} />
           </div>
-          <div className={`item ${errors.lastName ? 'error' : ''}`}>
+          <div className={`item item-surname ${errors.lastName ? 'error' : ''}`}>
             <input
               type="text"
               defaultValue={_changes.lastName || lastName}
@@ -75,7 +76,7 @@ export default function InputRow({
             />
             <ErrorCircle field="lastName" errors={errors} />
           </div>
-          <div className={`item ${errors.email ? 'error' : ''}`}>
+          <div className={`item item-email ${errors.email ? 'error' : ''}`}>
             <input
               type="text"
               defaultValue={_changes.email || email}
@@ -88,7 +89,7 @@ export default function InputRow({
         </>
       )}
 
-      <div className={`item item-x2 drop ${errors.role ? 'error' : ''}`}>
+      <div className={`item item-roles drop ${errors.role ? 'error' : ''}`}>
         <RoleSelect
           handleChange={handleChangeRole}
           rowId={id}
@@ -99,11 +100,13 @@ export default function InputRow({
         />
         <ErrorCircle field="role" errors={errors} />
       </div>
-      <div className="item item-x3 drop">
+      <div className="item item-topics drop">
         <TopicSelect rowId={id} table={table} />
       </div>
 
-      <div className="item">{status || '-'}</div>
+      <div className="item item-status">
+        <StatusLabel status={status} />
+      </div>
     </li>
   );
 }

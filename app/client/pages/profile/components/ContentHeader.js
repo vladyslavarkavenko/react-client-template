@@ -25,7 +25,8 @@ class ContentHeader extends React.Component {
       navLinks,
       isEdit,
       toggleEditMode,
-      onChange
+      onChange,
+      customButtons
     } = this.props;
 
     return (
@@ -58,7 +59,7 @@ class ContentHeader extends React.Component {
               />
             </div>
           ) : (
-            <>
+            <div className="text-block">
               {title && <h1>{title}</h1>}
               {subTitle && <h2>{subTitle}</h2>}
               {loc && (
@@ -67,8 +68,10 @@ class ContentHeader extends React.Component {
                   <p>{loc}</p>
                 </div>
               )}
-            </>
+            </div>
           )}
+
+          {customButtons && <div className="buttons-block">{customButtons}</div>}
         </div>
         {editForm && !isEdit && (
           <Button
@@ -79,6 +82,7 @@ class ContentHeader extends React.Component {
             type={TRANSPARENT}
           />
         )}
+
         {isEdit && editForm}
         {navLinks && (
           <ul className="content-nav-bar">

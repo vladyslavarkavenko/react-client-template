@@ -6,7 +6,7 @@ const { IMPORTANCE, SATISFACTION } = LEGEND_COLORS;
 
 const RadarTitle = () => (
   <div className="d-flex jc-between ai-center">
-    <h1 className="m-0">cTRU Radar</h1>
+    <h2 className="m-0 info-block__title">cTRU Radar</h2>
     <div className="d-flex">
       <div className="indicator flex-center">
         <span style={{ background: IMPORTANCE }} />

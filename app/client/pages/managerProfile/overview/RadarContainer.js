@@ -19,15 +19,10 @@ function RadarContainer({ status, data }) {
   );
 }
 
-const mapStateToProps = (state, props) => {
-  const { match } = props;
-
-  const {
-    params: { id }
-  } = match;
+const mapStateToProps = (state) => {
   const { status, data } = managerSelectors.radar(state);
 
-  return { status, data, id };
+  return { status, data };
 };
 
 export default connect(mapStateToProps)(RadarContainer);
