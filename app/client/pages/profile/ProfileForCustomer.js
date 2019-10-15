@@ -9,7 +9,7 @@ import ContentHeader from './components/ContentHeader';
 import ForCustomer from './HOCs/ForCustomer';
 
 const OverviewForCustomer = ForCustomer(customLoadable({ loader: () => import('./Overview') }));
-const AboutForCustomer = ForCustomer(customLoadable({ loader: () => import('./UserAbout') }));
+const AboutForCustomer = ForCustomer(customLoadable({ loader: () => import('./about/UserAbout') }));
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ProfileForCustomer extends React.Component {

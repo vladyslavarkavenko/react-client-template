@@ -71,6 +71,12 @@ export const FEATURES = {
 };
 
 export const CATEGORIES = {
+  ID_NAME: {
+    1: PROCESS,
+    2: RATIONAL,
+    3: RESULT,
+    4: FEELING
+  },
   NAMES: {
     RATIONAL,
     PROCESS,
@@ -102,12 +108,16 @@ export const CATEGORIES = {
     [RESULT]: [CONFIDENT, COMPENSATING, COST_CONSCIOUS]
   }
 };
-
+0;
 const a = 600;
 const factor = 0.4; // For categories bars that overflow chart
 
 const emptyArr = Object.values(FEATURES.NAMES).map((x) => ({ x, y: null }));
-const emptyData = [emptyArr, emptyArr];
+const emptyData = {
+  featuresDetails: null,
+  categoriesDetails: null,
+  grades: [emptyArr, emptyArr]
+};
 
 export const PROPS = {
   a,

@@ -18,7 +18,6 @@ export const prefix = 'profile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const getRadarScores = createRequestBound('RADAR_SCORES_FETCH');
-export const getSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
 
 function* getRadarScoresWorker() {
   yield put(getRadarScores.request());
@@ -30,19 +29,19 @@ function* getRadarScoresWorker() {
     let avgSatisfaction;
     if (activeRole === MANAGER) {
       const user = yield select(authSelectors.user);
-      console.log('@', user);
+
       // eslint-disable-next-line prefer-destructuring
       avgSatisfaction = user.avgSatisfaction;
       res = yield call(() => ManagerService.getRadarScores(user.staffId));
     } else {
       const company = yield select(companiesSelectors.getCurrentCompany);
-      console.log('@', company);
+
       // eslint-disable-next-line prefer-destructuring
       avgSatisfaction = company.avgSatisfaction;
       res = yield call(() => CompaniesService.getRadarScores(company.id));
     }
 
-    yield put(getRadarScores.success({ grades: parseRadarScores(res), avgSatisfaction }));
+    yield put(getRadarScores.success({ ...parseRadarScores(res), avgSatisfaction }));
   } catch (err) {
     console.error(err);
     Notification.error(err);

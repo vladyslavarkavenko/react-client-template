@@ -118,7 +118,7 @@ export default (OriginalComponent) => {
     data: companiesSelectors.data(state),
     isEdit: companiesSelectors.isEdit(state),
     activeEditCompany: companiesSelectors.activeEditCompany(state),
-    grades: profileSelectors.grades(state),
+    radarData: profileSelectors.radarData(state),
     avgSatisfaction: profileSelectors.avgSatisfaction(state)
   });
 

@@ -5,11 +5,10 @@ import { PROPS } from '../../pages/profile/overview/const';
 
 const { emptyData } = PROPS;
 
-const initialData = { grades: emptyData, avgSatisfaction: undefined };
+const initialData = { isInitial: true, avgSatisfaction: undefined, ...emptyData };
 const profileReducer = handleActions(
   {
     [actions.getRadarScores.SUCCESS](state, { payload }) {
-      console.log('payload', payload);
       return payload;
     }
   },

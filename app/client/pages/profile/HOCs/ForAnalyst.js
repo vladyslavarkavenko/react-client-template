@@ -9,7 +9,7 @@ export default (OriginalComponent) => {
   const ForAnalystHOC = (props) => <OriginalComponent {...props} />;
 
   const mapStateToProps = (state) => ({
-    grades: profileSelectors.grades(state),
+    radarData: profileSelectors.radarData(state),
     data: companiesSelectors.activeEditCompany(state),
     avgSatisfaction: profileSelectors.avgSatisfaction(state)
   });

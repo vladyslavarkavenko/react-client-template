@@ -16,7 +16,7 @@ function validateEmail(value, messages = {}) {
 
   const errors = {};
 
-  if (!value.length) {
+  if (!value) {
     errors.email = required;
   } else if (!validateText({ value, max: 30 })) {
     errors.email = long;
@@ -27,29 +27,47 @@ function validateEmail(value, messages = {}) {
   return errors;
 }
 function validatePhone(value, messages = {}) {
+  const allowedSymbols = [...'+-–−—(),'];
+
   const {
-    format = i18next.t('validation.phone.format'),
-    required = i18next.t('validation.phone.required')
+    format = i18next.t('validation.phone.format')
+    // required = i18next.t('validation.phone.required')
   } = messages;
 
   const errors = {};
 
-  if (!value) {
-    errors.phone = required;
-  } else if (!validator.isMobilePhone(value)) {
-    errors.phone = format;
+  // if (value && !validator.isMobilePhone(value)) {
+  //   errors.phone = format;
+  // }
+  if (value) {
+    [...value].forEach((chr, i, arr) => {
+      const isNumber = !Number.isNaN(+chr);
+      const isSymbol = allowedSymbols.indexOf(chr) !== -1;
+      const isPrevSymbol = allowedSymbols.indexOf(arr[i - 1]) !== -1;
+
+      if (!(isNumber || (isSymbol && !isPrevSymbol))) {
+        errors.phone = format;
+      }
+    });
   }
 
   return errors;
 }
 function validateLocation(value, messages = {}) {
-  // TODO: Need improvements.
-  const { required = i18next.t('validation.location.required') } = messages;
+  const limit = {
+    min: 2,
+    max: 256
+  };
+
+  const {
+    // required = i18next.t('validation.location.required'),
+    length = i18next.t('validation.location.length', limit)
+  } = messages;
 
   const errors = {};
 
-  if (!value) {
-    errors.location = required;
+  if (value && !validateText({ value, ...limit })) {
+    errors.location = length;
   }
 
   return errors;
@@ -63,8 +81,8 @@ function validateCompanyName(value, messages = {}) {
   };
 
   const {
-    length = i18next.t('validation.company.name.length', limit),
-    required = i18next.t('validation.company.name.required')
+    required = i18next.t('validation.company.name.required'),
+    length = i18next.t('validation.company.name.length', limit)
   } = messages;
 
   const errors = {};
@@ -85,7 +103,7 @@ function validateCompanySite(value, messages = {}) {
 
   const errors = {};
 
-  if (!value.length) {
+  if (!value) {
     errors.web = required;
   } else if (!validator.isURL(value, { require_protocol: true })) {
     errors.web = format;
@@ -100,15 +118,13 @@ function validateCompanyAbout(value, messages = {}) {
   };
 
   const {
-    length = i18next.t('validation.company.about.length', limit),
-    required = i18next.t('validation.company.about.required')
+    length = i18next.t('validation.company.about.length', limit)
+    // required = i18next.t('validation.company.about.required')
   } = messages;
 
   const errors = {};
 
-  if (!value) {
-    errors.about = required;
-  } else if (!validateText({ value, ...limit })) {
+  if (value && !validateText({ value, ...limit })) {
     errors.about = length;
   }
 
@@ -149,7 +165,7 @@ function validatePassword(value, messages = {}) {
   const upperCaseUsed = /[A-Z]/.test(password);
   const specSymbolsUsed = /[0-9!@#$%^&*.]/.test(password);
 
-  if (!password.length) {
+  if (!password) {
     errors.password = required;
   } else if (!validateText({ value: password, ...limit })) {
     errors.password = length;
@@ -175,15 +191,13 @@ function validateUserAbout(value, messages = {}) {
   };
 
   const {
-    length = i18next.t('validation.user.about.length', limit),
-    required = i18next.t('validation.user.about.required')
+    length = i18next.t('validation.user.about.length', limit)
+    // required = i18next.t('validation.user.about.required')
   } = messages;
 
   const errors = {};
 
-  if (!value) {
-    errors.about = required;
-  } else if (!validateText({ value, ...limit })) {
+  if (value && !validateText({ value, ...limit })) {
     errors.about = length;
   }
 
@@ -363,7 +377,7 @@ export function validateUserLogin(data) {
   };
 }
 export function validateUserSignUp(data) {
-  const { email, phone, firstName, lastName, password, policy } = data;
+  const { email, phone, firstName, lastName, password, confirmPassword, policy } = data;
 
   const errors = {
     ...validateEmail(email),
@@ -371,7 +385,7 @@ export function validateUserSignUp(data) {
     ...validateUserPolicy(policy),
     ...validateUserLastName(lastName),
     ...validateUserFirstName(firstName),
-    ...validatePassword({ password })
+    ...validatePassword({ password, confirmPassword })
   };
 
   return {

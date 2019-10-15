@@ -9,7 +9,7 @@ import ContentHeader from './components/ContentHeader';
 import ForManager from './HOCs/ForManager';
 
 const Overview = ForManager(customLoadable({ loader: () => import('./Overview') }));
-const AboutForManager = ForManager(customLoadable({ loader: () => import('./UserAbout') }));
+const AboutForManager = ForManager(customLoadable({ loader: () => import('./about/UserAbout') }));
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ProfileForManager extends React.Component {
