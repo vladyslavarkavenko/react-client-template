@@ -157,6 +157,146 @@ const invitations = combineReducers({
   errors: invitationsErrors
 });
 
+const activeData = handleActions(
+  {
+    [actions.fetchClientsTables.SUCCESS](state, { payload }) {
+      return payload.active;
+    },
+    [actions.setUsersStatus.SUCCESS](state, { payload }) {
+      const updatedIds = Object.keys(payload).map((key) => Number(key));
+      const cloned = [];
+
+      state.forEach((row) => {
+        if (updatedIds.indexOf(row.id) !== -1) {
+          cloned.push(payload[row.id]);
+        } else {
+          cloned.push(row);
+        }
+      });
+
+      return cloned;
+    },
+    [actions.pushUsersChanges.SUCCESS](state, { payload }) {
+      const updatedIds = Object.keys(payload).map((key) => Number(key));
+      const cloned = [];
+
+      state.forEach((row) => {
+        if (updatedIds.indexOf(row.id) !== -1) {
+          cloned.push(payload[row.id]);
+        } else {
+          cloned.push(row);
+        }
+      });
+
+      return cloned;
+    },
+    [actions.pushUsersChanges.FULFILL](state, { payload }) {
+      const { table } = payload;
+
+      if (table === STAFF_TABLE_TYPE.ACTIVE) {
+        const cloned = state.map((row) => {
+          const oldRow = {};
+
+          Object.keys(row).forEach((key) => {
+            if (key === '_changes') {
+              return;
+            }
+            oldRow[key] = row[key];
+          });
+
+          return oldRow;
+        });
+
+        return cloned;
+      }
+
+      return state;
+    },
+    [actions.saveTableField.TRIGGER](state, { payload }) {
+      const { table, field, id, value } = payload;
+
+      if (table === STAFF_TABLE_TYPE.ACTIVE) {
+        const row = state.findIndex((item) => item.id === Number(id));
+
+        if (row !== -1) {
+          const cloned = [...state];
+
+          if (field === 'isChecked') {
+            cloned[row] = { ...cloned[row], isChecked: value };
+          } else {
+            const _changes = cloned[row]._changes || {};
+
+            _changes[field] = value;
+
+            cloned[row] = { ...cloned[row], _changes, isChanged: true };
+          }
+
+          return cloned;
+        }
+      }
+
+      return state;
+    },
+    [actions.changeTableManager.TRIGGER](state, { payload }) {
+      const { table, id, value } = payload;
+
+      if (table === STAFF_TABLE_TYPE.ACTIVE) {
+        const row = state.findIndex((item) => item.id === Number(id));
+
+        if (row !== -1) {
+          const cloned = [...state];
+
+          const _changes = cloned[row]._changes || {};
+
+          _changes.manager = value || null;
+
+          cloned[row] = { ...cloned[row], _changes, isChanged: true };
+          return cloned;
+        }
+      }
+
+      return state;
+    },
+    [actions.selectAllRows.TRIGGER](state, { payload }) {
+      const { table, checked } = payload;
+
+      if (table === STAFF_TABLE_TYPE.ACTIVE) {
+        if (checked) {
+          return state.map((row) => ({ ...row, isChecked: true }));
+        }
+
+        return state.map((row) => ({ ...row, isChecked: false }));
+      }
+
+      return state;
+    }
+  },
+  []
+);
+
+const activeErrors = handleActions(
+  {
+    [actions.pushUsersChanges.FAILURE](state, { payload }) {
+      return payload;
+    },
+    [actions.pushUsersChanges.SUCCESS]() {
+      return {};
+    },
+    [actions.pushUsersChanges.TRIGGER]() {
+      return {};
+    }
+  },
+  {}
+);
+
+const activeStatus = makeStatusReducer(actions.pushUsersChanges);
+
+const active = combineReducers({
+  status: activeStatus,
+  data: activeData,
+  errors: activeErrors
+});
+
 const tablesStatus = makeStatusReducer(actions.fetchClientsTables);
 
 const managers = handleActions(
@@ -171,8 +311,8 @@ const managers = handleActions(
 const clients = combineReducers({
   status: tablesStatus,
   managers,
-  invitations
-  // active
+  invitations,
+  active
 });
 
 export default clients;

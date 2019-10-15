@@ -271,7 +271,7 @@ const activeData = handleActions(
       const { table, field, id, value } = payload;
 
       if (table === STAFF_TABLE_TYPE.ACTIVE) {
-        const row = state.findIndex((item) => item.id === id);
+        const row = state.findIndex((item) => item.id === Number(id));
 
         if (row !== -1) {
           const cloned = [...state];
@@ -296,7 +296,7 @@ const activeData = handleActions(
       const { table, id, values } = payload;
 
       if (table === STAFF_TABLE_TYPE.ACTIVE) {
-        const row = state.findIndex((item) => item.id === id);
+        const row = state.findIndex((item) => item.id === Number(id));
 
         if (row !== -1) {
           const cloned = [...state];
@@ -316,7 +316,7 @@ const activeData = handleActions(
       const { table, id, values, action } = payload;
 
       if (table === STAFF_TABLE_TYPE.ACTIVE) {
-        const row = state.findIndex((item) => item.id === id);
+        const row = state.findIndex((item) => item.id === Number(id));
 
         if (row !== -1) {
           const cloned = [...state];
@@ -359,23 +359,23 @@ const activeData = handleActions(
 
 const activeErrors = handleActions(
   {
-    [actions.pushSendInvitations.FAILURE](state, { payload }) {
+    [actions.pushUsersChanges.FAILURE](state, { payload }) {
       return payload;
     },
-    [actions.pushSendInvitations.SUCCESS]() {
+    [actions.pushUsersChanges.SUCCESS]() {
       return {};
     },
-    [actions.pushSendInvitations.TRIGGER]() {
+    [actions.pushUsersChanges.TRIGGER]() {
       return {};
     }
   },
   {}
 );
 
-// const activeStatus = makeStatusReducer(actions.pushSendInvitations);
+const activeStatus = makeStatusReducer(actions.pushUsersChanges);
 
 const active = combineReducers({
-  // status: activeStatus,
+  status: activeStatus,
   data: activeData,
   errors: activeErrors
 });

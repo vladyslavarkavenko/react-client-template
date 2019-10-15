@@ -4,6 +4,7 @@ import { fetchClientsTables } from '../../modules/clients/clientsActions';
 import clientsSelectors from '../../modules/clients/clientsSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 import InvitationTable from './invitationTable/InvitationTable';
+import ClientTable from './clientTable/clientTable';
 
 class Clients extends React.Component {
   componentDidMount() {
@@ -26,6 +27,7 @@ class Clients extends React.Component {
       <div className="staff">
         <section className="table-list">
           <InvitationTable />
+          <ClientTable />
         </section>
       </div>
     );

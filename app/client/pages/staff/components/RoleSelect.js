@@ -49,6 +49,7 @@ export default class RoleSelect extends React.Component {
           // }}
           isMulti={multipleRoles}
           classNamePrefix="role-select"
+          menuPosition="fixed"
         />
       </div>
     );

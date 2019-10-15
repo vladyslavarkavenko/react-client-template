@@ -33,6 +33,7 @@ export const pushUsersChanges = createRequestBound('USER_CHANGES_PUSH');
 
 export const saveTableField = createOnlyTriggerBound('FIELD_SAVE');
 export const createNewRow = createOnlyTriggerBound('NEW_ROW_CREATE');
+export const setUsersStatus = createRequestBound('USER_STATUS_SET');
 
 export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
 export const changeTableManager = createOnlyTriggerBound('MANAGER_CHANGE');
@@ -150,23 +151,12 @@ function* staffResendWorker() {
   }
 }
 
-function* updateStaffTask({ fields, topics, id, originalUser }) {
+function* updateStaffTask({ fields, id, originalUser }) {
   try {
     const { firstName, lastName } = originalUser;
-    const topicsId = topics.map((topic) => topic.value);
-    let user = originalUser;
+    const user = yield call(ClientsService.updateUser, { userId: id, data: fields });
 
-    if (Object.keys(fields).length) {
-      // returns CompanyStaff model its ok because of normalization after
-      user = yield call(StaffService.updateUser, { userId: id, data: fields });
-    }
-
-    yield call(StaffService.setTopicsPermission, {
-      staff: String(id),
-      topics: topicsId
-    });
-    // attach topics to model then normalize
-    user.topics = topicsId;
+    user.manager = fields.manager;
 
     Notification.success(`User ${firstName} ${lastName} has been updated`);
 
@@ -182,34 +172,27 @@ function* staffUpdateWorker() {
   yield put(pushUsersChanges.request());
   try {
     const selectedRows = yield select(staffSelectors.getOnlyChangedRows, 'active');
-
-    const company = yield select(companiesSelectors.getCurrentCompany);
     //check only roles field
-    const { errors, isValid } = validateUpdateStaffRow(selectedRows, company.hasAllAccess);
+    const { errors, isValid } = validateInviteCustomerRow(selectedRows);
 
     if (isValid) {
       const tasks = selectedRows.map((item) => {
         const { id, _changes } = item;
-        const { topics = [], roles } = _changes;
-        const fields = {};
+        const fields = {
+          manager: _changes.manager.value
+        };
 
-        if (roles) {
-          fields.isManager = roles.includes(ROLES.MANAGER);
-          fields.isAnalyst = roles.includes(ROLES.ANALYST);
-          fields.isAdmin = roles.includes(ROLES.ADMIN);
-        }
-
-        return call(updateStaffTask, { fields, topics, id, originalUser: item });
+        return call(updateStaffTask, { fields, id, originalUser: item });
       });
 
       const resolvedTasks = yield all(tasks);
 
       const onlySuccess = resolvedTasks.filter((item) => item !== null);
 
-      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+      const managers = yield select(clientsSelectors.getManagers);
 
       const normalized = onlySuccess.map((user) =>
-        normalizeUserData(user, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE)
+        normalizeUserData(user, managers, STAFF_TABLE_STATUS.ACTIVE)
       );
 
       const updatedUsers = {};
@@ -319,8 +302,8 @@ export function* clientsWatcher() {
   yield all([
     takeLatest(fetchClientsTables.TRIGGER, clientsTablesWorker),
     takeLatest(pushSendInvitations.TRIGGER, clientInvitationsWorker),
-    takeLatest(pushResendInvitations.TRIGGER, staffResendWorker)
-    // takeLatest(pushUsersChanges.TRIGGER, staffUpdateWorker),
+    takeLatest(pushResendInvitations.TRIGGER, staffResendWorker),
+    takeLatest(pushUsersChanges.TRIGGER, staffUpdateWorker)
     // takeLatest(setUsersStatus.TRIGGER, staffStatusWorker)
   ]);
 }
