@@ -1,7 +1,8 @@
-import { FEATURES, PROPS } from '../../pages/profile/overview/const';
+import { CATEGORIES, FEATURES, PROPS } from '../../pages/profile/overview/const';
 
 const { emptyData } = PROPS;
-const { NAMES, ID_NAME } = FEATURES;
+const { NAMES, ID_NAME: F_ID_NAME } = FEATURES;
+const { ID_NAME: C_ID_NAME } = CATEGORIES;
 
 const names = Object.values(NAMES);
 
@@ -15,24 +16,43 @@ export default function parseRadarScores(aspects) {
     names.map((x) => ({ x, y: [] })) //  Satisfaction
   ];
 
-  aspects.forEach(({ criteria }) => {
-    criteria.forEach(({ criteriaId: id, subjects }) => {
-      const i = data[0].find(({ x }) => x === ID_NAME[id]).y;
-      const s = data[1].find(({ x }) => x === ID_NAME[id]).y;
+  const categoriesDetails = {};
+  const featuresDetails = {};
 
-      subjects.forEach(({ topics }) => {
-        topics.forEach(({ grades }) => {
-          grades.forEach(({ importance, satisfaction }) => {
-            i.push(importance);
-            s.push(satisfaction);
+  aspects.forEach(
+    ({ aspectId: aId, criteria, countGrades: aCount, participationShare: aParticipation }) => {
+      const category = C_ID_NAME[aId];
+
+      categoriesDetails[category] = { count: aCount, participation: aParticipation };
+
+      criteria.forEach(
+        ({
+          criteriaId: cId,
+          subjects,
+          countGrades: cCount,
+          participationShare: cParticipation
+        }) => {
+          const feature = F_ID_NAME[cId];
+
+          featuresDetails[feature] = { count: cCount, participation: cParticipation };
+
+          const i = data[0].find(({ x }) => x === feature).y;
+          const s = data[1].find(({ x }) => x === feature).y;
+
+          subjects.forEach(({ topics }) => {
+            topics.forEach(({ grades }) => {
+              grades.forEach(({ importance, satisfaction }) => {
+                i.push(importance);
+                s.push(satisfaction);
+              });
+            });
           });
-        });
-      });
-    });
-  });
+        }
+      );
+    }
+  );
 
-  console.log('@data', data);
   const cb = ({ x, y }) => ({ x, y: y.length ? y.reduce((a, b) => a + b) / y.length : null });
 
-  return [data[0].map(cb), data[1].map(cb)];
+  return { grades: [data[0].map(cb), data[1].map(cb)], categoriesDetails, featuresDetails };
 }

@@ -20,6 +20,7 @@ class SignUp extends React.Component {
       email: '',
       phone: '',
       password: '',
+      confirmPassword: '',
       policy: false,
       token: null,
       errors: {}
@@ -61,8 +62,9 @@ class SignUp extends React.Component {
     const { errors, isValid } = validateUserSignUp(this.state);
 
     if (!isValid) {
-      this.setState({ errors });
+      return this.setState({ errors });
     }
+    this.setState({ errors: {} });
 
     const { firstName, lastName, email, phone, password, token, policy } = this.state;
     const input = {
@@ -79,7 +81,16 @@ class SignUp extends React.Component {
   }
 
   render() {
-    const { firstName, lastName, email, phone, password, policy, errors } = this.state;
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      confirmPassword,
+      policy,
+      errors
+    } = this.state;
 
     //TODO: add confirm password field
 
@@ -98,7 +109,7 @@ class SignUp extends React.Component {
               />
               <TextInput
                 value={lastName}
-                error={errors.lLastName}
+                error={errors.lastName}
                 onChange={this.onChange}
                 name="lastName"
                 labelText={i18next.t('register.name.last')}
@@ -125,6 +136,13 @@ class SignUp extends React.Component {
                 error={errors.password}
                 onChange={this.onChange}
                 labelText={i18next.t('register.password')}
+              />
+              <PasswordInput
+                name="confirmPassword"
+                value={confirmPassword}
+                error={errors.confirmPassword}
+                onChange={this.onChange}
+                labelText={i18next.t('register.confirmPassword')}
               />
               <CheckboxInput
                 name="policy"

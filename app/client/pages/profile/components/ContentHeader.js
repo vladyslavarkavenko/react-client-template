@@ -12,8 +12,20 @@ const { TRANSPARENT } = BTN_TYPES;
 
 // TODO: Add loading when updating.
 // TODO: Add validation for image.
-// eslint-disable-next-line react/prefer-stateless-function
 class ContentHeader extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.onEditBtnClick = this.onEditBtnClick.bind(this);
+  }
+
+  onEditBtnClick() {
+    const { history, toggleEditMode } = this.props;
+
+    toggleEditMode();
+    history.push('/account/profile/about');
+  }
+
   render() {
     const {
       displayAvatar = false,
@@ -24,7 +36,6 @@ class ContentHeader extends React.Component {
       editForm,
       navLinks,
       isEdit,
-      toggleEditMode,
       onChange,
       customButtons
     } = this.props;
@@ -77,7 +88,7 @@ class ContentHeader extends React.Component {
           <Button
             icon={PEN}
             title="Edit"
-            onClick={toggleEditMode}
+            onClick={this.onEditBtnClick}
             className="edit-btn"
             type={TRANSPARENT}
           />

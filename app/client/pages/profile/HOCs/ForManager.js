@@ -101,7 +101,7 @@ export default (OriginalComponent) => {
     user: authSelectors.user(state),
     isEdit: authSelectors.isEdit(state),
     activeEditUser: authSelectors.activeEditUser(state),
-    grades: profileSelectors.grades(state),
+    radarData: profileSelectors.radarData(state),
     avgSatisfaction: profileSelectors.avgSatisfaction(state)
   });
 

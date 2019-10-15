@@ -37,9 +37,9 @@ class Radar extends React.Component {
   }
 
   componentDidMount() {
-    const { getRadarScores } = this.props;
+    const { getRadarScores, data } = this.props;
 
-    getRadarScores && getRadarScores();
+    data && getRadarScores && data.isInitial && getRadarScores();
   }
 
   activateFeature(name) {
@@ -130,10 +130,11 @@ class Radar extends React.Component {
     const colorScale = Object.values(LEGEND_COLORS);
     const { mainAxis, dependentAxis, lines, dots, container } = styles;
 
-    const { data = emptyData } = this.props;
+    console.log('this.props', this.props);
+
+    const { data: { grades, categoriesDetails, featuresDetails } = emptyData } = this.props;
     const { activeFeature, activeCategory, tooltipData } = this.state;
 
-    console.log('props', this.props);
     return (
       <div className="radar-wrapper">
         <div className="radar p-relative">
@@ -165,12 +166,12 @@ class Radar extends React.Component {
               />
             ))}
             <VictoryGroup colorScale={colorScale} style={lines}>
-              {data.map((d, i) => (
+              {grades.map((d, i) => (
                 <VictoryLine key={i} data={d} name="lines" />
               ))}
             </VictoryGroup>
             <VictoryGroup colorScale={colorScale} style={dots}>
-              {data.map((d, i) => (
+              {grades.map((d, i) => (
                 <VictoryScatter key={i} data={d} name={i === 0 ? 'importance' : 'satisfaction'} />
               ))}
             </VictoryGroup>
@@ -179,8 +180,13 @@ class Radar extends React.Component {
           </VictoryChart>
           <FeaturesLabels onClick={this.activateFeature} />
           <CategoriesLabels onClick={this.activateCategory} />
-          <Details feature={activeFeature} category={activeCategory} />
-          <Tooltip data={data} tooltipData={tooltipData} />
+          <Details
+            feature={activeFeature}
+            category={activeCategory}
+            featuresDetails={featuresDetails}
+            categoriesDetails={categoriesDetails}
+          />
+          <Tooltip data={grades} tooltipData={tooltipData} />
         </div>
       </div>
     );

@@ -6,17 +6,17 @@ import ContentBody from './components/ContentBody';
 import RadarTitle from './overview/RadarTitle';
 import SatisfiedClients from './overview/SatisfiedClients';
 
-const Overview = ({ grades, getRadarScores, avgSatisfaction }) => (
+const Overview = ({ radarData, getRadarScores, avgSatisfaction }) => (
   <ContentBody
     main={[
       {
         title: <RadarTitle />,
-        body: <Radar getRadarScores={getRadarScores} data={grades} />
+        body: () => <Radar getRadarScores={getRadarScores} data={radarData} />
       }
     ]}
     sidebar={[
       {
-        body: <SatisfiedClients avgSatisfaction={avgSatisfaction} />
+        body: () => <SatisfiedClients avgSatisfaction={avgSatisfaction} />
       }
     ]}
   />
