@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
 
-  @grid-color: rgba(0,0,0,0.1);
+  @grid-color: #e5e5e5;
   @progress-color: @secondary-bg-color;
 
   @chart-height: 350px;
@@ -105,12 +105,17 @@
     margin: 0 @content-gap;
     min-height: 100%;
 
+    // lines for empty space
+    background-size: 100% / 9; // nine lines
+    background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
+
     .main-item {
       position: relative;
       height: @row-height;
       display: flex;
       align-items: center;
       flex-grow: 1;
+      // lines for overflow
       background-size: 100% / 9; // nine lines
       background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
 
