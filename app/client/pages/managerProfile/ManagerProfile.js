@@ -4,7 +4,9 @@ import { Link, Switch } from 'react-router-dom';
 
 import {
   fetchRadarScores,
-  fetchTopScores
+  fetchTopScores,
+  fetchStatistics,
+  clearAll
 } from '../../modules/managerProfile/managerProfileActions';
 import ContentHeader from '../profile/components/ContentHeader';
 import routing from '../../utils/routing';
@@ -42,11 +44,18 @@ class ManagerProfile extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    const { clearAll } = this.props;
+
+    clearAll();
+  }
+
   fetchData(id) {
-    const { fetchRadarScores, fetchTopScores } = this.props;
+    const { fetchRadarScores, fetchTopScores, fetchStatistics } = this.props;
 
     fetchRadarScores(id);
     fetchTopScores(id);
+    fetchStatistics(id);
   }
 
   render() {
@@ -114,7 +123,9 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = {
   fetchRadarScores,
-  fetchTopScores
+  fetchTopScores,
+  fetchStatistics,
+  clearAll
 };
 
 export default connect(

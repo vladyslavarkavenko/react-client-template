@@ -1,10 +1,11 @@
+/* eslint-disable */
 import React from 'react';
-import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
-import ErrorSvg from '../../../../../public/assets/svg/exclamation-circle.svg';
-import RoleSelect from './RoleSelect';
-import TopicSelect from './TopicSelect';
-import Notification from '../../../utils/notifications';
+import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
+import ErrorSvg from '../../../../../../public/assets/svg/exclamation-circle.svg';
+// import RoleSelect from './RoleSelect';
+import Notification from '../../../../utils/notifications';
 import StatusLabel from './StatusLabel';
+import ManagerSelect from './ManagerSelect';
 
 const handleNotify = (field, errors) => Notification.info(errors[field]);
 
@@ -20,16 +21,8 @@ const ErrorCircle = ({ field, errors }) => {
   return null;
 };
 
-export default function InputRow({
-  table,
-  errors = {},
-  data,
-  handleEdit,
-  handleChangeRole,
-  multipleRoles,
-  onlyDropEdit
-}) {
-  const { id, firstName, lastName, email, isChecked, roles, status, _changes = {} } = data;
+export default function InputRow({ table, errors = {}, data, handleEdit, onlyDropEdit }) {
+  const { id, firstName, lastName, email, isChecked, status, _changes = {} } = data;
 
   const withErrors = Object.keys(errors).length;
 
@@ -89,19 +82,9 @@ export default function InputRow({
         </>
       )}
 
-      <div className={`item item-roles drop ${errors.role ? 'error' : ''}`}>
-        <RoleSelect
-          handleChange={handleChangeRole}
-          rowId={id}
-          table={table}
-          roles={roles}
-          tempRoles={_changes.roles}
-          multipleRoles={multipleRoles}
-        />
-        <ErrorCircle field="role" errors={errors} />
-      </div>
-      <div className="item item-topics drop">
-        <TopicSelect rowId={id} table={table} />
+      <div className={`item item-manager drop ${errors.manager ? 'error' : ''}`}>
+        <ManagerSelect rowId={id} table={table} />
+        <ErrorCircle field="manager" errors={errors} />
       </div>
 
       <div className="item item-status">

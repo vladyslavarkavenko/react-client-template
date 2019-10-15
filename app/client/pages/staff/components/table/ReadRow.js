@@ -1,5 +1,5 @@
 import React from 'react';
-import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
+import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
 import RoleSelect from './RoleSelect';
 import TopicSelect from './TopicSelect';
 import StatusLabel from './StatusLabel';

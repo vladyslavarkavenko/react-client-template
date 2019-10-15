@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { call, put, takeLatest, all, select } from 'redux-saga/effects';
 // import i18next from 'i18next';
 
@@ -5,80 +7,72 @@ import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 import Notification from '../../utils/notifications';
 import StaffService from '../../services/staff';
-import ShareOpinionService from '../../services/shareOpinion';
 import { ROLES, STAFF_TABLE_STATUS, STAFF_TABLE_TYPE } from '../../utils/constants';
-import staffSelectors from './staffSelectors';
-import { validateInviteStaffRow, validateUpdateStaffRow } from '../../utils/validator';
+import staffSelectors from './clientsSelectors';
+import { validateInviteCustomerRow, validateUpdateStaffRow } from '../../utils/validator';
 
-import normalizeTopics from './helpers/normalizeTopics';
+import normalizeManagers from './helpers/normalizeManagers';
 import normalizeUserData from './helpers/normalizeUserData';
 import sortUserRowsByDate from './helpers/sortUserRowsByDate';
 
-import companiesSelectors from '../companies/companiesSelectors';
 import authSelectors from '../auth/authSelectors';
+import ClientsService from '../../services/clients';
+import CompaniesService from '../../services/companies';
+import clientsSelectors from './clientsSelectors';
 
-export const prefix = 'staff';
+export const prefix = 'clients';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 
-export const fetchStaffTables = createRequestBound('TABLES_FETCH');
+export const fetchClientsTables = createRequestBound('TABLES_FETCH');
 
 export const pushSendInvitations = createRequestBound('INVITATIONS_SEND');
 export const pushResendInvitations = createRequestBound('INVITATIONS_RESEND');
 
-export const setUsersStatus = createRequestBound('USER_STATUS_SET');
 export const pushUsersChanges = createRequestBound('USER_CHANGES_PUSH');
 
 export const saveTableField = createOnlyTriggerBound('FIELD_SAVE');
 export const createNewRow = createOnlyTriggerBound('NEW_ROW_CREATE');
+export const setUsersStatus = createRequestBound('USER_STATUS_SET');
+
 export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
-export const changeTableRole = createOnlyTriggerBound('ROLE_CHANGE');
-export const changeTableTopic = createOnlyTriggerBound('TOPIC_CHANGE');
+export const changeTableManager = createOnlyTriggerBound('MANAGER_CHANGE');
 
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
-function* staffTablesWorker() {
-  yield put(fetchStaffTables.request());
+function* clientsTablesWorker() {
+  yield put(fetchClientsTables.request());
   try {
-    const [pendingData, activeData, subjects] = yield all([
-      call(StaffService.getPendingStaff),
-      call(StaffService.getActiveStaff),
-      call(ShareOpinionService.getAllowedSubjects)
+    const [pendingData, activeData, managersData] = yield all([
+      call(ClientsService.getPendingCustomers),
+      call(ClientsService.getActiveCustomers),
+      call(CompaniesService.getManagersList)
     ]);
 
-    const subjectsFlatten = normalizeTopics(subjects);
+    const managers = normalizeManagers(managersData);
 
     const pending = pendingData
-      .map((userData) => normalizeUserData(userData, subjectsFlatten))
+      .map((userData) => normalizeUserData(userData, managers))
       .sort(sortUserRowsByDate);
 
     const currentUserId = yield select(authSelectors.getCurrentUserId);
     const active = activeData
       .filter((userData) => userData.id !== currentUserId)
-      .map((userData) => normalizeUserData(userData, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE))
+      .map((userData) => normalizeUserData(userData, managers, STAFF_TABLE_STATUS.ACTIVE))
       .sort(sortUserRowsByDate);
 
-    yield put(fetchStaffTables.success({ pending, active, subjects, subjectsFlatten }));
+    yield put(fetchClientsTables.success({ pending, active, managers }));
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(fetchStaffTables.failure());
+    yield put(fetchClientsTables.failure());
   }
 }
 
-function* createStaffTask({ fields, topics, tempId }) {
+function* createClientTask({ fields, tempId }) {
   try {
-    const user = yield call(StaffService.sendInvite, fields);
-    const topicsId = topics.map((topic) => topic.value);
+    const user = yield call(ClientsService.sendInvite, fields);
 
-    if (topics.length) {
-      yield call(StaffService.setTopicsPermission, {
-        staff: String(user.id),
-        topics: topicsId
-      });
-    }
-
-    user.topics = topicsId;
     user.tempId = tempId;
 
     Notification.success(
@@ -92,44 +86,39 @@ function* createStaffTask({ fields, topics, tempId }) {
   }
 }
 
-function* staffInvitationsWorker() {
+function* clientInvitationsWorker() {
   yield put(pushSendInvitations.request());
   try {
-    const selectedRows = yield select(
+    const checkedRows = yield select(
       staffSelectors.getOnlyCheckedRows,
       STAFF_TABLE_TYPE.INVITATIONS
     );
 
-    const company = yield select(companiesSelectors.getCurrentCompany);
+    const selectedRows = checkedRows.filter((item) => !item.status);
 
-    const { errors, isValid } = validateInviteStaffRow(selectedRows, company.hasAllAccess);
+    const { errors, isValid } = validateInviteCustomerRow(selectedRows);
 
     if (isValid) {
       const tasks = selectedRows.map((item) => {
-        const { email, firstName, lastName, topics, roles, id } = item;
+        const { email, firstName, lastName, manager, id } = item;
         const fields = {
           userData: { email, firstName, lastName },
-          isManager: roles.includes(ROLES.MANAGER),
-          isAnalyst: roles.includes(ROLES.ANALYST),
-          isAdmin: roles.includes(ROLES.ADMIN)
+          manager: manager.value
         };
 
-        return call(createStaffTask, { fields, topics, tempId: id });
+        return call(createClientTask, { fields, tempId: id });
       });
 
       const resolvedTasks = yield all(tasks);
 
-      // const result = yield join(onlySuccessTasks);
-
       const onlySuccess = resolvedTasks.filter((item) => item !== null);
 
-      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+      const managers = yield select(clientsSelectors.getManagers);
       const normalized = onlySuccess.map((user) => ({
-        ...normalizeUserData(user, subjectsFlatten, STAFF_TABLE_STATUS.PENDING),
+        ...normalizeUserData(user, managers, STAFF_TABLE_STATUS.PENDING),
         tempId: user.tempId
       }));
-      // console.log(onlySuccessTasks);
-      // console.log(result);
+
       yield put(pushSendInvitations.success(normalized));
     } else {
       console.error(errors);
@@ -143,7 +132,11 @@ function* staffInvitationsWorker() {
 }
 
 function* staffResendWorker() {
-  const selectedRows = yield select(staffSelectors.getOnlyCheckedRows, STAFF_TABLE_TYPE.PENDING);
+  const selectedRows = yield select(
+    clientsSelectors.getOnlyCheckedWithStatusRows,
+    STAFF_TABLE_TYPE.INVITATIONS,
+    STAFF_TABLE_STATUS.EXPIRED
+  );
 
   if (selectedRows.length) {
     yield put(pushResendInvitations.request());
@@ -160,23 +153,12 @@ function* staffResendWorker() {
   }
 }
 
-function* updateStaffTask({ fields, topics, id, originalUser }) {
+function* updateStaffTask({ fields, id, originalUser }) {
   try {
     const { firstName, lastName } = originalUser;
-    const topicsId = topics.map((topic) => topic.value);
-    let user = originalUser;
+    const user = yield call(ClientsService.updateUser, { userId: id, data: fields });
 
-    if (Object.keys(fields).length) {
-      // returns CompanyStaff model its ok because of normalization after
-      user = yield call(StaffService.updateUser, { userId: id, data: fields });
-    }
-
-    yield call(StaffService.setTopicsPermission, {
-      staff: String(id),
-      topics: topicsId
-    });
-    // attach topics to model then normalize
-    user.topics = topicsId;
+    user.manager = fields.manager;
 
     Notification.success(`User ${firstName} ${lastName} has been updated`);
 
@@ -192,34 +174,27 @@ function* staffUpdateWorker() {
   yield put(pushUsersChanges.request());
   try {
     const selectedRows = yield select(staffSelectors.getOnlyChangedRows, 'active');
-
-    const company = yield select(companiesSelectors.getCurrentCompany);
     //check only roles field
-    const { errors, isValid } = validateUpdateStaffRow(selectedRows, company.hasAllAccess);
+    const { errors, isValid } = validateInviteCustomerRow(selectedRows);
 
     if (isValid) {
       const tasks = selectedRows.map((item) => {
         const { id, _changes } = item;
-        const { topics = [], roles } = _changes;
-        const fields = {};
+        const fields = {
+          manager: _changes.manager.value
+        };
 
-        if (roles) {
-          fields.isManager = roles.includes(ROLES.MANAGER);
-          fields.isAnalyst = roles.includes(ROLES.ANALYST);
-          fields.isAdmin = roles.includes(ROLES.ADMIN);
-        }
-
-        return call(updateStaffTask, { fields, topics, id, originalUser: item });
+        return call(updateStaffTask, { fields, id, originalUser: item });
       });
 
       const resolvedTasks = yield all(tasks);
 
       const onlySuccess = resolvedTasks.filter((item) => item !== null);
 
-      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+      const managers = yield select(clientsSelectors.getManagers);
 
       const normalized = onlySuccess.map((user) =>
-        normalizeUserData(user, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE)
+        normalizeUserData(user, managers, STAFF_TABLE_STATUS.ACTIVE)
       );
 
       const updatedUsers = {};
@@ -325,12 +300,12 @@ function* staffStatusWorker({ payload }) {
   }
 }
 
-export function* staffWatcher() {
+export function* clientsWatcher() {
   yield all([
-    takeLatest(fetchStaffTables.TRIGGER, staffTablesWorker),
-    takeLatest(pushSendInvitations.TRIGGER, staffInvitationsWorker),
+    takeLatest(fetchClientsTables.TRIGGER, clientsTablesWorker),
+    takeLatest(pushSendInvitations.TRIGGER, clientInvitationsWorker),
     takeLatest(pushResendInvitations.TRIGGER, staffResendWorker),
-    takeLatest(pushUsersChanges.TRIGGER, staffUpdateWorker),
-    takeLatest(setUsersStatus.TRIGGER, staffStatusWorker)
+    takeLatest(pushUsersChanges.TRIGGER, staffUpdateWorker)
+    // takeLatest(setUsersStatus.TRIGGER, staffStatusWorker)
   ]);
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import Select, { components } from 'react-select';
 import { connect } from 'react-redux';
-import staffSelectors from '../../../modules/staff/staffSelectors';
-import { changeTableTopic } from '../../../modules/staff/staffActions';
+import staffSelectors from '../../../../modules/staff/staffSelectors';
+import { changeTableTopic } from '../../../../modules/staff/staffActions';
 // import Button from '../../../components/ui-components/Form/Button';
 
 const GroupHeading = (props) => {
@@ -85,6 +85,7 @@ class TopicSelect extends React.Component {
             isMulti
             isDisabled={readOnly}
             classNamePrefix="topic-select"
+            menuPosition="fixed"
           />
         </div>
 

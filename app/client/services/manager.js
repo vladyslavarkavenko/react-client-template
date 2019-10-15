@@ -12,6 +12,10 @@ class ManagerService {
   static getTopScores(managerId) {
     return api.get(`/opinion/manager/${managerId}/topic_scores/`);
   }
+
+  static getStatistics(managerId) {
+    return api.get(`/opinion/manager/${managerId}/statistics/`);
+  }
 }
 
 export default ManagerService;

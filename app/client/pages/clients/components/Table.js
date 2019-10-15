@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { STAFF_TABLE_STATUS } from '../../../utils/constants';
 import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
 import ReadRow from './table/ReadRow';
 import InputRow from './table/InputRow';
@@ -9,35 +11,41 @@ export default function Table({
   checked,
   handleSelectAll,
   handleEdit,
-  handleChangeRole,
   readOnly,
-  table,
-  multipleRoles,
-  onlyDropEdit
-  // isRequest
+  table
 }) {
-  const rows = list.map((item) =>
-    readOnly || item.status === 'Blocked' ? (
-      <ReadRow
-        key={item.id}
-        data={item}
-        table={table}
-        handleEdit={handleEdit}
-        multipleRoles={multipleRoles}
-      />
-    ) : (
+  const rows = list.map((item) => {
+    if (!item.status) {
+      return (
+        <InputRow
+          key={item.id}
+          data={item}
+          errors={errors[item.id]}
+          table={table}
+          handleEdit={handleEdit}
+        />
+      );
+    }
+
+    if (
+      readOnly ||
+      item.status === STAFF_TABLE_STATUS.BLOCKED ||
+      item.status === STAFF_TABLE_STATUS.PENDING
+    ) {
+      return <ReadRow key={item.id} data={item} table={table} handleEdit={handleEdit} />;
+    }
+
+    return (
       <InputRow
         key={item.id}
         data={item}
         errors={errors[item.id]}
         table={table}
         handleEdit={handleEdit}
-        handleChangeRole={handleChangeRole}
-        multipleRoles={multipleRoles}
-        onlyDropEdit={onlyDropEdit}
+        onlyDropEdit
       />
-    )
-  );
+    );
+  });
 
   return (
     <div className="table">
@@ -54,8 +62,7 @@ export default function Table({
         <li className="item item-name">Name</li>
         <li className="item item-surname">Surname</li>
         <li className="item item-email">Email</li>
-        <li className="item item-roles">Roles</li>
-        <li className="item item-topics">Topics</li>
+        <li className="item item-manager">Manager</li>
         <li className="item item-status">Status</li>
       </ul>
       <ul className="body">{rows}</ul>

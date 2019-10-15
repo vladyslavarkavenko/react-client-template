@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchStaffTables, clearAll } from '../../modules/staff/staffActions';
-import staffSelectors from '../../modules/staff/staffSelectors';
+import { fetchClientsTables, clearAll } from '../../modules/clients/clientsActions';
+import clientsSelectors from '../../modules/clients/clientsSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 import InvitationTable from './invitationTable/InvitationTable';
-import PendingTable from './pendingTable/PendingTable';
-import StaffTable from './staffTable/StaffTable';
+import ClientTable from './clientTable/clientTable';
 
-class Staff extends React.Component {
+class Clients extends React.Component {
   componentDidMount() {
-    const { fetchStaffTables } = this.props;
-    fetchStaffTables();
+    const { fetchClientsTables } = this.props;
+    fetchClientsTables();
   }
 
   componentWillUnmount() {
@@ -33,8 +32,7 @@ class Staff extends React.Component {
       <div className="staff">
         <section className="table-list">
           <InvitationTable />
-          <PendingTable />
-          <StaffTable />
+          <ClientTable />
         </section>
       </div>
     );
@@ -42,15 +40,15 @@ class Staff extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  tableStatus: staffSelectors.tableStatus(state)
+  tableStatus: clientsSelectors.tableStatus(state)
 });
 
 const mapDispatchToProps = {
-  fetchStaffTables,
+  fetchClientsTables,
   clearAll
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Staff);
+)(Clients);

@@ -3,6 +3,8 @@ import SatisfiedClientsContainer from './SatisfiedClientsContainer';
 import RadarContainer from './RadarContainer';
 
 import TopScoresContainer from './TopScoresContainer';
+import CtruCircleContainer from './CtruCircleContainer';
+import ParticipationCircleContainer from './ParticipationCircleContainer';
 
 function Overview({ match }) {
   return (
@@ -13,6 +15,8 @@ function Overview({ match }) {
       </main>
       <aside className="sidebar">
         <SatisfiedClientsContainer match={match} />
+        <CtruCircleContainer match={match} />
+        <ParticipationCircleContainer match={match} />
       </aside>
     </section>
   );

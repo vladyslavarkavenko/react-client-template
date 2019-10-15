@@ -315,6 +315,18 @@ function validateSelectedRoles(data, messages = {}) {
   return errors;
 }
 
+function validateSelectedManager(manager, messages = {}) {
+  const { required = 'Select manager' } = messages;
+
+  const errors = {};
+
+  if (!manager) {
+    errors.manager = required;
+  }
+
+  return errors;
+}
+
 // External validators
 export function validateUser(data) {
   const { email, phone, about, firstName, lastName, title, location } = data;
@@ -452,6 +464,28 @@ export function validateUpdateStaffRow(rows, multipleRoles) {
   rows.forEach(({ roles, id }) => {
     const rowErrors = {
       ...validateSelectedRoles({ roles, isMultiple: multipleRoles })
+    };
+
+    if (Object.keys(rowErrors).length) {
+      errors[id] = rowErrors;
+    }
+  });
+
+  return {
+    errors,
+    isValid: !Object.keys(errors).length
+  };
+}
+
+export function validateInviteCustomerRow(rows) {
+  const errors = {};
+
+  rows.forEach(({ email, firstName, lastName, manager, id }) => {
+    const rowErrors = {
+      ...validateEmail(email),
+      ...validateUserFirstName(firstName),
+      ...validateUserLastName(lastName),
+      ...validateSelectedManager(manager)
     };
 
     if (Object.keys(rowErrors).length) {

@@ -2,6 +2,8 @@ import React from 'react';
 import SatisfiedClientsContainer from './SatisfiedClientsContainer';
 import RadarContainer from './RadarContainer';
 import TopScoresContainer from './TopScoresContainer';
+import ParticipationCircleContainer from './ParticipationCircleContainer';
+import CtruCircleContainer from './CtruCircleContainer';
 
 function Overview({ match }) {
   return (
@@ -12,6 +14,8 @@ function Overview({ match }) {
       </main>
       <aside className="sidebar">
         <SatisfiedClientsContainer match={match} />
+        <CtruCircleContainer match={match} />
+        <ParticipationCircleContainer match={match} />
       </aside>
     </section>
   );
