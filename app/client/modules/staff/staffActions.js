@@ -46,8 +46,6 @@ function* staffTablesWorker() {
       call(ShareOpinionService.getAllowedSubjects)
     ]);
 
-    const t0 = window.performance.now();
-
     const subjectsFlatten = normalizeTopics(subjects);
 
     const pending = pendingData
@@ -60,7 +58,6 @@ function* staffTablesWorker() {
       .map((userData) => normalizeUserData(userData, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE))
       .sort(sortUserRowsByDate);
 
-    console.log('TIMING:', window.performance.now() - t0);
     yield put(fetchStaffTables.success({ pending, active, subjects, subjectsFlatten }));
   } catch (err) {
     console.error(err);

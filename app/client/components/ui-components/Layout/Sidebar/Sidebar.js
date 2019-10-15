@@ -8,7 +8,7 @@ import authSelectors from '../../../../modules/auth/authSelectors';
 const Sidebar = ({ role }) => (
   <ul className="nav-side-bar">
     {NAV_LINKS[role].map(({ title, Icon, to }) => (
-      <li key={to}>
+      <li key={title}>
         <NavLink exact to={to} activeClassName="active" className="nav-link">
           <Icon />
           {title}
