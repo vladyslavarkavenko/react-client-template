@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactSVG from 'react-svg';
 
-import { CATEGORIES } from '../const';
+import { CATEGORIES } from './const';
 
 const { NAMES, ICONS } = CATEGORIES;
 

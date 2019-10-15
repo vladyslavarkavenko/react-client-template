@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactSVG from 'react-svg';
 
-import { FEATURES, CATEGORIES } from '../const';
+import { FEATURES, CATEGORIES } from './const';
 
 const { ICONS: F_ICONS, BACKGROUND: F_BG } = FEATURES;
 const { ICONS: C_ICONS, BACKGROUND: C_BG } = CATEGORIES;

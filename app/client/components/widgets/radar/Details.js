@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Icon from './Icon';
-import Button from '../../components/Button';
+import Button from '../../../pages/profile/components/Button';
 
-import CONST from '../../../../utils/constants';
+import CONST from '../../../utils/constants';
 import calculatePositionByAngle from './helpers/calculatePositionByAngle';
 
 const { BTN_TYPES } = CONST;

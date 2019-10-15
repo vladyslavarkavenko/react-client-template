@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getRadarScores } from '../../modules/profile/profileActions';
-import Radar from '../profile/overview/Radar';
+import Radar from '../../components/widgets/radar/Radar';
 import ContentBody from '../profile/components/ContentBody';
-import RadarTitle from '../profile/overview/RadarTitle';
-import SatisfiedClients from '../profile/overview/SatisfiedClients';
+import RadarTitle from '../../components/widgets/radar/RadarTitle';
+import SatisfiedClients from '../../components/widgets/SatisfiedClients';
 import profileSelectors from '../../modules/profile/profileSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';

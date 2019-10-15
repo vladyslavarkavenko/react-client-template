@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import BlockWrapper from '../../profile/components/BlockWrapper';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
 import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
-import TopScoresHeader from '../../profile/overview/TopScoresHeader';
-import TopScoresChart from '../../profile/overview/TopScoresChart';
+import TopScoresHeader from '../../../components/widgets/topScores/TopScoresHeader';
+import TopScoresChart from '../../../components/widgets/topScores/TopScoresChart';
 
 function TopScoresContainer({ status, data }) {
   if (status === 'none' || status === 'failure' || !data.length) {

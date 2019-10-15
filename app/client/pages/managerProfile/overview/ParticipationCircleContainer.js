@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import BlockWrapper from '../../profile/components/BlockWrapper';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
-import ParticipationCircle from '../../profile/overview/ParticipationCircle';
+import ParticipationCircle from '../../../components/widgets/ParticipationCircle';
 import managerProfileSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 

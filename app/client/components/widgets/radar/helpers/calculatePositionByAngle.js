@@ -1,4 +1,4 @@
-import { PROPS } from '../../const';
+import { PROPS } from '../const';
 
 const { a, p } = PROPS;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FEATURES, PROPS, LEGEND_COLORS } from '../const';
+import { FEATURES, PROPS, LEGEND_COLORS } from './const';
 import calculatePositionByAngle from './helpers/calculatePositionByAngle';
 
 const { NAMES } = FEATURES;

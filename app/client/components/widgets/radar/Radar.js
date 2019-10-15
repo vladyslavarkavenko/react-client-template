@@ -9,12 +9,12 @@ import {
   VictoryVoronoiContainer
 } from 'victory';
 
-import Details from './radar/Details';
-import Tooltip from './radar/Tooltip';
-import FeaturesLabels from './radar/FeaturesLabels';
+import Details from './Details';
+import Tooltip from './Tooltip';
+import FeaturesLabels from './FeaturesLabels';
 
-import styles from './radar/styles';
-import CategoriesLabels from './radar/CategoriesLabels';
+import styles from './styles';
+import CategoriesLabels from './CategoriesLabels';
 import { LEGEND_COLORS, FEATURES, CATEGORIES, PROPS } from './const';
 
 import '../../../assets/styles/pages/overview.less';

@@ -1,4 +1,4 @@
-import { CATEGORIES, FEATURES, PROPS } from '../../pages/profile/overview/const';
+import { CATEGORIES, FEATURES, PROPS } from '../../components/widgets/radar/const';
 
 const { emptyData } = PROPS;
 const { NAMES, ID_NAME: F_ID_NAME } = FEATURES;

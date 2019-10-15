@@ -1,5 +1,5 @@
 import React from 'react';
-import RateItem from './topScores/RateItem';
+import RateItem from './RateItem';
 
 /* eslint-disable */
 const mockData = [

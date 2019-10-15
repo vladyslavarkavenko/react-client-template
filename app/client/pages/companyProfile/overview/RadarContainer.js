@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Radar from '../../profile/overview/Radar';
-import RadarTitle from '../../profile/overview/RadarTitle';
+import Radar from '../../../components/widgets/radar/Radar';
+import RadarTitle from '../../../components/widgets/radar/RadarTitle';
 import BlockWrapper from '../../profile/components/BlockWrapper';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
 import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';

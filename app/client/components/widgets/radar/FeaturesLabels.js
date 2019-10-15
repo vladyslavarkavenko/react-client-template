@@ -2,7 +2,7 @@ import React from 'react';
 
 import Icon from './Icon';
 
-import { FEATURES } from '../const';
+import { FEATURES } from './const';
 import calculatePositionByAngle from './helpers/calculatePositionByAngle';
 
 // TODO: Rewrite using formula.

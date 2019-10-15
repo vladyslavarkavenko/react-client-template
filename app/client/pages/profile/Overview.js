@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Radar from './overview/Radar';
+import Radar from '../../components/widgets/radar/Radar';
 import ContentBody from './components/ContentBody';
 
-import RadarTitle from './overview/RadarTitle';
-import SatisfiedClients from './overview/SatisfiedClients';
+import RadarTitle from '../../components/widgets/radar/RadarTitle';
+import SatisfiedClients from '../../components/widgets/SatisfiedClients';
 
 const Overview = ({ radarData, getRadarScores, avgSatisfaction }) => (
   <ContentBody

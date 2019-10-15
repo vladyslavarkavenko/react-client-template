@@ -5,7 +5,7 @@ import BlockWrapper from '../../profile/components/BlockWrapper';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
 import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
-import CtruScoreCircle from '../../profile/overview/CtruScoreCircle';
+import CtruScoreCircle from '../../../components/widgets/CtruScoreCircle';
 
 function CtruCircleContainer({ status, profileLabel, reviewsCount }) {
   if (status === 'none' || status === 'failure') {

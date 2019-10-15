@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import BlockWrapper from '../../profile/components/BlockWrapper';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
 import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
-import ParticipationCircle from '../../profile/overview/ParticipationCircle';
+import ParticipationCircle from '../../../components/widgets/ParticipationCircle';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
 function ParticipationCircleContainer({ status, data, profileLabel }) {

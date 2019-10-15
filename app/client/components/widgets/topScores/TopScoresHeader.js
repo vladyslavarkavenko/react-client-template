@@ -1,5 +1,5 @@
 import React from 'react';
-import Point from './topScores/Point';
+import Point from './Point';
 
 export default function TopScoresHeader() {
   return (

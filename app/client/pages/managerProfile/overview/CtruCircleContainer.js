@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import BlockWrapper from '../../profile/components/BlockWrapper';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
-import CtruScoreCircle from '../../profile/overview/CtruScoreCircle';
+import CtruScoreCircle from '../../../components/widgets/CtruScoreCircle';
 import managerProfileSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 
 function CtruCircleContainer({ status, profileLabel, reviewsCount }) {

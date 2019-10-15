@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 
 import * as actions from './profileActions';
-import { PROPS } from '../../pages/profile/overview/const';
+import { PROPS } from '../../components/widgets/radar/const';
 
 const { emptyData } = PROPS;
 
