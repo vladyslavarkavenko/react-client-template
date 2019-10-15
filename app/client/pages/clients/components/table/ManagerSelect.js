@@ -2,8 +2,8 @@ import React from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 
-import { changeTableManager } from '../../../modules/clients/clientsActions';
-import clientsSelectors from '../../../modules/clients/clientsSelectors';
+import { changeTableManager } from '../../../../modules/clients/clientsActions';
+import clientsSelectors from '../../../../modules/clients/clientsSelectors';
 
 class ManagerSelect extends React.Component {
   constructor(props) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchClientsTables } from '../../modules/clients/clientsActions';
+import { fetchClientsTables, clearAll } from '../../modules/clients/clientsActions';
 import clientsSelectors from '../../modules/clients/clientsSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 import InvitationTable from './invitationTable/InvitationTable';
@@ -10,6 +10,11 @@ class Clients extends React.Component {
   componentDidMount() {
     const { fetchClientsTables } = this.props;
     fetchClientsTables();
+  }
+
+  componentWillUnmount() {
+    const { clearAll } = this.props;
+    clearAll();
   }
 
   render() {
@@ -39,7 +44,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  fetchClientsTables
+  fetchClientsTables,
+  clearAll
 };
 
 export default connect(

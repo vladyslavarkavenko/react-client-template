@@ -35,6 +35,8 @@ export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
 export const changeTableRole = createOnlyTriggerBound('ROLE_CHANGE');
 export const changeTableTopic = createOnlyTriggerBound('TOPIC_CHANGE');
 
+export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
+
 function* staffTablesWorker() {
   yield put(fetchStaffTables.request());
   try {

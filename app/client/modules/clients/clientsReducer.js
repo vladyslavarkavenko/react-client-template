@@ -1,10 +1,9 @@
-/* eslint-disable */
 import getId from 'uuid/v4';
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 
 import { STAFF_TABLE_TYPE, STAFF_TABLE_STATUS } from '../../utils/constants';
-import { makeStatusReducer } from '../../utils/reduxHelpers';
+import { makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 import * as actions from './clientsActions';
 
 const userScheme = {
@@ -129,6 +128,9 @@ const invitationsData = handleActions(
       });
 
       return [...updated, ...unchanged];
+    },
+    [actions.clearAll.TRIGGER]() {
+      return generateRows();
     }
   },
   invitationsInitial
@@ -144,12 +146,18 @@ const invitationsErrors = handleActions(
     },
     [actions.pushSendInvitations.TRIGGER]() {
       return {};
+    },
+    [actions.clearAll.TRIGGER]() {
+      return {};
     }
   },
   {}
 );
 
-const invitationsStatus = makeStatusReducer(actions.pushSendInvitations);
+const invitationsStatus = makeStatusWithResetReducer(
+  actions.pushSendInvitations,
+  actions.clearAll.TRIGGER
+);
 
 const invitations = combineReducers({
   status: invitationsStatus,
@@ -269,6 +277,9 @@ const activeData = handleActions(
       }
 
       return state;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
     }
   },
   []
@@ -289,7 +300,7 @@ const activeErrors = handleActions(
   {}
 );
 
-const activeStatus = makeStatusReducer(actions.pushUsersChanges);
+const activeStatus = makeStatusWithResetReducer(actions.pushUsersChanges, actions.clearAll.TRIGGER);
 
 const active = combineReducers({
   status: activeStatus,
@@ -297,12 +308,18 @@ const active = combineReducers({
   errors: activeErrors
 });
 
-const tablesStatus = makeStatusReducer(actions.fetchClientsTables);
+const tablesStatus = makeStatusWithResetReducer(
+  actions.fetchClientsTables,
+  actions.clearAll.TRIGGER
+);
 
 const managers = handleActions(
   {
     [actions.fetchClientsTables.SUCCESS](state, { payload }) {
       return payload.managers;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
     }
   },
   []

@@ -1,12 +1,11 @@
-/* eslint-disable */
 import React from 'react';
-import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
-// import RoleSelect from './RoleSelect';
+import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
+import RoleSelect from './RoleSelect';
+import TopicSelect from './TopicSelect';
 import StatusLabel from './StatusLabel';
-import ManagerSelect from './ManagerSelect';
 
-export default function ReadRow({ table, data, handleEdit }) {
-  const { id, firstName, lastName, email, isChecked, status, manager } = data;
+export default function ReadRow({ table, data, handleEdit, multipleRoles }) {
+  const { id, firstName, lastName, email, isChecked, roles, status } = data;
 
   return (
     <li className={`row ${isChecked ? 'checked' : ''}`}>
@@ -30,10 +29,12 @@ export default function ReadRow({ table, data, handleEdit }) {
       <div className="item item-email">
         <span>{email}</span>
       </div>
-      <div className="item item-manager drop">
-        <ManagerSelect rowId={id} table={table} readOnly />
+      <div className="item item-roles drop">
+        <RoleSelect rowId={id} table={table} multipleRoles={multipleRoles} roles={roles} readOnly />
       </div>
-
+      <div className="item item-topics drop">
+        <TopicSelect rowId={id} table={table} readOnly />
+      </div>
       <div className="item item-status">
         <StatusLabel status={status} />
       </div>

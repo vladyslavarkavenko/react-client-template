@@ -1,5 +1,5 @@
 import React from 'react';
-import { STAFF_TABLE_STATUS } from '../../../utils/constants';
+import { STAFF_TABLE_STATUS } from '../../../../utils/constants';
 
 export default function StatusLabel({ status }) {
   switch (status) {

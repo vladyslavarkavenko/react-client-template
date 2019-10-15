@@ -1,9 +1,9 @@
 import React from 'react';
-import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
-import ErrorSvg from '../../../../../public/assets/svg/exclamation-circle.svg';
+import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
+import ErrorSvg from '../../../../../../public/assets/svg/exclamation-circle.svg';
 import RoleSelect from './RoleSelect';
 import TopicSelect from './TopicSelect';
-import Notification from '../../../utils/notifications';
+import Notification from '../../../../utils/notifications';
 import StatusLabel from './StatusLabel';
 
 const handleNotify = (field, errors) => Notification.info(errors[field]);

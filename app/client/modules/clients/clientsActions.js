@@ -38,6 +38,8 @@ export const setUsersStatus = createRequestBound('USER_STATUS_SET');
 export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
 export const changeTableManager = createOnlyTriggerBound('MANAGER_CHANGE');
 
+export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
+
 function* clientsTablesWorker() {
   yield put(fetchClientsTables.request());
   try {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import { ROLES } from '../../../utils/constants';
+import { ROLES } from '../../../../utils/constants';
 
 const options = [
   { value: ROLES.MANAGER, label: 'Manager' },

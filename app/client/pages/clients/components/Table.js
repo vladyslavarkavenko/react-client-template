@@ -2,8 +2,8 @@ import React from 'react';
 
 import { STAFF_TABLE_STATUS } from '../../../utils/constants';
 import CheckboxInput from '../../../components/ui-components/Form/CheckboxInput';
-import ReadRow from './ReadRow';
-import InputRow from './InputRow';
+import ReadRow from './table/ReadRow';
+import InputRow from './table/InputRow';
 
 export default function Table({
   list,
