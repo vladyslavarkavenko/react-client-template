@@ -85,6 +85,7 @@ class TopicSelect extends React.Component {
             isMulti
             isDisabled={readOnly}
             classNamePrefix="topic-select"
+            menuPosition="fixed"
           />
         </div>
 

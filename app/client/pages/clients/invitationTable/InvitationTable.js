@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import { connect } from 'react-redux';
 import { STAFF_TABLE_STATUS, STAFF_TABLE_TYPE } from '../../../utils/constants';

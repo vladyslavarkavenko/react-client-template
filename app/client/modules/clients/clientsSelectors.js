@@ -6,18 +6,18 @@ const getTableErrors = (state, table) => state.clients[table.toLowerCase()].erro
 
 const getManagers = (state) => state.clients.managers;
 
-const getTopicsByRowId = (state, { id, table }) => {
+const getManagerByRowId = (state, { id, table }) => {
   const row = getTableData(state, table).find((item) => item.id === id);
 
   if (row) {
-    if (row._changes && row._changes.topics) {
+    if (row._changes && row._changes.manager) {
       return row._changes.topics;
     }
 
-    return row.topics;
+    return row.manager;
   }
 
-  return [];
+  return null;
 };
 
 const getOnlyCheckedRows = (state, table) =>
@@ -42,8 +42,8 @@ export default {
   getTableErrors,
 
   getManagers,
+  getManagerByRowId,
 
-  getTopicsByRowId,
   getOnlyCheckedRows,
   getOnlyChangedRows,
   getCheckedAndChangedRows,

@@ -31,7 +31,7 @@ export default function ReadRow({ table, data, handleEdit }) {
         <span>{email}</span>
       </div>
       <div className="item item-manager drop">
-        <ManagerSelect rowId={id} table={table} manager={manager} readOnly />
+        <ManagerSelect rowId={id} table={table} readOnly />
       </div>
 
       <div className="item item-status">

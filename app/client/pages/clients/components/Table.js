@@ -13,7 +13,6 @@ export default function Table({
   handleEdit,
   readOnly,
   table
-  // isRequest
 }) {
   const rows = list.map((item) => {
     if (!item.status) {

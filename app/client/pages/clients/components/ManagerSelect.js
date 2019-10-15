@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import Select from 'react-select';
 import { connect } from 'react-redux';
@@ -21,12 +19,13 @@ class ManagerSelect extends React.Component {
   }
 
   render() {
-    const { managers, manager, tempManager, readOnly } = this.props;
+    const { managers, manager, readOnly } = this.props;
 
     return (
       <div className="role-select-wrapper">
         <Select
           placeholder={readOnly ? 'None' : 'Select Manager...'}
+          menuPosition="fixed"
           options={managers}
           value={manager}
           onChange={this.onChange}
@@ -41,8 +40,9 @@ class ManagerSelect extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  managers: clientsSelectors.getManagers(state)
+const mapStateToProps = (state, { rowId, table }) => ({
+  managers: clientsSelectors.getManagers(state),
+  manager: clientsSelectors.getManagerByRowId(state, { id: rowId, table })
 });
 
 const mapDispatchToProps = {

@@ -22,7 +22,7 @@ const ErrorCircle = ({ field, errors }) => {
 };
 
 export default function InputRow({ table, errors = {}, data, handleEdit, onlyDropEdit }) {
-  const { id, firstName, lastName, email, isChecked, manager, status, _changes = {} } = data;
+  const { id, firstName, lastName, email, isChecked, status, _changes = {} } = data;
 
   const withErrors = Object.keys(errors).length;
 
@@ -83,7 +83,7 @@ export default function InputRow({ table, errors = {}, data, handleEdit, onlyDro
       )}
 
       <div className={`item item-manager drop ${errors.manager ? 'error' : ''}`}>
-        <ManagerSelect rowId={id} table={table} manager={manager} tempManager={_changes.manager} />
+        <ManagerSelect rowId={id} table={table} />
         <ErrorCircle field="manager" errors={errors} />
       </div>
 
