@@ -13,6 +13,10 @@ class CompaniesService {
     return api.get(`/opinion/company/${companyId}/topic_scores/`);
   }
 
+  static getStatistics(companyId) {
+    return api.get(`/opinion/company/${companyId}/statistics/`);
+  }
+
   static getManagersList() {
     return api.get('/company/company/managers/');
   }
