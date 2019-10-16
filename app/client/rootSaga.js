@@ -8,6 +8,7 @@ import { clientsWatcher } from './modules/clients/clientsActions';
 import { profileWatcher } from './modules/profile/profileActions';
 import { managerProfileWatcher } from './modules/managerProfile/managerProfileActions';
 import { companyProfileWatcher } from './modules/companyProfile/companyProfileActions';
+import { opinionDetailsWatcher } from './modules/opinionDetails/opinionDetailsActions';
 
 export default function* rootSaga() {
   yield all([
@@ -19,6 +20,7 @@ export default function* rootSaga() {
     fork(clientsWatcher),
     fork(profileWatcher),
     fork(managerProfileWatcher),
-    fork(companyProfileWatcher)
+    fork(companyProfileWatcher),
+    fork(opinionDetailsWatcher)
   ]);
 }

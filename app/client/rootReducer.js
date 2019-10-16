@@ -7,6 +7,7 @@ import clients from './modules/clients/clientsReducer';
 import managerProfile from './modules/managerProfile/managerProfileReducer';
 import companyProfile from './modules/companyProfile/companyProfileReducer';
 import profile from './modules/profile/profileReducer';
+import opinionDetails from './modules/opinionDetails/opinionDetailsReducer';
 import { pushLogout } from './modules/auth/authActions';
 
 const appReducer = combineReducers({
@@ -18,7 +19,9 @@ const appReducer = combineReducers({
   profile,
 
   managerProfile,
-  companyProfile
+  companyProfile,
+
+  opinionDetails
 });
 
 export default (state, action) => {

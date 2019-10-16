@@ -33,7 +33,7 @@ const mapStateToProps = (state, props) => {
     company,
     manager,
     selected: shareOpinionSelectors.selectedProfile(state),
-    companies: companiesSelectors.getCompaniesList(state),
+    companies: companiesSelectors.getCompaniesAsCustomer(state),
     managers: companiesSelectors.getManagersList(state)
   };
 };

@@ -11,6 +11,27 @@ function generateProfileLink({ id, type }) {
   }
 }
 
+function generateOpinionLink({ id, type, criteriaId, subjectId, topicId }) {
+  let params = '';
+
+  if (criteriaId && subjectId && topicId) {
+    const paramObj = new URLSearchParams();
+    paramObj.append(ROUTING_PARAMS.CRITERIA_ID, criteriaId);
+    paramObj.append(ROUTING_PARAMS.SUBJECT_ID, subjectId);
+    paramObj.append(ROUTING_PARAMS.TOPIC_ID, topicId);
+    params = `?${paramObj.toString()}`;
+  }
+
+  switch (type) {
+    case RATE_PROFILE_TYPE.MANAGER:
+      return `${ROUTING_PARAMS.MANAGER}_${id}${params}`;
+    case RATE_PROFILE_TYPE.COMPANY:
+      return `${ROUTING_PARAMS.COMPANY}_${id}${params}`;
+    default:
+      return '';
+  }
+}
+
 export default (params) => ({
   root: '/',
 
@@ -45,6 +66,8 @@ export default (params) => ({
   }`,
   shareOpinionChart: '/account/share-opinion/rate',
   shareOpinionMessage: '/account/share-opinion/message',
+
+  opinionDetails: `/opinions/${params ? generateOpinionLink(params) : ':type\\_:id'}`,
 
   staff: '/manage/staff',
   clients: '/manage/clients',

@@ -4,6 +4,17 @@ const getCompanyData = (state) => state.companies.data;
 
 const getCompaniesList = (state) => Object.values(getCompanyData(state));
 
+const getCompaniesAsCustomer = (state) => {
+  const companies = getCompaniesList(state);
+  const currentUserId = authSelectors.getCurrentUserId(state); // permission[activeRole];
+
+  const customerCompanies = Object.values(companies).filter((company) =>
+    currentUserId.includes(company.id)
+  );
+
+  return customerCompanies;
+};
+
 const getCompaniesForActiveRole = (state) => {
   const companies = getCompaniesList(state);
   const myCompaniesIds = authSelectors.getCurrentUserId(state);
@@ -74,6 +85,7 @@ export default {
   getCompaniesForActiveRole,
   getCurrentManager,
   getCurrentCompany,
+  getCompaniesAsCustomer,
   data: getCompanyData,
   errors: (state) => state.companies.errors,
   activeEditCompany: (state) => state.companies.activeEditCompany,

@@ -70,6 +70,11 @@ const Staff = customLoadable({
 const Clients = customLoadable({
   loader: () => import('../pages/clients/Clients')
 });
+
+const OpinionDetails = customLoadable({
+  loader: () => import('../pages/opinionDetails/OpinionDetails')
+});
+
 const PageNotFound = customLoadable({
   loader: () => import('../pages/notFound/NotFound')
 });
@@ -112,6 +117,8 @@ export default function App() {
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />
       <AuthRoute exact path={routing().shareOpinionWithProfile} component={ShareOpinion} />
+
+      <AuthRoute exact path={routing().opinionDetails} component={OpinionDetails} />
 
       <ShareOpinionRoute
         exact
