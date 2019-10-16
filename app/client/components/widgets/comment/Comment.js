@@ -1,20 +1,19 @@
 import React from 'react';
+import { format } from 'date-fns';
 
 import Rating from './Rating';
 
-export default function Comment({ rate, id }) {
+export default function Comment({ data: { rate, id, author, date, text } }) {
+  const formattedDate = format(new Date(date), 'MMM d, yyyy');
+
   return (
     <li className="comment__item">
       <div className="comment__title">
-        <span className="author">Nickname</span>
-        <span className="date">Jan 30, 2019</span>
+        <span className="author">{author}</span>
+        <span className="date">{formattedDate}</span>
       </div>
       <Rating rate={rate} id={id} />
-      <div className="comment__body">
-        I was always afraid of investing money other than in my savings account. Mr. Meier took over
-        2 hours to explain the investment strategy funds to me and what a difference such an
-        investment makes for retirement provision
-      </div>
+      <div className="comment__body">{text}</div>
     </li>
   );
 }

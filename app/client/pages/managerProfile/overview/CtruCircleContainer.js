@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import BlockWrapper from '../../profile/components/BlockWrapper';
+import BlockWrapper from '../../../components/widgets/BlockWrapper';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 import CtruScoreCircle from '../../../components/widgets/CtruScoreCircle';
@@ -17,7 +17,7 @@ function CtruCircleContainer({ status, profileLabel, reviewsCount }) {
       {status === 'request' ? (
         <LoaderBlock height="20vh" />
       ) : (
-        <CtruScoreCircle profileLabel={profileLabel} reviewsCount={reviewsCount} />
+        <CtruScoreCircle profileLabel={profileLabel} reviewsCount={reviewsCount} isDouble />
       )}
     </BlockWrapper>
   );

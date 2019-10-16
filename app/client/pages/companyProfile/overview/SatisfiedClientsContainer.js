@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import BlockWrapper from '../../profile/components/BlockWrapper';
+import BlockWrapper from '../../../components/widgets/BlockWrapper';
 import SatisfiedClients from '../../../components/widgets/SatisfiedClients';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
