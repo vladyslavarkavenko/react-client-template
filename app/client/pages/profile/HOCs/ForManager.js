@@ -9,7 +9,7 @@ import {
   editModeUser,
   pushUpdateUser
 } from '../../../modules/auth/authActions';
-import { getRadarScores, getSatisfiedClients } from '../../../modules/profile/profileActions';
+import { getRadarScores } from '../../../modules/profile/profileActions';
 import profileSelectors from '../../../modules/profile/profileSelectors';
 
 export default (OriginalComponent) => {
@@ -58,7 +58,8 @@ export default (OriginalComponent) => {
       const data = new FormData();
       const { avatar, firstName, lastName, phone, email, about, location, title } = activeEditUser;
 
-      if (!avatar.length) {
+      // eslint-disable-next-line no-undef
+      if (avatar instanceof File) {
         data.append('avatar', avatar);
       }
       data.append('phone', phone);
@@ -101,8 +102,8 @@ export default (OriginalComponent) => {
     user: authSelectors.user(state),
     isEdit: authSelectors.isEdit(state),
     activeEditUser: authSelectors.activeEditUser(state),
-    grades: profileSelectors.grades(state),
-    satisfiedClients: profileSelectors.satisfiedClients(state)
+    radarData: profileSelectors.radarData(state),
+    avgSatisfaction: profileSelectors.avgSatisfaction(state)
   });
 
   const mapDispatchToProps = {
@@ -110,8 +111,7 @@ export default (OriginalComponent) => {
     setUserErrors,
     editModeUser,
     pushUpdateUser,
-    getRadarScores,
-    getSatisfiedClients
+    getRadarScores
   };
 
   return connect(

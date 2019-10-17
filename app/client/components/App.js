@@ -66,6 +66,10 @@ const ResetPassword = customLoadable({
 const Staff = customLoadable({
   loader: () => import('../pages/staff/Staff')
 });
+
+const Clients = customLoadable({
+  loader: () => import('../pages/clients/Clients')
+});
 const PageNotFound = customLoadable({
   loader: () => import('../pages/notFound/NotFound')
 });
@@ -103,9 +107,12 @@ export default function App() {
       <AuthRoute exact path={routing().companyProfile} component={CompanyProfile} />
       <AuthRoute exact path={routing().opinions} component={Opinions} />
       <RolesRoute exact path={routing().staff} forAdmin={Staff} />
+      <RolesRoute exact path={routing().clients} forAdmin={Clients} />
 
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />
+      <AuthRoute exact path={routing().shareOpinionWithProfile} component={ShareOpinion} />
+
       <ShareOpinionRoute
         exact
         path={routing().shareOpinionChart}

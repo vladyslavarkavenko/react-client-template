@@ -50,7 +50,7 @@ const STAFF = {
 const MY_CLIENTS = {
   title: 'My clients',
   Icon: SvgClients,
-  to: routing().notFound
+  to: routing().clients
 };
 
 const COMMUNITY = {
@@ -112,6 +112,13 @@ const NAV_LINKS = {
     MESSAGES,
     COMMUNITY
   ]
+};
+
+export const WORKING_NAV_LINKS = {
+  [ADMIN]: [DASHBOARD, STAFF, MY_CLIENTS],
+  [MANAGER]: [MY_PROFILE],
+  [ANALYST]: [DASHBOARD],
+  [CUSTOMER]: [OPINIONS, MY_PROFILE]
 };
 
 export default NAV_LINKS;

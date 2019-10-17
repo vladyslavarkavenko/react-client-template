@@ -2,13 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getRadarScores } from '../../modules/profile/profileActions';
-import Radar from '../profile/overview/Radar';
+import Radar from '../../components/widgets/radar/Radar';
 import ContentBody from '../profile/components/ContentBody';
-import RadarTitle from '../profile/overview/RadarTitle';
-import SatisfiedClients from '../profile/overview/SatisfiedClients';
+import RadarTitle from '../../components/widgets/radar/RadarTitle';
+import CtruScoreCircle from '../../components/widgets/CtruScoreCircle';
+import SatisfiedClients from '../../components/widgets/SatisfiedClients';
 import profileSelectors from '../../modules/profile/profileSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
+import StaffData from './StaffData';
 
 const {
   ROLES: { CUSTOMER, MANAGER }
@@ -42,9 +44,18 @@ class Dashboard extends React.Component {
             {
               title: <RadarTitle />,
               body: <Radar getRadarScores={getRadarScores} data={radarData} />
+            },
+            {
+              title: 'Staff',
+              body: <StaffData />
             }
           ]}
           sidebar={[
+            {
+              // TODO: Insert real company name.
+              title: 'cTRU score of Clientis',
+              body: <CtruScoreCircle />
+            },
             {
               body: <SatisfiedClients avgSatisfaction={avgSatisfaction} />,
               className: 'no-border'

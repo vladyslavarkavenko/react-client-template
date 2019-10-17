@@ -8,8 +8,8 @@ import EditForm from './components/EditForm';
 import ContentHeader from './components/ContentHeader';
 import ForAdmin from './HOCs/ForAdmin';
 
-const Overview = customLoadable({ loader: () => import('./Overview') });
-const AboutForAdmin = ForAdmin(customLoadable({ loader: () => import('./CompanyAbout') }));
+const OverviewForAdmin = ForAdmin(customLoadable({ loader: () => import('./Overview') }));
+const AboutForAdmin = ForAdmin(customLoadable({ loader: () => import('./about/CompanyAbout') }));
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ProfileForAdmin extends React.Component {
@@ -48,7 +48,7 @@ class ProfileForAdmin extends React.Component {
         />
         <Switch>
           <WrappedRoute exact path={routing().about} render={() => <AboutForAdmin />} />
-          <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
+          <WrappedRoute exact path={routing().overview} render={() => <OverviewForAdmin />} />
         </Switch>
       </div>
     );

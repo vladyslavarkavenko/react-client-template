@@ -74,14 +74,10 @@ const selectedTopics = handleActions(
     [actions.pushRateTopic.SUCCESS](state, { payload }) {
       const cloned = [...state];
 
-      const currentTopicIndex = cloned.findIndex((topic) => topic.id === payload.topic);
+      const currentTopicIndex = cloned.findIndex((topic) => topic.id === payload.id);
 
       cloned[currentTopicIndex] = {
-        ...cloned[currentTopicIndex],
-        score: payload.score,
-        satisfaction: payload.satisfaction,
-        importance: payload.importance,
-        dateLastOpinion: payload.dateLastOpinion,
+        ...payload,
         isRated: true
       };
 

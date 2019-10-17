@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Radar from '../../profile/overview/Radar';
-import RadarTitle from '../../profile/overview/RadarTitle';
-import BlockWrapper from '../../profile/components/BlockWrapper';
+import Radar from '../../../components/widgets/radar/Radar';
+import RadarTitle from '../../../components/widgets/radar/RadarTitle';
+import BlockWrapper from '../../../components/widgets/BlockWrapper';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
 import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
 
@@ -19,15 +19,10 @@ function RadarContainer({ status, data }) {
   );
 }
 
-const mapStateToProps = (state, props) => {
-  const { match } = props;
-
-  const {
-    params: { id }
-  } = match;
+const mapStateToProps = (state) => {
   const { status, data } = companyProfileSelectors.radar(state);
 
-  return { status, data, id };
+  return { status, data };
 };
 
 export default connect(mapStateToProps)(RadarContainer);

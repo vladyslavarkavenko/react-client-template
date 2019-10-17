@@ -8,7 +8,7 @@ import ContentHeader from './components/ContentHeader';
 import ForAnalyst from './HOCs/ForAnalyst';
 
 const Overview = customLoadable({ loader: () => import('./Overview') });
-const About = customLoadable({ loader: () => import('./CompanyAbout') });
+const About = customLoadable({ loader: () => import('./about/CompanyAbout') });
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ProfileForAnalyst extends React.Component {

@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch } from 'react-router-dom';
+import { Link, Switch } from 'react-router-dom';
 
 import {
   fetchRadarScores,
-  fetchSatisfiedClients
+  fetchTopScores,
+  fetchStatistics,
+  clearAll
 } from '../../modules/managerProfile/managerProfileActions';
 import ContentHeader from '../profile/components/ContentHeader';
 import routing from '../../utils/routing';
@@ -12,7 +14,7 @@ import Overview from './overview/Overview';
 import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 import About from './about/About';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
-import managerProfileSelectors from '../../modules/managerProfile/managerProfileSelectors';
+import { RATE_PROFILE_TYPE } from '../../utils/constants';
 
 class ManagerProfile extends React.Component {
   constructor(props) {
@@ -42,15 +44,22 @@ class ManagerProfile extends React.Component {
     }
   }
 
-  fetchData(id) {
-    const { fetchSatisfiedClients, fetchRadarScores } = this.props;
+  componentWillUnmount() {
+    const { clearAll } = this.props;
 
-    fetchSatisfiedClients(id);
+    clearAll();
+  }
+
+  fetchData(id) {
+    const { fetchRadarScores, fetchTopScores, fetchStatistics } = this.props;
+
     fetchRadarScores(id);
+    fetchTopScores(id);
+    fetchStatistics(id);
   }
 
   render() {
-    const { match, manager, satisfaction } = this.props;
+    const { match, manager } = this.props;
     const {
       params: { id }
     } = match;
@@ -65,7 +74,20 @@ class ManagerProfile extends React.Component {
       { to: routing(id).managerProfileAbout, title: 'About' }
     ];
 
-    const { firstName, lastName, avatar } = manager;
+    const customButtons = [
+      <Link
+        to={routing({ id, type: RATE_PROFILE_TYPE.MANAGER }).shareOpinionWithProfile}
+        className="btn btn-transparent"
+        key="header_btn_share"
+      >
+        Share Opinion
+      </Link>,
+      <Link to={navLinks[1].to} className="btn btn-transparent" key="header_btn_contact">
+        Contact
+      </Link>
+    ];
+
+    const { firstName, lastName, avatar, avgSatisfaction } = manager;
 
     return (
       <section className="manager-profile">
@@ -73,12 +95,9 @@ class ManagerProfile extends React.Component {
           displayAvatar
           avatar={avatar}
           title={`${firstName} ${lastName}`}
-          subTitle={
-            satisfaction
-              ? `${satisfaction}% of clients are satisfied`
-              : 'Loading client satisfaction...'
-          }
+          subTitle={avgSatisfaction ? `${avgSatisfaction}% of clients are satisfied` : ''}
           navLinks={navLinks}
+          customButtons={customButtons}
         />
         <Switch>
           <WrappedRoute exact path={routing().managerProfileAbout} component={About} />
@@ -95,19 +114,18 @@ const mapStateToProps = (state, props) => {
     params: { id, tab }
   } = match;
 
-  const satisfaction = managerProfileSelectors.satisfaction(state);
-
   return {
     id,
     tab,
-    manager: companiesSelectors.getCurrentManager(state, id),
-    satisfaction: satisfaction.data
+    manager: companiesSelectors.getCurrentManager(state, id)
   };
 };
 
 const mapDispatchToProps = {
-  fetchSatisfiedClients,
-  fetchRadarScores
+  fetchRadarScores,
+  fetchTopScores,
+  fetchStatistics,
+  clearAll
 };
 
 export default connect(

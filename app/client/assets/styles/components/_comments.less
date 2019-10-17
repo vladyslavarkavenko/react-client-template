@@ -1,0 +1,63 @@
+.comment {
+  @gap: 0.5rem;
+
+  &__list {
+
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    .makeWidgetWrap();
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: @gap;
+
+    .author {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .date {
+      color: @font-color-lighter
+    }
+  }
+
+  &__rate {
+    display: flex;
+    align-items: center;
+    margin-bottom: @gap;
+    .count {
+      font-weight: bold;
+      color: @font-color-blue;
+      font-size: 1.4rem;
+      margin-right: 1rem;
+    }
+
+    .progress {
+      display: flex;
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-left: 0.5rem;
+
+        &.fill {
+          background-color: @font-color-blue;
+        }
+
+        &.empty {
+          background-color: @font-color-light;
+        }
+      }
+    }
+  }
+
+  &__body {
+
+  }
+}

@@ -8,6 +8,14 @@ class ManagerService {
   static getSatisfiedClients(managerId) {
     return api.get(`/opinion/manager/${managerId}/avg_satisfaction/`);
   }
+
+  static getTopScores(managerId) {
+    return api.get(`/opinion/manager/${managerId}/topic_scores/`);
+  }
+
+  static getStatistics(managerId) {
+    return api.get(`/opinion/manager/${managerId}/statistics/`);
+  }
 }
 
 export default ManagerService;

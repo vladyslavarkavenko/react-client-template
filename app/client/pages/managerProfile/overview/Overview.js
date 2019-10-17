@@ -1,20 +1,24 @@
 import React from 'react';
 import SatisfiedClientsContainer from './SatisfiedClientsContainer';
 import RadarContainer from './RadarContainer';
-import TopScoresChart from '../../companyProfile/about/TopScoresChart';
-import BlockWrapper from '../../profile/components/BlockWrapper';
+
+import TopScoresContainer from './TopScoresContainer';
+import CtruCircleContainer from './CtruCircleContainer';
+import ParticipationCircleContainer from './ParticipationCircleContainer';
+import CommentsList from '../../../components/widgets/comment/CommentsList';
 
 function Overview({ match }) {
   return (
     <section className="content-body">
       <main className="main">
-        <BlockWrapper title="Top Scores">
-          <TopScoresChart />
-        </BlockWrapper>
-        <RadarContainer match={match} />
+        <TopScoresContainer />
+        <RadarContainer />
+        <CommentsList />
       </main>
       <aside className="sidebar">
         <SatisfiedClientsContainer match={match} />
+        <CtruCircleContainer match={match} />
+        <ParticipationCircleContainer match={match} />
       </aside>
     </section>
   );

@@ -41,31 +41,33 @@ class PasswordInput extends React.Component {
     // TODO: Rewrite this using CustomInput.js
 
     return (
-      <div className="input-block form__row">
-        {error && <span className="input-error-message">{error}</span>}
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor={key} className="form__row-label">
-          {labelText}
-          {showIndicator && <PasswordIndicator value={value} />}
-        </label>
-        <div className="p-relative">
-          <input
-            id={key}
-            name={name}
-            onChange={onChange}
-            value={value}
-            type={isPasswordVisible ? 'text' : 'password'}
-            className="form__row-input"
-            readOnly={readOnly}
-            ref={forwardRef}
-          />
-          <button
-            className="toggle-password-visibility"
-            type="button"
-            onClick={this.togglePassword}
-          >
-            {isPasswordVisible ? <SvgEye /> : <SvgSlashEye />}
-          </button>
+      <div className="form__row">
+        <div className={`input-block ${error ? 'input-error' : ''}`}>
+          {error && <span className="input-error-message">{error}</span>}
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor={key} className="form__row-label">
+            {labelText}
+            {showIndicator && <PasswordIndicator value={value} />}
+          </label>
+          <div className="p-relative">
+            <input
+              id={key}
+              name={name}
+              onChange={onChange}
+              value={value}
+              type={isPasswordVisible ? 'text' : 'password'}
+              className="form__row-input"
+              readOnly={readOnly}
+              ref={forwardRef}
+            />
+            <button
+              className="toggle-password-visibility"
+              type="button"
+              onClick={this.togglePassword}
+            >
+              {isPasswordVisible ? <SvgEye /> : <SvgSlashEye />}
+            </button>
+          </div>
         </div>
         {showTooltip && (
           <span className="form__row-tooltip">{i18next.t('register.passwordNote')}</span>

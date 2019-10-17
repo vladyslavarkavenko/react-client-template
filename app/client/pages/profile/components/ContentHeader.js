@@ -12,8 +12,20 @@ const { TRANSPARENT } = BTN_TYPES;
 
 // TODO: Add loading when updating.
 // TODO: Add validation for image.
-// eslint-disable-next-line react/prefer-stateless-function
 class ContentHeader extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.onEditBtnClick = this.onEditBtnClick.bind(this);
+  }
+
+  onEditBtnClick() {
+    const { history, toggleEditMode } = this.props;
+
+    toggleEditMode();
+    history.push('/account/profile/about');
+  }
+
   render() {
     const {
       displayAvatar = false,
@@ -24,15 +36,15 @@ class ContentHeader extends React.Component {
       editForm,
       navLinks,
       isEdit,
-      toggleEditMode,
-      onChange
+      onChange,
+      customButtons
     } = this.props;
 
     return (
       <div className="content-header">
         {displayAvatar && (
-          <div className="avatar">
-            <div className="img-wrapper">
+          <div className="avatar-wrapper">
+            <div className="avatar circle">
               <img alt="Avatar" src={avatar || '/assets/img/empty-avatar.jpg'} />
             </div>
           </div>
@@ -58,7 +70,7 @@ class ContentHeader extends React.Component {
               />
             </div>
           ) : (
-            <>
+            <div className="text-block">
               {title && <h1>{title}</h1>}
               {subTitle && <h2>{subTitle}</h2>}
               {loc && (
@@ -67,18 +79,21 @@ class ContentHeader extends React.Component {
                   <p>{loc}</p>
                 </div>
               )}
-            </>
+            </div>
           )}
+
+          {customButtons && <div className="buttons-block">{customButtons}</div>}
         </div>
         {editForm && !isEdit && (
           <Button
             icon={PEN}
             title="Edit"
-            onClick={toggleEditMode}
+            onClick={this.onEditBtnClick}
             className="edit-btn"
             type={TRANSPARENT}
           />
         )}
+
         {isEdit && editForm}
         {navLinks && (
           <ul className="content-nav-bar">

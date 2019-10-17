@@ -3,7 +3,7 @@ import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 
 import { ROLES, STAFF_TABLE_TYPE, STAFF_TABLE_STATUS } from '../../utils/constants';
-import { makeStatusReducer } from '../../utils/reduxHelpers';
+import { makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 import * as actions from './staffActions';
 
 const userScheme = {
@@ -20,12 +20,16 @@ const userScheme = {
 
 const minRowCount = 5;
 
-const invitationsInitial = Array(minRowCount)
-  .fill(null)
-  .map(() => ({ ...userScheme, id: getId() }));
+const invitationsInitial = () =>
+  Array(minRowCount)
+    .fill(null)
+    .map(() => ({ ...userScheme, id: getId() }));
 
 const invitationsData = handleActions(
   {
+    [actions.createNewRow.TRIGGER](state) {
+      return [...state, { ...userScheme, id: getId() }];
+    },
     [actions.saveTableField.TRIGGER](state, { payload }) {
       const { table, field, id, value } = payload;
 
@@ -113,9 +117,12 @@ const invitationsData = handleActions(
       }
 
       return state;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return invitationsInitial();
     }
   },
-  invitationsInitial
+  invitationsInitial()
 );
 
 const invitationsErrors = handleActions(
@@ -128,12 +135,18 @@ const invitationsErrors = handleActions(
     },
     [actions.pushSendInvitations.TRIGGER]() {
       return {};
+    },
+    [actions.clearAll.TRIGGER]() {
+      return {};
     }
   },
   {}
 );
 
-const invitationsStatus = makeStatusReducer(actions.pushSendInvitations);
+const invitationsStatus = makeStatusWithResetReducer(
+  actions.pushSendInvitations,
+  actions.clearAll.TRIGGER
+);
 
 const invitations = combineReducers({
   status: invitationsStatus,
@@ -197,12 +210,19 @@ const pendingData = handleActions(
       }
 
       return state;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
     }
   },
+
   []
 );
 
-const pendingStatus = makeStatusReducer(actions.pushResendInvitations);
+const pendingStatus = makeStatusWithResetReducer(
+  actions.pushResendInvitations,
+  actions.clearAll.TRIGGER
+);
 
 const pending = combineReducers({
   status: pendingStatus,
@@ -268,7 +288,7 @@ const activeData = handleActions(
       const { table, field, id, value } = payload;
 
       if (table === STAFF_TABLE_TYPE.ACTIVE) {
-        const row = state.findIndex((item) => item.id === id);
+        const row = state.findIndex((item) => item.id === Number(id));
 
         if (row !== -1) {
           const cloned = [...state];
@@ -293,7 +313,7 @@ const activeData = handleActions(
       const { table, id, values } = payload;
 
       if (table === STAFF_TABLE_TYPE.ACTIVE) {
-        const row = state.findIndex((item) => item.id === id);
+        const row = state.findIndex((item) => item.id === Number(id));
 
         if (row !== -1) {
           const cloned = [...state];
@@ -313,7 +333,7 @@ const activeData = handleActions(
       const { table, id, values, action } = payload;
 
       if (table === STAFF_TABLE_TYPE.ACTIVE) {
-        const row = state.findIndex((item) => item.id === id);
+        const row = state.findIndex((item) => item.id === Number(id));
 
         if (row !== -1) {
           const cloned = [...state];
@@ -349,6 +369,9 @@ const activeData = handleActions(
       }
 
       return state;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
     }
   },
   []
@@ -356,23 +379,26 @@ const activeData = handleActions(
 
 const activeErrors = handleActions(
   {
-    [actions.pushSendInvitations.FAILURE](state, { payload }) {
+    [actions.pushUsersChanges.FAILURE](state, { payload }) {
       return payload;
     },
-    [actions.pushSendInvitations.SUCCESS]() {
+    [actions.pushUsersChanges.SUCCESS]() {
       return {};
     },
-    [actions.pushSendInvitations.TRIGGER]() {
+    [actions.pushUsersChanges.TRIGGER]() {
+      return {};
+    },
+    [actions.clearAll.TRIGGER]() {
       return {};
     }
   },
   {}
 );
 
-// const activeStatus = makeStatusReducer(actions.pushSendInvitations);
+const activeStatus = makeStatusWithResetReducer(actions.pushUsersChanges, actions.clearAll.TRIGGER);
 
 const active = combineReducers({
-  // status: activeStatus,
+  status: activeStatus,
   data: activeData,
   errors: activeErrors
 });
@@ -381,6 +407,9 @@ const subjectList = handleActions(
   {
     [actions.fetchStaffTables.SUCCESS](state, { payload }) {
       return payload.subjects;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
     }
   },
   []
@@ -390,12 +419,15 @@ const subjectListNormalized = handleActions(
   {
     [actions.fetchStaffTables.SUCCESS](state, { payload }) {
       return payload.subjectsFlatten;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
     }
   },
   []
 );
 
-const tablesStatus = makeStatusReducer(actions.fetchStaffTables);
+const tablesStatus = makeStatusWithResetReducer(actions.fetchStaffTables, actions.clearAll.TRIGGER);
 
 const staff = combineReducers({
   status: tablesStatus,

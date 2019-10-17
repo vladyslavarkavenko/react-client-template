@@ -7,7 +7,7 @@ import ExclamationCircleEmptySvg from '../../../../../../../public/assets/svg/ex
 const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 
 export default function RateListItem({ data = {}, selected, withAlert, isCompany, handleSelect }) {
-  const { avatar, name, firstName, lastName, id } = data;
+  const { avatar, name, firstName, lastName, id, avgSatisfaction } = data;
 
   const type = isCompany ? COMPANY : MANAGER;
 
@@ -27,8 +27,11 @@ export default function RateListItem({ data = {}, selected, withAlert, isCompany
         <div className="company-title">{isCompany ? name : `${firstName} ${lastName}`}</div>
         <div className="company-subtitle">
           {isCompany
-            ? i18next.t('shareOpinion.satisfaction', { percent: 93, with: 'the bank' })
-            : i18next.t('shareOpinion.satisfaction', { percent: 75, with: 'this manager' })}
+            ? i18next.t('shareOpinion.satisfaction', { percent: avgSatisfaction, with: 'the bank' })
+            : i18next.t('shareOpinion.satisfaction', {
+                percent: avgSatisfaction,
+                with: 'this manager'
+              })}
         </div>
         {withAlert && (
           <span className="company-alert">

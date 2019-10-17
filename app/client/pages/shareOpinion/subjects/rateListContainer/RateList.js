@@ -9,7 +9,26 @@ const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 
 export default class RateList extends React.Component {
   componentDidMount() {
-    const { companies, managers, handleSelect } = this.props;
+    const {
+      companies,
+      managers,
+      company,
+      manager,
+
+      handleSelect
+    } = this.props;
+
+    if (company) {
+      //from url
+      handleSelect({ data: company, type: COMPANY });
+      return;
+    }
+
+    if (manager) {
+      //from url
+      handleSelect({ data: manager, type: MANAGER });
+      return;
+    }
 
     if (companies.length) {
       //select first company in the list

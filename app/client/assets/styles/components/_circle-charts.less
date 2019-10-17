@@ -1,0 +1,133 @@
+.participation {
+  &__chart {
+    position: relative;
+    margin: 0 auto;
+    width: 80%;
+    margin-bottom: 1rem;
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+
+    .count {
+      font-weight: bold;
+      font-size: 2.25rem;
+      line-height: 2rem;
+    }
+
+    .text {
+      color: @font-color-lighter;
+      font-size: 1.25rem;
+    }
+  }
+
+  &__info {
+    color: @font-color-lighter;
+  }
+}
+
+.ctru-circle {
+  @circle-inner-color: #00BFDF;
+  @circle-outer-color: #0075B7;
+
+  &__chart {
+    position: relative;
+    margin: 0 auto;
+    width: 80%;
+    margin-bottom: 1rem;
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+
+    .count {
+      font-weight: bold;
+      font-size: 2.25rem;
+      line-height: 2rem;
+    }
+
+    .diff {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.25rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+
+      svg {
+        width: 1.1rem;
+        height: 1.1rem;
+      }
+
+      &.green {
+        color: @alert-color-green;
+        svg {
+          margin-top: 0.5rem;
+          fill: @alert-color-green;
+        }
+      }
+
+      &.red {
+        color: @alert-color-red;
+        svg {
+          margin-bottom: 0.4rem;
+          transform: rotate(180deg);
+          fill: @alert-color-red;
+        }
+      }
+    }
+  }
+
+  &__info {
+    color: @font-color-lighter;
+  }
+
+  &__legend {
+    .legend-item {
+      display: flex;
+      .point {
+        margin-right: 0.5rem;
+        align-self: center;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+
+        &.inner {
+          background-color: @circle-inner-color;
+        }
+
+        &.outer {
+          background-color: @circle-outer-color;
+        }
+      }
+
+      .score {
+        margin-left: 0.5rem;
+        font-weight: bold;
+        font-size: 1.3rem;
+        line-height: 1.3rem;
+      }
+
+    }
+
+    margin-bottom: 1rem;
+  }
+
+
+}

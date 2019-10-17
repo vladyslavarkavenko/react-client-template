@@ -1,27 +1,22 @@
 import React from 'react';
 
-import Radar from './overview/Radar';
+import Radar from '../../components/widgets/radar/Radar';
 import ContentBody from './components/ContentBody';
 
-import RadarTitle from './overview/RadarTitle';
-import SatisfiedClients from './overview/SatisfiedClients';
+import RadarTitle from '../../components/widgets/radar/RadarTitle';
+import SatisfiedClients from '../../components/widgets/SatisfiedClients';
 
-const Overview = ({ grades, getRadarScores, getSatisfiedClients, satisfiedClients }) => (
+const Overview = ({ radarData, getRadarScores, avgSatisfaction }) => (
   <ContentBody
     main={[
       {
         title: <RadarTitle />,
-        body: <Radar getRadarScores={getRadarScores} data={grades} />
+        body: () => <Radar getRadarScores={getRadarScores} data={radarData} />
       }
     ]}
     sidebar={[
       {
-        body: (
-          <SatisfiedClients
-            getSatisfiedClients={getSatisfiedClients}
-            satisfiedClients={satisfiedClients}
-          />
-        )
+        body: () => <SatisfiedClients avgSatisfaction={avgSatisfaction} />
       }
     ]}
   />
