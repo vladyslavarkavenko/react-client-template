@@ -7,17 +7,21 @@ import companyProfileSelectors from '../../../modules/companyProfile/companyProf
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 import CtruScoreCircle from '../../../components/widgets/CtruScoreCircle';
 
-function CtruCircleContainer({ status, profileLabel, reviewsCount }) {
+function CtruCircleContainer({ status, profileLabel, reviewsCount, ctruScore }) {
   if (status === 'none' || status === 'failure') {
     return null;
   }
 
   return (
-    <BlockWrapper title="cTRU Score">
+    <BlockWrapper title={`cTRU Score of ${profileLabel}`}>
       {status === 'request' ? (
         <LoaderBlock height="20vh" />
       ) : (
-        <CtruScoreCircle profileLabel={profileLabel} reviewsCount={reviewsCount} />
+        <CtruScoreCircle
+          profileLabel={profileLabel}
+          reviewsCount={reviewsCount}
+          ctruScore={ctruScore}
+        />
       )}
     </BlockWrapper>
   );
@@ -28,13 +32,14 @@ const mapStateToProps = (state, { match }) => {
     params: { id }
   } = match;
   const {
-    data: { numberOpinions }
+    status,
+    data: { numberOpinions, ctruScore }
   } = companyProfileSelectors.stats(state);
   const { name } = companiesSelectors.getCurrentCompany(state, id);
 
   return {
-    status: 'success',
-    // data,
+    status,
+    ctruScore,
     profileLabel: name,
     reviewsCount: numberOpinions
   };

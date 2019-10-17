@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CircleWithBackground from './CircleWithBackground';
-import ArrowSvg from '../../../../public/assets/svg/sort-up.solid.svg';
+// import ArrowSvg from '../../../../public/assets/svg/sort-up.solid.svg';
 
 const config = {
   size: 300,
@@ -25,23 +25,28 @@ const circleInner = {
   color: '#00BFDF'
 };
 
-export default function CtruScoreCircle({ profileLabel, reviewsCount, isDouble }) {
+export default function CtruScoreCircle({ ctruScore, profileLabel, reviewsCount, isDouble }) {
   const { size } = config;
+
+  const score = ctruScore.toFixed(1);
+  const percent = Math.round(ctruScore * 10);
 
   return (
     <div className="ctru-circle">
       <div className="ctru-circle__chart">
         <svg viewBox={`0 0 ${size} ${size}`} width="100%" height="100%">
-          <CircleWithBackground circle={circleOuter} percent={75} config={config} />
+          <CircleWithBackground circle={circleOuter} percent={percent} config={config} />
 
-          {isDouble && <CircleWithBackground circle={circleInner} percent={60} config={config} />}
+          {isDouble && (
+            <CircleWithBackground circle={circleInner} percent={percent} config={config} />
+          )}
         </svg>
 
         <div className="ctru-circle__label">
-          <span className="count">7.6</span>
-          <span className="diff green">
-            +12.2% <ArrowSvg />
-          </span>
+          <span className="count">{score}</span>
+          {/*<span className="diff green">*/}
+          {/*  +12.2% <ArrowSvg />*/}
+          {/*</span>*/}
 
           {/*<span className="diff red">*/}
           {/*  +12.2% <ArrowSvg />*/}
@@ -54,12 +59,12 @@ export default function CtruScoreCircle({ profileLabel, reviewsCount, isDouble }
           <li className="legend-item">
             <span className="point outer" />
             <span className="text">All clients</span>
-            <span className="score">7.9</span>
+            <span className="score">{score}</span>
           </li>
           <li className="legend-item">
             <span className="point inner" />
             <span className="text">Clients of {profileLabel}</span>
-            <span className="score">6.9</span>
+            <span className="score">{score}</span>
           </li>
         </ul>
       )}
