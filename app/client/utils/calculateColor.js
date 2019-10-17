@@ -16,24 +16,6 @@ export const calculateColorByPointHSL = (point, maxValue, color = {}) => {
   return `hsl(${hue}, 50%, 50%)`;
 };
 
-const calculateColorParamByPoint = (param, point, ticks, colors = defaultColors) => {
-  const { l, r } = colors;
-
-  const lFactor = (l[param] * (ticks - point)) / ticks;
-  const rFactor = (r[param] * point) / ticks;
-
-  return Math.round(lFactor + rFactor);
-};
-
-export function calculateColorByPoint(...arg) {
-  // arg = { point, ticks, colors };
-  const r = calculateColorParamByPoint('r', ...arg);
-  const g = calculateColorParamByPoint('g', ...arg);
-  const b = calculateColorParamByPoint('b', ...arg);
-
-  return `rgb(${r}, ${g}, ${b})`;
-}
-
 const calculateColorParam = (param, x, y, width, height, colors = defaultColors) => {
   const { lt, rt, rb, lb } = colors;
 

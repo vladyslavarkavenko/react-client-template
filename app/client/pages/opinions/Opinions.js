@@ -6,12 +6,14 @@ import routing from '../../utils/routing';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
+import { fetchStaffStatistics } from '../../modules/opinions/opinionsActions';
+import opinionsSelectors from '../../modules/opinions/opinionsSelectors';
 
 const {
   ROLES: { CUSTOMER }
 } = CONST;
 
-function parseCompanies(companies) {
+function parseCompanies(companies, staffStatistics) {
   const newData = [];
 
   companies.forEach((company) => {
@@ -33,8 +35,13 @@ function parseCompanies(companies) {
     {
       const { id, firstName, lastName, title, avatar, confirmed = true, avgSatisfaction } = manager;
 
+      console.log('staffStatistics', staffStatistics, id);
+      const { numberOpinions: count, ctruScore: score } = staffStatistics[id];
+
       newData.push({
         id,
+        score: Math.floor(score * 10) / 10,
+        count,
         name: firstName + lastName,
         title,
         avatar,
@@ -46,6 +53,7 @@ function parseCompanies(companies) {
     }
   });
 
+  console.log('newData', newData);
   return newData;
 }
 
@@ -59,7 +67,18 @@ const Confirmed = () => (
   </div>
 );
 
-const Block = ({ id, isManager, avatar, name, confirmed, title, description, grades }) => (
+const Block = ({
+  id,
+  name,
+  title,
+  count,
+  score,
+  grades,
+  avatar,
+  confirmed,
+  isManager,
+  description
+}) => (
   <li className="block">
     <Link to={isManager ? routing(id).managerProfileAbout : routing(id).companyProfileAbout}>
       <div className="d-flex mb-1">
@@ -75,6 +94,17 @@ const Block = ({ id, isManager, avatar, name, confirmed, title, description, gra
           <p className="description">{description}</p>
         </div>
         <span className="arrow" />
+        {isManager && (
+          <div className="ctru-score flex-center">
+            <div className="info">
+              <h2>cTRU score</h2>
+              <p>{count} feedback</p>
+            </div>
+            <div className="grade-circle flex-center">
+              <div className="inner-circle flex-center">{score}</div>
+            </div>
+          </div>
+        )}
       </div>
       <ul className="grades">
         {grades.map(({ grade, topic, color }) => (
@@ -94,36 +124,52 @@ const Block = ({ id, isManager, avatar, name, confirmed, title, description, gra
   </li>
 );
 
-const Opinions = ({ companies, activeRole }) => {
-  if (activeRole !== CUSTOMER) {
+class Opinions extends React.Component {
+  componentDidMount() {
+    const { staffStatistics, fetchStaffStatistics } = this.props;
+
+    console.log('this.props', this.props);
+
+    !staffStatistics && fetchStaffStatistics && fetchStaffStatistics();
+  }
+
+  render() {
+    const { companies, staffStatistics, activeRole } = this.props;
+
+    if (activeRole !== CUSTOMER || !staffStatistics) {
+      return (
+        <div className="opinions">
+          <div className="empty-header">
+            <h1>Opinions</h1>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="opinions">
         <div className="empty-header">
           <h1>Opinions</h1>
         </div>
+        <div className="body">
+          <ul>
+            {parseCompanies(companies, staffStatistics).map((datum) => (
+              <Block key={datum.id} {...datum} />
+            ))}
+          </ul>
+        </div>
       </div>
     );
   }
-
-  return (
-    <div className="opinions">
-      <div className="empty-header">
-        <h1>Opinions</h1>
-      </div>
-      <div className="body">
-        <ul>
-          {parseCompanies(companies).map((datum) => (
-            <Block key={datum.id} {...datum} />
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-};
+}
 
 const mapStateToProps = (state) => ({
   activeRole: authSelectors.activeRole(state),
-  companies: companiesSelectors.getCompaniesForActiveRole(state)
+  companies: companiesSelectors.getCompaniesForActiveRole(state),
+  staffStatistics: opinionsSelectors.staffStatistics(state)
 });
 
-export default connect(mapStateToProps)(Opinions);
+export default connect(
+  mapStateToProps,
+  { fetchStaffStatistics }
+)(Opinions);

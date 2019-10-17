@@ -114,4 +114,11 @@ const NAV_LINKS = {
   ]
 };
 
+export const WORKING_NAV_LINKS = {
+  [ADMIN]: [DASHBOARD, STAFF, MY_CLIENTS],
+  [MANAGER]: [MY_PROFILE],
+  [ANALYST]: [DASHBOARD],
+  [CUSTOMER]: [OPINIONS, MY_PROFILE]
+};
+
 export default NAV_LINKS;

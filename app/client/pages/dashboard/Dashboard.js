@@ -5,10 +5,13 @@ import { getRadarScores } from '../../modules/profile/profileActions';
 import Radar from '../../components/widgets/radar/Radar';
 import ContentBody from '../profile/components/ContentBody';
 import RadarTitle from '../../components/widgets/radar/RadarTitle';
+import CtruScoreForCompany from './CtruScoreForCompany';
+import CtruScoreTitleForCompany from './CtruScoreTitleForCompany';
 import SatisfiedClients from '../../components/widgets/SatisfiedClients';
 import profileSelectors from '../../modules/profile/profileSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
+import StaffData from './StaffData';
 
 const {
   ROLES: { CUSTOMER, MANAGER }
@@ -20,7 +23,7 @@ const {
 // eslint-disable-next-line react/prefer-stateless-function
 class Dashboard extends React.Component {
   render() {
-    const { grades, avgSatisfaction, activeRole, getRadarScores } = this.props;
+    const { radarData, avgSatisfaction, activeRole, getRadarScores } = this.props;
 
     if (activeRole === CUSTOMER || activeRole === MANAGER) {
       return (
@@ -37,28 +40,36 @@ class Dashboard extends React.Component {
         <div className="empty-header">
           <h1>Dashboard</h1>
         </div>
-        <div className="body">
-          <ContentBody
-            main={[
-              {
-                title: <RadarTitle />,
-                body: <Radar getRadarScores={getRadarScores} data={grades} />
-              }
-            ]}
-            sidebar={[
-              {
-                body: <SatisfiedClients avgSatisfaction={avgSatisfaction} />
-              }
-            ]}
-          />
-        </div>
+        <ContentBody
+          main={[
+            {
+              title: <RadarTitle />,
+              body: <Radar getRadarScores={getRadarScores} data={radarData} />
+            },
+            {
+              title: 'Staff',
+              body: <StaffData />
+            }
+          ]}
+          sidebar={[
+            {
+              // TODO: Insert real company name.
+              title: <CtruScoreTitleForCompany />,
+              body: <CtruScoreForCompany />
+            },
+            {
+              body: <SatisfiedClients avgSatisfaction={avgSatisfaction} />,
+              className: 'no-border'
+            }
+          ]}
+        />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  grades: profileSelectors.grades(state),
+  radarData: profileSelectors.radarData(state),
   activeRole: authSelectors.activeRole(state),
   avgSatisfaction: profileSelectors.avgSatisfaction(state)
 });

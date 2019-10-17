@@ -178,6 +178,26 @@ ul, ol {
   margin-bottom: -5.25rem;
 }
 
+
+.avatar {
+  overflow: hidden;
+  position: relative;
+
+  &.circle {
+    border-radius: 50%;
+  }
+
+  img {
+    width: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    object-fit: cover;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
 .opinions {
   position: relative;
 
@@ -196,6 +216,7 @@ ul, ol {
       cursor: pointer;
       background: white;
       margin-bottom: 1rem;
+      position: relative;
 
       &:hover {
         box-shadow: 0 1px 2px 1px rgba(100, 100, 100, .1);
@@ -208,6 +229,7 @@ ul, ol {
 
       .name {
         margin-bottom: 0.5rem;
+
         h2 {
           font-size: 1rem;
           margin-right: 0.5rem;
@@ -276,26 +298,87 @@ ul, ol {
           padding: 0.25rem 0.5rem;
         }
       }
+
+      .ctru-score {
+        position: absolute;
+        right: 1.5rem;
+        bottom: 1.5rem;
+
+        .info {
+          margin-right: 0.25rem;
+
+          h2 {
+            font-size: 0.825rem;
+          }
+
+          p {
+            font-size: 0.75rem;
+            color: #808FA3;
+          }
+        }
+
+        .grade-circle {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 50%;
+          background-color: #33BCDB;
+
+          .inner-circle {
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+            border: 1px solid white;
+            color: white;
+            font-size: 1.125rem;
+          }
+        }
+      }
+
+      .arrow {
+        height: 3px;
+        border: solid #808FA3;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+        transform: rotate(-45deg);
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+      }
     }
   }
 }
 
-.avatar {
-  overflow: hidden;
-  position: relative;
-
-  &.circle {
-    border-radius: 50%;
-  }
-
-  img {
+.staff-block {
+  table {
     width: 100%;
-    min-height: 100%;
-    min-width: 100%;
-    object-fit: cover;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+
+    th {
+      font-size: 0.825rem;
+      color: #808FA3;
+      padding-bottom: 0.5rem;
+    }
+
+    td {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(128, 143, 163, 0.31);
+      color: #353535;
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        margin-right: 0.5rem;
+      }
+
+      .name {
+        font-weight: bold;
+      }
+
+      .title {
+        font-size: 0.825rem;
+        color: #808FA3;
+      }
+    }
   }
 }
 

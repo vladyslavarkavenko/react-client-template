@@ -5,6 +5,10 @@ class StaffService {
     return api.get('/company/staff/confirmed/');
   }
 
+  static getStaffStatistics(id) {
+    return api.get(`/opinion/manager/${id}/statistics/`);
+  }
+
   static getPendingStaff() {
     return api.get('/company/staff/unconfirmed/');
   }

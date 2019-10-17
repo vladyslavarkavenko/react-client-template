@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 
 import EditIcon from './infoBlock/EditIcon';
@@ -37,8 +38,10 @@ class InfoBlock extends React.Component {
           {typeof title === 'string' ? <h2 className="info-block__title">{title}</h2> : title}
           {typeof body === 'string' ? (
             <CustomTextarea name={name} value={body} onChange={onChange} error={errors[name]} />
-          ) : (
+          ) : typeof body === 'function' ? (
             body(isBlockEditing)
+          ) : (
+            body
           )}
         </div>
       );
@@ -48,7 +51,13 @@ class InfoBlock extends React.Component {
       <div className={`info-block ${className || ''}`}>
         {isEdit && <EditIcon onClick={this.toggleEdit} />}
         {typeof title === 'string' ? <h2 className="info-block__title">{title}</h2> : title}
-        {typeof body === 'string' ? <p>{body || '—'}</p> : body(isBlockEditing)}
+        {typeof body === 'string' ? (
+          <p>{body || '—'}</p>
+        ) : typeof body === 'function' ? (
+          body(isBlockEditing)
+        ) : (
+          body
+        )}
       </div>
     );
   }

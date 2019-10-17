@@ -58,7 +58,8 @@ export default (OriginalComponent) => {
       const data = new FormData();
       const { avatar, firstName, lastName, phone, email, about, location, title } = activeEditUser;
 
-      if (!avatar.length) {
+      // eslint-disable-next-line no-undef
+      if (avatar instanceof File) {
         data.append('avatar', avatar);
       }
       data.append('phone', phone);
