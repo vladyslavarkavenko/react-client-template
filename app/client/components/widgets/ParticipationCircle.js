@@ -12,7 +12,7 @@ const config = {
   color: '#3EA0DA'
 };
 
-export default function ParticipationCircle({ data, profileLabel = '' }) {
+export default function ParticipationCircle({ data = {}, profileLabel = '' }) {
   const { numberUniqueCustomerOpinions: opinionsCount, numberCustomers: customerCount } = data;
 
   const { size } = config;

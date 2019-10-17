@@ -20,8 +20,6 @@ function* getRadarScoresWorker({ payload }) {
   try {
     const scores = yield call(CompaniesService.getRadarScores, payload);
 
-    yield call(CompaniesService.getStatistics, payload);
-
     const data = parseRadarScores(scores);
 
     yield put(fetchRadarScores.success(data));

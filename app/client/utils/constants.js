@@ -57,6 +57,9 @@ module.exports = {
   },
   ROUTING_PARAMS: {
     MANAGER: 'manager',
-    COMPANY: 'company'
+    COMPANY: 'company',
+    CRITERIA_ID: 'criteriaId',
+    SUBJECT_ID: 'subjectId',
+    TOPIC_ID: 'topicId'
   }
 };

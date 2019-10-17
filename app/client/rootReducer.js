@@ -7,6 +7,7 @@ import clients from './modules/clients/clientsReducer';
 import managerProfile from './modules/managerProfile/managerProfileReducer';
 import companyProfile from './modules/companyProfile/companyProfileReducer';
 import profile from './modules/profile/profileReducer';
+import opinionDetails from './modules/opinionDetails/opinionDetailsReducer';
 import dashboard from './modules/dashboard/dashboardReducer';
 import opinions from './modules/opinions/opinionsReducer';
 import { pushLogout } from './modules/auth/authActions';
@@ -21,7 +22,9 @@ const appReducer = combineReducers({
   dashboard,
   managerProfile,
   companyProfile,
-  opinions
+  opinions,
+
+  opinionDetails
 });
 
 export default (state, action) => {

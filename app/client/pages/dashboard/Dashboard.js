@@ -5,7 +5,8 @@ import { getRadarScores } from '../../modules/profile/profileActions';
 import Radar from '../../components/widgets/radar/Radar';
 import ContentBody from '../profile/components/ContentBody';
 import RadarTitle from '../../components/widgets/radar/RadarTitle';
-import CtruScoreCircle from '../../components/widgets/CtruScoreCircle';
+import CtruScoreForCompany from './CtruScoreForCompany';
+import CtruScoreTitleForCompany from './CtruScoreTitleForCompany';
 import SatisfiedClients from '../../components/widgets/SatisfiedClients';
 import profileSelectors from '../../modules/profile/profileSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
@@ -53,8 +54,8 @@ class Dashboard extends React.Component {
           sidebar={[
             {
               // TODO: Insert real company name.
-              title: 'cTRU score of Clientis',
-              body: <CtruScoreCircle />
+              title: <CtruScoreTitleForCompany />,
+              body: <CtruScoreForCompany />
             },
             {
               body: <SatisfiedClients avgSatisfaction={avgSatisfaction} />,
