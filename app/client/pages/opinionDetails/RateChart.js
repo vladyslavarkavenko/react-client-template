@@ -8,8 +8,8 @@ import lightenDarkenColor from '../../utils/helpers';
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
 
 const config = {
-  canvasX: 600,
-  canvasY: 300,
+  canvasX: 1000,
+  canvasY: 500,
 
   padding: 0,
 
@@ -25,25 +25,21 @@ function RateChart() {
         <VictoryChart
           width={canvasX}
           height={canvasY}
-          // domain={{
-          //   x: [0, 12],
-          //   y: [0, 10]
-          // }}
+          domain={{
+            x: [0, 12],
+            y: [0, 10]
+          }}
         >
-          <VictoryAxis
-            domain={[1, 12]}
-            style={{
-              labels: {
-                fontSize: 12
-              }
-            }}
-            domainPadding={{
-              x: [0, 5],
-              y: [0, 0]
-            }}
-            standalone={false}
-          />
-          <VictoryAxis dependentAxis domain={[0, 10]} standalone={false} />
+          {/*<VictoryAxis*/}
+          {/*  domain={[1, 12]}*/}
+          {/*  style={{*/}
+          {/*    labels: {*/}
+          {/*      fontSize: 12*/}
+          {/*    }*/}
+          {/*  }}*/}
+          {/*  standalone={false}*/}
+          {/*/>*/}
+          {/*<VictoryAxis dependentAxis domain={[0, 10]} standalone={false} />*/}
           <VictoryGroup>
             <VictoryLine
               style={{

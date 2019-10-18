@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
@@ -6,12 +8,13 @@ import CtruPieChart from './CtruPieChart';
 import RateChart from './RateChart';
 
 function TopicBody({ status, topic }) {
-  if (status === 'request' || status === 'failure' || !topic) {
-    return null;
-  }
+  // if (status === 'request' || status === 'failure' || !topic) {
+  //   return null;
+  // }
 
-  const { topicName } = topic;
+  // const { topicName } = topic;
 
+  const topicName = 'Test';
   return (
     <section className="topic-details">
       <div className="topic-details__header">
