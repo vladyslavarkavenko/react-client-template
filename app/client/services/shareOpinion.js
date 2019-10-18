@@ -30,11 +30,11 @@ class ShareOpinionService {
   }
 
   static pushRateTopicByManager(data) {
-    return api.post('/opinion/opinion/', data);
+    return api.post('/opinion/rate/manager', data);
   }
 
   static pushRateTopicByCompany(data) {
-    return api.post('/opinion/opinion-company/', data);
+    return api.post('/opinion/rate/company', data);
   }
 
   static pushCommentToOpinion(data) {
