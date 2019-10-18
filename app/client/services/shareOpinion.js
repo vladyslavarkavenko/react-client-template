@@ -10,15 +10,15 @@ class ShareOpinionService {
   }
 
   static getSubjectsByManager(managerId) {
-    return api.get(`/opinion/manager/${managerId}`);
+    return api.get(`/opinion/manager/${managerId}/`);
   }
 
   static getSubjectsByCompany(companyId) {
-    return api.get(`/opinion/company/${companyId}`);
+    return api.get(`/opinion/company/${companyId}/`);
   }
 
   static getTopicsBySubject(subjectId) {
-    return api.get(`/opinion/subject/${subjectId}`);
+    return api.get(`/opinion/subject/${subjectId}/`);
   }
 
   static pushCreateSubject(data) {
@@ -30,11 +30,11 @@ class ShareOpinionService {
   }
 
   static pushRateTopicByManager(data) {
-    return api.post('/opinion/rate/manager', data);
+    return api.post('/opinion/rate/manager/', data);
   }
 
   static pushRateTopicByCompany(data) {
-    return api.post('/opinion/rate/company', data);
+    return api.post('/opinion/rate/company/', data);
   }
 
   static pushCommentToOpinion(data) {
