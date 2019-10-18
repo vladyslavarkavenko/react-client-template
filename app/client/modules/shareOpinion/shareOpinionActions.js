@@ -24,7 +24,7 @@ export const pushNewTopic = createRequestBound('TOPIC_NEW_CREATE');
 export const selectSubjectForNewTopic = createRequestBound('TOPIC_NEW_WITH_SUBJECT_SELECT');
 export const saveNewTopicField = createRequestBound('TOPIC_NEW_FIELD_SAVE');
 
-export const pushRateTopic = createRequestBound('TOPIC_CURRENT_RATE');
+export const saveTopicRate = createRequestBound('TOPIC_CURRENT_RATE');
 
 export const selectTopicReview = createRequestBound('REVIEW_SELECT');
 export const selectReviewRecommend = createRequestBound('REVIEW_RECOMMEND_SELECT');
@@ -34,7 +34,7 @@ export const selectExpectAction = createRequestBound('REVIEW_EXPECT_ACTION_SELEC
 export const setSharedComment = createRequestBound('REVIEW_SHARED_COMMENT_SET');
 
 export const saveTopicField = createRequestBound('TOPIC_FIELD_SAVE');
-export const pushUpdateTopics = createRequestBound('TOPIC_UPDATE_SEND');
+export const pushTopicsRate = createRequestBound('TOPIC_RATE_SEND');
 
 export const calcAverageRate = createRequestBound('AVERAGE_RATE_CALC');
 
@@ -190,41 +190,17 @@ function* newTopicWorker() {
   }
 }
 
-function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
-  yield put(pushRateTopic.request());
+function* saveTopicRateWorker({ payload: { satisfaction, importance } }) {
+  yield put(saveTopicRate.request());
   try {
     const currentTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
-    // const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
-    // let ratedTopic;
-
-    // if (type === RATE_PROFILE_TYPE.MANAGER) {
-    //   ratedTopic = yield call(() =>
-    //     ShareOpinionService.pushRateTopicByManager({
-    //       manager: id,
-    //       topic: currentTopic.id, //topic_id,
-    //       customer: customerId, //customer id
-    //       satisfaction,
-    //       importance
-    //     })
-    //   );
-    // } else {
-    //   ratedTopic = yield call(() =>
-    //     ShareOpinionService.pushRateTopicByCompany({
-    //       company: id,
-    //       topic: currentTopic.id,
-    //       customer: customerId,
-    //       satisfaction,
-    //       importance
-    //     })
-    //   );
-    // }
 
     const { result } = yield ShareOpinionService.getOpinionScore({
       satisfaction,
       importance
     });
 
-    yield put(pushRateTopic.success({ ...currentTopic, satisfaction, importance, score: result }));
+    yield put(saveTopicRate.success({ ...currentTopic, satisfaction, importance, score: result }));
 
     const nextTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
 
@@ -239,7 +215,7 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(pushRateTopic.failure());
+    yield put(saveTopicRate.failure());
   }
 }
 
@@ -272,7 +248,7 @@ function* fetchTopicOpinionsWorker() {
   }
 }
 
-function* patchTopicFieldsWorker({ rateFields, commentFields, file, isChecked, isSharedComment }) {
+function* sendTopicDataWorker({ rateFields, commentFields, file, isChecked, isSharedComment }) {
   try {
     const opinion = rateFields.manager
       ? yield call(ShareOpinionService.pushRateTopicByManager, rateFields)
@@ -304,8 +280,8 @@ function* patchTopicFieldsWorker({ rateFields, commentFields, file, isChecked, i
   }
 }
 
-function* pushUpdateTopicsWorker({ payload }) {
-  yield put(pushUpdateTopics.request());
+function* pushTopicsRateWorker({ payload }) {
+  yield put(pushTopicsRate.request());
   try {
     const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
     const selectedTopics = yield select(shareOpinionSelectors.selectedTopics);
@@ -334,7 +310,7 @@ function* pushUpdateTopicsWorker({ payload }) {
 
       const file = withComments ? payload[topic.id] : null;
 
-      return fork(patchTopicFieldsWorker, {
+      return fork(sendTopicDataWorker, {
         rateFields,
         commentFields,
         file,
@@ -367,7 +343,7 @@ function* pushUpdateTopicsWorker({ payload }) {
       }
     }
 
-    yield put(pushUpdateTopics.success());
+    yield put(pushTopicsRate.success());
     yield put(
       historyPush({ method: 'replace', to: routing({ type, id }).shareOpinionWithProfile })
     );
@@ -375,7 +351,7 @@ function* pushUpdateTopicsWorker({ payload }) {
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(pushUpdateTopics.failure());
+    yield put(pushTopicsRate.failure());
   }
 }
 
@@ -388,8 +364,8 @@ export function* shareOpinionWatcher() {
     takeLatest(saveNewTopicField.TRIGGER, subjectHintsWorker),
     takeLatest(fetchTopicOpinions.TRIGGER, fetchTopicOpinionsWorker),
 
-    takeLatest(pushRateTopic.TRIGGER, pushRateTopicWorker),
+    takeLatest(saveTopicRate.TRIGGER, saveTopicRateWorker),
 
-    takeLatest(pushUpdateTopics.TRIGGER, pushUpdateTopicsWorker)
+    takeLatest(pushTopicsRate.TRIGGER, pushTopicsRateWorker)
   ]);
 }

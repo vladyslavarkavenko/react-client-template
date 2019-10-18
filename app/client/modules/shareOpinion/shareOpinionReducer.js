@@ -14,10 +14,10 @@ const topicOpinions = handleActions(
     [actions.fetchTopicOpinions.FAILURE]() {
       return [];
     },
-    [actions.pushRateTopic.SUCCESS]() {
+    [actions.saveTopicRate.SUCCESS]() {
       return [];
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     },
     [actions.selectOpinionProfile.TRIGGER]() {
@@ -39,7 +39,7 @@ const selectedProfile = handleActions(
 
       return { type, id, avatar, title, customerId };
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return null;
     }
   },
@@ -71,7 +71,7 @@ const selectedTopics = handleActions(
 
       return [newTopic, ...state];
     },
-    [actions.pushRateTopic.SUCCESS](state, { payload }) {
+    [actions.saveTopicRate.SUCCESS](state, { payload }) {
       const cloned = [...state];
 
       const currentTopicIndex = cloned.findIndex((topic) => topic.id === payload.id);
@@ -110,7 +110,7 @@ const selectedTopics = handleActions(
     [actions.selectOpinionExpired.SUCCESS](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     },
     [actions.selectOpinionProfile.TRIGGER]() {
@@ -143,7 +143,7 @@ const actualSubjects = handleActions(
 
       return actual;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     },
     [actions.selectOpinionProfile.TRIGGER]() {
@@ -180,7 +180,7 @@ const expiredOpinions = handleActions(
 
       return expired;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return {};
     },
     [actions.selectOpinionProfile.TRIGGER]() {
@@ -203,7 +203,7 @@ const subjectsData = handleActions(
     [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     }
   },
@@ -225,7 +225,7 @@ const newTopicInput = handleActions(
     [actions.selectSubjectForNewTopic.TRIGGER](state, { payload }) {
       return { ...state, subject: payload.name };
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return newTopicInputInitial;
     },
     [actions.pushNewTopic.FULFILL]() {
@@ -246,7 +246,7 @@ const newTopicHints = handleActions(
     [actions.pushNewTopic.FULFILL]() {
       return [];
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     }
   },
@@ -268,7 +268,7 @@ const newTopicErrors = handleActions(
     [actions.pushNewTopic.FULFILL]() {
       return {};
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return {};
     }
   },
@@ -283,7 +283,7 @@ const newTopicSelectedSubject = handleActions(
     [actions.pushNewTopic.FULFILL]() {
       return null;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return null;
     }
   },
@@ -301,7 +301,7 @@ const newTopicModal = handleActions(
     [actions.pushNewTopic.FULFILL]() {
       return false;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return false;
     }
   },
@@ -313,7 +313,7 @@ const withComments = handleActions(
     [actions.selectReviewRecommend.SUCCESS]() {
       return true;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return false;
     }
   },
@@ -336,7 +336,7 @@ const isRecommended = handleActions(
 
       return 1; // will recommend
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return 1;
     }
   },
@@ -348,7 +348,7 @@ const whoCanSee = handleActions(
     [actions.selectWhoCanSee.TRIGGER](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return 3;
     }
   },
@@ -360,7 +360,7 @@ const isExpectingAction = handleActions(
     [actions.selectExpectAction.TRIGGER](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return false;
     }
   },
@@ -372,7 +372,7 @@ const sharedComment = handleActions(
     [actions.setSharedComment.SUCCESS](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return '';
     }
   },
@@ -384,21 +384,21 @@ const isSharedComment = handleActions(
     [actions.setSharedComment.TRIGGER](state) {
       return !state;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return false;
     }
   },
   false
 );
 
-const finishStatus = makeStatusReducer(actions.pushUpdateTopics);
+const finishStatus = makeStatusReducer(actions.pushTopicsRate);
 
 const averageRate = handleActions(
   {
     [actions.calcAverageRate.TRIGGER](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return 0;
     }
   },

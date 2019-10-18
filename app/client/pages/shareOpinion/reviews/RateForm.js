@@ -6,7 +6,7 @@ import RateComment from './rateForm/RateComment';
 import RadioGroup from '../../../components/ui-components/Form/RadioGroup';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
 import {
-  pushUpdateTopics,
+  pushTopicsRate,
   selectWhoCanSee,
   selectExpectAction,
   saveTopicField,
@@ -184,7 +184,7 @@ const mapStateToProps = (state) => {
 const saveSharedComment = setSharedComment.success;
 
 const mapDispatchToProps = {
-  handleFinish: pushUpdateTopics,
+  handleFinish: pushTopicsRate,
   saveTopicField,
   selectWhoCanSee,
   selectExpectAction,

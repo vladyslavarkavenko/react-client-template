@@ -12,7 +12,7 @@ import OpinionAboutBlock from './OpinionAboutBlock';
 import PROPS, { allPoints } from './chart/chartProperties';
 import { axisStyle, bubbleStyle, activeBubbleStyle } from './chart/styles';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
-import { pushRateTopic, fetchTopicOpinions } from '../../modules/shareOpinion/shareOpinionActions';
+import { saveTopicRate, fetchTopicOpinions } from '../../modules/shareOpinion/shareOpinionActions';
 
 import '../../assets/styles/pages/chart.less';
 
@@ -215,5 +215,5 @@ const mapStateToProps = (state) => ({ opinions: shareOpinionSelectors.topicOpini
 
 export default connect(
   mapStateToProps,
-  { pushRateTopic, fetchTopicOpinions }
+  { pushRateTopic: saveTopicRate, fetchTopicOpinions }
 )(ShareOpinionChart);
