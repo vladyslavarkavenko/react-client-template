@@ -367,6 +367,30 @@ const isExpectingAction = handleActions(
   false
 );
 
+const sharedComment = handleActions(
+  {
+    [actions.setSharedComment.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return '';
+    }
+  },
+  ''
+);
+
+const isSharedComment = handleActions(
+  {
+    [actions.setSharedComment.TRIGGER](state) {
+      return !state;
+    },
+    [actions.pushUpdateTopics.SUCCESS]() {
+      return false;
+    }
+  },
+  false
+);
+
 const finishStatus = makeStatusReducer(actions.pushUpdateTopics);
 
 const averageRate = handleActions(
@@ -387,6 +411,8 @@ const subjects = combineReducers({
 });
 
 const selectedOptions = combineReducers({
+  sharedComment,
+  isSharedComment,
   isExpectingAction,
   isRecommended,
   whoCanSee,

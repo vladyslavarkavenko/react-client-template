@@ -31,6 +31,8 @@ export const selectReviewRecommend = createRequestBound('REVIEW_RECOMMEND_SELECT
 export const selectWhoCanSee = createRequestBound('REVIEW_CAN_SEE_SELECT');
 export const selectExpectAction = createRequestBound('REVIEW_EXPECT_ACTION_SELECT');
 
+export const setSharedComment = createRequestBound('REVIEW_SHARED_COMMENT_SET');
+
 export const saveTopicField = createRequestBound('TOPIC_FIELD_SAVE');
 export const pushUpdateTopics = createRequestBound('TOPIC_UPDATE_SEND');
 
@@ -270,31 +272,35 @@ function* fetchTopicOpinionsWorker() {
   }
 }
 
-function* patchTopicFieldsWorker({ fields, file, isChecked }) {
+function* patchTopicFieldsWorker({ rateFields, commentFields, file, isChecked, isSharedComment }) {
   try {
-    let opinion;
+    const opinion = rateFields.manager
+      ? yield call(ShareOpinionService.pushRateTopicByManager, rateFields)
+      : yield call(ShareOpinionService.pushRateTopicByCompany, rateFields);
 
-    if (fields.manager) {
-      opinion = yield call(() => ShareOpinionService.pushRateTopicByManager(fields));
-    } else {
-      opinion = yield call(() => ShareOpinionService.pushRateTopicByCompany(fields));
+    if (isSharedComment) {
+      return { opinion, comment: null };
     }
 
-    const { id } = opinion;
+    const comment = yield call(ShareOpinionService.pushCommentToOpinion, {
+      ...commentFields,
+      id: [opinion.id]
+    });
 
     if (file && isChecked) {
       const data = new window.FormData();
 
       data.append('file', file.file, file.fileName);
-
-      if (fields.manager) {
-        yield call(() => ShareOpinionService.pushFileToTopicByManager({ id, data }));
-      } else {
-        yield call(() => ShareOpinionService.pushFileToTopicByCompany({ id, data }));
-      }
+      yield call(ShareOpinionService.pushFileToComment, { id: comment.id, data });
     }
+
+    return {
+      opinion,
+      comment
+    };
   } catch (err) {
     console.error(err);
+    return null;
   }
 }
 
@@ -305,19 +311,22 @@ function* pushUpdateTopicsWorker({ payload }) {
     const selectedTopics = yield select(shareOpinionSelectors.selectedTopics);
     const selectedOptions = yield select(shareOpinionSelectors.selectedOptions);
 
-    const { withComments } = selectedOptions;
+    const { withComments, isSharedComment, sharedComment } = selectedOptions;
 
     const tasks = selectedTopics.map((topic) => {
       const { isChecked } = topic;
 
-      const fields = {
+      const rateFields = {
         topic: topic.id,
         satisfaction: topic.satisfaction,
         importance: topic.importance,
         manager: type === RATE_PROFILE_TYPE.MANAGER ? id : undefined, // manager or company_id,
         company: type === RATE_PROFILE_TYPE.COMPANY ? id : undefined,
-        customer: customerId, //customer id
-        comment: withComments && isChecked ? topic.comment : undefined,
+        customer: customerId //customer id
+      };
+
+      const commentFields = {
+        text: withComments && isChecked ? topic.comment : undefined,
         expectActionProvider: selectedOptions.isExpectingAction,
         isRecommended: selectedOptions.isRecommended,
         statusSharedComment: selectedOptions.whoCanSee
@@ -325,10 +334,38 @@ function* pushUpdateTopicsWorker({ payload }) {
 
       const file = withComments ? payload[topic.id] : null;
 
-      return fork(patchTopicFieldsWorker, { fields, file, isChecked });
+      return fork(patchTopicFieldsWorker, {
+        rateFields,
+        commentFields,
+        file,
+        isChecked,
+        isSharedComment
+      });
     });
 
-    yield all(tasks);
+    const completed = yield all(tasks);
+    const onlySuccess = completed.filter((item) => item !== null);
+
+    if (isSharedComment) {
+      const opinionIdList = onlySuccess.map((item) => item.opinion.id);
+
+      const comment = yield call(ShareOpinionService.pushCommentToOpinion, {
+        text: sharedComment,
+        expectActionProvider: selectedOptions.isExpectingAction,
+        isRecommended: selectedOptions.isRecommended,
+        statusSharedComment: selectedOptions.whoCanSee,
+        id: [opinionIdList]
+      });
+
+      const file = payload[-1] || null;
+
+      if (file) {
+        const data = new window.FormData();
+
+        data.append('file', file.file, file.fileName);
+        yield call(ShareOpinionService.pushFileToComment, { id: comment.id, data });
+      }
+    }
 
     yield put(pushUpdateTopics.success());
     yield put(
