@@ -37,12 +37,12 @@ class ShareOpinionService {
     return api.post('/opinion/opinion-company/', data);
   }
 
-  static pushFileToTopicByManager({ id, data }) {
-    return api.post(`/opinion/opinion/${id}/upload_files/`, data);
+  static pushCommentToOpinion(data) {
+    return api.post('/opinion/comment/', data);
   }
 
-  static pushFileToTopicByCompany({ id, data }) {
-    return api.post(`/opinion/opinion-company/${id}/upload_files/`, data);
+  static pushFileToComment({ id, data }) {
+    return api.post(`/opinion/comment/${id}/upload_files/`, data);
   }
 
   static getTopicOpinionsByManager({ id, topic }) {

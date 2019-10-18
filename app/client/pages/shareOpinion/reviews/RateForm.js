@@ -6,13 +6,15 @@ import RateComment from './rateForm/RateComment';
 import RadioGroup from '../../../components/ui-components/Form/RadioGroup';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
 import {
-  pushUpdateTopics,
+  pushTopicsRate,
   selectWhoCanSee,
   selectExpectAction,
   saveTopicField,
-  selectTopicReview
+  selectTopicReview,
+  setSharedComment
 } from '../../../modules/shareOpinion/shareOpinionActions';
 import ButtonFullBlock from '../../../components/ui-components/Form/ButtonFullBlock';
+import SharedComment from './rateForm/SharedComment';
 
 const whoCanSeeOptions = [
   { value: 1, title: i18next.t('shareOpinion.whoCanSee.all') },
@@ -73,6 +75,10 @@ class RateForm extends React.Component {
       selectExpectAction,
       saveTopicField,
       selectTopicReview,
+      isSharedComment,
+      setSharedComment,
+      sharedComment,
+      saveSharedComment,
       topics,
       status
     } = this.props;
@@ -81,26 +87,39 @@ class RateForm extends React.Component {
 
     const isRequest = status === 'request';
 
-    const options = topics.map((topic) => (
-      <RateComment
-        key={topic.id}
-        file={files[topic.id]}
-        topic={topic}
-        handleChangeFile={this.handleChangeFile}
-        handleChangeText={saveTopicField}
-        handleCheck={selectTopicReview}
-        disabled={isRequest}
-      />
-    ));
+    const options =
+      !isSharedComment &&
+      topics.map((topic) => (
+        <RateComment
+          key={topic.id}
+          file={files[topic.id]}
+          topic={topic}
+          handleChangeFile={this.handleChangeFile}
+          handleChangeText={saveTopicField}
+          handleCheck={selectTopicReview}
+          disabled={isRequest}
+          isHidden={isSharedComment}
+        />
+      ));
 
     return (
       <>
         <form onSubmit={this.handleSubmit} className="opinion-form">
           <div className="container">
             <p className="opinion-form__title">{i18next.t('shareOpinion.addComment')}</p>
+
             <div className="opinion-form__block">
               <p className="opinion-form__subtitle">{i18next.t('shareOpinion.criteria')}</p>
 
+              <SharedComment
+                isChecked={isSharedComment}
+                handleChangeFile={this.handleChangeFile}
+                handleChangeText={saveSharedComment}
+                handleCheck={setSharedComment}
+                file={files[-1]}
+                comment={sharedComment}
+                disabled={isRequest}
+              />
               {options}
 
               <p className="opinion-form__subtitle">{i18next.t('shareOpinion.whoCanSee.title')}</p>
@@ -144,22 +163,34 @@ class RateForm extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { isExpectingAction, whoCanSee, status } = shareOpinionSelectors.selectedOptions(state);
+  const {
+    isExpectingAction,
+    whoCanSee,
+    isSharedComment,
+    sharedComment,
+    status
+  } = shareOpinionSelectors.selectedOptions(state);
 
   return {
     status,
     expectingAction: isExpectingAction,
     whoCanSee,
+    isSharedComment,
+    sharedComment,
     topics: shareOpinionSelectors.selectedTopics(state)
   };
 };
 
+const saveSharedComment = setSharedComment.success;
+
 const mapDispatchToProps = {
-  handleFinish: pushUpdateTopics,
+  handleFinish: pushTopicsRate,
   saveTopicField,
   selectWhoCanSee,
   selectExpectAction,
-  selectTopicReview
+  selectTopicReview,
+  setSharedComment,
+  saveSharedComment
 };
 
 export default connect(

@@ -1,4 +1,4 @@
-import { call, put, takeLatest, all, fork, select } from 'redux-saga/effects';
+import { call, put, takeLatest, all, fork, select, join } from 'redux-saga/effects';
 import i18next from 'i18next';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
@@ -24,15 +24,17 @@ export const pushNewTopic = createRequestBound('TOPIC_NEW_CREATE');
 export const selectSubjectForNewTopic = createRequestBound('TOPIC_NEW_WITH_SUBJECT_SELECT');
 export const saveNewTopicField = createRequestBound('TOPIC_NEW_FIELD_SAVE');
 
-export const pushRateTopic = createRequestBound('TOPIC_CURRENT_RATE');
+export const saveTopicRate = createRequestBound('TOPIC_CURRENT_RATE');
 
 export const selectTopicReview = createRequestBound('REVIEW_SELECT');
 export const selectReviewRecommend = createRequestBound('REVIEW_RECOMMEND_SELECT');
 export const selectWhoCanSee = createRequestBound('REVIEW_CAN_SEE_SELECT');
 export const selectExpectAction = createRequestBound('REVIEW_EXPECT_ACTION_SELECT');
 
+export const setSharedComment = createRequestBound('REVIEW_SHARED_COMMENT_SET');
+
 export const saveTopicField = createRequestBound('TOPIC_FIELD_SAVE');
-export const pushUpdateTopics = createRequestBound('TOPIC_UPDATE_SEND');
+export const pushTopicsRate = createRequestBound('TOPIC_RATE_SEND');
 
 export const calcAverageRate = createRequestBound('AVERAGE_RATE_CALC');
 
@@ -188,41 +190,17 @@ function* newTopicWorker() {
   }
 }
 
-function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
-  yield put(pushRateTopic.request());
+function* saveTopicRateWorker({ payload: { satisfaction, importance } }) {
+  yield put(saveTopicRate.request());
   try {
     const currentTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
-    // const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
-    // let ratedTopic;
-
-    // if (type === RATE_PROFILE_TYPE.MANAGER) {
-    //   ratedTopic = yield call(() =>
-    //     ShareOpinionService.pushRateTopicByManager({
-    //       manager: id,
-    //       topic: currentTopic.id, //topic_id,
-    //       customer: customerId, //customer id
-    //       satisfaction,
-    //       importance
-    //     })
-    //   );
-    // } else {
-    //   ratedTopic = yield call(() =>
-    //     ShareOpinionService.pushRateTopicByCompany({
-    //       company: id,
-    //       topic: currentTopic.id,
-    //       customer: customerId,
-    //       satisfaction,
-    //       importance
-    //     })
-    //   );
-    // }
 
     const { result } = yield ShareOpinionService.getOpinionScore({
       satisfaction,
       importance
     });
 
-    yield put(pushRateTopic.success({ ...currentTopic, satisfaction, importance, score: result }));
+    yield put(saveTopicRate.success({ ...currentTopic, satisfaction, importance, score: result }));
 
     const nextTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
 
@@ -237,7 +215,7 @@ function* pushRateTopicWorker({ payload: { satisfaction, importance } }) {
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(pushRateTopic.failure());
+    yield put(saveTopicRate.failure());
   }
 }
 
@@ -270,67 +248,105 @@ function* fetchTopicOpinionsWorker() {
   }
 }
 
-function* patchTopicFieldsWorker({ fields, file, isChecked }) {
+function* sendTopicDataWorker({ rateFields, commentFields, file, isChecked, isSharedComment }) {
   try {
-    let opinion;
+    const opinion = rateFields.manager
+      ? yield call(ShareOpinionService.pushRateTopicByManager, rateFields)
+      : yield call(ShareOpinionService.pushRateTopicByCompany, rateFields);
 
-    if (fields.manager) {
-      opinion = yield call(() => ShareOpinionService.pushRateTopicByManager(fields));
-    } else {
-      opinion = yield call(() => ShareOpinionService.pushRateTopicByCompany(fields));
+    if (isSharedComment || !commentFields.text) {
+      return { opinion, comment: null };
     }
 
-    const { id } = opinion;
+    const comment = yield call(ShareOpinionService.pushCommentToOpinion, {
+      ...commentFields,
+      opinions: [opinion.id]
+    });
 
     if (file && isChecked) {
       const data = new window.FormData();
 
       data.append('file', file.file, file.fileName);
-
-      if (fields.manager) {
-        yield call(() => ShareOpinionService.pushFileToTopicByManager({ id, data }));
-      } else {
-        yield call(() => ShareOpinionService.pushFileToTopicByCompany({ id, data }));
-      }
+      yield call(ShareOpinionService.pushFileToComment, { id: comment.id, data });
     }
+
+    return {
+      opinion,
+      comment
+    };
   } catch (err) {
     console.error(err);
+    return null;
   }
 }
 
-function* pushUpdateTopicsWorker({ payload }) {
-  yield put(pushUpdateTopics.request());
+function* pushTopicsRateWorker({ payload }) {
+  yield put(pushTopicsRate.request());
   try {
     const { type, id, customerId } = yield select(shareOpinionSelectors.selectedProfile);
     const selectedTopics = yield select(shareOpinionSelectors.selectedTopics);
     const selectedOptions = yield select(shareOpinionSelectors.selectedOptions);
 
-    const { withComments } = selectedOptions;
+    const { withComments, isSharedComment, sharedComment } = selectedOptions;
 
     const tasks = selectedTopics.map((topic) => {
       const { isChecked } = topic;
 
-      const fields = {
+      const rateFields = {
         topic: topic.id,
         satisfaction: topic.satisfaction,
         importance: topic.importance,
         manager: type === RATE_PROFILE_TYPE.MANAGER ? id : undefined, // manager or company_id,
         company: type === RATE_PROFILE_TYPE.COMPANY ? id : undefined,
-        customer: customerId, //customer id
-        comment: withComments && isChecked ? topic.comment : undefined,
-        expectActionProvider: selectedOptions.isExpectingAction,
         isRecommended: selectedOptions.isRecommended,
+        customer: customerId //customer id
+      };
+
+      const commentFields = {
+        text: withComments && isChecked ? topic.comment : undefined,
+        customer: customerId,
+        expectActionProvider: selectedOptions.isExpectingAction,
         statusSharedComment: selectedOptions.whoCanSee
       };
 
       const file = withComments ? payload[topic.id] : null;
 
-      return fork(patchTopicFieldsWorker, { fields, file, isChecked });
+      return fork(sendTopicDataWorker, {
+        rateFields,
+        commentFields,
+        file,
+        isChecked,
+        isSharedComment
+      });
     });
 
-    yield all(tasks);
+    const completed = yield all(tasks);
+    const result = yield join(completed);
 
-    yield put(pushUpdateTopics.success());
+    const onlySuccess = result.filter((item) => item !== null);
+
+    if (isSharedComment) {
+      const opinionIdList = onlySuccess.map((item) => item.opinion.id);
+
+      const comment = yield call(ShareOpinionService.pushCommentToOpinion, {
+        text: sharedComment,
+        customer: customerId,
+        expectActionProvider: selectedOptions.isExpectingAction,
+        statusSharedComment: selectedOptions.whoCanSee,
+        opinions: opinionIdList
+      });
+
+      const file = payload[-1] || null;
+
+      if (file) {
+        const data = new window.FormData();
+
+        data.append('file', file.file, file.fileName);
+        yield call(ShareOpinionService.pushFileToComment, { id: comment.id, data });
+      }
+    }
+
+    yield put(pushTopicsRate.success());
     yield put(
       historyPush({ method: 'replace', to: routing({ type, id }).shareOpinionWithProfile })
     );
@@ -338,7 +354,7 @@ function* pushUpdateTopicsWorker({ payload }) {
   } catch (err) {
     console.error(err);
     Notification.error(err);
-    yield put(pushUpdateTopics.failure());
+    yield put(pushTopicsRate.failure());
   }
 }
 
@@ -351,8 +367,8 @@ export function* shareOpinionWatcher() {
     takeLatest(saveNewTopicField.TRIGGER, subjectHintsWorker),
     takeLatest(fetchTopicOpinions.TRIGGER, fetchTopicOpinionsWorker),
 
-    takeLatest(pushRateTopic.TRIGGER, pushRateTopicWorker),
+    takeLatest(saveTopicRate.TRIGGER, saveTopicRateWorker),
 
-    takeLatest(pushUpdateTopics.TRIGGER, pushUpdateTopicsWorker)
+    takeLatest(pushTopicsRate.TRIGGER, pushTopicsRateWorker)
   ]);
 }

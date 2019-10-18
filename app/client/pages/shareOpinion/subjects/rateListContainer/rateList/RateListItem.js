@@ -21,7 +21,7 @@ export default function RateListItem({ data = {}, selected, withAlert, isCompany
     >
       {isActive && <span className="company-label" />}
       <div className="company-img">
-        <img src={avatar} alt="" />
+        <img src={avatar || '/assets/img/empty-avatar.jpg'} alt="" />
       </div>
       <div className="company-info">
         <div className="company-title">{isCompany ? name : `${firstName} ${lastName}`}</div>

@@ -9,9 +9,11 @@ import { FILE_MIMES, FILE_SIZES } from '../../../../utils/constants';
 
 const { DOCUMENTS, IMAGES, ARCHIVES } = FILE_MIMES;
 
-export default class RateComment extends React.Component {
+export default class SharedComment extends React.Component {
   constructor(props) {
     super(props);
+
+    this.checkId = -1;
 
     this.maxSize = FILE_SIZES.DEFAULT;
     this.allowedMimes = [...DOCUMENTS, ...IMAGES, ...ARCHIVES];
@@ -23,17 +25,17 @@ export default class RateComment extends React.Component {
   }
 
   handleCheck() {
-    const { handleCheck, topic } = this.props;
-    handleCheck(topic.id);
+    const { handleCheck } = this.props;
+    handleCheck();
   }
 
   handleChangeText({ currentTarget }) {
-    const { handleChangeText, topic } = this.props;
-    handleChangeText({ id: topic.id, value: currentTarget.value });
+    const { handleChangeText } = this.props;
+    handleChangeText(currentTarget.value);
   }
 
   handleChangeFile({ currentTarget }) {
-    const { handleChangeFile, topic } = this.props;
+    const { handleChangeFile } = this.props;
     const file = currentTarget.files[0];
 
     if (!this.allowedMimes.includes(file.type)) {
@@ -46,33 +48,27 @@ export default class RateComment extends React.Component {
       return;
     }
 
-    handleChangeFile({ file, fileName: file.name, id: topic.id });
+    handleChangeFile({ file, fileName: file.name, id: this.checkId });
   }
 
   handleDeleteFile(e) {
     e.preventDefault();
-    const { handleChangeFile, topic } = this.props;
-    handleChangeFile({ isDelete: true, id: topic.id });
+    const { handleChangeFile } = this.props;
+    handleChangeFile({ isDelete: true, id: this.checkId });
   }
 
   render() {
-    const { topic, file, disabled, isHidden } = this.props;
+    const { file, disabled, isChecked, comment } = this.props;
 
-    const { name, comment, isChecked } = topic;
-
-    const checkBoxKey = `${topic.id}_c`;
-    const fileKey = `${topic.id}_f`;
-
-    if (isHidden) {
-      return <div className="opinion-form__check">{name}</div>;
-    }
+    const checkBoxKey = `select_all_c`;
+    const fileKey = `select_all_f`;
 
     return (
       <>
         <CheckboxInput
           className="opinion-form__check"
           name={checkBoxKey}
-          labelText={name}
+          labelText="Select all"
           onChange={this.handleCheck}
           disabled={disabled}
         />
