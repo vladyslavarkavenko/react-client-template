@@ -51,10 +51,22 @@ const topScores = combineReducers({
 
 const statsStatus = makeStatusWithResetReducer(actions.fetchStatistics, actions.clearAll.TRIGGER);
 
-const statsData = handleActions(
+const managerStatsData = handleActions(
   {
     [actions.fetchStatistics.SUCCESS](state, { payload }) {
-      return payload;
+      return payload.managerStats;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return {};
+    }
+  },
+  {}
+);
+
+const companyStatsData = handleActions(
+  {
+    [actions.fetchStatistics.SUCCESS](state, { payload }) {
+      return payload.companyStats;
     },
     [actions.clearAll.TRIGGER]() {
       return {};
@@ -65,7 +77,8 @@ const statsData = handleActions(
 
 const stats = combineReducers({
   status: statsStatus,
-  data: statsData
+  manager: managerStatsData,
+  company: companyStatsData
 });
 
 const managerProfile = combineReducers({

@@ -1,9 +1,11 @@
-import { put, takeLatest, all, call } from 'redux-saga/effects';
+import { put, takeLatest, all, call, select } from 'redux-saga/effects';
 
 import ManagerService from '../../services/manager';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 import parseRadarScores from '../helpers/parseRadarScores';
+import CompaniesService from '../../services/companies';
+import companiesSelectors from '../companies/companiesSelectors';
 
 export const prefix = 'managerProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -46,9 +48,13 @@ function* getTopScoresWorker({ payload }) {
 function* getStatisticsWorker({ payload }) {
   yield put(fetchStatistics.request());
   try {
-    const stats = yield call(ManagerService.getStatistics, payload);
+    const { id } = yield select(companiesSelectors.findCompanyByManager, payload);
+    const [managerStats, companyStats] = yield all([
+      call(ManagerService.getStatistics, payload),
+      call(CompaniesService.getStatistics, id)
+    ]);
 
-    yield put(fetchStatistics.success(stats));
+    yield put(fetchStatistics.success({ managerStats, companyStats }));
   } catch (err) {
     console.error(err);
     yield put(fetchStatistics.failure());

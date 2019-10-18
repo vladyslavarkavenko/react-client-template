@@ -25,25 +25,45 @@ const circleInner = {
   color: '#00BFDF'
 };
 
-export default function CtruScoreCircle({ ctruScore, profileLabel, reviewsCount, isDouble }) {
+export default function CtruScoreCircle({
+  ctruScore,
+  companyCtruScore,
+  profileLabel,
+  reviewsCount
+}) {
   const { size } = config;
 
-  const score = ctruScore.toFixed(1);
-  const percent = Math.round(ctruScore * 10);
+  const dataOuter = {
+    percent: companyCtruScore ? Math.round(companyCtruScore * 10) : Math.round(ctruScore * 10),
+    score: companyCtruScore ? companyCtruScore.toFixed(1) : ctruScore.toFixed(1)
+  };
+
+  let dataInner = null;
+
+  if (companyCtruScore) {
+    dataInner = {
+      percent: Math.round(ctruScore * 10),
+      score: ctruScore.toFixed(1)
+    };
+  }
 
   return (
     <div className="ctru-circle">
       <div className="ctru-circle__chart">
         <svg viewBox={`0 0 ${size} ${size}`} width="100%" height="100%">
-          <CircleWithBackground circle={circleOuter} percent={percent} config={config} />
+          <CircleWithBackground circle={circleOuter} percent={dataOuter.percent} config={config} />
 
-          {isDouble && (
-            <CircleWithBackground circle={circleInner} percent={percent} config={config} />
+          {dataInner && (
+            <CircleWithBackground
+              circle={circleInner}
+              percent={dataInner.percent}
+              config={config}
+            />
           )}
         </svg>
 
         <div className="ctru-circle__label">
-          <span className="count">{score}</span>
+          <span className="count">{dataInner ? dataInner.score : dataOuter.score}</span>
           {/*<span className="diff green">*/}
           {/*  +12.2% <ArrowSvg />*/}
           {/*</span>*/}
@@ -54,17 +74,17 @@ export default function CtruScoreCircle({ ctruScore, profileLabel, reviewsCount,
         </div>
       </div>
 
-      {isDouble && (
+      {dataInner && (
         <ul className="ctru-circle__legend">
           <li className="legend-item">
             <span className="point outer" />
             <span className="text">All clients</span>
-            <span className="score">{score}</span>
+            <span className="score">{dataOuter.score}</span>
           </li>
           <li className="legend-item">
             <span className="point inner" />
             <span className="text">Clients of {profileLabel}</span>
-            <span className="score">{score}</span>
+            <span className="score">{dataInner.score}</span>
           </li>
         </ul>
       )}
