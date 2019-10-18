@@ -15,8 +15,8 @@ function Overview({ match }) {
         <CommentsList />
       </main>
       <aside className="sidebar">
-        <SatisfiedClientsContainer match={match} />
         <CtruCircleContainer match={match} />
+        <SatisfiedClientsContainer match={match} />
         <ParticipationCircleContainer match={match} />
       </aside>
     </section>
