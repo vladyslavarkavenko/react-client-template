@@ -1,9 +1,7 @@
 .comment {
   @gap: 0.5rem;
 
-  &__list {
-
-  }
+  &__list {}
 
   &__item {
     display: flex;
@@ -26,7 +24,7 @@
     }
   }
 
-  &__rate {
+  &__rate-dots {
     display: flex;
     align-items: center;
     margin-bottom: @gap;
@@ -36,20 +34,16 @@
       font-size: 1.4rem;
       margin-right: 1rem;
     }
-
     .progress {
       display: flex;
-
       .dot {
         width: 12px;
         height: 12px;
         border-radius: 50%;
         margin-left: 0.5rem;
-
         &.fill {
           background-color: @font-color-blue;
         }
-
         &.empty {
           background-color: @font-color-light;
         }
