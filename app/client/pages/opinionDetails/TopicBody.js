@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
 import RadioGroup from '../../components/ui-components/Form/RadioGroup';
+import CtruPieChart from './CtruPieChart';
+import RateChart from './RateChart';
 
 function TopicBody({ status, topic }) {
   if (status === 'request' || status === 'failure' || !topic) {
@@ -51,6 +53,10 @@ function TopicBody({ status, topic }) {
             {'>'}
           </button>
         </div>
+      </div>
+      <div className="topic-details__body">
+        <RateChart />
+        <CtruPieChart />
       </div>
     </section>
   );

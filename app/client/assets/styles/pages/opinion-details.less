@@ -5,7 +5,7 @@
   @convenient-color: #FFAF5F; // 2
   @creative-color: #F07E68; // 3
   @clear-color: #EF6363; // 4
-  @cost-conscious-color: #efa7e5; // 5
+  @cost-conscious-color: #B96E9F; // 5
   @compensating-color: #8E97F1; // 6
   @confident-color: #4CB1E9; // 7
   @courtegious-color: #13BE99; // 8
@@ -145,7 +145,7 @@
 
   .topic-details {
     .makeWidgetWrap();
-    margin: 20px;
+    margin: 20px 20px 0 20px;
     flex-grow: 1;
 
     .radio-group {
@@ -162,6 +162,7 @@
     }
 
     &__title {
+      flex-basis: 40%;
       font-size: 1.4rem;
     }
 
@@ -191,6 +192,49 @@
       }
     }
 
+    &__body {
+      display: flex;
+      justify-content: space-between;
+      .rate-chart {
+        flex-grow: 1;
+      }
+
+      .ctru-pie {
+        padding: 2rem 0;
+        flex-basis: 30%;
+
+        &__wrapper {
+          position: relative;
+          margin: 0 auto;
+          max-width: 75%;
+        }
+
+        &__label {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          justify-content: space-between;
+
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          text-align: center;
+
+          .count {
+            font-weight: bold;
+            font-size: 2.25rem;
+            line-height: 2rem;
+          }
+
+          .text {
+            margin-top: 0.25rem;
+            font-size: 1.1rem;
+            color: @font-color-lighter;
+          }
+        }
+
+      }
+    }
   }
 
 }
