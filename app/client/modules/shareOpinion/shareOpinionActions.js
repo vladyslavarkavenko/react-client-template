@@ -303,6 +303,7 @@ function* pushTopicsRateWorker({ payload }) {
 
       const commentFields = {
         text: withComments && isChecked ? topic.comment : undefined,
+        customer: customerId,
         expectActionProvider: selectedOptions.isExpectingAction,
         isRecommended: selectedOptions.isRecommended,
         statusSharedComment: selectedOptions.whoCanSee
@@ -327,6 +328,7 @@ function* pushTopicsRateWorker({ payload }) {
 
       const comment = yield call(ShareOpinionService.pushCommentToOpinion, {
         text: sharedComment,
+        customer: customerId,
         expectActionProvider: selectedOptions.isExpectingAction,
         isRecommended: selectedOptions.isRecommended,
         statusSharedComment: selectedOptions.whoCanSee,
