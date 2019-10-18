@@ -12,7 +12,7 @@ const criteriaStatus = makeStatusWithResetReducer(
 const criteriaData = handleActions(
   {
     [actions.fetchOpinionDetails.SUCCESS](state, { payload }) {
-      return payload;
+      return payload.data;
     },
     [actions.clearAll.TRIGGER]() {
       return {};
@@ -62,8 +62,21 @@ const selectedTopic = handleActions(
   null
 );
 
+const comments = handleActions(
+  {
+    [actions.fetchOpinionDetails.SUCCESS](state, { payload }) {
+      return payload.comments;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
 const opinionDetails = combineReducers({
   criteria,
+  comments,
   selectedCriteria,
   selectedSubject,
   selectedTopic

@@ -81,6 +81,8 @@ class HeaderWithTabs extends React.Component {
       selectedTopic
     } = this.props;
 
+    console.log(this.props);
+
     if (status === 'request') {
       return <SimpleContentHeader title="Opinions" />;
     }

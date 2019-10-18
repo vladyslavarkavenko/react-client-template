@@ -60,5 +60,7 @@ export default {
 
   selectedCriteria,
   selectedSubject,
-  selectedTopic
+  selectedTopic,
+
+  comments: (state) => state.opinionDetails.comments
 };

@@ -5,7 +5,8 @@ import RatingDots from './RatingDots';
 import RatingList from './RatingList';
 
 export default function Comment({
-  data: { id, fullName, dateComment, text, opinions, selectedTopicId }
+  data: { id, fullName, dateComment, text, opinions },
+  selectedTopicId
 }) {
   const formattedDate = format(new Date(dateComment), 'MMM d, yyyy');
 

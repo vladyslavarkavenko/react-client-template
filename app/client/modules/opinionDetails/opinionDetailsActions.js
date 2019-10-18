@@ -27,17 +27,27 @@ function* getDetailsWorker({ payload }) {
   try {
     const { id, type, criteriaId, subjectId, topicId } = payload;
 
-    const data =
-      type === ROUTING_PARAMS.MANAGER
-        ? yield call(ManagerService.getRadarScores, id)
-        : yield call(CompaniesService.getRadarScores, id);
+    let data;
+    let comments;
+
+    if (type === ROUTING_PARAMS.MANAGER) {
+      [data, comments] = yield all([
+        call(ManagerService.getRadarScores, id),
+        call(ManagerService.getComments, id)
+      ]);
+    } else {
+      [data, comments] = yield all([
+        call(CompaniesService.getRadarScores, id),
+        call(CompaniesService.getComments, id)
+      ]);
+    }
 
     const normalize = normalizeCriteria(data);
 
     const selected = recursiveSelect(normalize, { criteriaId, subjectId, topicId });
 
     yield put(setProfile.success(selected));
-    yield put(fetchOpinionDetails.success(normalize));
+    yield put(fetchOpinionDetails.success({ data: normalize, comments }));
   } catch (err) {
     console.error(err);
     Notification.error(err);

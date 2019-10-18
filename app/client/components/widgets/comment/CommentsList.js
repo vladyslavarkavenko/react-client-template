@@ -14,6 +14,11 @@ export default function CommentsList({ data, selectedTopicId }) {
     .map((item) => (
       <Comment key={`${item.id}_comm`} data={item} selectedTopicId={selectedTopicId} />
     ));
+
+  if (!comments.length) {
+    return null;
+  }
+
   return (
     <>
       <h2 className="info-block__title">Comments</h2>
