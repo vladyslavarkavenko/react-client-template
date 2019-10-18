@@ -12,6 +12,7 @@ const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
 export const fetchTopScores = createRequestBound('TOP_SCORES_FETCH');
 export const fetchStatistics = createRequestBound('STATISTICS_FETCH');
+export const fetchComments = createRequestBound('COMMENTS_FETCH');
 
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
@@ -55,10 +56,23 @@ function* getStatisticsWorker({ payload }) {
   }
 }
 
+function* getCommentsWorker({ payload }) {
+  yield put(fetchComments.request());
+  try {
+    const comments = yield call(CompaniesService.getComments, payload);
+
+    yield put(fetchComments.success(comments));
+  } catch (err) {
+    console.error(err);
+    yield put(fetchComments.failure());
+  }
+}
+
 export function* companyProfileWatcher() {
   yield all([
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
     takeLatest(fetchTopScores.TRIGGER, getTopScoresWorker),
-    takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker)
+    takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker),
+    takeLatest(fetchComments.TRIGGER, getCommentsWorker)
   ]);
 }

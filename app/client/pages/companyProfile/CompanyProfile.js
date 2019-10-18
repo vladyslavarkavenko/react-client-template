@@ -6,6 +6,7 @@ import {
   fetchRadarScores,
   fetchTopScores,
   fetchStatistics,
+  fetchComments,
   clearAll
 } from '../../modules/companyProfile/companyProfileActions';
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
@@ -51,11 +52,12 @@ class CompanyProfile extends React.Component {
   }
 
   fetchData(id) {
-    const { fetchRadarScores, fetchTopScores, fetchStatistics } = this.props;
+    const { fetchRadarScores, fetchTopScores, fetchStatistics, fetchComments } = this.props;
 
     fetchRadarScores(id);
     fetchTopScores(id);
     fetchStatistics(id);
+    fetchComments(id);
   }
 
   render() {
@@ -125,6 +127,7 @@ const mapDispatchToProps = {
   fetchRadarScores,
   fetchTopScores,
   fetchStatistics,
+  fetchComments,
   clearAll
 };
 
