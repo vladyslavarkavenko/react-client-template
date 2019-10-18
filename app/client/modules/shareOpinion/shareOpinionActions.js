@@ -1,4 +1,4 @@
-import { call, put, takeLatest, all, fork, select } from 'redux-saga/effects';
+import { call, put, takeLatest, all, fork, select, join } from 'redux-saga/effects';
 import i18next from 'i18next';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
@@ -254,13 +254,13 @@ function* sendTopicDataWorker({ rateFields, commentFields, file, isChecked, isSh
       ? yield call(ShareOpinionService.pushRateTopicByManager, rateFields)
       : yield call(ShareOpinionService.pushRateTopicByCompany, rateFields);
 
-    if (isSharedComment) {
+    if (isSharedComment || !commentFields.text) {
       return { opinion, comment: null };
     }
 
     const comment = yield call(ShareOpinionService.pushCommentToOpinion, {
       ...commentFields,
-      id: [opinion.id]
+      opinions: [opinion.id]
     });
 
     if (file && isChecked) {
@@ -298,6 +298,7 @@ function* pushTopicsRateWorker({ payload }) {
         importance: topic.importance,
         manager: type === RATE_PROFILE_TYPE.MANAGER ? id : undefined, // manager or company_id,
         company: type === RATE_PROFILE_TYPE.COMPANY ? id : undefined,
+        isRecommended: selectedOptions.isRecommended,
         customer: customerId //customer id
       };
 
@@ -305,7 +306,6 @@ function* pushTopicsRateWorker({ payload }) {
         text: withComments && isChecked ? topic.comment : undefined,
         customer: customerId,
         expectActionProvider: selectedOptions.isExpectingAction,
-        isRecommended: selectedOptions.isRecommended,
         statusSharedComment: selectedOptions.whoCanSee
       };
 
@@ -321,7 +321,9 @@ function* pushTopicsRateWorker({ payload }) {
     });
 
     const completed = yield all(tasks);
-    const onlySuccess = completed.filter((item) => item !== null);
+    const result = yield join(completed);
+
+    const onlySuccess = result.filter((item) => item !== null);
 
     if (isSharedComment) {
       const opinionIdList = onlySuccess.map((item) => item.opinion.id);
@@ -330,9 +332,8 @@ function* pushTopicsRateWorker({ payload }) {
         text: sharedComment,
         customer: customerId,
         expectActionProvider: selectedOptions.isExpectingAction,
-        isRecommended: selectedOptions.isRecommended,
         statusSharedComment: selectedOptions.whoCanSee,
-        id: [opinionIdList]
+        opinions: opinionIdList
       });
 
       const file = payload[-1] || null;
