@@ -116,24 +116,25 @@
   position: relative;
   display: flex;
   vertical-align: middle;
-  &__item {
+
+  .makeRadioItem(
+    @color-active: @secondary-bg-color,
+    @font-color-active: white,
+    @color-default: @font-color-light,
+    @font-color-default: @font-color-dark
+  ) {
     //TODO: Improve borders
-    //@color-gray: red;
+    //@color-default: red;
     //@color-blue: green;
-
-    @color-gray: @font-color-lighter;
-    @color-blue: @secondary-bg-color;
-
     line-height: 1.5;
     text-align: center;
     padding: 0.25rem 0.5rem;
     flex-grow: 1;
     cursor: pointer;
-    color:  @font-color-dark;
-    border-right: 1px solid @color-gray;
-    border-top: 1px solid @color-gray;
-    border-bottom: 1px solid @color-gray;
-    font-weight: bold;
+    color:  @font-color-default;
+    border-right: 1px solid @color-default;
+    border-top: 1px solid @color-default;
+    border-bottom: 1px solid @color-default;
 
     //&:hover {
     //  border-color: black;
@@ -149,29 +150,30 @@
       &:not(:first-child) {
         //color: red;
       }
-      background-color: @color-blue;
-      border-right: 1px solid @color-blue;
-      border-top: 1px solid @color-blue;
-      border-bottom: 1px solid @color-blue;
-      color: white;
+      background-color: @color-active;
+      border-right: 1px solid @color-active;
+      border-top: 1px solid @color-active;
+      border-bottom: 1px solid @color-active;
+      color: @font-color-active;
+      font-weight: bold;
 
       &:first-child {
-        border-left: 1px solid @color-blue;
+        border-left: 1px solid @color-active;
       }
 
       &:last-child {
-        border-right: 1px solid @color-blue;
+        border-right: 1px solid @color-active;
       }
     }
 
     &:first-child {
-      border-left: 1px solid @color-gray;
+      border-left: 1px solid @color-default;
       border-top-left-radius: 0.25rem;
       border-bottom-left-radius: 0.25rem;
     }
 
     &:last-child {
-      border-right: 1px solid @color-gray;
+      border-right: 1px solid @color-default;
       border-top-right-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
     }
@@ -182,5 +184,15 @@
       pointer-events: none;
       padding: 0;
     }
+  }
+
+  &.gray {
+    .radio-group__item {
+      .makeRadioItem(@font-color-light, black, @font-color-light, @font-color-lighter);
+    }
+  }
+
+  &__item {
+   .makeRadioItem();
   }
 }

@@ -7,7 +7,7 @@ import ParticipationCircle from '../../../components/widgets/ParticipationCircle
 import managerProfileSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
-function ParticipationCircleContainer({ status, data, profileLabel }) {
+function ParticipationCircleContainer({ status, manager, profileLabel }) {
   if (status === 'none' || status === 'failure') {
     return null;
   }
@@ -17,7 +17,7 @@ function ParticipationCircleContainer({ status, data, profileLabel }) {
       {status === 'request' ? (
         <LoaderBlock height="20vh" />
       ) : (
-        <ParticipationCircle data={data} profileLabel={profileLabel} />
+        <ParticipationCircle data={manager} profileLabel={profileLabel} />
       )}
     </BlockWrapper>
   );
@@ -28,12 +28,12 @@ const mapStateToProps = (state, { match }) => {
     params: { id }
   } = match;
 
-  const { status, data } = managerProfileSelectors.stats(state);
+  const { status, manager } = managerProfileSelectors.stats(state);
   const { firstName, lastName } = companiesSelectors.getCurrentManager(state, id);
 
   return {
     status,
-    data,
+    manager,
     profileLabel: `${firstName} ${lastName}`
   };
 };

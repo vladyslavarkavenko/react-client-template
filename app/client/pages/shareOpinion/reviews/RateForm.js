@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import { connect } from 'react-redux';
 
 import RateComment from './rateForm/RateComment';
-import RadioGroup from './rateForm/RadioGroup';
+import RadioGroup from '../../../components/ui-components/Form/RadioGroup';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
 import {
   pushUpdateTopics,

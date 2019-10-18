@@ -13,11 +13,14 @@ const config = {
 };
 
 export default function ParticipationCircle({ data = {}, profileLabel = '' }) {
-  const { numberUniqueCustomerOpinions: opinionsCount, numberCustomers: customerCount } = data;
+  const { numberOpinions, participationShare } = data;
 
   const { size } = config;
 
-  const percent = Math.round((customerCount - opinionsCount) / customerCount) * 100;
+  console.log(participationShare);
+  const percent = Math.round(participationShare * 100);
+
+  console.log(percent);
 
   return (
     <div className="participation">
@@ -27,7 +30,7 @@ export default function ParticipationCircle({ data = {}, profileLabel = '' }) {
         </svg>
 
         <div className="participation__label">
-          <span className="count">{opinionsCount}</span>
+          <span className="count">{numberOpinions}</span>
           <span className="text">Reviews</span>
         </div>
       </div>
