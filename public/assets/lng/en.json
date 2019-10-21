@@ -14,8 +14,8 @@
           "info": "The {{field}} is invalid"
         },
         "email": {
-          "long": "Email is too long",
           "required": "Email is required",
+          "length": "Email must be {{min}}-{{max}} characters long",
           "info": "Email format is invalid"
         },
         "phone": {

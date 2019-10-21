@@ -2,6 +2,8 @@
 import React from 'react';
 
 import EditIcon from './infoBlock/EditIcon';
+import SaveIcon from './infoBlock/SaveIcon';
+import CancelIcon from './infoBlock/CancelIcon';
 import CustomTextarea from '../../../components/ui-components/CustomTextarea';
 
 class InfoBlock extends React.Component {
@@ -13,12 +15,27 @@ class InfoBlock extends React.Component {
     };
 
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.onSaveClick = this.onSaveClick.bind(this);
+    this.onCancelClick = this.onCancelClick.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.isEdit) {
       this.setState({ isBlockEditing: false });
     }
+  }
+
+  onSaveClick() {
+    const { saveChanges } = this.props;
+
+    saveChanges(this.toggleEdit);
+  }
+
+  onCancelClick() {
+    const { cancelChanges } = this.props;
+
+    cancelChanges();
+    this.toggleEdit();
   }
 
   toggleEdit() {
@@ -34,7 +51,8 @@ class InfoBlock extends React.Component {
     if (isBlockEditing) {
       return (
         <div className={`info-block ${className || ''}`}>
-          <EditIcon onClick={this.toggleEdit} />
+          <CancelIcon onClick={this.onCancelClick} />
+          <SaveIcon onClick={this.onSaveClick} />
           {typeof title === 'string' ? <h2 className="info-block__title">{title}</h2> : title}
           {typeof body === 'string' ? (
             <CustomTextarea name={name} value={body} onChange={onChange} error={errors[name]} />

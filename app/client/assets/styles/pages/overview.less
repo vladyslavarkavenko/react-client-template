@@ -20,8 +20,9 @@
 
       .radar-wrapper {
         display: flex;
-        justify-content: center;
         padding: 2rem;
+        justify-content: center;
+        position: relative;
 
         .radar {
           position: relative;
@@ -185,6 +186,45 @@
                 font-size: 0.825rem;
               }
             }
+          }
+        }
+      }
+
+      .icons-wrapper {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        overflow: hidden;
+
+        .bg-icon {
+          width: 9rem;
+          fill: #f7f8fa;
+          position: absolute;
+
+          &.bg-icon-0 {
+            top: 50%;
+            left: 100%;
+            transform: translate(-50%, -50%);
+          }
+
+          &.bg-icon-1 {
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+
+          &.bg-icon-2 {
+            top: 50%;
+            left: 0;
+            transform: translate(-50%, -50%);
+          }
+
+          &.bg-icon-3 {
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -50%);
           }
         }
       }

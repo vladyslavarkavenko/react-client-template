@@ -1,45 +1,46 @@
 import React from 'react';
+
 import ContentBody from '../components/ContentBody';
 import Contacts from '../components/Contacts';
+import ForCompany from '../HOCs/ForCompany';
 
-// eslint-disable-next-line react/prefer-stateless-function
-class CompanyAbout extends React.Component {
-  render() {
-    const {
-      isEdit,
-      errors,
-      onChange,
-      data: { web, email, phone, about }
-    } = this.props;
+const CompanyAbout = ({
+  isEdit,
+  errors,
+  onChange,
+  saveChanges,
+  cancelChanges,
+  data: { web, email, phone, about }
+}) => (
+  <ContentBody
+    main={[
+      {
+        name: 'about',
+        title: 'Portrait',
+        body: about,
+        saveChanges: (cb) => saveChanges(['about'], cb),
+        cancelChanges: () => cancelChanges(['about'])
+      }
+    ]}
+    sidebar={[
+      {
+        title: 'Contacts',
+        body: (isBlockEditing) => (
+          <Contacts
+            isEdit={isBlockEditing}
+            onChange={onChange}
+            errors={errors}
+            web={web}
+            email={email}
+            phone={phone}
+          />
+        ),
+        saveChanges: (cb) => saveChanges(['email', 'phone', 'web'], cb),
+        cancelChanges: () => cancelChanges(['email', 'phone', 'web'])
+      }
+    ]}
+    commonProps={{ isEdit, onChange, errors }}
+  />
+);
 
-    return (
-      <ContentBody
-        main={[
-          {
-            name: 'about',
-            title: 'Portrait',
-            body: about
-          }
-        ]}
-        sidebar={[
-          {
-            title: 'Contacts',
-            body: (isBlockEditing) => (
-              <Contacts
-                isEdit={isBlockEditing}
-                onChange={onChange}
-                errors={errors}
-                web={web}
-                email={email}
-                phone={phone}
-              />
-            )
-          }
-        ]}
-        commonProps={{ isEdit, onChange, errors }}
-      />
-    );
-  }
-}
-
-export default CompanyAbout;
+export default ForCompany(CompanyAbout);

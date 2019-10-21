@@ -118,6 +118,7 @@
         p {
           line-height: 24px;
         }
+
         .location {
           display: flex;
           align-items: center;
@@ -292,7 +293,6 @@
 
     display: block;
 
-    background: aliceblue;
     border-radius: 4px;
     padding: 5px;
     width: 100%;
@@ -302,7 +302,6 @@
 
   input {
     padding: 8px;
-    background: aliceblue;
     width: 100%;
     border-radius: 4px;
     font-family: 'Muli', sans-serif;
@@ -358,7 +357,7 @@
   border-radius: 4px;
 }
 
-.edit-icon {
+.icon {
   height: 32px;
   width: 32px;
   border: 1px solid #E5E9EF;
@@ -368,12 +367,43 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 20px;
   top: 20px;
   cursor: pointer;
 
   svg {
     height: 14px;
-    fill: #3EA0DA;
+  }
+
+  &.edit-icon {
+    right: 20px;
+    svg {
+      fill: #3EA0DA;
+    }
+  }
+
+  &.cancel-icon {
+    right: 62px;
+    svg {
+      height: 30px;
+      width: 30px;
+      fill: #da2842;
+    }
+
+    &:hover svg {
+      fill: #b42635;
+    }
+  }
+
+  &.save-icon {
+    right: 20px;
+    svg {
+      height: 30px;
+      width: 30px;
+      fill: #2bd78d;
+    }
+
+    &:hover svg {
+      fill: #25b473;;
+    }
   }
 }

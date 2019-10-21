@@ -20,7 +20,7 @@ export default function parseRadarScores(aspects) {
   const featuresDetails = {};
 
   aspects.forEach(
-    ({ aspectId: aId, criteria, countGrades: aCount, participationShare: aParticipation }) => {
+    ({ aspectId: aId, criteria, numberGrades: aCount, participationShare: aParticipation }) => {
       const category = C_ID_NAME[aId];
 
       categoriesDetails[category] = { count: aCount, participation: aParticipation };
@@ -29,7 +29,7 @@ export default function parseRadarScores(aspects) {
         ({
           criteriaId: cId,
           subjects,
-          countGrades: cCount,
+          numberGrades: cCount,
           participationShare: cParticipation
         }) => {
           const feature = F_ID_NAME[cId];
