@@ -4,7 +4,7 @@ import { VictoryPie } from 'victory';
 import { connect } from 'react-redux';
 
 import { COLORS } from '../../utils/constants';
-import lightenDarkenColor from '../../utils/helpers';
+import { lightenDarkenColor } from '../../utils/helpers';
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
 
 const config = {

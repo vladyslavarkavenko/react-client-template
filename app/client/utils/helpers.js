@@ -17,7 +17,7 @@ export function debounce(f, ms) {
 }
 
 /* eslint-disable */
-export default function lightenDarkenColor(col, amt) {
+export function lightenDarkenColor(col, amt) {
   var usePound = false;
 
   if (col[0] == '#') {
@@ -43,4 +43,8 @@ export default function lightenDarkenColor(col, amt) {
   else if (g < 0) g = 0;
 
   return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
+}
+
+export function minMaxRandom(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
