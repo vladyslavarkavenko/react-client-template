@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { COLORS } from '../../utils/constants';
 import { lightenDarkenColor, minMaxRandom } from '../../utils/helpers';
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
+import { LINE_TYPES } from '../../modules/opinionDetails/helpers/constants';
 
 const config = {
   canvasX: 1000,
@@ -53,16 +54,27 @@ const generateDomain = () => {
   return domain;
 };
 
-const generateData = (min, max) => {
-  const data = [];
+const generatePoints = (arr) => {
+  const importanceData = [];
+  const satisfactionData = [];
 
-  for (let i = 0; i <= 11; i++) {
-    const date = new Date(2000, i);
-    data.push({ x: date, y0: 1, y: minMaxRandom(min, max) });
-  }
+  arr.forEach((item) => {
+    const date = new Date(item.date);
 
-  console.log(data);
-  return data;
+    importanceData.push({
+      x: date,
+      y0: 1,
+      y: item.importance
+    });
+
+    satisfactionData.push({
+      x: date,
+      y0: 1,
+      y: item.satisfaction
+    });
+  });
+
+  return { importanceData, satisfactionData };
 };
 
 const LineGradient = ({ name, color }) => {
@@ -75,7 +87,7 @@ const LineGradient = ({ name, color }) => {
   );
 };
 
-function RateChart() {
+function RateChart({ visibleLines, satisfactionData, importanceData }) {
   const {
     padding,
     canvasX,
@@ -92,6 +104,8 @@ function RateChart() {
 
   const gradientKey = 'opinion_details_grad_1';
 
+  // const { importanceData, satisfactionData } = generatePoints(data);
+
   return (
     <div className="rate-chart">
       <div className="rate-chart__wrapper">
@@ -103,7 +117,7 @@ function RateChart() {
         <VictoryChart width={canvasX} height={canvasY} scale={{ x: 'time' }} padding={30}>
           <VictoryAxis
             // domain={[1, 12]}
-            domain={generateDomain()}
+            // domain={generateDomain()}
             standalone={false}
             tickFormat={(t) => t.toLocaleString('en-US', { month: 'short' })}
             tickCount={12}
@@ -136,31 +150,37 @@ function RateChart() {
           />
 
           <VictoryGroup>
-            <VictoryArea
-              style={{
-                data: {
-                  fill: `url(#${gradientKey})`,
-                  stroke: satisfaction.color,
-                  strokeWidth
-                },
-                parent: { border: '1px solid #ccc' }
-              }}
-              interpolation={interpolation}
-              data={generateData(4, 7)}
-            />
+            {visibleLines.includes(LINE_TYPES.IMPORTANCE) && (
+              <VictoryArea
+                style={{
+                  data: {
+                    fill: `url(#${gradientKey})`,
+                    stroke: satisfaction.color,
+                    strokeWidth
+                  },
+                  parent: { border: '1px solid #ccc' }
+                }}
+                interpolation={interpolation}
+                data={satisfactionData}
+                // data={satisfactionData}
+              />
+            )}
 
-            <VictoryLine
-              style={{
-                data: {
-                  stroke: importance.color,
-                  strokeDasharray: importance.strokeDasharray,
-                  strokeWidth
-                },
-                parent: { border: '1px solid #ccc' }
-              }}
-              interpolation={interpolation}
-              data={generateData(3, 6)}
-            />
+            {visibleLines.includes(LINE_TYPES.SATISFACTION) && (
+              <VictoryLine
+                style={{
+                  data: {
+                    stroke: importance.color,
+                    strokeDasharray: importance.strokeDasharray,
+                    strokeWidth
+                  },
+                  parent: { border: '1px solid #ccc' }
+                }}
+                interpolation={interpolation}
+                data={importanceData}
+                // data={importanceData}
+              />
+            )}
           </VictoryGroup>
         </VictoryChart>
       </div>
@@ -168,8 +188,4 @@ function RateChart() {
   );
 }
 
-const mapStateToProps = (state) => ({
-  theme: opinionDetailsSelectors.selectedCriteria(state)
-});
-
-export default connect(mapStateToProps)(RateChart);
+export default RateChart;
