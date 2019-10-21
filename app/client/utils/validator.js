@@ -6,11 +6,33 @@ function validateText({ value, min = 2, max }) {
   return validator.isLength(value, { min, max });
 }
 
+function validate(validators, data, keys) {
+  let errors = {};
+  console.log(validators, data, keys);
+  keys.forEach((key) => {
+    console.log(key);
+    const value = data[key];
+    const validFn = validators[key];
+
+    errors = { ...errors, ...validFn(value) };
+  });
+
+  return {
+    errors,
+    isValid: !Object.keys(errors).length
+  };
+}
+
 // Common
 function validateEmail(value, messages = {}) {
+  const limit = {
+    min: 2,
+    max: 256
+  };
+
   const {
     info = i18next.t('validation.email.info'),
-    long = i18next.t('validation.email.long'),
+    length = i18next.t('validation.email.length', limit),
     required = i18next.t('validation.email.required')
   } = messages;
 
@@ -18,8 +40,8 @@ function validateEmail(value, messages = {}) {
 
   if (!value) {
     errors.email = required;
-  } else if (!validateText({ value, max: 30 })) {
-    errors.email = long;
+  } else if (!validateText({ value, ...limit })) {
+    errors.email = length;
   } else if (!validator.isEmail(value)) {
     errors.email = info;
   }
@@ -328,41 +350,33 @@ function validateSelectedManager(manager, messages = {}) {
 }
 
 // External validators
-export function validateUser(data) {
-  const { email, phone, about, firstName, lastName, title, location } = data;
-
-  const errors = {
-    ...validateUserAbout(about),
-    ...validateUserTitle(title),
-    ...validateEmail(email),
-    ...validatePhone(phone),
-    ...validateLocation(location),
-    ...validateUserLastName(lastName),
-    ...validateUserFirstName(firstName)
-  };
-
-  return {
-    errors,
-    isValid: !Object.keys(errors).length
-  };
+const companyValidators = {
+  avatar: () => ({}),
+  email: validateEmail,
+  phone: validatePhone,
+  web: validateCompanySite,
+  name: validateCompanyName,
+  about: validateCompanyAbout,
+  title: validateCompanyTitle
+};
+export function validateCompany(data, keys = Object.keys(companyValidators)) {
+  return validate(companyValidators, data, keys);
 }
-export function validateCompany(data) {
-  const { email, name, phone, web, about, title } = data;
 
-  const errors = {
-    ...validateCompanySite(web),
-    ...validateEmail(email),
-    ...validatePhone(phone),
-    ...validateCompanyName(name),
-    ...validateCompanyAbout(about),
-    ...validateCompanyTitle(title)
-  };
-
-  return {
-    errors,
-    isValid: !Object.keys(errors).length
-  };
+const userValidators = {
+  avatar: () => ({}),
+  email: validateEmail,
+  phone: validatePhone,
+  about: validateUserAbout,
+  title: validateUserTitle,
+  location: validateLocation,
+  lastName: validateUserLastName,
+  firstName: validateUserFirstName
+};
+export function validateUser(data, keys = Object.keys(userValidators)) {
+  return validate(userValidators, data, keys);
 }
+
 export function validateUserLogin(data) {
   const { email, password } = data;
 

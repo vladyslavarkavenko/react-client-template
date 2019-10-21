@@ -13,14 +13,13 @@ export const editModeCompanies = createToggleRoutine(prefix, 'EDIT_MODE');
 export const updateCompany = createRequestBound('COMPANY_UPDATE');
 export const setCompanyErrors = createRequestBound('COMPANY_SET_ERRORS');
 
-function* updateCompanyWorker({ payload: { data } }) {
+function* updateCompanyWorker({ payload: { data, cb } }) {
   yield put(pushUpdateCompany.request());
   try {
-    // TODO: Check this.
     const company = yield call(() => CompaniesService.updateCompany(data));
 
+    cb && cb();
     yield put(pushUpdateCompany.success(company));
-    yield put(editModeCompanies.toggle());
   } catch (err) {
     console.error(err);
   }

@@ -61,6 +61,7 @@ class PasswordInput extends React.Component {
               ref={forwardRef}
             />
             <button
+              tabIndex="-1"
               className="toggle-password-visibility"
               type="button"
               onClick={this.togglePassword}

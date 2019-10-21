@@ -32,13 +32,13 @@ export const editModeUser = createToggleRoutine(prefix, 'EDIT_MODE');
 export const updateUser = createRequestBound('USER_UPDATE');
 export const setUserErrors = createRequestBound('USER_SET_ERRORS');
 
-function* updateUserWorker({ payload: { data } }) {
+function* updateUserWorker({ payload: { data, cb } }) {
   yield put(pushUpdateUser.request());
   try {
     const user = yield call(() => AuthService.updateUser(data));
 
+    cb && cb();
     yield put(pushUpdateUser.success(user));
-    yield put(editModeUser.toggle());
   } catch (err) {
     console.error(err);
   }

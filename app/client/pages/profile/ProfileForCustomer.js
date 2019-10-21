@@ -1,35 +1,72 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
+
 import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 import customLoadable from '../../components/customLoadable';
-
 import routing from '../../utils/routing';
 import EditForm from './components/EditForm';
 import ContentHeader from './components/ContentHeader';
-import ForCustomer from './HOCs/ForCustomer';
+import ForUser from './HOCs/ForUser';
 
-const OverviewForCustomer = ForCustomer(customLoadable({ loader: () => import('./Overview') }));
-const AboutForCustomer = ForCustomer(customLoadable({ loader: () => import('./about/UserAbout') }));
+const Overview = customLoadable({ loader: () => import('./Overview') });
+const About = customLoadable({ loader: () => import('./about/UserAbout') });
 
-// eslint-disable-next-line react/prefer-stateless-function
 class ProfileForCustomer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.mainSaveChanges = this.mainSaveChanges.bind(this);
+    this.mainCancelChanges = this.mainCancelChanges.bind(this);
+  }
+
+  mainSaveChanges(e) {
+    const { toggleEditMode, saveChanges, cancelChanges } = this.props;
+
+    e.preventDefault();
+
+    saveChanges(['firstName', 'lastName', 'location', 'avatar'], () => {
+      toggleEditMode();
+      cancelChanges(['about', 'email', 'phone']);
+    });
+  }
+
+  mainCancelChanges(e) {
+    const { toggleEditMode, cancelChanges } = this.props;
+
+    e.preventDefault();
+
+    toggleEditMode();
+    cancelChanges();
+  }
+
   render() {
     const {
+      isEdit,
+      errors,
+      history,
+      onChange,
+      toggleEditMode,
       data: { avatar, newAvatar, firstName, lastName, location }
     } = this.props;
 
     return (
       <div className="content">
         <ContentHeader
-          {...this.props}
           displayAvatar
-          avatar={newAvatar || avatar}
-          title={`${firstName} ${lastName}`}
-          subTitle="I'm satisfied"
           loc={location}
+          isEdit={isEdit}
+          history={history}
+          onChange={onChange}
+          subTitle="I'm satisfied"
+          avatar={newAvatar || avatar}
+          toggleEditMode={toggleEditMode}
+          title={`${firstName} ${lastName}`}
           editForm={
             <EditForm
-              {...this.props}
+              onChange={onChange}
+              saveChanges={this.mainSaveChanges}
+              cancelChanges={this.mainCancelChanges}
+              errors={errors}
               inputs={[
                 {
                   labelText: 'First name',
@@ -51,17 +88,23 @@ class ProfileForCustomer extends React.Component {
             />
           }
           navLinks={[
-            { to: routing().overview, title: 'Overview' },
-            { to: routing().about, title: 'About' }
+            {
+              to: routing().overview,
+              title: 'Overview'
+            },
+            {
+              to: routing().about,
+              title: 'About'
+            }
           ]}
         />
         <Switch>
-          <WrappedRoute exact path={routing().about} render={() => <AboutForCustomer />} />
-          <WrappedRoute exact path={routing().overview} render={() => <OverviewForCustomer />} />
+          <WrappedRoute exact path={routing().about} render={() => <About />} />
+          <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
         </Switch>
       </div>
     );
   }
 }
 
-export default ForCustomer(ProfileForCustomer);
+export default ForUser(ProfileForCustomer);

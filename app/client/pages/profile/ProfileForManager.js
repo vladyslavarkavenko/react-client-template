@@ -6,30 +6,68 @@ import customLoadable from '../../components/customLoadable';
 import routing from '../../utils/routing';
 import EditForm from './components/EditForm';
 import ContentHeader from './components/ContentHeader';
-import ForManager from './HOCs/ForManager';
+import ForUser from './HOCs/ForUser';
 
-const Overview = ForManager(customLoadable({ loader: () => import('./Overview') }));
-const AboutForManager = ForManager(customLoadable({ loader: () => import('./about/UserAbout') }));
+const Overview = customLoadable({ loader: () => import('./Overview') });
+const About = customLoadable({ loader: () => import('./about/UserAbout') });
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ProfileForManager extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.mainSaveChanges = this.mainSaveChanges.bind(this);
+    this.mainCancelChanges = this.mainCancelChanges.bind(this);
+  }
+
+  mainSaveChanges(e) {
+    const { toggleEditMode, saveChanges, cancelChanges } = this.props;
+
+    e.preventDefault();
+
+    saveChanges(['firstName', 'lastName', 'location', 'title', 'avatar'], () => {
+      toggleEditMode();
+      cancelChanges(['about', 'email', 'phone']);
+    });
+  }
+
+  mainCancelChanges(e) {
+    const { toggleEditMode, cancelChanges } = this.props;
+
+    e.preventDefault();
+
+    toggleEditMode();
+    cancelChanges();
+  }
+
   render() {
     const {
+      isEdit,
+      errors,
+      history,
+      onChange,
+      toggleEditMode,
       data: { avatar, newAvatar, firstName, lastName, location, title }
     } = this.props;
 
     return (
       <div className="content">
         <ContentHeader
-          {...this.props}
           displayAvatar
-          avatar={newAvatar || avatar}
-          title={`${firstName} ${lastName}`}
-          subTitle="I'm satisfied"
           loc={location}
+          isEdit={isEdit}
+          history={history}
+          onChange={onChange}
+          subTitle="I'm satisfied"
+          avatar={newAvatar || avatar}
+          toggleEditMode={toggleEditMode}
+          title={`${firstName} ${lastName}`}
           editForm={
             <EditForm
-              {...this.props}
+              onChange={onChange}
+              saveChanges={this.mainSaveChanges}
+              cancelChanges={this.mainCancelChanges}
+              errors={errors}
               inputs={[
                 {
                   labelText: 'First name',
@@ -61,7 +99,7 @@ class ProfileForManager extends React.Component {
           ]}
         />
         <Switch>
-          <WrappedRoute exact path={routing().about} render={() => <AboutForManager />} />
+          <WrappedRoute exact path={routing().about} render={() => <About />} />
           <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
         </Switch>
       </div>
@@ -69,4 +107,4 @@ class ProfileForManager extends React.Component {
   }
 }
 
-export default ForManager(ProfileForManager);
+export default ForUser(ProfileForManager);

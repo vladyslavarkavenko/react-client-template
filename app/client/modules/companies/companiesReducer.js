@@ -44,6 +44,14 @@ const errors = handleActions(
     [actions.setCompanyErrors](state, { payload }) {
       return payload;
     },
+    [actions.updateCompany](state, { payload }) {
+      const resetErrors = {};
+      Object.keys(payload).forEach((key) => {
+        resetErrors[key] = undefined;
+      });
+
+      return { ...state, ...resetErrors };
+    },
     [actions.editModeCompanies]() {
       return initErrors;
     }

@@ -46,6 +46,14 @@ const errors = handleActions(
     [actions.setUserErrors](state, { payload }) {
       return payload;
     },
+    [actions.updateUser](state, { payload }) {
+      const resetErrors = {};
+      Object.keys(payload).forEach((key) => {
+        resetErrors[key] = undefined;
+      });
+
+      return { ...state, ...resetErrors };
+    },
     [actions.editModeUser]() {
       return initErrors;
     }
