@@ -118,13 +118,10 @@ function* loginByTokenWorker() {
 function* loginWorker({ payload: { email, password } }) {
   yield put(pushLogin.request());
   try {
-    const tokenRes = yield call(() => AuthService.obtainTokens({ email, password }));
+    const tokenRes = yield call(AuthService.obtainTokens, { email, password });
     setTokens(tokenRes);
 
-    const [user, roles] = yield all([
-      call(() => AuthService.getUser()),
-      call(() => AuthService.getRoles())
-    ]);
+    const [user, roles] = yield all([call(AuthService.getUser), call(AuthService.getRoles)]);
 
     const {
       staffId,
@@ -166,7 +163,7 @@ function* signUpWorker({ payload: { input } }) {
   yield put(pushSignUp.request());
 
   try {
-    yield call(() => AuthService.register(input));
+    yield call(AuthService.register, input);
     // start Sign In
     yield put(pushLogin({ email: input.email, password: input.password }));
 

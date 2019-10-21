@@ -77,16 +77,16 @@ const isAuthReducer = handleActions(
       return true;
     },
     [actions.pushLogin.FAILURE]() {
-      return null;
+      return false;
     },
     [actions.pushLoginByToken.FAILURE]() {
-      return null;
+      return false;
     },
     [actions.pushLogout.TRIGGER]() {
-      return null;
+      return false;
     }
   },
-  null
+  false
 );
 
 const roleInitial = null;
