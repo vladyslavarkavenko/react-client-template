@@ -1,13 +1,11 @@
 /* eslint-disable */
-
 import React from 'react';
 import { connect } from 'react-redux';
+
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
-import RadioGroup from '../../components/ui-components/Form/RadioGroup';
-import CtruPieChart from './CtruPieChart';
-import RateChart from './RateChart';
 import ChartControls from './ChartControls';
 import RateChartContainer from './RateChartContainer';
+import CtruPieChartContainer from './CtruPieChartContainer';
 
 function TopicBody({ status, topic }) {
   // if (status === 'request' || status === 'failure' || !topic) {
@@ -24,7 +22,7 @@ function TopicBody({ status, topic }) {
       </div>
       <div className="topic-details__body">
         <RateChartContainer />
-        <CtruPieChart />
+        <CtruPieChartContainer />
       </div>
     </section>
   );

@@ -1,11 +1,10 @@
 /* eslint-disable */
 import React from 'react';
 import { VictoryPie } from 'victory';
-import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { COLORS } from '../../utils/constants';
 import { lightenDarkenColor } from '../../utils/helpers';
-import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
 
 const config = {
   size: 300,
@@ -40,9 +39,7 @@ const generateData = () => {
 
 const data = generateData();
 
-console.log(data);
-
-function CtruPieChart() {
+export default function CtruPieChart({ changeOpinionLink }) {
   const { size, padding, innerRadius, padAngle, labelRadius, baseColor } = config;
 
   const colors = generateColors(data.length, baseColor);
@@ -76,12 +73,14 @@ function CtruPieChart() {
           <span className="text">Score</span>
         </div>
       </div>
+
+      {changeOpinionLink && (
+        <div className="ctru-pie__btns">
+          <Link to={changeOpinionLink} className="change-opinion-btn">
+            Change your opinion
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
-
-const mapStateToProps = (state) => ({
-  theme: opinionDetailsSelectors.selectedCriteria(state)
-});
-
-export default connect(mapStateToProps)(CtruPieChart);
