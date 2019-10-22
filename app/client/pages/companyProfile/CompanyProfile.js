@@ -13,8 +13,9 @@ import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import ContentHeader from '../profile/components/ContentHeader';
 import routing from '../../utils/routing';
 import Overview from './overview/Overview';
-import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 import About from './about/About';
+import Products from './products/Products';
+import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 
@@ -73,6 +74,7 @@ class CompanyProfile extends React.Component {
 
     const navLinks = [
       { to: routing(id).companyProfileOverview, title: 'Overview' },
+      { to: routing(id).companyProfileProducts, title: 'Services & Products' },
       { to: routing(id).companyProfileAbout, title: 'About' }
     ];
 
@@ -104,6 +106,7 @@ class CompanyProfile extends React.Component {
         <Switch>
           <WrappedRoute exact path={routing().companyProfileAbout} component={About} />
           <WrappedRoute exact path={routing().companyProfileOverview} component={Overview} />
+          <WrappedRoute exact path={routing().companyProfileProducts} component={Products} />
         </Switch>
       </section>
     );

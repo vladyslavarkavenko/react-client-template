@@ -1,15 +1,15 @@
 import { RATE_PROFILE_TYPE, ROUTING_PARAMS } from './constants';
 
-function generateProfileLink({ id, type }) {
-  switch (type) {
-    case RATE_PROFILE_TYPE.MANAGER:
-      return `${ROUTING_PARAMS.MANAGER}_${id}`;
-    case RATE_PROFILE_TYPE.COMPANY:
-      return `${ROUTING_PARAMS.COMPANY}_${id}`;
-    default:
-      return '';
-  }
-}
+// function generateProfileLink({ id, type }) {
+//   switch (type) {
+//     case RATE_PROFILE_TYPE.MANAGER:
+//       return `${ROUTING_PARAMS.MANAGER}_${id}`;
+//     case RATE_PROFILE_TYPE.COMPANY:
+//       return `${ROUTING_PARAMS.COMPANY}_${id}`;
+//     default:
+//       return '';
+//   }
+// }
 
 function generateOpinionLink({ id, type, criteriaId, subjectId, topicId }) {
   const paramObj = new URLSearchParams();
@@ -26,11 +26,15 @@ function generateOpinionLink({ id, type, criteriaId, subjectId, topicId }) {
     paramObj.append(ROUTING_PARAMS.TOPIC_ID, topicId);
   }
 
-  const params = paramObj.keys().length ? `?${paramObj.toString()}` : '';
+  const paramsStr = paramObj.toString();
+  const params = paramsStr.length ? `?${paramsStr}` : '';
 
   switch (type) {
+    case ROUTING_PARAMS.MANAGER:
     case RATE_PROFILE_TYPE.MANAGER:
       return `${ROUTING_PARAMS.MANAGER}_${id}${params}`;
+
+    case ROUTING_PARAMS.COMPANY:
     case RATE_PROFILE_TYPE.COMPANY:
       return `${ROUTING_PARAMS.COMPANY}_${id}${params}`;
     default:
@@ -63,12 +67,13 @@ export default (params) => ({
   companyProfile: `/company/profile/${params || ':id'}/:tab`,
   companyProfileAbout: `/company/profile/${params || ':id'}/about`,
   companyProfileOverview: `/company/profile/${params || ':id'}/overview`,
+  companyProfileProducts: `/company/profile/${params || ':id'}/products`,
 
   dashboard: '/account/dashboard',
 
   shareOpinion: '/account/share-opinion',
   shareOpinionWithProfile: `/account/share-opinion/${
-    params ? generateProfileLink(params) : ':type\\_:id'
+    params ? generateOpinionLink(params) : ':type\\_:id'
   }`,
   shareOpinionChart: '/account/share-opinion/rate',
   shareOpinionMessage: '/account/share-opinion/message',

@@ -14,19 +14,20 @@ export default class RateList extends React.Component {
       managers,
       company,
       manager,
+      fastSelect,
 
       handleSelect
     } = this.props;
 
     if (company) {
       //from url
-      handleSelect({ data: company, type: COMPANY });
+      handleSelect({ data: company, type: COMPANY, fastSelect });
       return;
     }
 
     if (manager) {
       //from url
-      handleSelect({ data: manager, type: MANAGER });
+      handleSelect({ data: manager, type: MANAGER, fastSelect });
       return;
     }
 

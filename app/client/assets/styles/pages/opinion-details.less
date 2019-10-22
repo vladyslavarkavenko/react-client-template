@@ -193,6 +193,30 @@
       .ctru-pie {
         padding: 2rem 0;
         flex-basis: 30%;
+        flex-direction: column;
+
+        &__btns {
+          display: flex;
+          justify-content: center;
+          margin: 2rem 0 0 0;
+
+          .change-opinion-btn {
+            display: inline-flex;
+            justify-content: center;
+            border: 1px solid @button-bg-dark-blue;
+            border-radius: @border-radius-block;
+            padding: 0.65rem 1.1rem;
+            font-weight: bold;
+            color: @button-bg-dark-blue;
+            transition: background-color 0.1s ease;
+
+            &:hover {
+              color: white;
+              background-color: @button-bg-dark-blue;
+            }
+          }
+        }
+
 
         &__wrapper {
           position: relative;

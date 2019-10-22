@@ -99,7 +99,7 @@ class ContentHeader extends React.Component {
           <ul className="content-nav-bar">
             {navLinks.map(({ to, title }) => (
               <li key={to}>
-                <NavLink to={to} activeClassName="active">
+                <NavLink to={to} activeClassName="active" exact>
                   {title}
                 </NavLink>
               </li>
