@@ -151,7 +151,7 @@ function* loginWorker({ payload: { email, password } }) {
     if (activeRole === ROLES.CUSTOMER) {
       yield put(historyPush(routing().shareOpinion));
     } else {
-      yield put(historyPush(routing().account));
+      yield put(historyPush(routing().about));
     }
   } catch (err) {
     Notification.error(err);

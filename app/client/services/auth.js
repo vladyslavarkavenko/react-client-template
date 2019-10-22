@@ -32,6 +32,10 @@ class AuthService {
   static updateUser(data) {
     return api.patch('/core/user/', data);
   }
+
+  static validateSignUpToken(token) {
+    return api.post('/core/registration/validate_token/', { token });
+  }
 }
 
 export default AuthService;

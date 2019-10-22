@@ -147,7 +147,6 @@ const data = combineReducers({
   rolesPermissions: permissionsReducer
 });
 
-// TODO: Add different statuses for token and simple login
 const status = makeStatusReducer([actions.pushLoginByToken, actions.pushLogin]);
 
 const authReducer = combineReducers({

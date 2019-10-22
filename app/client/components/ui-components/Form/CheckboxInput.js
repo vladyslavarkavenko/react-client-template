@@ -10,6 +10,7 @@ export default function CheckboxInput({
   withFill,
   onlyCheck,
   forwardRef,
+  readOnly,
   ...rest
 }) {
   const key = `${name}_check`;
@@ -42,6 +43,7 @@ export default function CheckboxInput({
         onChange={onChange}
         name={name}
         type="checkbox"
+        disabled={readOnly}
         ref={forwardRef}
         {...rest}
       />
