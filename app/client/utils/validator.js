@@ -494,12 +494,12 @@ export function validateUpdateStaffRow(rows, multipleRoles) {
 export function validateInviteCustomerRow(rows) {
   const errors = {};
 
-  rows.forEach(({ email, firstName, lastName, manager, id }) => {
+  rows.forEach(({ email, firstName, lastName, manager, id, _changes = {} }) => {
     const rowErrors = {
-      ...validateEmail(email),
-      ...validateUserFirstName(firstName),
-      ...validateUserLastName(lastName),
-      ...validateSelectedManager(manager)
+      ...validateEmail(_changes.email || email),
+      ...validateUserFirstName(_changes.firstName || firstName),
+      ...validateUserLastName(_changes.lastName || lastName),
+      ...validateSelectedManager(_changes.manager || manager)
     };
 
     if (Object.keys(rowErrors).length) {
