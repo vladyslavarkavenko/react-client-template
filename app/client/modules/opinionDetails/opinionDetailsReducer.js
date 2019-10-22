@@ -78,17 +78,24 @@ const comments = handleActions(
 
 /* eslint-disable */
 const chartDataGenerator = () => {
-  const t0 = window.performance.now();
+  // const t0 = window.performance.now();
   const data = [];
 
-  const days = 365 * 2;
+  const months = 0;
 
-  for (let i = 1; i <= days; i++) {
-    const date = new Date(2018, 0, i);
-    data.push({ date, importance: minMaxRandom(6, 9), satisfaction: minMaxRandom(4, 5) });
+  for (let i = 1; i <= months; i++) {
+    const date = new Date(2019, i - 1, 1);
+    data.push({ date, importance: minMaxRandom(7, 9), satisfaction: minMaxRandom(3, 5) });
   }
 
-  console.log(data, window.performance.now() - t0);
+  // const days = 365 * 2;
+  //
+  // for (let i = 1; i <= days; i++) {
+  //   const date = new Date(2018, 0, i);
+  //   data.push({ date, importance: minMaxRandom(6, 9), satisfaction: minMaxRandom(4, 5) });
+  // }
+
+  // console.log(data, window.performance.now() - t0);
 
   return data;
 };
