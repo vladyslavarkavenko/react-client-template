@@ -209,7 +209,8 @@ const activeData = handleActions(
             if (key === '_changes') {
               return;
             }
-            oldRow[key] = row[key];
+
+            oldRow[key] = row[key] || null;
           });
 
           return oldRow;

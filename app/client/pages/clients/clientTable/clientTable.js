@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { STAFF_TABLE_TYPE } from '../../../utils/constants';
+import { STAFF_TABLE_TYPE, STAFF_TABLE_STATUS } from '../../../utils/constants';
 import {
   saveTableField,
   pushUsersChanges,
+  setUsersStatus,
   selectAllRows
 } from '../../../modules/clients/clientsActions';
 import Table from '../components/Table';
@@ -17,26 +18,26 @@ class ClientTable extends React.Component {
     this.handleEdit = this.handleEdit.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-    // this.handleBlock = this.handleBlock.bind(this);
-    // this.handleUnblock = this.handleUnblock.bind(this);
+    this.handleBlock = this.handleBlock.bind(this);
+    this.handleUnblock = this.handleUnblock.bind(this);
     this.handleSelectAll = this.handleSelectAll.bind(this);
   }
 
-  // handleBlock() {
-  //   const { table, setUsersStatus } = this.props;
-  //   setUsersStatus({
-  //     table,
-  //     status: STAFF_TABLE_STATUS.BLOCKED
-  //   });
-  // }
-  //
-  // handleUnblock() {
-  //   const { table, setUsersStatus } = this.props;
-  //   setUsersStatus({
-  //     table,
-  //     status: STAFF_TABLE_STATUS.ACTIVE
-  //   });
-  // }
+  handleBlock() {
+    const { table, setUsersStatus } = this.props;
+    setUsersStatus({
+      table,
+      status: STAFF_TABLE_STATUS.BLOCKED
+    });
+  }
+
+  handleUnblock() {
+    const { table, setUsersStatus } = this.props;
+    setUsersStatus({
+      table,
+      status: STAFF_TABLE_STATUS.ACTIVE
+    });
+  }
 
   handleSave() {
     const { table, saveChanges } = this.props;
@@ -87,24 +88,24 @@ class ClientTable extends React.Component {
         />
 
         <div className="table-controls">
-          {/*{checked.length !== 0 && (*/}
-          {/*  <>*/}
-          {/*    <Button*/}
-          {/*      className="table-btn blocked"*/}
-          {/*      isLoading={isRequest}*/}
-          {/*      onClick={this.handleBlock}*/}
-          {/*    >*/}
-          {/*      Block*/}
-          {/*    </Button>*/}
-          {/*    <Button*/}
-          {/*      className="table-btn active"*/}
-          {/*      isLoading={isRequest}*/}
-          {/*      onClick={this.handleUnblock}*/}
-          {/*    >*/}
-          {/*      Unblock*/}
-          {/*    </Button>*/}
-          {/*  </>*/}
-          {/*)}*/}
+          {checked.length !== 0 && (
+            <>
+              <Button
+                className="table-btn blocked"
+                isLoading={isRequest}
+                onClick={this.handleBlock}
+              >
+                Block
+              </Button>
+              <Button
+                className="table-btn active"
+                isLoading={isRequest}
+                onClick={this.handleUnblock}
+              >
+                Unblock
+              </Button>
+            </>
+          )}
 
           {changed.length !== 0 && (
             <>
@@ -144,6 +145,7 @@ const cancelChanges = pushUsersChanges.fulfill;
 const mapDispatchToProps = {
   saveTableField,
   selectAllRows,
+  setUsersStatus,
   saveChanges,
   cancelChanges
 };

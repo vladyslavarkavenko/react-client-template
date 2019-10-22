@@ -119,6 +119,7 @@ export default function App() {
       <AuthRoute exact path={routing().shareOpinionWithProfile} component={ShareOpinion} />
 
       <AuthRoute exact path={routing().opinionDetails} component={OpinionDetails} />
+      <RolesRoute exact path={routing().myOpinionDetails} forManager={OpinionDetails} />
 
       <ShareOpinionRoute
         exact

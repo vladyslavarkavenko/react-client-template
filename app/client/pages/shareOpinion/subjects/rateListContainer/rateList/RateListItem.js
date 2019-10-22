@@ -6,12 +6,20 @@ import ExclamationCircleEmptySvg from '../../../../../../../public/assets/svg/ex
 
 const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 
-export default function RateListItem({ data = {}, selected, withAlert, isCompany, handleSelect }) {
+export default function RateListItem({
+  data = {},
+  selected,
+  isCompany,
+  handleSelect,
+  globalExpired
+}) {
   const { avatar, name, firstName, lastName, id, avgSatisfaction } = data;
 
   const type = isCompany ? COMPANY : MANAGER;
 
   const isActive = selected && selected.type === type && selected.id === id;
+
+  const isExpired = Boolean(globalExpired[type][id]);
 
   return (
     <li
@@ -21,7 +29,7 @@ export default function RateListItem({ data = {}, selected, withAlert, isCompany
     >
       {isActive && <span className="company-label" />}
       <div className="company-img">
-        <img src={avatar} alt="" />
+        <img src={avatar || '/assets/img/empty-avatar.jpg'} alt="" />
       </div>
       <div className="company-info">
         <div className="company-title">{isCompany ? name : `${firstName} ${lastName}`}</div>
@@ -33,7 +41,7 @@ export default function RateListItem({ data = {}, selected, withAlert, isCompany
                 with: 'this manager'
               })}
         </div>
-        {withAlert && (
+        {isExpired && (
           <span className="company-alert">
             <ExclamationCircleEmptySvg />
           </span>

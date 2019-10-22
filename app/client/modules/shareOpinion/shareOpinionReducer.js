@@ -1,10 +1,11 @@
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
-import { differenceInMonths } from 'date-fns';
 
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import { makeStatusReducer, makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 import * as actions from './shareOpinionActions';
+import getOnlyExpired from './helpers/getOnlyExpired';
+import getOnlyActual from './helpers/getOnlyActual';
 
 const topicOpinions = handleActions(
   {
@@ -14,10 +15,10 @@ const topicOpinions = handleActions(
     [actions.fetchTopicOpinions.FAILURE]() {
       return [];
     },
-    [actions.pushRateTopic.SUCCESS]() {
+    [actions.saveTopicRate.SUCCESS]() {
       return [];
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     },
     [actions.selectOpinionProfile.TRIGGER]() {
@@ -39,7 +40,7 @@ const selectedProfile = handleActions(
 
       return { type, id, avatar, title, customerId };
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return null;
     }
   },
@@ -71,7 +72,7 @@ const selectedTopics = handleActions(
 
       return [newTopic, ...state];
     },
-    [actions.pushRateTopic.SUCCESS](state, { payload }) {
+    [actions.saveTopicRate.SUCCESS](state, { payload }) {
       const cloned = [...state];
 
       const currentTopicIndex = cloned.findIndex((topic) => topic.id === payload.id);
@@ -110,7 +111,7 @@ const selectedTopics = handleActions(
     [actions.selectOpinionExpired.SUCCESS](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     },
     [actions.selectOpinionProfile.TRIGGER]() {
@@ -123,27 +124,9 @@ const selectedTopics = handleActions(
 const actualSubjects = handleActions(
   {
     [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
-      const actual = [];
-      const now = new Date();
-
-      payload.forEach((subject) => {
-        // for every topic check if its expired
-        const haveExpired = subject.topics.some((topic) => {
-          if (!topic.dateLastOpinion) {
-            return true;
-          }
-
-          return differenceInMonths(now, new Date(topic.dateLastOpinion.split('-'))) >= 6;
-        });
-
-        if (!haveExpired) {
-          actual.push(subject.id);
-        }
-      });
-
-      return actual;
+      return getOnlyActual(payload);
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     },
     [actions.selectOpinionProfile.TRIGGER]() {
@@ -156,31 +139,9 @@ const actualSubjects = handleActions(
 const expiredOpinions = handleActions(
   {
     [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
-      const expired = {};
-      const now = new Date();
-
-      payload.forEach((subject) => {
-        // for every topic
-        subject.topics.forEach((topic) => {
-          // check time
-          if (!topic.dateLastOpinion) {
-            return;
-          }
-
-          const isExpired =
-            differenceInMonths(now, new Date(topic.dateLastOpinion.split('-'))) >= 6;
-          // push if expired
-          if (isExpired) {
-            expired[subject.id]
-              ? expired[subject.id].push(topic.id)
-              : (expired[subject.id] = [topic.id]);
-          }
-        });
-      });
-
-      return expired;
+      return getOnlyExpired(payload);
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return {};
     },
     [actions.selectOpinionProfile.TRIGGER]() {
@@ -203,7 +164,7 @@ const subjectsData = handleActions(
     [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     }
   },
@@ -225,7 +186,7 @@ const newTopicInput = handleActions(
     [actions.selectSubjectForNewTopic.TRIGGER](state, { payload }) {
       return { ...state, subject: payload.name };
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return newTopicInputInitial;
     },
     [actions.pushNewTopic.FULFILL]() {
@@ -246,7 +207,7 @@ const newTopicHints = handleActions(
     [actions.pushNewTopic.FULFILL]() {
       return [];
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return [];
     }
   },
@@ -268,7 +229,7 @@ const newTopicErrors = handleActions(
     [actions.pushNewTopic.FULFILL]() {
       return {};
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return {};
     }
   },
@@ -283,7 +244,7 @@ const newTopicSelectedSubject = handleActions(
     [actions.pushNewTopic.FULFILL]() {
       return null;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return null;
     }
   },
@@ -301,7 +262,7 @@ const newTopicModal = handleActions(
     [actions.pushNewTopic.FULFILL]() {
       return false;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return false;
     }
   },
@@ -313,7 +274,7 @@ const withComments = handleActions(
     [actions.selectReviewRecommend.SUCCESS]() {
       return true;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return false;
     }
   },
@@ -336,7 +297,7 @@ const isRecommended = handleActions(
 
       return 1; // will recommend
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return 1;
     }
   },
@@ -348,7 +309,7 @@ const whoCanSee = handleActions(
     [actions.selectWhoCanSee.TRIGGER](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return 3;
     }
   },
@@ -360,25 +321,69 @@ const isExpectingAction = handleActions(
     [actions.selectExpectAction.TRIGGER](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return false;
     }
   },
   false
 );
 
-const finishStatus = makeStatusReducer(actions.pushUpdateTopics);
+const sharedComment = handleActions(
+  {
+    [actions.setSharedComment.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.pushTopicsRate.SUCCESS]() {
+      return '';
+    }
+  },
+  ''
+);
+
+const isSharedComment = handleActions(
+  {
+    [actions.setSharedComment.TRIGGER](state) {
+      return !state;
+    },
+    [actions.pushTopicsRate.SUCCESS]() {
+      return false;
+    }
+  },
+  false
+);
+
+const finishStatus = makeStatusReducer(actions.pushTopicsRate);
 
 const averageRate = handleActions(
   {
     [actions.calcAverageRate.TRIGGER](state, { payload }) {
       return payload;
     },
-    [actions.pushUpdateTopics.SUCCESS]() {
+    [actions.pushTopicsRate.SUCCESS]() {
       return 0;
     }
   },
   0
+);
+
+const globalExpiredInitial = {
+  [RATE_PROFILE_TYPE.MANAGER]: {},
+  [RATE_PROFILE_TYPE.COMPANY]: {}
+};
+
+const globalExpired = handleActions(
+  {
+    [actions.fetchExpiredGlobal.TRIGGER]() {
+      return globalExpiredInitial;
+    },
+    [actions.fetchExpiredGlobal.FAILURE]() {
+      return globalExpiredInitial;
+    },
+    [actions.fetchExpiredGlobal.SUCCESS](state, { payload }) {
+      return payload;
+    }
+  },
+  globalExpiredInitial
 );
 
 const subjects = combineReducers({
@@ -387,6 +392,8 @@ const subjects = combineReducers({
 });
 
 const selectedOptions = combineReducers({
+  sharedComment,
+  isSharedComment,
   isExpectingAction,
   isRecommended,
   whoCanSee,
@@ -404,6 +411,7 @@ const newTopic = combineReducers({
 });
 
 const shareOpinion = combineReducers({
+  globalExpired,
   topicOpinions,
   averageRate,
   selectedProfile,

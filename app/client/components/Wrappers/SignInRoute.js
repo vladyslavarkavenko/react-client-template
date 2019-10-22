@@ -1,10 +1,11 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+
 import AuthTopBar from '../ui-components/Layout/AuthTopBar';
 import AuthBackground from '../ui-components/Layout/AuthBackground';
+import NoAuthCheck from '../HOCs/NoAuthCheck';
 
-// TODO: Make different layout for login and other pages
-export default function SignInRoute(props) {
+function SignInRoute(props) {
   return (
     <>
       <AuthTopBar />
@@ -14,3 +15,5 @@ export default function SignInRoute(props) {
     </>
   );
 }
+
+export default NoAuthCheck(SignInRoute);

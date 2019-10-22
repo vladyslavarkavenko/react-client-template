@@ -1,9 +1,7 @@
 .comment {
   @gap: 0.5rem;
 
-  &__list {
-
-  }
+  &__list {}
 
   &__item {
     display: flex;
@@ -26,7 +24,7 @@
     }
   }
 
-  &__rate {
+  &__rate-dots {
     display: flex;
     align-items: center;
     margin-bottom: @gap;
@@ -36,24 +34,95 @@
       font-size: 1.4rem;
       margin-right: 1rem;
     }
-
     .progress {
       display: flex;
-
       .dot {
         width: 12px;
         height: 12px;
         border-radius: 50%;
         margin-left: 0.5rem;
-
         &.fill {
           background-color: @font-color-blue;
         }
-
         &.empty {
           background-color: @font-color-light;
         }
       }
+    }
+  }
+
+  &__rate-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    .rate-opinion {
+      .makeColor(@color) {
+        color: darken(@color, 30%);
+        border: 1px solid lighten(@color, 20%);
+        background-color: lighten(@color, 20%);
+      }
+
+      //.makeColor(@secondary-bg-color);
+
+      margin: 0px 10px 10px 0;
+      padding: 1px 5px;
+
+      border-radius: @border-radius-block;
+
+      .score {
+        font-weight: bold;
+        margin-left: 0.25rem;
+      }
+
+      &.theme {
+        &-1 {
+          .makeColor(@caring-color);
+        }
+        &-2 {
+          .makeColor(@convenient-color);
+        }
+        &-3 {
+          .makeColor(@clear-color);
+        }
+        &-4 {
+          .makeColor(@compensating-color);
+        }
+        &-5 {
+          .makeColor(@cost-conscious-color);
+        }
+        &-6 {
+          .makeColor(@courtegious-color);
+        }
+        &-7 {
+          .makeColor(@confident-color);
+        }
+      }
+
+
+      //&:nth-child(8n) {
+      //  .makeColor(@caring-color);
+      //}
+      //
+      //&:nth-child(7n) {
+      //  .makeColor(@convenient-color);
+      //}
+
+      //&:nth-child(6n) {
+      //  .makeColor(@creative-color);
+      //}
+
+      //&:nth-child(5n) {
+      //  .makeColor(lime);
+      //}
+      //
+      //&:nth-child(4n + 4) {
+      //  .makeColor(@compensating-color);
+      //}
+
+      //&:nth-child(6n + 2) {
+      //  .makeColor(@convenient-color);
+      //}
+
     }
   }
 

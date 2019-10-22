@@ -78,6 +78,16 @@ const getManagersWithCompanies = (state) => {
   return list;
 };
 
+const findCompanyByManager = (state, managerId) => {
+  const companies = getCompanyData(state);
+
+  const company = Object.values(companies).find(
+    (item) => item.manager && item.manager.id === Number(managerId)
+  );
+
+  return company;
+};
+
 export default {
   getCompaniesList,
   getManagersList,
@@ -86,6 +96,8 @@ export default {
   getCurrentManager,
   getCurrentCompany,
   getCompaniesAsCustomer,
+
+  findCompanyByManager,
   data: getCompanyData,
   errors: (state) => state.companies.errors,
   activeEditCompany: (state) => state.companies.activeEditCompany,

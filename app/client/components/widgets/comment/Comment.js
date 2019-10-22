@@ -1,18 +1,31 @@
 import React from 'react';
 import { format } from 'date-fns';
 
-import Rating from './Rating';
+import RatingDots from './RatingDots';
+import RatingList from './RatingList';
 
-export default function Comment({ data: { rate, id, author, date, text } }) {
-  const formattedDate = format(new Date(date), 'MMM d, yyyy');
+export default function Comment({
+  data: { id, fullName, dateComment, text, opinions },
+  selectedTopicId
+}) {
+  const formattedDate = format(new Date(dateComment), 'MMM d, yyyy');
+
+  const selectedTopic =
+    selectedTopicId && opinions.find((item) => item.topic.id === selectedTopicId);
 
   return (
     <li className="comment__item">
       <div className="comment__title">
-        <span className="author">{author}</span>
+        <span className="author">{fullName}</span>
         <span className="date">{formattedDate}</span>
       </div>
-      <Rating rate={rate} id={id} />
+
+      {selectedTopicId ? (
+        <RatingDots rate={selectedTopic.opinionCtruScore} id={id} />
+      ) : (
+        <RatingList opinions={opinions} id={id} />
+      )}
+
       <div className="comment__body">{text}</div>
     </li>
   );

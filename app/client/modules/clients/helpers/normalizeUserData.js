@@ -2,8 +2,10 @@ import { differenceInDays } from 'date-fns';
 import { STAFF_TABLE_STATUS } from '../../../utils/constants';
 
 export default function normalizeUserData(user, managerList, forceStatus) {
-  let status = STAFF_TABLE_STATUS.ACTIVE;
-  const manager = managerList.find((item) => user.manager === item.value);
+  let status = user.isActive ? STAFF_TABLE_STATUS.ACTIVE : STAFF_TABLE_STATUS.BLOCKED;
+  const manager = managerList
+    ? managerList.find((item) => user.manager === item.value)
+    : user.manager;
 
   if (user.expiredIn) {
     differenceInDays(new Date(), new Date(user.expiredIn)) >= 7
@@ -14,10 +16,6 @@ export default function normalizeUserData(user, managerList, forceStatus) {
   if (forceStatus) {
     status = forceStatus;
   }
-
-  // if (!roles.length) {
-  //   status = STAFF_TABLE_STATUS.BLOCKED;
-  // }
 
   return {
     id: Number(user.id),

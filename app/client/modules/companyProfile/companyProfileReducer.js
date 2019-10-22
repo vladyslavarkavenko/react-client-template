@@ -68,10 +68,30 @@ const stats = combineReducers({
   data: statsData
 });
 
+const commentsStatus = makeStatusWithResetReducer(actions.fetchComments, actions.clearAll.TRIGGER);
+
+const commentsData = handleActions(
+  {
+    [actions.fetchComments.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const comments = combineReducers({
+  status: commentsStatus,
+  data: commentsData
+});
+
 const companyProfile = combineReducers({
   radar,
   topScores,
-  stats
+  stats,
+  comments
 });
 
 export default companyProfile;

@@ -85,16 +85,16 @@ const isAuthReducer = handleActions(
       return true;
     },
     [actions.pushLogin.FAILURE]() {
-      return null;
+      return false;
     },
     [actions.pushLoginByToken.FAILURE]() {
-      return null;
+      return false;
     },
     [actions.pushLogout.TRIGGER]() {
-      return null;
+      return false;
     }
   },
-  null
+  false
 );
 
 const roleInitial = null;
@@ -147,7 +147,6 @@ const data = combineReducers({
   rolesPermissions: permissionsReducer
 });
 
-// TODO: Add different statuses for token and simple login
 const status = makeStatusReducer([actions.pushLoginByToken, actions.pushLogin]);
 
 const authReducer = combineReducers({

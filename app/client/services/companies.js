@@ -17,6 +17,10 @@ class CompaniesService {
     return api.get(`/opinion/company/${companyId}/statistics/`);
   }
 
+  static getComments(companyId) {
+    return api.get(`/opinion/company/${companyId}/comments/`);
+  }
+
   static getManagersList() {
     return api.get('/company/company/managers/');
   }

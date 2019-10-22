@@ -40,7 +40,7 @@ export default class RateList extends React.Component {
   }
 
   render() {
-    const { companies, managers, selected, handleSelect } = this.props;
+    const { companies, managers, selected, handleSelect, globalExpired } = this.props;
 
     const companiesList = companies.map((company) => (
       <RateListItem
@@ -48,6 +48,7 @@ export default class RateList extends React.Component {
         data={company}
         selected={selected}
         handleSelect={handleSelect}
+        globalExpired={globalExpired}
         isCompany
       />
     ));
@@ -58,6 +59,7 @@ export default class RateList extends React.Component {
         data={manager}
         selected={selected}
         handleSelect={handleSelect}
+        globalExpired={globalExpired}
       />
     ));
 

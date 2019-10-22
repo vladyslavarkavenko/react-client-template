@@ -1,9 +1,11 @@
-import { put, takeLatest, all, call } from 'redux-saga/effects';
+import { put, takeLatest, all, call, select } from 'redux-saga/effects';
 
 import ManagerService from '../../services/manager';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 import parseRadarScores from '../helpers/parseRadarScores';
+import CompaniesService from '../../services/companies';
+import companiesSelectors from '../companies/companiesSelectors';
 
 export const prefix = 'managerProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -12,6 +14,7 @@ const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
 export const fetchTopScores = createRequestBound('TOP_SCORES_FETCH');
 export const fetchStatistics = createRequestBound('STATISTICS_FETCH');
+export const fetchComments = createRequestBound('COMMENTS_FETCH');
 
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
@@ -46,12 +49,28 @@ function* getTopScoresWorker({ payload }) {
 function* getStatisticsWorker({ payload }) {
   yield put(fetchStatistics.request());
   try {
-    const stats = yield call(ManagerService.getStatistics, payload);
+    const { id } = yield select(companiesSelectors.findCompanyByManager, payload);
+    const [managerStats, companyStats] = yield all([
+      call(ManagerService.getStatistics, payload),
+      call(CompaniesService.getStatistics, id)
+    ]);
 
-    yield put(fetchStatistics.success(stats));
+    yield put(fetchStatistics.success({ managerStats, companyStats }));
   } catch (err) {
     console.error(err);
     yield put(fetchStatistics.failure());
+  }
+}
+
+function* getCommentsWorker({ payload }) {
+  yield put(fetchComments.request());
+  try {
+    const comments = yield call(ManagerService.getComments, payload);
+
+    yield put(fetchComments.success(comments));
+  } catch (err) {
+    console.error(err);
+    yield put(fetchComments.failure());
   }
 }
 
@@ -59,6 +78,7 @@ export function* managerProfileWatcher() {
   yield all([
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
     takeLatest(fetchTopScores.TRIGGER, getTopScoresWorker),
-    takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker)
+    takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker),
+    takeLatest(fetchComments.TRIGGER, getCommentsWorker)
   ]);
 }

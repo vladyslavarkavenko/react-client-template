@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Redirect, Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { pushUpdateTopics } from '../../modules/shareOpinion/shareOpinionActions';
+import { pushTopicsRate } from '../../modules/shareOpinion/shareOpinionActions';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
 import routing from '../../utils/routing';
 import Logo from '../ui-components/Layout/Logo';
@@ -45,7 +45,7 @@ const mapStateToProps = (state) => ({
   selectedTopics: shareOpinionSelectors.selectedTopics(state)
 });
 
-const clearState = pushUpdateTopics.success;
+const clearState = pushTopicsRate.success;
 
 const mapDispatchToProps = {
   clearState

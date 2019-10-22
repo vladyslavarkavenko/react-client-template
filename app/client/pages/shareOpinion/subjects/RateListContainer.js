@@ -34,7 +34,8 @@ const mapStateToProps = (state, props) => {
     manager,
     selected: shareOpinionSelectors.selectedProfile(state),
     companies: companiesSelectors.getCompaniesAsCustomer(state),
-    managers: companiesSelectors.getManagersList(state)
+    managers: companiesSelectors.getManagersList(state),
+    globalExpired: shareOpinionSelectors.getGlobalExpired(state)
   };
 };
 

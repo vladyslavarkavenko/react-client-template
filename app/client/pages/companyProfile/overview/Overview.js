@@ -4,7 +4,7 @@ import RadarContainer from './RadarContainer';
 import TopScoresContainer from './TopScoresContainer';
 import ParticipationCircleContainer from './ParticipationCircleContainer';
 import CtruCircleContainer from './CtruCircleContainer';
-import CommentsList from '../../../components/widgets/comment/CommentsList';
+import CommentsContainer from './CommentsContainer';
 
 function Overview({ match }) {
   return (
@@ -12,11 +12,11 @@ function Overview({ match }) {
       <main className="main">
         <TopScoresContainer />
         <RadarContainer />
-        <CommentsList />
+        <CommentsContainer />
       </main>
       <aside className="sidebar">
-        <SatisfiedClientsContainer match={match} />
         <CtruCircleContainer match={match} />
+        <SatisfiedClientsContainer match={match} />
         <ParticipationCircleContainer match={match} />
       </aside>
     </section>

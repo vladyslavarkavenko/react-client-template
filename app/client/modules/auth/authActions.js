@@ -11,6 +11,7 @@ import authSelectors from './authSelectors';
 import companiesSelectors from '../companies/companiesSelectors';
 import Notification from '../../utils/notifications';
 import createToggleRoutine from '../helpers/createToggleRoutine';
+import { fetchExpiredGlobal } from '../shareOpinion/shareOpinionActions';
 
 const { MANAGER, CUSTOMER } = ROLES;
 
@@ -109,6 +110,7 @@ function* loginByTokenWorker() {
           rolesPermissions
         })
       );
+      yield put(fetchExpiredGlobal());
     } catch (err) {
       console.error(err);
       removeTokens();
@@ -120,13 +122,10 @@ function* loginByTokenWorker() {
 function* loginWorker({ payload: { email, password, rememberMe } }) {
   yield put(pushLogin.request());
   try {
-    const tokenRes = yield call(() => AuthService.obtainTokens({ email, password }));
+    const tokenRes = yield call(AuthService.obtainTokens, { email, password });
     setTokens(tokenRes, rememberMe);
 
-    const [user, roles] = yield all([
-      call(() => AuthService.getUser()),
-      call(() => AuthService.getRoles())
-    ]);
+    const [user, roles] = yield all([call(AuthService.getUser), call(AuthService.getRoles)]);
 
     const {
       staffId,
@@ -148,6 +147,7 @@ function* loginWorker({ payload: { email, password, rememberMe } }) {
         rolesPermissions
       })
     );
+    yield put(fetchExpiredGlobal());
 
     if (activeRole === CUSTOMER || activeRole === MANAGER) {
       yield put(historyPush(routing().about));
@@ -168,7 +168,7 @@ function* signUpWorker({ payload: { input } }) {
   yield put(pushSignUp.request());
 
   try {
-    yield call(() => AuthService.register(input));
+    yield call(AuthService.register, input);
     // start Sign In
     yield put(pushLogin({ email: input.email, password: input.password }));
 

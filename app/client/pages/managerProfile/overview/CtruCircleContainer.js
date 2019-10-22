@@ -7,7 +7,7 @@ import companiesSelectors from '../../../modules/companies/companiesSelectors';
 import CtruScoreCircle from '../../../components/widgets/CtruScoreCircle';
 import managerProfileSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 
-function CtruCircleContainer({ status, profileLabel, reviewsCount, ctruScore }) {
+function CtruCircleContainer({ status, profileLabel, reviewsCount, ctruScore, companyCtruScore }) {
   if (status === 'none' || status === 'failure') {
     return null;
   }
@@ -19,9 +19,9 @@ function CtruCircleContainer({ status, profileLabel, reviewsCount, ctruScore }) 
       ) : (
         <CtruScoreCircle
           ctruScore={ctruScore}
+          companyCtruScore={companyCtruScore}
           profileLabel={profileLabel}
           reviewsCount={reviewsCount}
-          isDouble
         />
       )}
     </BlockWrapper>
@@ -34,13 +34,15 @@ const mapStateToProps = (state, { match }) => {
   } = match;
   const {
     status,
-    data: { numberOpinions, ctruScore }
+    manager: { numberOpinions, ctruScore },
+    company: { ctruScore: companyCtruScore }
   } = managerProfileSelectors.stats(state);
   const { firstName, lastName } = companiesSelectors.getCurrentManager(state, id);
 
   return {
     status,
     ctruScore,
+    companyCtruScore,
     profileLabel: `${firstName} ${lastName}`,
     reviewsCount: numberOpinions
   };

@@ -7,9 +7,9 @@ import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 import Notification from '../../utils/notifications';
 import StaffService from '../../services/staff';
-import { ROLES, STAFF_TABLE_STATUS, STAFF_TABLE_TYPE } from '../../utils/constants';
-import staffSelectors from './clientsSelectors';
-import { validateInviteCustomerRow, validateUpdateStaffRow } from '../../utils/validator';
+import { STAFF_TABLE_STATUS, STAFF_TABLE_TYPE } from '../../utils/constants';
+import clientsSelectors from './clientsSelectors';
+import { validateInviteCustomerRow } from '../../utils/validator';
 
 import normalizeManagers from './helpers/normalizeManagers';
 import normalizeUserData from './helpers/normalizeUserData';
@@ -18,7 +18,6 @@ import sortUserRowsByDate from './helpers/sortUserRowsByDate';
 import authSelectors from '../auth/authSelectors';
 import ClientsService from '../../services/clients';
 import CompaniesService from '../../services/companies';
-import clientsSelectors from './clientsSelectors';
 
 export const prefix = 'clients';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -58,7 +57,7 @@ function* clientsTablesWorker() {
     const currentUserId = yield select(authSelectors.getCurrentUserId);
     const active = activeData
       .filter((userData) => userData.id !== currentUserId)
-      .map((userData) => normalizeUserData(userData, managers, STAFF_TABLE_STATUS.ACTIVE))
+      .map((userData) => normalizeUserData(userData, managers))
       .sort(sortUserRowsByDate);
 
     yield put(fetchClientsTables.success({ pending, active, managers }));
@@ -90,7 +89,7 @@ function* clientInvitationsWorker() {
   yield put(pushSendInvitations.request());
   try {
     const checkedRows = yield select(
-      staffSelectors.getOnlyCheckedRows,
+      clientsSelectors.getOnlyCheckedRows,
       STAFF_TABLE_TYPE.INVITATIONS
     );
 
@@ -131,7 +130,7 @@ function* clientInvitationsWorker() {
   }
 }
 
-function* staffResendWorker() {
+function* clientsResendWorker() {
   const selectedRows = yield select(
     clientsSelectors.getOnlyCheckedWithStatusRows,
     STAFF_TABLE_TYPE.INVITATIONS,
@@ -153,7 +152,7 @@ function* staffResendWorker() {
   }
 }
 
-function* updateStaffTask({ fields, id, originalUser }) {
+function* updateClientTask({ fields, id, originalUser }) {
   try {
     const { firstName, lastName } = originalUser;
     const user = yield call(ClientsService.updateUser, { userId: id, data: fields });
@@ -170,10 +169,10 @@ function* updateStaffTask({ fields, id, originalUser }) {
   }
 }
 
-function* staffUpdateWorker() {
+function* clientsUpdateWorker() {
   yield put(pushUsersChanges.request());
   try {
-    const selectedRows = yield select(staffSelectors.getOnlyChangedRows, 'active');
+    const selectedRows = yield select(clientsSelectors.getOnlyChangedRows, 'active');
     //check only roles field
     const { errors, isValid } = validateInviteCustomerRow(selectedRows);
 
@@ -184,7 +183,7 @@ function* staffUpdateWorker() {
           manager: _changes.manager.value
         };
 
-        return call(updateStaffTask, { fields, id, originalUser: item });
+        return call(updateClientTask, { fields, id, originalUser: item });
       });
 
       const resolvedTasks = yield all(tasks);
@@ -213,53 +212,54 @@ function* staffUpdateWorker() {
   }
 }
 
-function* unblockStaffTask({ id, originalUser }) {
+function* unblockClientsTask({ id, originalUser }) {
   try {
     const { firstName, lastName } = originalUser;
-    const user = { ...originalUser, roles: [ROLES.MANAGER] };
 
-    yield call(StaffService.updateUser, {
+    yield call(ClientsService.updateUser, {
       userId: id,
       data: {
-        isManager: true
+        isActive: true
       }
     });
     Notification.success(`User ${firstName} ${lastName} has been unblocked`);
-    return user;
+    return { ...originalUser, isActive: true };
   } catch (err) {
     Notification.error(`Failed to unblock ${originalUser.firstName} ${originalUser.lastName}`);
     return null;
   }
 }
 
-function* blockStaffTask({ id, originalUser }) {
+function* blockClientsTask({ id, originalUser }) {
   try {
     const { firstName, lastName } = originalUser;
-    const user = { ...originalUser, roles: [] };
 
-    yield call(StaffService.blockUser, id);
+    yield call(ClientsService.updateUser, {
+      userId: id,
+      data: {
+        isActive: false
+      }
+    });
 
     Notification.success(`User ${firstName} ${lastName} has been blocked`);
-    return user;
+    return { ...originalUser, isActive: false };
   } catch (err) {
     Notification.error(`Failed to block ${originalUser.firstName} ${originalUser.lastName}`);
     return null;
   }
 }
 
-function* staffStatusWorker({ payload }) {
+function* clientsStatusWorker({ payload }) {
   yield put(setUsersStatus.request());
   try {
     const { status } = payload;
-    const checkedRows = yield select(staffSelectors.getOnlyCheckedRows, 'active');
+    const checkedRows = yield select(clientsSelectors.getOnlyCheckedRows, 'active');
     const selectedRows = checkedRows.filter((row) => {
       if (status === STAFF_TABLE_STATUS.BLOCKED) {
-        //select only active users;
-        return row.roles.length !== 0;
+        return row.status === STAFF_TABLE_STATUS.ACTIVE;
       }
 
-      //select only blocked users;
-      return row.roles.length === 0;
+      return row.status === STAFF_TABLE_STATUS.BLOCKED;
     });
 
     if (selectedRows.length) {
@@ -267,21 +267,17 @@ function* staffStatusWorker({ payload }) {
         const { id } = item;
 
         if (status === STAFF_TABLE_STATUS.BLOCKED) {
-          return call(blockStaffTask, { id, originalUser: item });
+          return call(blockClientsTask, { id, originalUser: item });
         }
 
-        return call(unblockStaffTask, { id, originalUser: item });
+        return call(unblockClientsTask, { id, originalUser: item });
       });
 
       const resolvedTasks = yield all(tasks);
 
       const onlySuccess = resolvedTasks.filter((item) => item !== null);
 
-      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
-
-      const normalized = onlySuccess.map((user) =>
-        normalizeUserData(user, subjectsFlatten, status)
-      );
+      const normalized = onlySuccess.map((user) => normalizeUserData(user, null, status));
 
       const updatedUsers = {};
 
@@ -289,7 +285,7 @@ function* staffStatusWorker({ payload }) {
         updatedUsers[user.id] = user;
       });
 
-      yield put(pushUsersChanges.success(updatedUsers));
+      yield put(setUsersStatus.success(updatedUsers));
     } else {
       yield put(setUsersStatus.failure());
     }
@@ -304,8 +300,8 @@ export function* clientsWatcher() {
   yield all([
     takeLatest(fetchClientsTables.TRIGGER, clientsTablesWorker),
     takeLatest(pushSendInvitations.TRIGGER, clientInvitationsWorker),
-    takeLatest(pushResendInvitations.TRIGGER, staffResendWorker),
-    takeLatest(pushUsersChanges.TRIGGER, staffUpdateWorker)
-    // takeLatest(setUsersStatus.TRIGGER, staffStatusWorker)
+    takeLatest(pushResendInvitations.TRIGGER, clientsResendWorker),
+    takeLatest(pushUsersChanges.TRIGGER, clientsUpdateWorker),
+    takeLatest(setUsersStatus.TRIGGER, clientsStatusWorker)
   ]);
 }

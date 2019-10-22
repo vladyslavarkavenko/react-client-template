@@ -29,6 +29,12 @@ const OPINIONS = {
   to: routing().opinions
 };
 
+const MANAGER_OPINIONS = {
+  title: 'Opinions',
+  Icon: SvgEyeEmpty,
+  to: routing().myOpinionDetails
+};
+
 const MATCHING = {
   title: 'Matching',
   Icon: SvgMatch,
@@ -96,7 +102,7 @@ const NAV_LINKS = {
   [ADMIN]: [DASHBOARD, OPINIONS, MATCHING, BENCHMARKS, STAFF, MY_CLIENTS, COMMUNITY, SUBJECTS],
   [MANAGER]: [
     DASHBOARD,
-    OPINIONS,
+    MANAGER_OPINIONS,
     MATCHING,
     MY_COMPANY,
     MY_PROFILE,
@@ -119,7 +125,7 @@ const NAV_LINKS = {
 
 export const WORKING_NAV_LINKS = {
   [ADMIN]: [DASHBOARD, STAFF, MY_CLIENTS],
-  [MANAGER]: [MY_PROFILE],
+  [MANAGER]: [MY_PROFILE, MANAGER_OPINIONS],
   [ANALYST]: [DASHBOARD],
   [CUSTOMER]: [OPINIONS, MY_PROFILE]
 };

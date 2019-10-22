@@ -12,15 +12,21 @@ function generateProfileLink({ id, type }) {
 }
 
 function generateOpinionLink({ id, type, criteriaId, subjectId, topicId }) {
-  let params = '';
+  const paramObj = new URLSearchParams();
 
-  if (criteriaId && subjectId && topicId) {
-    const paramObj = new URLSearchParams();
+  if (criteriaId) {
     paramObj.append(ROUTING_PARAMS.CRITERIA_ID, criteriaId);
-    paramObj.append(ROUTING_PARAMS.SUBJECT_ID, subjectId);
-    paramObj.append(ROUTING_PARAMS.TOPIC_ID, topicId);
-    params = `?${paramObj.toString()}`;
   }
+
+  if (subjectId) {
+    paramObj.append(ROUTING_PARAMS.SUBJECT_ID, subjectId);
+  }
+
+  if (topicId) {
+    paramObj.append(ROUTING_PARAMS.TOPIC_ID, topicId);
+  }
+
+  const params = paramObj.keys().length ? `?${paramObj.toString()}` : '';
 
   switch (type) {
     case RATE_PROFILE_TYPE.MANAGER:
@@ -68,6 +74,7 @@ export default (params) => ({
   shareOpinionMessage: '/account/share-opinion/message',
 
   opinionDetails: `/opinions/${params ? generateOpinionLink(params) : ':type\\_:id'}`,
+  myOpinionDetails: `/opinions/dashboard`,
 
   staff: '/manage/staff',
   clients: '/manage/clients',

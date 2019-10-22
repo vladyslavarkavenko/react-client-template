@@ -16,6 +16,10 @@ class ManagerService {
   static getStatistics(managerId) {
     return api.get(`/opinion/manager/${managerId}/statistics/`);
   }
+
+  static getComments(managerId) {
+    return api.get(`/opinion/manager/${managerId}/comments/`);
+  }
 }
 
 export default ManagerService;

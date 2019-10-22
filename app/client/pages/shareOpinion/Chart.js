@@ -12,7 +12,7 @@ import OpinionAboutBlock from './OpinionAboutBlock';
 import PROPS, { allPoints } from './chart/chartProperties';
 import { axisStyle, bubbleStyle, activeBubbleStyle } from './chart/styles';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
-import { pushRateTopic, fetchTopicOpinions } from '../../modules/shareOpinion/shareOpinionActions';
+import { saveTopicRate, fetchTopicOpinions } from '../../modules/shareOpinion/shareOpinionActions';
 
 import '../../assets/styles/pages/chart.less';
 
@@ -124,7 +124,7 @@ class ShareOpinionChart extends React.Component {
     const rateText = `${i18next.t('shareOpinion.i')} ${i} & ${i18next.t('shareOpinion.s')} ${s}`;
 
     return (
-      <div ref={this.chartWrapper} className="chart-wrapper content">
+      <div ref={this.chartWrapper} className="opinion-chart-wrapper content">
         <OpinionAboutBlock backgroundColor="transparent" />
         <div
           style={{ width: w, height: h }}
@@ -215,5 +215,5 @@ const mapStateToProps = (state) => ({ opinions: shareOpinionSelectors.topicOpini
 
 export default connect(
   mapStateToProps,
-  { pushRateTopic, fetchTopicOpinions }
+  { pushRateTopic: saveTopicRate, fetchTopicOpinions }
 )(ShareOpinionChart);
