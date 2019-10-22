@@ -1,10 +1,11 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 
-import WrappedRoute from '../../components/Wrappers/WrappedRoute';
-import customLoadable from '../../components/customLoadable';
 import routing from '../../utils/routing';
+import ForCompany from './HOCs/ForCompany';
 import ContentHeader from './components/ContentHeader';
+import customLoadable from '../../components/customLoadable';
+import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 
 const Overview = customLoadable({ loader: () => import('./Overview') });
 const About = customLoadable({ loader: () => import('./about/CompanyAbout') });
@@ -17,7 +18,7 @@ class ProfileForAnalyst extends React.Component {
     } = this.props;
 
     return (
-      <div className="content">
+      <>
         <ContentHeader
           displayAvatar
           avatar={avatar}
@@ -32,9 +33,9 @@ class ProfileForAnalyst extends React.Component {
           <WrappedRoute exact path={routing().about} render={() => <About />} />
           <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
         </Switch>
-      </div>
+      </>
     );
   }
 }
 
-export default ProfileForAnalyst;
+export default ForCompany(ProfileForAnalyst);

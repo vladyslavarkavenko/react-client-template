@@ -51,7 +51,7 @@ class ProfileForManager extends React.Component {
     } = this.props;
 
     return (
-      <div className="content">
+      <>
         <ContentHeader
           displayAvatar
           loc={location}
@@ -102,7 +102,7 @@ class ProfileForManager extends React.Component {
           <WrappedRoute exact path={routing().about} render={() => <About />} />
           <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
         </Switch>
-      </div>
+      </>
     );
   }
 }

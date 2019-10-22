@@ -4,5 +4,6 @@ export default {
 
     return { isInitial, grades, featuresDetails, categoriesDetails };
   },
-  avgSatisfaction: (state) => state.profile.avgSatisfaction
+  avgSatisfaction: (state) => state.profile.avgSatisfaction,
+  detailsData: (state) => state.profile.detailsData
 };

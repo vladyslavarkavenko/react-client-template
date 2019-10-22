@@ -28,6 +28,16 @@ export const FEATURES = {
     7: CONFIDENT,
     8: COURTEGIOUS
   },
+  NAME_ID: {
+    [CARING]: 1,
+    [CONVENIENT]: 2,
+    [CREATIVE]: 3,
+    [CLEAR]: 4,
+    [COST_CONSCIOUS]: 5,
+    [COMPENSATING]: 6,
+    [CONFIDENT]: 7,
+    [COURTEGIOUS]: 8
+  },
   NAMES: {
     CLEAR,
     CREATIVE,
@@ -76,6 +86,12 @@ export const CATEGORIES = {
     2: RATIONAL,
     3: RESULT,
     4: FEELING
+  },
+  NAME_ID: {
+    [PROCESS]: 1,
+    [RATIONAL]: 2,
+    [RESULT]: 3,
+    [FEELING]: 4
   },
   NAMES: {
     RATIONAL,

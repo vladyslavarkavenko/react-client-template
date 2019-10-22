@@ -3,6 +3,7 @@ import React from 'react';
 import ContentBody from '../components/ContentBody';
 import Contacts from '../components/Contacts';
 import ForUser from '../HOCs/ForUser';
+import TitleAbout from './TitleAbout';
 
 const UserAbout = ({
   isEdit,
@@ -16,7 +17,7 @@ const UserAbout = ({
     main={[
       {
         name: 'about',
-        title: 'Biography',
+        title: <TitleAbout />,
         body: about,
         saveChanges: (cb) => saveChanges(['about'], cb),
         cancelChanges: () => cancelChanges(['about'])

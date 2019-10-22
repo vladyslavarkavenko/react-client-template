@@ -48,19 +48,44 @@ class InfoBlock extends React.Component {
     const { isBlockEditing } = this.state;
     const { title, body, name, isEdit, onChange, errors, className } = this.props;
 
+    let Title;
+    switch (typeof title) {
+      case 'string':
+        Title = <h2 className="info-block__title">{title}</h2>;
+        break;
+      case 'function':
+        Title = title();
+        break;
+      default:
+        Title = title;
+        break;
+    }
+
+    let Body;
+    switch (typeof body) {
+      case 'string':
+        if (isBlockEditing) {
+          const error = errors[name];
+          Body = <CustomTextarea name={name} value={body} onChange={onChange} error={error} />;
+        } else {
+          Body = <p>{body || '—'}</p>;
+        }
+        break;
+      case 'function':
+        Body = body(isBlockEditing);
+        break;
+      default:
+        Body = body;
+        break;
+    }
+
     if (isBlockEditing) {
       return (
         <div className={`info-block ${className || ''}`}>
           <CancelIcon onClick={this.onCancelClick} />
           <SaveIcon onClick={this.onSaveClick} />
-          {typeof title === 'string' ? <h2 className="info-block__title">{title}</h2> : title}
-          {typeof body === 'string' ? (
-            <CustomTextarea name={name} value={body} onChange={onChange} error={errors[name]} />
-          ) : typeof body === 'function' ? (
-            body(isBlockEditing)
-          ) : (
-            body
-          )}
+          {Title}
+          {Body}
         </div>
       );
     }
@@ -68,14 +93,8 @@ class InfoBlock extends React.Component {
     return (
       <div className={`info-block ${className || ''}`}>
         {isEdit && <EditIcon onClick={this.toggleEdit} />}
-        {typeof title === 'string' ? <h2 className="info-block__title">{title}</h2> : title}
-        {typeof body === 'string' ? (
-          <p>{body || '—'}</p>
-        ) : typeof body === 'function' ? (
-          body(isBlockEditing)
-        ) : (
-          body
-        )}
+        {Title}
+        {Body}
       </div>
     );
   }
