@@ -11,7 +11,7 @@ function Overview({ match }) {
     <section className="content-body">
       <main className="main">
         <TopScoresContainer />
-        <RadarContainer />
+        <RadarContainer match={match} />
         <CommentsContainer />
       </main>
       <aside className="sidebar">

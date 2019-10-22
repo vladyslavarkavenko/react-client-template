@@ -6,23 +6,37 @@ import RadarTitle from '../../../components/widgets/radar/RadarTitle';
 import BlockWrapper from '../../../components/widgets/BlockWrapper';
 import managerSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
+import { ROUTING_PARAMS } from '../../../utils/constants';
 
-function RadarContainer({ status, data }) {
+function RadarContainer({ status, data, detailsData }) {
   if (status === 'failure') {
     return null;
   }
 
   return (
     <BlockWrapper title={<RadarTitle />}>
-      {status === 'request' ? <LoaderBlock height="20vh" /> : <Radar data={data} />}
+      {status === 'request' ? (
+        <LoaderBlock height="20vh" />
+      ) : (
+        <Radar data={data} detailsData={detailsData} />
+      )}
     </BlockWrapper>
   );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { match }) => {
+  const {
+    params: { id }
+  } = match;
+
   const { status, data } = managerSelectors.radar(state);
 
-  return { status, data };
+  const detailsData = {
+    type: ROUTING_PARAMS.MANAGER,
+    id
+  };
+
+  return { status, data, detailsData };
 };
 
 export default connect(mapStateToProps)(RadarContainer);
