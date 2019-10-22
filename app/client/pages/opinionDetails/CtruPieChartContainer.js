@@ -27,13 +27,6 @@ const mapStateToProps = (state, { match: { path, params } }) => {
     selectedTopic
   ) {
     const { id, type } = params;
-    console.log({
-      id,
-      type,
-      subjectId: selectedSubjectId,
-      topicId: selectedTopic.topicId
-    });
-
     changeOpinionLink = routing({
       id,
       type,

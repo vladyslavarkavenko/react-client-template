@@ -106,7 +106,7 @@ function* fetchExpiredGlobalWorker() {
   }
 }
 
-function* fetchOpinionSubjectsWorker() {
+function* fetchOpinionSubjectsWorker({ payload = {} }) {
   yield put(fetchOpinionSubjects.request());
   try {
     const { id, type } = yield select(shareOpinionSelectors.selectedProfile);
@@ -120,6 +120,29 @@ function* fetchOpinionSubjectsWorker() {
     }
 
     yield put(fetchOpinionSubjects.success(subjects));
+
+    const { fastSelect } = payload;
+
+    if (fastSelect && fastSelect.isActive) {
+      const { subjectId, topicId } = fastSelect || {};
+
+      const subjects = yield select(shareOpinionSelectors.subjectsData);
+
+      const subject = subjects.find((subject) => subject.id === Number(subjectId));
+
+      if (!subject) {
+        return;
+      }
+
+      const topic = subject.topics.find((topic) => topic.id === Number(topicId));
+
+      if (!topic) {
+        return;
+      }
+
+      yield put(selectOpinionTopic(topic));
+      yield put(historyPush(routing().shareOpinionChart));
+    }
   } catch (err) {
     console.error(err);
     Notification.error(err);
