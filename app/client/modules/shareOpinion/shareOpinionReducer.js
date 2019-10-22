@@ -1,10 +1,11 @@
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
-import { differenceInMonths } from 'date-fns';
 
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import { makeStatusReducer, makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 import * as actions from './shareOpinionActions';
+import getOnlyExpired from './helpers/getOnlyExpired';
+import getOnlyActual from './helpers/getOnlyActual';
 
 const topicOpinions = handleActions(
   {
@@ -123,25 +124,7 @@ const selectedTopics = handleActions(
 const actualSubjects = handleActions(
   {
     [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
-      const actual = [];
-      const now = new Date();
-
-      payload.forEach((subject) => {
-        // for every topic check if its expired
-        const haveExpired = subject.topics.some((topic) => {
-          if (!topic.dateLastOpinion) {
-            return true;
-          }
-
-          return differenceInMonths(now, new Date(topic.dateLastOpinion.split('-'))) >= 6;
-        });
-
-        if (!haveExpired) {
-          actual.push(subject.id);
-        }
-      });
-
-      return actual;
+      return getOnlyActual(payload);
     },
     [actions.pushTopicsRate.SUCCESS]() {
       return [];
@@ -156,29 +139,7 @@ const actualSubjects = handleActions(
 const expiredOpinions = handleActions(
   {
     [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
-      const expired = {};
-      const now = new Date();
-
-      payload.forEach((subject) => {
-        // for every topic
-        subject.topics.forEach((topic) => {
-          // check time
-          if (!topic.dateLastOpinion) {
-            return;
-          }
-
-          const isExpired =
-            differenceInMonths(now, new Date(topic.dateLastOpinion.split('-'))) >= 6;
-          // push if expired
-          if (isExpired) {
-            expired[subject.id]
-              ? expired[subject.id].push(topic.id)
-              : (expired[subject.id] = [topic.id]);
-          }
-        });
-      });
-
-      return expired;
+      return getOnlyExpired(payload);
     },
     [actions.pushTopicsRate.SUCCESS]() {
       return {};
@@ -405,6 +366,26 @@ const averageRate = handleActions(
   0
 );
 
+const globalExpiredInitial = {
+  [RATE_PROFILE_TYPE.MANAGER]: {},
+  [RATE_PROFILE_TYPE.COMPANY]: {}
+};
+
+const globalExpired = handleActions(
+  {
+    [actions.fetchExpiredGlobal.TRIGGER]() {
+      return globalExpiredInitial;
+    },
+    [actions.fetchExpiredGlobal.FAILURE]() {
+      return globalExpiredInitial;
+    },
+    [actions.fetchExpiredGlobal.SUCCESS](state, { payload }) {
+      return payload;
+    }
+  },
+  globalExpiredInitial
+);
+
 const subjects = combineReducers({
   status: subjectsStatus,
   data: subjectsData
@@ -430,6 +411,7 @@ const newTopic = combineReducers({
 });
 
 const shareOpinion = combineReducers({
+  globalExpired,
   topicOpinions,
   averageRate,
   selectedProfile,

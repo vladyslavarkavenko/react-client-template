@@ -11,6 +11,7 @@ import authSelectors from './authSelectors';
 import companiesSelectors from '../companies/companiesSelectors';
 import Notification from '../../utils/notifications';
 import createToggleRoutine from '../helpers/createToggleRoutine';
+import { fetchExpiredGlobal } from '../shareOpinion/shareOpinionActions';
 
 export const prefix = 'auth';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -107,6 +108,7 @@ function* loginByTokenWorker() {
           rolesPermissions
         })
       );
+      yield put(fetchExpiredGlobal());
     } catch (err) {
       console.error(err);
       removeTokens();
@@ -143,6 +145,8 @@ function* loginWorker({ payload: { email, password } }) {
         rolesPermissions
       })
     );
+
+    yield put(fetchExpiredGlobal());
 
     if (activeRole === ROLES.CUSTOMER) {
       yield put(historyPush(routing().shareOpinion));

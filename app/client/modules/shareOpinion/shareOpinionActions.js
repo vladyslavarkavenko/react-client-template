@@ -6,10 +6,13 @@ import ShareOpinionService from '../../services/shareOpinion';
 import Notification from '../../utils/notifications';
 import shareOpinionSelectors from './shareOpinionSelectors';
 
-import { RATE_PROFILE_TYPE } from '../../utils/constants';
+import { RATE_PROFILE_TYPE, ROLES } from '../../utils/constants';
 import { validateCreateNewTopic } from '../../utils/validator';
 import { historyPush } from '../redirect/redirectActions';
 import routing from '../../utils/routing';
+import authSelectors from '../auth/authSelectors';
+import companiesSelectors from '../companies/companiesSelectors';
+import getOnlyExpired from './helpers/getOnlyExpired';
 
 export const prefix = 'shareOpinion';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -38,6 +41,71 @@ export const pushTopicsRate = createRequestBound('TOPIC_RATE_SEND');
 
 export const calcAverageRate = createRequestBound('AVERAGE_RATE_CALC');
 
+export const fetchExpiredGlobal = createRequestBound('EXPIRED_GLOBAL_FETCH');
+
+function* expiredGlobalTask({ type, id, time }) {
+  try {
+    const subjects =
+      type === RATE_PROFILE_TYPE.MANAGER
+        ? yield call(ShareOpinionService.getSubjectsByManager, id)
+        : yield call(ShareOpinionService.getSubjectsByCompany, id);
+
+    const expired = getOnlyExpired(subjects, time);
+
+    if (Object.keys(expired).length) {
+      return { type, id, expired };
+    }
+
+    return null;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+function* fetchExpiredGlobalWorker() {
+  const userRole = yield select(authSelectors.activeRole);
+
+  if (userRole === ROLES.CUSTOMER) {
+    yield put(fetchExpiredGlobal.request());
+    const companies = yield select(companiesSelectors.getCompaniesAsCustomer);
+    const managers = yield select(companiesSelectors.getManagersList);
+    try {
+      const time = new Date();
+
+      const tasks = [
+        ...companies.map(({ id }) =>
+          fork(expiredGlobalTask, { type: RATE_PROFILE_TYPE.COMPANY, id, time })
+        ),
+        ...managers.map(({ id }) =>
+          fork(expiredGlobalTask, { type: RATE_PROFILE_TYPE.MANAGER, id, time })
+        )
+      ];
+
+      const completed = yield all(tasks);
+      const result = yield join(completed);
+
+      const onlySuccess = result.filter((item) => item !== null);
+      const globalExpired = {
+        [RATE_PROFILE_TYPE.MANAGER]: {},
+        [RATE_PROFILE_TYPE.COMPANY]: {}
+      };
+
+      onlySuccess.forEach((task) => {
+        globalExpired[task.type] = {
+          ...globalExpired[task.type],
+          [task.id]: task.expired
+        };
+      });
+
+      yield put(fetchExpiredGlobal.success(globalExpired));
+    } catch (err) {
+      console.error(err);
+      yield put(fetchExpiredGlobal.failure());
+    }
+  }
+}
+
 function* fetchOpinionSubjectsWorker() {
   yield put(fetchOpinionSubjects.request());
   try {
@@ -46,9 +114,9 @@ function* fetchOpinionSubjectsWorker() {
     let subjects;
 
     if (type === RATE_PROFILE_TYPE.MANAGER) {
-      subjects = yield call(() => ShareOpinionService.getSubjectsByManager(id));
+      subjects = yield call(ShareOpinionService.getSubjectsByManager, id);
     } else {
-      subjects = yield call(() => ShareOpinionService.getSubjectsByCompany(id));
+      subjects = yield call(ShareOpinionService.getSubjectsByCompany, id);
     }
 
     yield put(fetchOpinionSubjects.success(subjects));
@@ -346,6 +414,7 @@ function* pushTopicsRateWorker({ payload }) {
       }
     }
 
+    yield call(fetchExpiredGlobalWorker);
     yield put(pushTopicsRate.success());
     yield put(
       historyPush({ method: 'replace', to: routing({ type, id }).shareOpinionWithProfile })
@@ -369,6 +438,8 @@ export function* shareOpinionWatcher() {
 
     takeLatest(saveTopicRate.TRIGGER, saveTopicRateWorker),
 
-    takeLatest(pushTopicsRate.TRIGGER, pushTopicsRateWorker)
+    takeLatest(pushTopicsRate.TRIGGER, pushTopicsRateWorker),
+
+    takeLatest(fetchExpiredGlobal.TRIGGER, fetchExpiredGlobalWorker)
   ]);
 }
