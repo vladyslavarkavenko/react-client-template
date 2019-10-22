@@ -8,6 +8,7 @@ import {
   VictoryPolarAxis,
   VictoryVoronoiContainer
 } from 'victory';
+import ReactSVG from 'react-svg';
 
 import Details from './Details';
 import Tooltip from './Tooltip';
@@ -20,6 +21,7 @@ import { LEGEND_COLORS, FEATURES, CATEGORIES, PROPS } from './const';
 import '../../../assets/styles/pages/overview.less';
 
 const { a, p, domain, factor, tooltipTriggerRadius, emptyData } = PROPS;
+const { ICONS } = CATEGORIES;
 
 class Radar extends React.Component {
   constructor(props) {
@@ -136,59 +138,66 @@ class Radar extends React.Component {
     const { activeFeature, activeCategory, tooltipData } = this.state;
 
     return (
-      <div className="radar-wrapper">
-        <div className="radar p-relative">
-          <VictoryChart
-            polar
-            domain={domain}
-            width={a}
-            height={a}
-            padding={p}
-            containerComponent={
-              <VictoryVoronoiContainer
-                style={container}
-                responsive={false}
-                voronoiBlacklist={['lines']}
-                radius={tooltipTriggerRadius}
-                onActivated={this.showTooltip}
-                onDeactivated={this.hideTooltip}
-              />
-            }
-          >
-            <VictoryPolarAxis style={mainAxis} />
-            {features.map((value) => (
-              <VictoryPolarAxis
-                key={value}
-                dependentAxis
-                axisValue={value}
-                tickCount={domain.y[1]}
-                style={dependentAxis}
-              />
-            ))}
-            <VictoryGroup colorScale={colorScale} style={lines}>
-              {grades.map((d, i) => (
-                <VictoryLine key={i} data={d} name="lines" />
+      <>
+        <div className="radar-wrapper">
+          <div className="radar p-relative">
+            <VictoryChart
+              polar
+              domain={domain}
+              width={a}
+              height={a}
+              padding={p}
+              containerComponent={
+                <VictoryVoronoiContainer
+                  style={container}
+                  responsive={false}
+                  voronoiBlacklist={['lines']}
+                  radius={tooltipTriggerRadius}
+                  onActivated={this.showTooltip}
+                  onDeactivated={this.hideTooltip}
+                />
+              }
+            >
+              <VictoryPolarAxis style={mainAxis} />
+              {features.map((value) => (
+                <VictoryPolarAxis
+                  key={value}
+                  dependentAxis
+                  axisValue={value}
+                  tickCount={domain.y[1]}
+                  style={dependentAxis}
+                />
               ))}
-            </VictoryGroup>
-            <VictoryGroup colorScale={colorScale} style={dots}>
-              {grades.map((d, i) => (
-                <VictoryScatter key={i} data={d} name={i === 0 ? 'importance' : 'satisfaction'} />
-              ))}
-            </VictoryGroup>
-            {activeFeature && <VictoryBar {...activeFeature} />}
-            {activeCategory && <VictoryBar {...activeCategory} />}
-          </VictoryChart>
-          <FeaturesLabels onClick={this.activateFeature} />
-          <CategoriesLabels onClick={this.activateCategory} />
-          <Details
-            feature={activeFeature}
-            category={activeCategory}
-            featuresDetails={featuresDetails}
-            categoriesDetails={categoriesDetails}
-          />
-          <Tooltip data={grades} tooltipData={tooltipData} />
+              <VictoryGroup colorScale={colorScale} style={lines}>
+                {grades.map((d, i) => (
+                  <VictoryLine key={i} data={d} name="lines" />
+                ))}
+              </VictoryGroup>
+              <VictoryGroup colorScale={colorScale} style={dots}>
+                {grades.map((d, i) => (
+                  <VictoryScatter key={i} data={d} name={i === 0 ? 'importance' : 'satisfaction'} />
+                ))}
+              </VictoryGroup>
+              {activeFeature && <VictoryBar {...activeFeature} />}
+              {activeCategory && <VictoryBar {...activeCategory} />}
+            </VictoryChart>
+            <FeaturesLabels onClick={this.activateFeature} />
+            <CategoriesLabels onClick={this.activateCategory} />
+            <Details
+              feature={activeFeature}
+              category={activeCategory}
+              featuresDetails={featuresDetails}
+              categoriesDetails={categoriesDetails}
+            />
+            <Tooltip data={grades} tooltipData={tooltipData} />
+          </div>
         </div>
-      </div>
+        <div className="icons-wrapper">
+          {Object.values(ICONS).map((src, i) => (
+            <ReactSVG className={`bg-icon bg-icon-${i}`} src={src} />
+          ))}
+        </div>
+      </>
     );
   }
 }

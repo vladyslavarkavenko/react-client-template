@@ -1,7 +1,7 @@
 import React from 'react';
 import i18next from 'i18next';
 
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { validateUserLogin } from '../../utils/validator';
 import TextInput from '../../components/ui-components/Form/TextInput';
@@ -50,8 +50,12 @@ class Login extends React.Component {
   }
 
   render() {
-    const { status } = this.props;
+    const { status, isAuth } = this.props;
     const { email, password, errors } = this.state;
+
+    if (isAuth) {
+      return <Redirect to="/" />;
+    }
 
     const isLoading = status === 'request';
 
@@ -96,7 +100,8 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  status: authSelectors.status(state)
+  status: authSelectors.status(state),
+  isAuth: authSelectors.isAuth(state)
 });
 
 const mapDispatchToProps = {

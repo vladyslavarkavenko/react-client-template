@@ -1,3 +1,4 @@
 export default {
-  staffStatistics: (state) => state.opinions
+  staffStatistics: (state) => state.opinions.staff,
+  companiesStatistics: (state) => state.opinions.companies
 };

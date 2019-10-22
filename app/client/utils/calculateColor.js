@@ -27,11 +27,34 @@ const calculateColorParam = (param, x, y, width, height, colors = defaultColors)
   return Math.round((ltFactor + rtFactor + rbFactor + lbFactor) / (width * height));
 };
 
-export default function calculateColor(...arg) {
-  // arg = { x, y, width, height, colors };
+function createRGB(...arg) {
   const r = calculateColorParam('r', ...arg);
   const g = calculateColorParam('g', ...arg);
   const b = calculateColorParam('b', ...arg);
 
   return `rgb(${r}, ${g}, ${b})`;
+}
+
+export default function calculateColor(x, y, width, height) {
+  const halfWidth = width / 2;
+
+  let colors;
+  if (x < halfWidth) {
+    colors = {
+      lt: { r: 180, g: 0, b: 0 },
+      rt: { r: 240, g: 220, b: 0 },
+      rb: { r: 255, g: 255, b: 100 },
+      lb: { r: 255, g: 100, b: 100 }
+    };
+  } else {
+    x -= halfWidth;
+    colors = {
+      lt: { r: 240, g: 220, b: 0 },
+      rt: { r: 0, g: 180, b: 0 },
+      rb: { r: 100, g: 255, b: 100 },
+      lb: { r: 255, g: 255, b: 100 }
+    };
+  }
+
+  return createRGB(x, y, halfWidth, height, colors);
 }

@@ -10,14 +10,14 @@ import {
 } from '../../../modules/auth/authActions';
 import { validateUser } from '../../../utils/validator';
 
-export default (OriginalComponent) => {
+export default function ForUser(OriginalComponent) {
   class ForCustomerHOC extends React.Component {
     constructor(props) {
       super(props);
 
-      this.save = this.save.bind(this);
-      this.reset = this.reset.bind(this);
       this.onChange = this.onChange.bind(this);
+      this.saveChanges = this.saveChanges.bind(this);
+      this.cancelChanges = this.cancelChanges.bind(this);
     }
 
     // eslint-disable-next-line consistent-return
@@ -43,10 +43,10 @@ export default (OriginalComponent) => {
       }
     }
 
-    save(e) {
-      e.preventDefault();
+    saveChanges(saveData, cb) {
       const { setUserErrors, pushUpdateUser, activeEditUser } = this.props;
-      const { errors, isValid } = validateUser(activeEditUser);
+
+      const { errors, isValid } = validateUser(activeEditUser, saveData);
 
       if (!isValid) {
         return setUserErrors(errors);
@@ -54,40 +54,48 @@ export default (OriginalComponent) => {
 
       // eslint-disable-next-line no-undef
       const data = new FormData();
-      const { avatar, firstName, lastName, phone, email, about, location } = activeEditUser;
+      saveData.forEach((key) => {
+        if (key === 'avatar') {
+          const avatar = activeEditUser.avatar || '';
+          // eslint-disable-next-line no-undef
+          if (avatar instanceof File || !avatar) {
+            data.append(key, avatar);
+          }
+        } else {
+          data.append(key, activeEditUser[key]);
+        }
+      });
 
-      if (!avatar.length) {
-        data.append('avatar', avatar);
-      }
-      data.append('phone', phone);
-      data.append('email', email);
-      data.append('about', about);
-      data.append('lastName', lastName);
-      data.append('location', location);
-      data.append('firstName', firstName);
-
-      return pushUpdateUser({ data });
+      return pushUpdateUser({ data, cb });
     }
 
-    reset(e) {
-      e.preventDefault();
-      const { user, updateUser, editModeUser } = this.props;
+    cancelChanges(resetData) {
+      const { user, updateUser } = this.props;
 
-      editModeUser();
-      updateUser({ ...user, newAvatar: undefined });
+      if (!resetData) {
+        resetData = user;
+      } else {
+        resetData.forEach((key) => {
+          resetData[key] = user[key];
+        });
+      }
+
+      updateUser({ ...resetData });
     }
 
     render() {
-      const { updateUser, pushUpdateUser, editModeUser, activeEditUser, ...rest } = this.props;
+      const { isEdit, errors, editModeUser, activeEditUser, history } = this.props;
 
       return (
         <OriginalComponent
-          {...rest}
+          isEdit={isEdit}
+          errors={errors}
+          history={history}
           data={activeEditUser}
-          toggleEditMode={editModeUser}
           onChange={this.onChange}
-          reset={this.reset}
-          save={this.save}
+          toggleEditMode={editModeUser}
+          saveChanges={this.saveChanges}
+          cancelChanges={this.cancelChanges}
         />
       );
     }
@@ -111,4 +119,4 @@ export default (OriginalComponent) => {
     mapStateToProps,
     mapDispatchToProps
   )(ForCustomerHOC);
-};
+}

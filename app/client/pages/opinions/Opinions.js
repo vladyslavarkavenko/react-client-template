@@ -6,39 +6,58 @@ import routing from '../../utils/routing';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
-import { fetchStaffStatistics } from '../../modules/opinions/opinionsActions';
+import {
+  fetchStaffStatistics,
+  fetchCompaniesStatistics
+} from '../../modules/opinions/opinionsActions';
 import opinionsSelectors from '../../modules/opinions/opinionsSelectors';
 
 const {
   ROLES: { CUSTOMER }
 } = CONST;
 
-function parseCompanies(companies, staffStatistics) {
+// prettier-ignore
+const colors = [
+  [6, 200, 155],
+  [245, 123, 123],
+  [255, 150, 10],
+  [190, 120, 230],
+  [90, 170, 220]
+];
+// function randomColor() {
+//   return colors[Math.floor(Math.random() * colors.length)];
+// }
+
+function parseCompanies(companies, staffStatistics, companiesStatistics) {
   const newData = [];
 
   companies.forEach((company) => {
-    const { manager } = company;
+    const { id, name, avgSatisfaction, avatar, confirmed = true, manager } = company;
 
-    {
-      const { id, name, avgSatisfaction, avatar, confirmed = true } = company;
+    const { numberOpinions: count, ctruScore: score, topFiveScores } = companiesStatistics[id];
 
-      newData.push({
-        id,
-        name,
-        avatar,
-        confirmed,
-        grades: [],
-        isCompany: true,
-        description: `${avgSatisfaction}% clients satisfied with the company`
-      });
-    }
-    {
+    newData.unshift({
+      id,
+      name,
+      avatar,
+      count,
+      score: Math.floor(score * 10) / 10,
+      confirmed,
+      grades: topFiveScores.map(({ topicName, topicScore }, i) => ({
+        grade: topicScore,
+        topic: topicName,
+        color: colors[i]
+      })),
+      isCompany: true,
+      description: `${avgSatisfaction}% clients satisfied with the company`
+    });
+
+    if (manager) {
       const { id, firstName, lastName, title, avatar, confirmed = true, avgSatisfaction } = manager;
 
-      console.log('staffStatistics', staffStatistics, id);
-      const { numberOpinions: count, ctruScore: score } = staffStatistics[id];
+      const { numberOpinions: count, ctruScore: score, topFiveScores } = staffStatistics[id];
 
-      newData.push({
+      newData.unshift({
         id,
         score: Math.floor(score * 10) / 10,
         count,
@@ -46,7 +65,11 @@ function parseCompanies(companies, staffStatistics) {
         title,
         avatar,
         confirmed,
-        grades: [],
+        grades: topFiveScores.map(({ topicName, topicScore }, i) => ({
+          grade: topicScore,
+          topic: topicName,
+          color: colors[i]
+        })),
         isManager: true,
         description: `${avgSatisfaction}% of the clients are satisfied with this manager`
       });
@@ -94,7 +117,7 @@ const Block = ({
           <p className="description">{description}</p>
         </div>
         <span className="arrow" />
-        {isManager && (
+        {!isManager && (
           <div className="ctru-score flex-center">
             <div className="info">
               <h2>cTRU score</h2>
@@ -114,9 +137,7 @@ const Block = ({
               background: `rgb(${color.join()}, .1)`
             }}
           >
-            {grade}
-            {isManager ? '–' : ''}
-            {topic}
+            {`${grade} – ${topic}`}
           </li>
         ))}
       </ul>
@@ -126,17 +147,22 @@ const Block = ({
 
 class Opinions extends React.Component {
   componentDidMount() {
-    const { staffStatistics, fetchStaffStatistics } = this.props;
-
-    console.log('this.props', this.props);
+    const {
+      staffStatistics,
+      fetchStaffStatistics,
+      companiesStatistics,
+      fetchCompaniesStatistics
+    } = this.props;
 
     !staffStatistics && fetchStaffStatistics && fetchStaffStatistics();
+    !companiesStatistics && fetchCompaniesStatistics && fetchCompaniesStatistics();
   }
 
   render() {
-    const { companies, staffStatistics, activeRole } = this.props;
+    const { companies, staffStatistics, companiesStatistics, activeRole } = this.props;
+    console.log('this.props', this.props);
 
-    if (activeRole !== CUSTOMER || !staffStatistics) {
+    if (activeRole !== CUSTOMER || !staffStatistics || !companiesStatistics) {
       return (
         <div className="opinions">
           <div className="empty-header">
@@ -153,7 +179,7 @@ class Opinions extends React.Component {
         </div>
         <div className="body">
           <ul>
-            {parseCompanies(companies, staffStatistics).map((datum) => (
+            {parseCompanies(companies, staffStatistics, companiesStatistics).map((datum) => (
               <Block key={datum.id} {...datum} />
             ))}
           </ul>
@@ -166,10 +192,11 @@ class Opinions extends React.Component {
 const mapStateToProps = (state) => ({
   activeRole: authSelectors.activeRole(state),
   companies: companiesSelectors.getCompaniesForActiveRole(state),
-  staffStatistics: opinionsSelectors.staffStatistics(state)
+  staffStatistics: opinionsSelectors.staffStatistics(state),
+  companiesStatistics: opinionsSelectors.companiesStatistics(state)
 });
 
 export default connect(
   mapStateToProps,
-  { fetchStaffStatistics }
+  { fetchStaffStatistics, fetchCompaniesStatistics }
 )(Opinions);
