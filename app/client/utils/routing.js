@@ -74,6 +74,7 @@ export default (params) => ({
   shareOpinionMessage: '/account/share-opinion/message',
 
   opinionDetails: `/opinions/${params ? generateOpinionLink(params) : ':type\\_:id'}`,
+  myOpinionDetails: `/opinions/dashboard`,
 
   staff: '/manage/staff',
   clients: '/manage/clients',

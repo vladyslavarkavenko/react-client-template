@@ -7,7 +7,8 @@ import { setProfile, selectOption } from '../../modules/opinionDetails/opinionDe
 import { ROUTING_PARAMS } from '../../utils/constants';
 import SimpleContentHeader from '../../components/ui-components/Layout/SimpleContentHeader';
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
-// import routing from '../../utils/routing';
+import authSelectors from '../../modules/auth/authSelectors';
+import routing from '../../utils/routing';
 
 /* eslint-disable */
 
@@ -48,11 +49,20 @@ class HeaderWithTabs extends React.Component {
   }
 
   componentDidMount() {
-    const { match, location, history, setProfile } = this.props;
+    const { match, location, history, setProfile, user } = this.props;
     const {
       params: { type, id }
     } = match;
     const { search } = location;
+
+    if (match.path === routing().myOpinionDetails) {
+      setProfile({
+        type: ROUTING_PARAMS.MANAGER,
+        id: user.staffId
+      });
+      return;
+    }
+
     // also need user id validation
     if (type !== ROUTING_PARAMS.MANAGER && type !== ROUTING_PARAMS.COMPANY) {
       history.push(routing().notFound);
@@ -150,6 +160,8 @@ class HeaderWithTabs extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    user: authSelectors.user(state),
+
     status: opinionDetailsSelectors.getCriteriaStatus(state),
     criteriaList: opinionDetailsSelectors.getCriteriaList(state),
     subjectList: opinionDetailsSelectors.getSubjectList(state),

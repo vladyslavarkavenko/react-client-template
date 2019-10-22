@@ -14,9 +14,8 @@ function TopicBody({ status, topic }) {
   //   return null;
   // }
 
-  // const { topicName } = topic;
+  const { topicName = '' } = topic;
 
-  const topicName = 'Test';
   return (
     <section className="topic-details">
       <div className="topic-details__header">
@@ -33,7 +32,7 @@ function TopicBody({ status, topic }) {
 
 const mapStateToProps = (state) => ({
   status: opinionDetailsSelectors.getCriteriaStatus(state),
-  topic: opinionDetailsSelectors.selectedTopic(state)
+  topic: opinionDetailsSelectors.selectedTopic(state) || {}
 });
 
 export default connect(mapStateToProps)(TopicBody);
