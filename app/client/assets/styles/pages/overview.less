@@ -102,7 +102,6 @@
             background: #FEFEFF;
             border-radius: 0.5rem;
             box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.15);
-            pointer-events: none;
             z-index: 4;
 
             .circle {
@@ -131,6 +130,7 @@
 
               .info-line {
                 display: flex;
+                margin-bottom: 1rem;
 
                 p {
                   white-space: nowrap;
@@ -143,12 +143,19 @@
                   margin-left: auto;
                 }
               }
-            }
 
-            button {
-              margin-left: auto;
-              padding: 0.5rem 0.75rem;
-              margin-top: 0.5rem;
+              .link {
+                display: flex;
+                justify-content: flex-end;
+
+                a {
+                  color: white;
+                  background: #03A2FB;
+                  border-radius: 0.25rem;
+                  display: inline-block;
+                  padding: 0.5rem 0.75rem;
+                }
+              }
             }
           }
 

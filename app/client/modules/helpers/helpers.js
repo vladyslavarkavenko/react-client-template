@@ -3,13 +3,13 @@ import { ROLES } from '../../utils/constants';
 
 const { CUSTOMER, ADMIN, ANALYST, MANAGER } = ROLES;
 
-export const setTokens = ({ access, refresh }) => {
+export const setTokens = ({ access, refresh }, rememberMe = false) => {
   if (access) {
-    localStorage.setItem('access_token', access);
+    rememberMe && localStorage.setItem('access_token', access);
     setApiHeaders({ Authorization: `Bearer ${access}` });
   }
   if (refresh) {
-    localStorage.setItem('refresh_token', refresh);
+    rememberMe && localStorage.setItem('refresh_token', refresh);
   }
 };
 

@@ -9,12 +9,14 @@ import SatisfiedClients from '../../components/widgets/SatisfiedClients';
 import profileSelectors from '../../modules/profile/profileSelectors';
 import { getRadarScores } from '../../modules/profile/profileActions';
 
-const Overview = ({ radarData, getRadarScores, avgSatisfaction }) => (
+const Overview = ({ radarData, getRadarScores, detailsData, avgSatisfaction }) => (
   <ContentBody
     main={[
       {
         title: <RadarTitle />,
-        body: () => <Radar getRadarScores={getRadarScores} data={radarData} />
+        body: () => (
+          <Radar detailsData={detailsData} getRadarScores={getRadarScores} data={radarData} />
+        )
       }
     ]}
     sidebar={[
@@ -27,6 +29,7 @@ const Overview = ({ radarData, getRadarScores, avgSatisfaction }) => (
 
 const mapStateToProps = (state) => ({
   radarData: profileSelectors.radarData(state),
+  detailsData: profileSelectors.detailsData(state),
   avgSatisfaction: profileSelectors.avgSatisfaction(state)
 });
 

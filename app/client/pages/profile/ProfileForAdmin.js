@@ -50,7 +50,7 @@ class ProfileForAdmin extends React.Component {
     } = this.props;
 
     return (
-      <div className="content">
+      <>
         <ContentHeader
           isEdit={isEdit}
           history={history}
@@ -87,7 +87,7 @@ class ProfileForAdmin extends React.Component {
           <WrappedRoute exact path={routing().about} render={() => <About />} />
           <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
         </Switch>
-      </div>
+      </>
     );
   }
 }

@@ -39,12 +39,12 @@ function parseCompanies(companies, staffStatistics, companiesStatistics) {
     newData.unshift({
       id,
       name,
-      avatar,
+      avatar: avatar || '/assets/img/empty-avatar.jpg',
       count,
       score: Math.floor(score * 10) / 10,
       confirmed,
       grades: topFiveScores.map(({ topicName, topicScore }, i) => ({
-        grade: topicScore,
+        grade: Math.floor(topicScore * 10) / 10,
         topic: topicName,
         color: colors[i]
       })),
@@ -63,10 +63,10 @@ function parseCompanies(companies, staffStatistics, companiesStatistics) {
         count,
         name: firstName + lastName,
         title,
-        avatar,
+        avatar: avatar || '/assets/img/empty-avatar.jpg',
         confirmed,
         grades: topFiveScores.map(({ topicName, topicScore }, i) => ({
-          grade: topicScore,
+          grade: Math.floor(topicScore * 10) / 10,
           topic: topicName,
           color: colors[i]
         })),
@@ -191,8 +191,8 @@ class Opinions extends React.Component {
 
 const mapStateToProps = (state) => ({
   activeRole: authSelectors.activeRole(state),
-  companies: companiesSelectors.getCompaniesForActiveRole(state),
   staffStatistics: opinionsSelectors.staffStatistics(state),
+  companies: companiesSelectors.getCompaniesForActiveRole(state),
   companiesStatistics: opinionsSelectors.companiesStatistics(state)
 });
 

@@ -376,6 +376,7 @@
 
   &.edit-icon {
     right: 20px;
+
     svg {
       fill: #3EA0DA;
     }
@@ -383,27 +384,34 @@
 
   &.cancel-icon {
     right: 62px;
+    background: #3291cd;
+
     svg {
-      height: 30px;
-      width: 30px;
-      fill: #da2842;
+      margin: -1px;
+      height: 32px;
+      width: 32px;
+      fill: #fff;
     }
 
-    &:hover svg {
-      fill: #b42635;
+    &:hover {
+      background: #35a0e1;
     }
   }
 
   &.save-icon {
     right: 20px;
+    background: #fff;
+
     svg {
       height: 30px;
       width: 30px;
-      fill: #2bd78d;
+      fill: #3291cd;
     }
 
-    &:hover svg {
-      fill: #25b473;;
+    &:hover {
+      svg {
+        fill: #35a0e1;
+      }
     }
   }
 }

@@ -50,7 +50,7 @@ class ProfileForCustomer extends React.Component {
     } = this.props;
 
     return (
-      <div className="content">
+      <>
         <ContentHeader
           displayAvatar
           loc={location}
@@ -102,7 +102,7 @@ class ProfileForCustomer extends React.Component {
           <WrappedRoute exact path={routing().about} render={() => <About />} />
           <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
         </Switch>
-      </div>
+      </>
     );
   }
 }

@@ -1,12 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import Icon from './Icon';
-import Button from '../../../pages/profile/components/Button';
 
-import CONST from '../../../utils/constants';
 import calculatePositionByAngle from './helpers/calculatePositionByAngle';
+import routing from '../../../utils/routing';
 
-const { BTN_TYPES } = CONST;
+import { FEATURES, CATEGORIES } from './const';
+
+const { NAME_ID } = FEATURES;
+const { FEATURES: C_FEATURES } = CATEGORIES;
 
 // TODO: Rewrite using formulas.
 const featuresMap = {
@@ -27,7 +30,7 @@ const categoriesMap = {
   270: [-50, 20]
 };
 
-const Details = ({ feature, category, featuresDetails, categoriesDetails }) => {
+const Details = ({ detailsData, feature, category, featuresDetails, categoriesDetails }) => {
   if (!feature && !category) {
     return null;
   }
@@ -35,6 +38,7 @@ const Details = ({ feature, category, featuresDetails, categoriesDetails }) => {
   const { data, name } = feature || category;
   const i = data.findIndex(({ y }) => y > 0);
 
+  let to;
   let angle;
   let transform;
   let entries;
@@ -45,6 +49,11 @@ const Details = ({ feature, category, featuresDetails, categoriesDetails }) => {
       ? featuresDetails[name]
       : { count: 0, participation: 0 };
 
+    const params = {
+      ...detailsData,
+      criteriaId: NAME_ID[name]
+    };
+    to = routing(params).opinionDetails;
     entries = count;
     participationShare = participation;
     angle = i * (360 / data.length);
@@ -55,6 +64,11 @@ const Details = ({ feature, category, featuresDetails, categoriesDetails }) => {
       ? categoriesDetails[name]
       : { count: 0, participation: 0 };
 
+    const params = {
+      ...detailsData,
+      criteriaId: NAME_ID[C_FEATURES[name][1]]
+    };
+    to = routing(params).opinionDetails;
     entries = count;
     participationShare = participation;
     angle = i === 0 ? 0 : (i + 1) * (360 / data.length);
@@ -83,7 +97,9 @@ const Details = ({ feature, category, featuresDetails, categoriesDetails }) => {
           <p>Participation share</p>
           <h6>{participationShare ? `${participationShare}%` : '—'}</h6>
         </div>
-        <Button title="Details" type={BTN_TYPES.BLUE} />
+        <div className="link">
+          <Link to={to}>Details</Link>
+        </div>
       </div>
     </div>
   );

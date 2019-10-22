@@ -6,7 +6,7 @@ import RateDetailsContainer from './subjects/RateDetailsContainer';
 
 export default function Subjects({ match }) {
   return (
-    <div className="content share-opinion">
+    <div className="share-opinion">
       <SimpleContentHeader title={i18next.t('shareOpinion.title')} />
       <div className="content-body">
         <RateListContainer match={match} />

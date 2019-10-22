@@ -1,10 +1,11 @@
 import React from 'react';
 import i18next from 'i18next';
+import { Link } from 'react-router-dom';
 
 import SvgEye from '../../../public/assets/svg/eye.svg';
 import SvgSlashEye from '../../../public/assets/svg/eye-slash.svg';
-
 import PasswordIndicator from './ui-components/Form/PasswordIndicator';
+import routing from '../utils/routing';
 
 class PasswordInput extends React.Component {
   constructor(props) {
@@ -33,7 +34,8 @@ class PasswordInput extends React.Component {
       showIndicator,
       showTooltip,
       readOnly,
-      forwardRef
+      forwardRef,
+      forgotPassword
     } = this.props;
     const { isPasswordVisible } = this.state;
 
@@ -47,6 +49,11 @@ class PasswordInput extends React.Component {
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label htmlFor={key} className="form__row-label">
             {labelText}
+            {forgotPassword && (
+              <div className="text-center forgot-password">
+                <Link to={routing().forgotPassword}>{i18next.t('login.forgotPassword')}</Link>
+              </div>
+            )}
             {showIndicator && <PasswordIndicator value={value} />}
           </label>
           <div className="p-relative">

@@ -19,6 +19,7 @@ import CategoriesLabels from './CategoriesLabels';
 import { LEGEND_COLORS, FEATURES, CATEGORIES, PROPS } from './const';
 
 import '../../../assets/styles/pages/overview.less';
+// import routing from '../../../utils/routing';
 
 const { a, p, domain, factor, tooltipTriggerRadius, emptyData } = PROPS;
 const { ICONS } = CATEGORIES;
@@ -50,10 +51,7 @@ class Radar extends React.Component {
     const data = Object.values(NAMES).map((x) => {
       const y = x === name ? domain.y[1] : 0;
 
-      return {
-        x,
-        y
-      };
+      return { x, y };
     });
 
     const style = styles.activateFeature(COLORS[name]);
@@ -76,10 +74,7 @@ class Radar extends React.Component {
     const data = Object.values(NAMES).map((x) => {
       const y = C_FEATURES[name].indexOf(x) !== -1 ? domain.y[1] * (1.2 + factor) : 0;
 
-      return {
-        x,
-        y
-      };
+      return { x, y };
     });
 
     const style = styles.activeCategory(COLORS[name]);
@@ -134,7 +129,10 @@ class Radar extends React.Component {
 
     console.log('this.props', this.props);
 
-    const { data: { grades, categoriesDetails, featuresDetails } = emptyData } = this.props;
+    const {
+      detailsData,
+      data: { grades, categoriesDetails, featuresDetails } = emptyData
+    } = this.props;
     const { activeFeature, activeCategory, tooltipData } = this.state;
 
     return (
@@ -186,6 +184,7 @@ class Radar extends React.Component {
             <Details
               feature={activeFeature}
               category={activeCategory}
+              detailsData={detailsData}
               featuresDetails={featuresDetails}
               categoriesDetails={categoriesDetails}
             />

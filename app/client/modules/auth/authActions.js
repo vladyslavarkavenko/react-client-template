@@ -4,13 +4,15 @@ import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import AuthService from '../../services/auth';
 import { setTokens, removeTokens, formatRolesPayload } from '../helpers/helpers';
-import { TOKENS, ROLES } from '../../utils/constants';
+import { ROLES, TOKENS } from '../../utils/constants';
 import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
 import authSelectors from './authSelectors';
 import companiesSelectors from '../companies/companiesSelectors';
 import Notification from '../../utils/notifications';
 import createToggleRoutine from '../helpers/createToggleRoutine';
+
+const { MANAGER, CUSTOMER } = ROLES;
 
 export const prefix = 'auth';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -115,11 +117,11 @@ function* loginByTokenWorker() {
   }
 }
 
-function* loginWorker({ payload: { email, password } }) {
+function* loginWorker({ payload: { email, password, rememberMe } }) {
   yield put(pushLogin.request());
   try {
     const tokenRes = yield call(() => AuthService.obtainTokens({ email, password }));
-    setTokens(tokenRes);
+    setTokens(tokenRes, rememberMe);
 
     const [user, roles] = yield all([
       call(() => AuthService.getUser()),
@@ -147,10 +149,10 @@ function* loginWorker({ payload: { email, password } }) {
       })
     );
 
-    if (activeRole === ROLES.CUSTOMER) {
-      yield put(historyPush(routing().shareOpinion));
+    if (activeRole === CUSTOMER || activeRole === MANAGER) {
+      yield put(historyPush(routing().about));
     } else {
-      yield put(historyPush(routing().account));
+      yield put(historyPush(routing().dashboard));
     }
   } catch (err) {
     Notification.error(err);

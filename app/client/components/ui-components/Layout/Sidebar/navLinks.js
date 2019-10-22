@@ -74,7 +74,10 @@ const MY_COMPANY = {
 const MY_PROFILE = {
   title: 'My profile',
   Icon: SvgProfile,
-  to: routing().about
+  to: routing().about,
+  isActive(match, location) {
+    return location.pathname.indexOf('profile') !== -1;
+  }
 };
 
 const MESSAGES = {
