@@ -67,6 +67,7 @@ export default (params) => ({
   companyProfile: `/company/profile/${params || ':id'}/:tab`,
   companyProfileAbout: `/company/profile/${params || ':id'}/about`,
   companyProfileOverview: `/company/profile/${params || ':id'}/overview`,
+  companyProfileProducts: `/company/profile/${params || ':id'}/products`,
 
   dashboard: '/account/dashboard',
 
