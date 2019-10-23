@@ -89,24 +89,33 @@
   .topic-tabs,
   .subject-tabs {
     &__list {
-      display: flex;
+      display: inline-flex;
       font-size: 1rem;
       font-weight: 600;
       border-bottom: 1px solid @font-color-light;
       background-color: white;
-      height: @header-tab-height + 10px;
+      height: @header-tab-height + 10px + 3px;
       padding: 0.75rem 0.5rem;
+      min-width: 100%;
+
+      overflow-x: scroll;
+      .makeCustomScrollbar(3px);
     }
 
     &__item {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       align-content: center;
       cursor: pointer;
-      margin: 0 0.5rem;
       padding: 0 1rem;
+      min-width: max-content;
+
       border: 1px solid @font-color-light;
       border-radius: @border-radius-block;
+
+      &:not(:last-child) {
+        margin-right: 0.5rem;
+      }
 
       &.active {
         color: white;
