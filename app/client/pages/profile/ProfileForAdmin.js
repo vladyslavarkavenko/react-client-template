@@ -6,29 +6,66 @@ import customLoadable from '../../components/customLoadable';
 import routing from '../../utils/routing';
 import EditForm from './components/EditForm';
 import ContentHeader from './components/ContentHeader';
-import ForAdmin from './HOCs/ForAdmin';
+import ForCompany from './HOCs/ForCompany';
 
 const Overview = customLoadable({ loader: () => import('./Overview') });
-const AboutForAdmin = ForAdmin(customLoadable({ loader: () => import('./CompanyAbout') }));
+const About = customLoadable({ loader: () => import('./about/CompanyAbout') });
 
-// eslint-disable-next-line react/prefer-stateless-function
 class ProfileForAdmin extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.mainSaveChanges = this.mainSaveChanges.bind(this);
+    this.mainCancelChanges = this.mainCancelChanges.bind(this);
+  }
+
+  mainSaveChanges(e) {
+    const { toggleEditMode, saveChanges, cancelChanges } = this.props;
+
+    e.preventDefault();
+
+    saveChanges(['name', 'title', 'avatar'], () => {
+      toggleEditMode();
+      cancelChanges(['about', 'email', 'phone', 'web']);
+    });
+  }
+
+  mainCancelChanges(e) {
+    const { toggleEditMode, cancelChanges } = this.props;
+
+    e.preventDefault();
+
+    cancelChanges();
+    toggleEditMode();
+  }
+
   render() {
     const {
+      isEdit,
+      errors,
+      history,
+      onChange,
+      toggleEditMode,
       data: { avatar, newAvatar, name, title }
     } = this.props;
 
     return (
-      <div className="content">
+      <>
         <ContentHeader
-          {...this.props}
+          isEdit={isEdit}
+          history={history}
+          onChange={onChange}
+          toggleEditMode={toggleEditMode}
           displayAvatar
           avatar={newAvatar || avatar}
           title={name}
           subTitle="89% of clients are satisfied"
           editForm={
             <EditForm
-              {...this.props}
+              onChange={onChange}
+              saveChanges={this.mainSaveChanges}
+              cancelChanges={this.mainCancelChanges}
+              errors={errors}
               inputs={[
                 {
                   name: 'name',
@@ -47,12 +84,12 @@ class ProfileForAdmin extends React.Component {
           ]}
         />
         <Switch>
-          <WrappedRoute exact path={routing().about} render={() => <AboutForAdmin />} />
+          <WrappedRoute exact path={routing().about} render={() => <About />} />
           <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
         </Switch>
-      </div>
+      </>
     );
   }
 }
 
-export default ForAdmin(ProfileForAdmin);
+export default ForCompany(ProfileForAdmin);

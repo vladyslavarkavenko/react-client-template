@@ -4,13 +4,16 @@ import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import AuthService from '../../services/auth';
 import { setTokens, removeTokens, formatRolesPayload } from '../helpers/helpers';
-import { TOKENS, ROLES } from '../../utils/constants';
+import { ROLES, TOKENS } from '../../utils/constants';
 import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
 import authSelectors from './authSelectors';
 import companiesSelectors from '../companies/companiesSelectors';
 import Notification from '../../utils/notifications';
 import createToggleRoutine from '../helpers/createToggleRoutine';
+import { fetchExpiredGlobal } from '../shareOpinion/shareOpinionActions';
+
+const { MANAGER, CUSTOMER } = ROLES;
 
 export const prefix = 'auth';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -32,13 +35,13 @@ export const editModeUser = createToggleRoutine(prefix, 'EDIT_MODE');
 export const updateUser = createRequestBound('USER_UPDATE');
 export const setUserErrors = createRequestBound('USER_SET_ERRORS');
 
-function* updateUserWorker({ payload: { data } }) {
+function* updateUserWorker({ payload: { data, cb } }) {
   yield put(pushUpdateUser.request());
   try {
     const user = yield call(() => AuthService.updateUser(data));
 
+    cb && cb();
     yield put(pushUpdateUser.success(user));
-    yield put(editModeUser.toggle());
   } catch (err) {
     console.error(err);
   }
@@ -107,6 +110,7 @@ function* loginByTokenWorker() {
           rolesPermissions
         })
       );
+      yield put(fetchExpiredGlobal());
     } catch (err) {
       console.error(err);
       removeTokens();
@@ -115,16 +119,13 @@ function* loginByTokenWorker() {
   }
 }
 
-function* loginWorker({ payload: { email, password } }) {
+function* loginWorker({ payload: { email, password, rememberMe } }) {
   yield put(pushLogin.request());
   try {
-    const tokenRes = yield call(() => AuthService.obtainTokens({ email, password }));
-    setTokens(tokenRes);
+    const tokenRes = yield call(AuthService.obtainTokens, { email, password });
+    setTokens(tokenRes, rememberMe);
 
-    const [user, roles] = yield all([
-      call(() => AuthService.getUser()),
-      call(() => AuthService.getRoles())
-    ]);
+    const [user, roles] = yield all([call(AuthService.getUser), call(AuthService.getRoles)]);
 
     const {
       staffId,
@@ -146,11 +147,12 @@ function* loginWorker({ payload: { email, password } }) {
         rolesPermissions
       })
     );
+    yield put(fetchExpiredGlobal());
 
-    if (activeRole === ROLES.CUSTOMER) {
-      yield put(historyPush(routing().shareOpinion));
+    if (activeRole === CUSTOMER || activeRole === MANAGER) {
+      yield put(historyPush(routing().about));
     } else {
-      yield put(historyPush(routing().account));
+      yield put(historyPush(routing().dashboard));
     }
   } catch (err) {
     Notification.error(err);
@@ -166,7 +168,7 @@ function* signUpWorker({ payload: { input } }) {
   yield put(pushSignUp.request());
 
   try {
-    yield call(() => AuthService.register(input));
+    yield call(AuthService.register, input);
     // start Sign In
     yield put(pushLogin({ email: input.email, password: input.password }));
 

@@ -9,7 +9,7 @@ import NoSvg from '../../../../../public/assets/svg/times-circle.light.svg';
 import AlarmClockSvg from '../../../../../public/assets/svg/alarm-clock.svg';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
 import {
-  pushUpdateTopics,
+  pushTopicsRate,
   selectReviewRecommend
 } from '../../../modules/shareOpinion/shareOpinionActions';
 
@@ -116,7 +116,7 @@ const handleProceed = selectReviewRecommend.success;
 const handleRate = selectReviewRecommend.trigger;
 
 const mapDispatchToProps = {
-  handleFinish: pushUpdateTopics,
+  handleFinish: pushTopicsRate,
   handleProceed,
   handleRate
 };

@@ -5,11 +5,13 @@ import {
   saveTableField,
   changeTableRole,
   pushSendInvitations,
-  selectAllRows
+  selectAllRows,
+  createNewRow
 } from '../../../modules/staff/staffActions';
 import Table from '../components/Table';
 import staffSelectors from '../../../modules/staff/staffSelectors';
 import Button from '../../../components/ui-components/Form/Button';
+import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
 class InvitationTable extends React.Component {
   constructor(props) {
@@ -47,7 +49,8 @@ class InvitationTable extends React.Component {
       multipleRoles,
       status,
       errors,
-      checked
+      checked,
+      createNewRow
     } = this.props;
 
     const isRequest = status === 'request';
@@ -69,6 +72,14 @@ class InvitationTable extends React.Component {
         />
 
         <div className="table-controls">
+          <Button
+            className="table-btn-transparent"
+            onClick={() => createNewRow()}
+            disabled={isRequest}
+          >
+            + Add a row
+          </Button>
+
           {checked.length !== 0 && (
             <Button
               className="table-btn"
@@ -86,8 +97,10 @@ class InvitationTable extends React.Component {
 
 const mapStateToProps = (state) => {
   const table = STAFF_TABLE_TYPE.INVITATIONS;
+  const multipleRoles = companiesSelectors.getCurrentCompany(state).hasAllAccess;
   return {
     table,
+    multipleRoles,
     status: staffSelectors.getTableStatus(state, table),
     list: staffSelectors.getTableData(state, table),
     errors: staffSelectors.getTableErrors(state, table),
@@ -99,7 +112,8 @@ const mapDispatchToProps = {
   saveTableField,
   changeTableRole,
   pushSendInvitations,
-  selectAllRows
+  selectAllRows,
+  createNewRow
 };
 
 export default connect(

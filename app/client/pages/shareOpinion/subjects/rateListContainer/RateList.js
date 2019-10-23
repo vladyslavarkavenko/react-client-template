@@ -9,7 +9,27 @@ const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 
 export default class RateList extends React.Component {
   componentDidMount() {
-    const { companies, managers, handleSelect } = this.props;
+    const {
+      companies,
+      managers,
+      company,
+      manager,
+      fastSelect,
+
+      handleSelect
+    } = this.props;
+
+    if (company) {
+      //from url
+      handleSelect({ data: company, type: COMPANY, fastSelect });
+      return;
+    }
+
+    if (manager) {
+      //from url
+      handleSelect({ data: manager, type: MANAGER, fastSelect });
+      return;
+    }
 
     if (companies.length) {
       //select first company in the list
@@ -21,7 +41,7 @@ export default class RateList extends React.Component {
   }
 
   render() {
-    const { companies, managers, selected, handleSelect } = this.props;
+    const { companies, managers, selected, handleSelect, globalExpired } = this.props;
 
     const companiesList = companies.map((company) => (
       <RateListItem
@@ -29,6 +49,7 @@ export default class RateList extends React.Component {
         data={company}
         selected={selected}
         handleSelect={handleSelect}
+        globalExpired={globalExpired}
         isCompany
       />
     ));
@@ -39,6 +60,7 @@ export default class RateList extends React.Component {
         data={manager}
         selected={selected}
         handleSelect={handleSelect}
+        globalExpired={globalExpired}
       />
     ));
 

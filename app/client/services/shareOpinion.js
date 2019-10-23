@@ -10,15 +10,15 @@ class ShareOpinionService {
   }
 
   static getSubjectsByManager(managerId) {
-    return api.get(`/opinion/manager/${managerId}`);
+    return api.get(`/opinion/manager/${managerId}/`);
   }
 
   static getSubjectsByCompany(companyId) {
-    return api.get(`/opinion/company/${companyId}`);
+    return api.get(`/opinion/company/${companyId}/`);
   }
 
   static getTopicsBySubject(subjectId) {
-    return api.get(`/opinion/subject/${subjectId}`);
+    return api.get(`/opinion/subject/${subjectId}/`);
   }
 
   static pushCreateSubject(data) {
@@ -30,19 +30,19 @@ class ShareOpinionService {
   }
 
   static pushRateTopicByManager(data) {
-    return api.post('/opinion/opinion/', data);
+    return api.post('/opinion/rate/manager/', data);
   }
 
   static pushRateTopicByCompany(data) {
-    return api.post('/opinion/opinion-company/', data);
+    return api.post('/opinion/rate/company/', data);
   }
 
-  static pushFileToTopicByManager({ id, data }) {
-    return api.post(`/opinion/opinion/${id}/upload_files/`, data);
+  static pushCommentToOpinion(data) {
+    return api.post('/opinion/comment/', data);
   }
 
-  static pushFileToTopicByCompany({ id, data }) {
-    return api.post(`/opinion/opinion-company/${id}/upload_files/`, data);
+  static pushFileToComment({ id, data }) {
+    return api.post(`/opinion/comment/${id}/upload_files/`, data);
   }
 
   static getTopicOpinionsByManager({ id, topic }) {

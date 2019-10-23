@@ -2,18 +2,21 @@ import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 
 import * as actions from './companyProfileActions';
-import { makeStatusReducer } from '../../utils/reduxHelpers';
+import { makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 
-import { PROPS } from '../../pages/profile/overview/const';
+import { PROPS } from '../../components/widgets/radar/const';
 
 const { emptyData } = PROPS;
 
-const radarStatus = makeStatusReducer(actions.fetchRadarScores);
+const radarStatus = makeStatusWithResetReducer(actions.fetchRadarScores, actions.clearAll.TRIGGER);
 
 const radarData = handleActions(
   {
     [actions.fetchRadarScores.SUCCESS](state, { payload }) {
       return payload || emptyData;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return emptyData;
     }
   },
   emptyData
@@ -24,25 +27,71 @@ const radar = combineReducers({
   data: radarData
 });
 
-const satisfiedClientsStatus = makeStatusReducer(actions.fetchSatisfiedClients);
-
-const satisfiedClientsData = handleActions(
-  {
-    [actions.fetchSatisfiedClients.SUCCESS](state, { payload }) {
-      return payload;
-    }
-  },
-  null
+const topScoresStatus = makeStatusWithResetReducer(
+  actions.fetchTopScores,
+  actions.clearAll.TRIGGER
 );
 
-const satisfaction = combineReducers({
-  status: satisfiedClientsStatus,
-  data: satisfiedClientsData
+const topScoresData = handleActions(
+  {
+    [actions.fetchTopScores.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const topScores = combineReducers({
+  status: topScoresStatus,
+  data: topScoresData
+});
+
+const statsStatus = makeStatusWithResetReducer(actions.fetchStatistics, actions.clearAll.TRIGGER);
+
+const statsData = handleActions(
+  {
+    [actions.fetchStatistics.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return {};
+    }
+  },
+  {}
+);
+
+const stats = combineReducers({
+  status: statsStatus,
+  data: statsData
+});
+
+const commentsStatus = makeStatusWithResetReducer(actions.fetchComments, actions.clearAll.TRIGGER);
+
+const commentsData = handleActions(
+  {
+    [actions.fetchComments.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const comments = combineReducers({
+  status: commentsStatus,
+  data: commentsData
 });
 
 const companyProfile = combineReducers({
   radar,
-  satisfaction
+  topScores,
+  stats,
+  comments
 });
 
 export default companyProfile;

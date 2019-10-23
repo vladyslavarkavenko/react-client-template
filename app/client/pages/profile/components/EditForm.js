@@ -6,7 +6,7 @@ import TextInput from '../../../components/ui-components/Form/TextInput';
 
 const { BLUE } = BTN_TYPES;
 
-const EditForm = ({ inputs, onChange, reset, save, errors }) => (
+const EditForm = ({ inputs, onChange, cancelChanges, saveChanges, errors }) => (
   <form className="content-edit-info">
     {inputs.map(({ name, value, labelText, className }) => {
       return (
@@ -22,8 +22,8 @@ const EditForm = ({ inputs, onChange, reset, save, errors }) => (
       );
     })}
     <div className="buttons">
-      <Button title="Cancel" onClick={reset} />
-      <Button title="Save changes" type={BLUE} onClick={save} />
+      <Button title="Cancel" onClick={cancelChanges} />
+      <Button title="Save changes" type={BLUE} onClick={saveChanges} />
     </div>
   </form>
 );

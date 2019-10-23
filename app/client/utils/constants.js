@@ -54,5 +54,23 @@ module.exports = {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' //.xlsx
     ],
     ARCHIVES: ['application/zip', 'application/x-7z-compressed', 'application/x-rar-compressed']
+  },
+  COLORS: {
+    // criteria_id
+    CARING: '#69BE60', // 1
+    CONVENIENT: '#FFAF5F', // 2
+    CREATIVE: '#F07E68', // 3
+    CLEAR: '#EF6363', // 4
+    COST_CONSCIOUS: '#B96E9F', // 5
+    COMPENSATING: '#8E97F1', // 6
+    CONFIDENT: '#4CB1E9', // 7
+    COURTEGIOUS: '#13BE99' // 8
+  },
+  ROUTING_PARAMS: {
+    MANAGER: 'manager',
+    COMPANY: 'company',
+    CRITERIA_ID: 'criteriaId',
+    SUBJECT_ID: 'subjectId',
+    TOPIC_ID: 'topicId'
   }
 };

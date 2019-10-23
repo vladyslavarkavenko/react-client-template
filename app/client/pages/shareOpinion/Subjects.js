@@ -4,12 +4,12 @@ import SimpleContentHeader from '../../components/ui-components/Layout/SimpleCon
 import RateListContainer from './subjects/RateListContainer';
 import RateDetailsContainer from './subjects/RateDetailsContainer';
 
-export default function Subjects() {
+export default function Subjects({ match, location }) {
   return (
-    <div className="content share-opinion">
+    <div className="share-opinion">
       <SimpleContentHeader title={i18next.t('shareOpinion.title')} />
       <div className="content-body">
-        <RateListContainer />
+        <RateListContainer match={match} location={location} />
         <RateDetailsContainer />
       </div>
     </div>

@@ -1,4 +1,9 @@
 export default {
-  grades: (state) => state.profile.grades,
-  satisfiedClients: (state) => state.profile.satisfiedClients
+  radarData: (state) => {
+    const { isInitial, grades, featuresDetails, categoriesDetails } = state.profile;
+
+    return { isInitial, grades, featuresDetails, categoriesDetails };
+  },
+  avgSatisfaction: (state) => state.profile.avgSatisfaction,
+  detailsData: (state) => state.profile.detailsData
 };

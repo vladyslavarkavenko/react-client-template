@@ -14,8 +14,8 @@
           "info": "The {{field}} is invalid"
         },
         "email": {
-          "long": "Email is too long",
           "required": "Email is required",
+          "length": "Email must be {{min}}-{{max}} characters long",
           "info": "Email format is invalid"
         },
         "phone": {
@@ -23,7 +23,8 @@
           "required": "Phone number is required"
         },
         "location": {
-          "required": "Location is required"
+          "required": "Location is required",
+          "length": "Location must be {{min}}-{{max}} characters long"
         },
         "company": {
           "name": {
@@ -95,8 +96,9 @@
           "last": "Last name"
         },
         "email": "Email address",
-        "phone": "Phone",
+        "phone": "Phone (optional)",
         "password": "Password",
+        "confirmPassword": "Confirm password",
         "passwordNote": "At least 8 characters",
         "policy": "I agree to the Terms of Service, Privacy Policy and Cookie Policy",
         "buttons": {

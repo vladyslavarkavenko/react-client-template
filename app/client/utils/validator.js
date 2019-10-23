@@ -6,20 +6,42 @@ function validateText({ value, min = 2, max }) {
   return validator.isLength(value, { min, max });
 }
 
+function validate(validators, data, keys) {
+  let errors = {};
+  console.log(validators, data, keys);
+  keys.forEach((key) => {
+    console.log(key);
+    const value = data[key];
+    const validFn = validators[key];
+
+    errors = { ...errors, ...validFn(value) };
+  });
+
+  return {
+    errors,
+    isValid: !Object.keys(errors).length
+  };
+}
+
 // Common
 function validateEmail(value, messages = {}) {
+  const limit = {
+    min: 2,
+    max: 256
+  };
+
   const {
     info = i18next.t('validation.email.info'),
-    long = i18next.t('validation.email.long'),
+    length = i18next.t('validation.email.length', limit),
     required = i18next.t('validation.email.required')
   } = messages;
 
   const errors = {};
 
-  if (!value.length) {
+  if (!value) {
     errors.email = required;
-  } else if (!validateText({ value, max: 30 })) {
-    errors.email = long;
+  } else if (!validateText({ value, ...limit })) {
+    errors.email = length;
   } else if (!validator.isEmail(value)) {
     errors.email = info;
   }
@@ -27,29 +49,47 @@ function validateEmail(value, messages = {}) {
   return errors;
 }
 function validatePhone(value, messages = {}) {
+  const allowedSymbols = [...'+-–−—(),'];
+
   const {
-    format = i18next.t('validation.phone.format'),
-    required = i18next.t('validation.phone.required')
+    format = i18next.t('validation.phone.format')
+    // required = i18next.t('validation.phone.required')
   } = messages;
 
   const errors = {};
 
-  if (!value) {
-    errors.phone = required;
-  } else if (!validator.isMobilePhone(value)) {
-    errors.phone = format;
+  // if (value && !validator.isMobilePhone(value)) {
+  //   errors.phone = format;
+  // }
+  if (value) {
+    [...value].forEach((chr, i, arr) => {
+      const isNumber = !Number.isNaN(+chr);
+      const isSymbol = allowedSymbols.indexOf(chr) !== -1;
+      const isPrevSymbol = allowedSymbols.indexOf(arr[i - 1]) !== -1;
+
+      if (!(isNumber || (isSymbol && !isPrevSymbol))) {
+        errors.phone = format;
+      }
+    });
   }
 
   return errors;
 }
 function validateLocation(value, messages = {}) {
-  // TODO: Need improvements.
-  const { required = i18next.t('validation.location.required') } = messages;
+  const limit = {
+    min: 2,
+    max: 256
+  };
+
+  const {
+    // required = i18next.t('validation.location.required'),
+    length = i18next.t('validation.location.length', limit)
+  } = messages;
 
   const errors = {};
 
-  if (!value) {
-    errors.location = required;
+  if (value && !validateText({ value, ...limit })) {
+    errors.location = length;
   }
 
   return errors;
@@ -63,8 +103,8 @@ function validateCompanyName(value, messages = {}) {
   };
 
   const {
-    length = i18next.t('validation.company.name.length', limit),
-    required = i18next.t('validation.company.name.required')
+    required = i18next.t('validation.company.name.required'),
+    length = i18next.t('validation.company.name.length', limit)
   } = messages;
 
   const errors = {};
@@ -85,7 +125,7 @@ function validateCompanySite(value, messages = {}) {
 
   const errors = {};
 
-  if (!value.length) {
+  if (!value) {
     errors.web = required;
   } else if (!validator.isURL(value, { require_protocol: true })) {
     errors.web = format;
@@ -100,15 +140,13 @@ function validateCompanyAbout(value, messages = {}) {
   };
 
   const {
-    length = i18next.t('validation.company.about.length', limit),
-    required = i18next.t('validation.company.about.required')
+    length = i18next.t('validation.company.about.length', limit)
+    // required = i18next.t('validation.company.about.required')
   } = messages;
 
   const errors = {};
 
-  if (!value) {
-    errors.about = required;
-  } else if (!validateText({ value, ...limit })) {
+  if (value && !validateText({ value, ...limit })) {
     errors.about = length;
   }
 
@@ -149,7 +187,7 @@ function validatePassword(value, messages = {}) {
   const upperCaseUsed = /[A-Z]/.test(password);
   const specSymbolsUsed = /[0-9!@#$%^&*.]/.test(password);
 
-  if (!password.length) {
+  if (!password) {
     errors.password = required;
   } else if (!validateText({ value: password, ...limit })) {
     errors.password = length;
@@ -175,15 +213,13 @@ function validateUserAbout(value, messages = {}) {
   };
 
   const {
-    length = i18next.t('validation.user.about.length', limit),
-    required = i18next.t('validation.user.about.required')
+    length = i18next.t('validation.user.about.length', limit)
+    // required = i18next.t('validation.user.about.required')
   } = messages;
 
   const errors = {};
 
-  if (!value) {
-    errors.about = required;
-  } else if (!validateText({ value, ...limit })) {
+  if (value && !validateText({ value, ...limit })) {
     errors.about = length;
   }
 
@@ -301,42 +337,46 @@ function validateSelectedRoles(data, messages = {}) {
   return errors;
 }
 
+function validateSelectedManager(manager, messages = {}) {
+  const { required = 'Select manager' } = messages;
+
+  const errors = {};
+
+  if (!manager) {
+    errors.manager = required;
+  }
+
+  return errors;
+}
+
 // External validators
-export function validateUser(data) {
-  const { email, phone, about, firstName, lastName, title, location } = data;
-
-  const errors = {
-    ...validateUserAbout(about),
-    ...validateUserTitle(title),
-    ...validateEmail(email),
-    ...validatePhone(phone),
-    ...validateLocation(location),
-    ...validateUserLastName(lastName),
-    ...validateUserFirstName(firstName)
-  };
-
-  return {
-    errors,
-    isValid: !Object.keys(errors).length
-  };
+const companyValidators = {
+  avatar: () => ({}),
+  email: validateEmail,
+  phone: validatePhone,
+  web: validateCompanySite,
+  name: validateCompanyName,
+  about: validateCompanyAbout,
+  title: validateCompanyTitle
+};
+export function validateCompany(data, keys = Object.keys(companyValidators)) {
+  return validate(companyValidators, data, keys);
 }
-export function validateCompany(data) {
-  const { email, name, phone, web, about, title } = data;
 
-  const errors = {
-    ...validateCompanySite(web),
-    ...validateEmail(email),
-    ...validatePhone(phone),
-    ...validateCompanyName(name),
-    ...validateCompanyAbout(about),
-    ...validateCompanyTitle(title)
-  };
-
-  return {
-    errors,
-    isValid: !Object.keys(errors).length
-  };
+const userValidators = {
+  avatar: () => ({}),
+  email: validateEmail,
+  phone: validatePhone,
+  about: validateUserAbout,
+  title: validateUserTitle,
+  location: validateLocation,
+  lastName: validateUserLastName,
+  firstName: validateUserFirstName
+};
+export function validateUser(data, keys = Object.keys(userValidators)) {
+  return validate(userValidators, data, keys);
 }
+
 export function validateUserLogin(data) {
   const { email, password } = data;
 
@@ -351,7 +391,7 @@ export function validateUserLogin(data) {
   };
 }
 export function validateUserSignUp(data) {
-  const { email, phone, firstName, lastName, password, policy } = data;
+  const { email, phone, firstName, lastName, password, confirmPassword, policy } = data;
 
   const errors = {
     ...validateEmail(email),
@@ -359,7 +399,7 @@ export function validateUserSignUp(data) {
     ...validateUserPolicy(policy),
     ...validateUserLastName(lastName),
     ...validateUserFirstName(firstName),
-    ...validatePassword({ password })
+    ...validatePassword({ password, confirmPassword })
   };
 
   return {
@@ -410,10 +450,10 @@ export function validateCreateNewTopic(data) {
   };
 }
 
-export function validateInviteStaffRow(rows) {
+export function validateInviteStaffRow(rows, multipleRoles) {
   const errors = {};
 
-  rows.forEach(({ email, firstName, lastName, roles, id }, multipleRoles) => {
+  rows.forEach(({ email, firstName, lastName, roles, id }) => {
     const rowErrors = {
       ...validateEmail(email),
       ...validateUserFirstName(firstName),
@@ -432,12 +472,34 @@ export function validateInviteStaffRow(rows) {
   };
 }
 
-export function validateUpdateStaffRow(rows) {
+export function validateUpdateStaffRow(rows, multipleRoles) {
   const errors = {};
 
-  rows.forEach(({ roles, id }, multipleRoles) => {
+  rows.forEach(({ roles, id }) => {
     const rowErrors = {
       ...validateSelectedRoles({ roles, isMultiple: multipleRoles })
+    };
+
+    if (Object.keys(rowErrors).length) {
+      errors[id] = rowErrors;
+    }
+  });
+
+  return {
+    errors,
+    isValid: !Object.keys(errors).length
+  };
+}
+
+export function validateInviteCustomerRow(rows) {
+  const errors = {};
+
+  rows.forEach(({ email, firstName, lastName, manager, id, _changes = {} }) => {
+    const rowErrors = {
+      ...validateEmail(_changes.email || email),
+      ...validateUserFirstName(_changes.firstName || firstName),
+      ...validateUserLastName(_changes.lastName || lastName),
+      ...validateSelectedManager(_changes.manager || manager)
     };
 
     if (Object.keys(rowErrors).length) {

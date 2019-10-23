@@ -1,14 +1,14 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 
-import WrappedRoute from '../../components/Wrappers/WrappedRoute';
-import customLoadable from '../../components/customLoadable';
 import routing from '../../utils/routing';
+import ForCompany from './HOCs/ForCompany';
 import ContentHeader from './components/ContentHeader';
-import ForAnalyst from './HOCs/ForAnalyst';
+import customLoadable from '../../components/customLoadable';
+import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 
 const Overview = customLoadable({ loader: () => import('./Overview') });
-const About = customLoadable({ loader: () => import('./CompanyAbout') });
+const About = customLoadable({ loader: () => import('./about/CompanyAbout') });
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ProfileForAnalyst extends React.Component {
@@ -18,9 +18,8 @@ class ProfileForAnalyst extends React.Component {
     } = this.props;
 
     return (
-      <div className="content">
+      <>
         <ContentHeader
-          {...this.props}
           displayAvatar
           avatar={avatar}
           title={name}
@@ -31,16 +30,12 @@ class ProfileForAnalyst extends React.Component {
           ]}
         />
         <Switch>
-          <WrappedRoute exact path={routing().about} render={() => <About {...this.props} />} />
-          <WrappedRoute
-            exact
-            path={routing().overview}
-            render={() => <Overview {...this.props} />}
-          />
+          <WrappedRoute exact path={routing().about} render={() => <About />} />
+          <WrappedRoute exact path={routing().overview} render={() => <Overview />} />
         </Switch>
-      </div>
+      </>
     );
   }
 }
 
-export default ForAnalyst(ProfileForAnalyst);
+export default ForCompany(ProfileForAnalyst);

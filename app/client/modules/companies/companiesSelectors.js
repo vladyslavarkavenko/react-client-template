@@ -4,6 +4,28 @@ const getCompanyData = (state) => state.companies.data;
 
 const getCompaniesList = (state) => Object.values(getCompanyData(state));
 
+const getCompaniesAsCustomer = (state) => {
+  const companies = getCompaniesList(state);
+  const currentUserId = authSelectors.getCurrentUserId(state); // permission[activeRole];
+
+  const customerCompanies = Object.values(companies).filter((company) =>
+    currentUserId.includes(company.id)
+  );
+
+  return customerCompanies;
+};
+
+const getCompaniesForActiveRole = (state) => {
+  const companies = getCompaniesList(state);
+  const myCompaniesIds = authSelectors.getCurrentUserId(state);
+
+  if (Array.isArray(myCompaniesIds)) {
+    return companies.filter(({ id }) => myCompaniesIds.indexOf(id) !== -1);
+  }
+
+  return companies.find(({ id }) => myCompaniesIds === id);
+};
+
 const getManagersList = (state) => {
   const companies = getCompaniesList(state);
   const managers = [];
@@ -24,8 +46,10 @@ const getCurrentManager = (state, managerId) => {
   if (Array.isArray(currentUserId)) {
     // if user is customer with multiple companies
     const companyWithManager = Object.values(companies).find(
-      (company) => company.manager.id === Number(managerId)
+      // safe check manager
+      (company) => company.manager && company.manager.id === Number(managerId)
     );
+
     return companyWithManager ? companyWithManager.manager : null;
   }
 
@@ -34,16 +58,10 @@ const getCurrentManager = (state, managerId) => {
 
 const getCurrentCompany = (state, companyId) => {
   const companies = getCompanyData(state); //state.companies.data
-  const currentUserId = authSelectors.getCurrentUserId(state); // permission[activeRole];
+  let currentUserId = authSelectors.getCurrentUserId(state); // permission[activeRole];
+  currentUserId = Array.isArray(currentUserId) ? currentUserId[0] : currentUserId;
 
-  // if (Array.isArray(currentUserId)) {
-  //   // if user is customer with multiple companies
-  //   const company = companies[companyId];
-  //
-  //   return co : null;
-  // }
-
-  return companies[companyId || currentUserId] || null;
+  return companies[companyId || currentUserId || null];
 };
 
 const getManagersWithCompanies = (state) => {
@@ -60,12 +78,26 @@ const getManagersWithCompanies = (state) => {
   return list;
 };
 
+const findCompanyByManager = (state, managerId) => {
+  const companies = getCompanyData(state);
+
+  const company = Object.values(companies).find(
+    (item) => item.manager && item.manager.id === Number(managerId)
+  );
+
+  return company;
+};
+
 export default {
   getCompaniesList,
   getManagersList,
   getManagersWithCompanies,
+  getCompaniesForActiveRole,
   getCurrentManager,
   getCurrentCompany,
+  getCompaniesAsCustomer,
+
+  findCompanyByManager,
   data: getCompanyData,
   errors: (state) => state.companies.errors,
   activeEditCompany: (state) => state.companies.activeEditCompany,

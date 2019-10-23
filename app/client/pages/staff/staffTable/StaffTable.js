@@ -102,24 +102,36 @@ class StaffTable extends React.Component {
         />
 
         <div className="table-controls">
-          {changed.length !== 0 && (
+          {checked.length !== 0 && (
             <>
-              <Button className="table-btn" isLoading={isRequest} onClick={this.handleSave}>
-                Save
+              <Button
+                className="table-btn blocked"
+                isLoading={isRequest}
+                onClick={this.handleBlock}
+              >
+                Block
               </Button>
-              <Button className="table-btn" isLoading={isRequest} onClick={this.handleCancel}>
-                Cancel
+              <Button
+                className="table-btn active"
+                isLoading={isRequest}
+                onClick={this.handleUnblock}
+              >
+                Unblock
               </Button>
             </>
           )}
 
-          {checked.length !== 0 && (
+          {changed.length !== 0 && (
             <>
-              <Button className="table-btn" isLoading={isRequest} onClick={this.handleBlock}>
-                Block
+              <Button
+                className="table-btn-transparent"
+                isLoading={isRequest}
+                onClick={this.handleCancel}
+              >
+                Cancel
               </Button>
-              <Button className="table-btn" isLoading={isRequest} onClick={this.handleUnblock}>
-                Unblock
+              <Button className="table-btn" isLoading={isRequest} onClick={this.handleSave}>
+                Save
               </Button>
             </>
           )}

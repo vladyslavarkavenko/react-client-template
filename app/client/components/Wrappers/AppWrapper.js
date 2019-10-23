@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import RedirectWatcher from '../ui-components/RedirectWatcher';
 
 const AppWrapper = ({ children }) => (
@@ -15,6 +15,8 @@ const AppWrapper = ({ children }) => (
       toastClassName="custom-toast"
       bodyClassName="custom-toast__body"
       hideProgressBar
+      position={toast.POSITION.TOP_RIGHT}
+      autoClose={4000}
     />
     <RedirectWatcher />
     {/* Other modules such as analytics */}

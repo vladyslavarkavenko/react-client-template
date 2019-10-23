@@ -14,17 +14,24 @@
 // Components
 @import "components/_navbar";
 @import "components/_userprofile";
+@import "components/_comments";
 @import "components/_top-scores-chart";
-// TODO: Add code splitting.
-// TODO: Reorganize styling and prepare it for adaptive layout.
-// TODO: Make another file for styling svg and one more for export.
-// NOTES: Font size(line height): 24(30), 20(28), 16(20/22), 13(18/13), 14(22)
+@import "components/_circle-charts";
 // Pages
 @import "pages/chart";
 @import "pages/profile";
 @import "pages/choose-role-page";
 @import "pages/share-opinion";
 @import "pages/staff";
+@import "pages/opinion-details";
+
+
+// TODO: Add code splitting.
+// TODO: Reorganize styling and prepare it for adaptive layout.
+// TODO: Make another file for styling svg and one more for export.
+// NOTES: Font size(line height): 24(30), 20(28), 16(20/22), 13(18/13), 14(22)
+
+
 
 * {
   box-sizing: border-box;
@@ -85,6 +92,7 @@ ul, ol {
 }
 
 .app-wrap {
+  position: relative;
   min-height: 100vh;
   display: flex;
   padding-top: 60px;
@@ -160,21 +168,43 @@ ul, ol {
   align-items: center;
 }
 
-.opinions {
-  padding: 1rem;
+.empty-header {
+  width: 100%;
+  height: 8.75rem;
+  background: linear-gradient(322.07deg, #51B7EF 0%, #1974B2 100%);
+  padding: 1.25rem;
+  color: white;
+  top: 0;
+  left: 0;
+  margin-bottom: -5.25rem;
+}
+
+
+.avatar {
+  overflow: hidden;
   position: relative;
 
-  .empty-header {
-    width: 100%;
-    height: 8.75rem;
-    background: linear-gradient(322.07deg, #51B7EF 0%, #1974B2 100%);
-    position: absolute;
-    top: 0;
-    left: 0;
+  &.circle {
+    border-radius: 50%;
   }
+
+  img {
+    width: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    object-fit: cover;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.opinions {
+  position: relative;
 
   .body {
     position: relative;
+    padding: 1rem;
 
     h1 {
       color: white;
@@ -182,13 +212,177 @@ ul, ol {
       margin-bottom: 2rem;
     }
 
-    li {
-      height: 10rem;
-      background: white;
-      margin-bottom: 2rem;
-      border-radius: 1px;
+    .block {
       padding: 1rem;
+      cursor: pointer;
+      background: white;
+      margin-bottom: 1rem;
+      position: relative;
+
+      &:hover {
+        box-shadow: 0 1px 2px 1px rgba(100, 100, 100, .1);
+      }
+
+      .avatar {
+        width: 75px;
+        height: 75px;
+      }
+
+      .name {
+        margin-bottom: 0.5rem;
+
+        h2 {
+          font-size: 1rem;
+          margin-right: 0.5rem;
+        }
+
+        .confirmed {
+          position: relative;
+          width: 1rem;
+          height: 1rem;
+          color: white;
+
+          * {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+
+          .bg-line {
+            height: 100%;
+            width: 30%;
+            border-radius: 0.5rem;
+            background-color: #14CEA5;
+            display: block;
+
+
+            &:nth-child(2) {
+              transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            &:nth-child(3) {
+              transform: translate(-50%, -50%) rotate(90deg);
+            }
+
+            &:nth-child(4) {
+              transform: translate(-50%, -50%) rotate(135deg);
+            }
+          }
+
+          .check {
+            font-size: 0.825rem;
+          }
+        }
+      }
+
+      .title {
+        font-size: 0.825rem;
+        color: #808FA3;
+        margin-bottom: 0.5rem;
+      }
+
+      .description {
+        font-weight: bold;
+        font-size: 0.825rem;
+      }
+
+      .grades {
+        display: flex;
+
+        li {
+          margin-right: 1rem;
+          border-radius: 0.25rem;
+          font-size: 0.75rem;
+          font-weight: bold;
+          letter-spacing: 0.5px;
+          padding: 0.25rem 0.5rem;
+        }
+      }
+
+      .ctru-score {
+        position: absolute;
+        right: 1.5rem;
+        bottom: 1.5rem;
+
+        .info {
+          margin-right: 0.25rem;
+
+          h2 {
+            font-size: 0.825rem;
+          }
+
+          p {
+            font-size: 0.75rem;
+            color: #808FA3;
+          }
+        }
+
+        .grade-circle {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 50%;
+          background-color: #33BCDB;
+
+          .inner-circle {
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+            border: 1px solid white;
+            color: white;
+            font-size: 1.125rem;
+          }
+        }
+      }
+
+      .arrow {
+        height: 3px;
+        border: solid #808FA3;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+        transform: rotate(-45deg);
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+      }
+    }
+  }
+}
+
+.staff-block {
+  table {
+    width: 100%;
+
+    th {
+      font-size: 0.825rem;
+      color: #808FA3;
+      padding-bottom: 0.5rem;
     }
 
+    td {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(128, 143, 163, 0.31);
+      color: #353535;
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        margin-right: 0.5rem;
+      }
+
+      .name {
+        font-weight: bold;
+      }
+
+      .title {
+        font-size: 0.825rem;
+        color: #808FA3;
+      }
+    }
   }
+}
+
+.dashboard {
+  position: relative;
 }

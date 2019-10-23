@@ -56,15 +56,19 @@ export default class RateComment extends React.Component {
   }
 
   render() {
-    const { topic, file, disabled } = this.props;
+    const { topic, file, disabled, isHidden } = this.props;
 
     const { name, comment, isChecked } = topic;
 
     const checkBoxKey = `${topic.id}_c`;
     const fileKey = `${topic.id}_f`;
 
+    if (isHidden) {
+      return <div className="opinion-form__check">{name}</div>;
+    }
+
     return (
-      <div className="">
+      <>
         <CheckboxInput
           className="opinion-form__check"
           name={checkBoxKey}
@@ -102,7 +106,7 @@ export default class RateComment extends React.Component {
             />
           </>
         )}
-      </div>
+      </>
     );
   }
 }

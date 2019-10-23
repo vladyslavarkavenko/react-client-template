@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchStaffTables } from '../../modules/staff/staffActions';
+import { fetchStaffTables, clearAll } from '../../modules/staff/staffActions';
 import staffSelectors from '../../modules/staff/staffSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 import InvitationTable from './invitationTable/InvitationTable';
@@ -11,6 +11,11 @@ class Staff extends React.Component {
   componentDidMount() {
     const { fetchStaffTables } = this.props;
     fetchStaffTables();
+  }
+
+  componentWillUnmount() {
+    const { clearAll } = this.props;
+    clearAll();
   }
 
   render() {
@@ -41,7 +46,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  fetchStaffTables
+  fetchStaffTables,
+  clearAll
 };
 
 export default connect(

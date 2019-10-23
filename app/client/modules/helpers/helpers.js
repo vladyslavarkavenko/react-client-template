@@ -3,13 +3,13 @@ import { ROLES } from '../../utils/constants';
 
 const { CUSTOMER, ADMIN, ANALYST, MANAGER } = ROLES;
 
-export const setTokens = ({ access, refresh }) => {
+export const setTokens = ({ access, refresh }, rememberMe = false) => {
   if (access) {
-    localStorage.setItem('access_token', access);
+    rememberMe && localStorage.setItem('access_token', access);
     setApiHeaders({ Authorization: `Bearer ${access}` });
   }
   if (refresh) {
-    localStorage.setItem('refresh_token', refresh);
+    rememberMe && localStorage.setItem('refresh_token', refresh);
   }
 };
 
@@ -47,7 +47,7 @@ export const formatRolesPayload = ({ customers, staff }) => {
   if (customers.length) {
     rolesPermissions[CUSTOMER] = [];
     customers.forEach(({ company, manager, id }) => {
-      const newManager = { ...manager, customerId: id };
+      const newManager = manager ? { ...manager, customerId: id } : null;
 
       companies[company.id] = { ...company, manager: newManager, customerId: id };
       rolesPermissions[CUSTOMER].push(company.id);

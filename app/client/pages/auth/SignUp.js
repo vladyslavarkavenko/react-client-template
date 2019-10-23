@@ -1,7 +1,7 @@
 import React from 'react';
 import i18next from 'i18next';
-import queryString from 'query-string';
 import { connect } from 'react-redux';
+
 import routing from '../../utils/routing';
 import { validateUserSignUp } from '../../utils/validator';
 import TextInput from '../../components/ui-components/Form/TextInput';
@@ -9,79 +9,106 @@ import PasswordInput from '../../components/PasswordInput';
 import { pushSignUp } from '../../modules/auth/authActions';
 import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
 import Button from '../../components/ui-components/Form/Button';
+import AuthService from '../../services/auth';
+import Notification from '../../utils/notifications';
 
 class SignUp extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      password: '',
-      policy: false,
+      input: {
+        email: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        password: '',
+        confirmPassword: '',
+        policy: false
+      },
       token: null,
+      status: 'request',
       errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleValidateToken = this.handleValidateToken.bind(this);
   }
 
   componentDidMount() {
-    const {
-      location: { search },
-      history
-    } = this.props;
-    const { token, email } = queryString.parse(search);
-
-    const newState = {};
-    if (token) {
-      newState.token = token;
-    } else {
-      return history.push(routing().notFound);
-    }
-    if (email) {
-      newState.email = email;
-    }
-
-    return this.setState(newState);
+    this.handleValidateToken();
   }
 
   onChange(e) {
     const { value, name, type, checked } = e.target;
+    this.setState((prevState) => ({
+      ...prevState,
+      input: {
+        ...prevState.input,
+        [name]: type === 'checkbox' ? checked : value
+      }
+    }));
+  }
 
-    this.setState({ [name]: type === 'checkbox' ? checked : value });
+  handleValidateToken() {
+    const {
+      location: { search },
+      history
+    } = this.props;
+
+    const params = new URLSearchParams(search.slice(1));
+    const email = params.get('email') || '';
+    const token = params.get('token');
+
+    if (!token) {
+      history.push(routing().login);
+    }
+
+    AuthService.validateSignUpToken(token)
+      .then(() => {
+        this.setState((prevState) => ({
+          status: 'success',
+          input: { ...prevState.input, email },
+          token
+        }));
+      })
+      .catch((err) => {
+        Notification.error(err);
+        history.push(routing().login);
+      });
   }
 
   handleSubmit(e) {
     e.preventDefault();
     const { pushSignUp, history } = this.props;
-    const { errors, isValid } = validateUserSignUp(this.state);
+    const { input, token } = this.state;
+    const { errors, isValid } = validateUserSignUp(input);
 
-    if (!isValid) {
-      this.setState({ errors });
+    this.setState({ errors });
+
+    if (isValid) {
+      const { firstName, lastName, email, phone, password, policy } = input;
+
+      const fields = {
+        firstName,
+        lastName,
+        phone,
+        email,
+        password,
+        token,
+        processPersonalData: policy
+      };
+
+      pushSignUp({ input: fields, history });
     }
-
-    const { firstName, lastName, email, phone, password, token, policy } = this.state;
-    const input = {
-      firstName,
-      lastName,
-      phone,
-      email,
-      password,
-      token,
-      processPersonalData: policy
-    };
-
-    return pushSignUp({ input, history });
   }
 
   render() {
-    const { firstName, lastName, email, phone, password, policy, errors } = this.state;
+    const { input, errors, status } = this.state;
+    const { firstName, lastName, email, phone, password, confirmPassword, policy } = input;
 
-    //TODO: add confirm password field
+    const isLoading = status === 'request';
 
     return (
       <div className="form-page">
@@ -94,13 +121,15 @@ class SignUp extends React.Component {
                 error={errors.firstName}
                 onChange={this.onChange}
                 name="firstName"
+                readOnly={isLoading}
                 labelText={i18next.t('register.name.first')}
               />
               <TextInput
                 value={lastName}
-                error={errors.lLastName}
+                error={errors.lastName}
                 onChange={this.onChange}
                 name="lastName"
+                readOnly={isLoading}
                 labelText={i18next.t('register.name.last')}
               />
               <TextInput
@@ -108,6 +137,7 @@ class SignUp extends React.Component {
                 error={errors.email}
                 onChange={this.onChange}
                 name="email"
+                readOnly={isLoading}
                 labelText={i18next.t('register.email')}
               />
               <TextInput
@@ -115,6 +145,7 @@ class SignUp extends React.Component {
                 error={errors.phone}
                 onChange={this.onChange}
                 name="phone"
+                readOnly={isLoading}
                 labelText={i18next.t('register.phone')}
               />
               <PasswordInput
@@ -123,12 +154,22 @@ class SignUp extends React.Component {
                 name="password"
                 value={password}
                 error={errors.password}
+                readOnly={isLoading}
                 onChange={this.onChange}
                 labelText={i18next.t('register.password')}
+              />
+              <PasswordInput
+                name="confirmPassword"
+                value={confirmPassword}
+                error={errors.confirmPassword}
+                readOnly={isLoading}
+                onChange={this.onChange}
+                labelText={i18next.t('register.confirmPassword')}
               />
               <CheckboxInput
                 name="policy"
                 checked={policy}
+                readOnly={isLoading}
                 onChange={this.onChange}
                 className="policy-agreement checkbox-form"
                 type="checkbox"
@@ -136,7 +177,11 @@ class SignUp extends React.Component {
                 labelText={i18next.t('register.policy')}
               />
               <div className="form__bottom">
-                <Button type="submit" title={i18next.t('register.buttons.signUp')} />
+                <Button
+                  type="submit"
+                  isLoading={isLoading}
+                  title={i18next.t('register.buttons.signUp')}
+                />
               </div>
             </form>
           </div>
@@ -146,16 +191,11 @@ class SignUp extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  history: props.history,
-  location: props.location
-});
-
 const mapDispatchToProps = {
   pushSignUp
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(SignUp);

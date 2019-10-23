@@ -6,20 +6,55 @@ import Notification from '../../utils/notifications';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import authSelectors from '../auth/authSelectors';
 
+import { ROLES, RATE_PROFILE_TYPE } from '../../utils/constants';
+import companiesSelectors from '../companies/companiesSelectors';
+import CompaniesService from '../../services/companies';
+
+const { MANAGER } = ROLES;
+
 export const prefix = 'profile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const getRadarScores = createRequestBound('RADAR_SCORES_FETCH');
-export const getSatisfiedClients = createRequestBound('SATISFIED_CLIENTS_FETCH');
 
 function* getRadarScoresWorker() {
   yield put(getRadarScores.request());
 
   try {
-    const user = yield select(authSelectors.user);
-    const res = yield call(() => ManagerService.getRadarScores(user.staffId));
+    const activeRole = yield select(authSelectors.activeRole);
 
-    yield put(getRadarScores.success(parseRadarScores(res)));
+    let res;
+    let detailsData;
+    let avgSatisfaction;
+    if (activeRole === MANAGER) {
+      const user = yield select(authSelectors.user);
+
+      // eslint-disable-next-line prefer-destructuring
+      avgSatisfaction = user.avgSatisfaction;
+      detailsData = {
+        id: user.staffId,
+        type: RATE_PROFILE_TYPE.MANAGER
+      };
+      res = yield call(() => ManagerService.getRadarScores(user.staffId));
+    } else {
+      const company = yield select(companiesSelectors.getCurrentCompany);
+
+      // eslint-disable-next-line prefer-destructuring
+      avgSatisfaction = company.avgSatisfaction;
+      detailsData = {
+        id: company.id,
+        type: RATE_PROFILE_TYPE.COMPANY
+      };
+      res = yield call(() => CompaniesService.getRadarScores(company.id));
+    }
+
+    yield put(
+      getRadarScores.success({
+        detailsData,
+        avgSatisfaction,
+        ...parseRadarScores(res)
+      })
+    );
   } catch (err) {
     console.error(err);
     Notification.error(err);
@@ -27,24 +62,6 @@ function* getRadarScoresWorker() {
   }
 }
 
-function* getSatisfiedClientsWorker() {
-  yield put(getSatisfiedClients.request());
-
-  try {
-    const user = yield select(authSelectors.user);
-    const res = yield call(() => ManagerService.getSatisfiedClients(user.staffId));
-
-    yield put(getSatisfiedClients.success(res.avgSatisfaction));
-  } catch (err) {
-    console.error(err);
-    Notification.error(err);
-    yield put(getSatisfiedClients.failure());
-  }
-}
-
 export function* profileWatcher() {
-  yield all([
-    takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker),
-    takeLatest(getSatisfiedClients.TRIGGER, getSatisfiedClientsWorker)
-  ]);
+  yield all([takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker)]);
 }

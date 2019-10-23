@@ -1,15 +1,15 @@
 import React from 'react';
 import i18next from 'i18next';
 
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { validateUserLogin } from '../../utils/validator';
 import TextInput from '../../components/ui-components/Form/TextInput';
 import PasswordInput from '../../components/PasswordInput';
-import routing from '../../utils/routing';
 import { pushLogin } from '../../modules/auth/authActions';
 import authSelectors from '../../modules/auth/authSelectors';
 import Button from '../../components/ui-components/Form/Button';
+import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
 
 // TODO: Remove errors when user starts typing in that field. (Think about it)
 
@@ -20,6 +20,7 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      rememberMe: true,
       errors: {}
     };
 
@@ -28,12 +29,13 @@ class Login extends React.Component {
   }
 
   onChange(e) {
-    const { value, name } = e.target;
-    this.setState({ [name]: value });
+    const { value, name, checked, type } = e.target;
+    this.setState({ [name]: type === 'checkbox' ? checked : value });
   }
 
   handleSubmit(e) {
     e.preventDefault();
+    const { rememberMe } = this.state;
     const { pushLogin, status } = this.props;
 
     if (status === 'request') {
@@ -46,12 +48,16 @@ class Login extends React.Component {
     }
 
     const { email, password } = this.state;
-    return pushLogin({ email, password });
+    return pushLogin({ email, password, rememberMe });
   }
 
   render() {
-    const { status } = this.props;
-    const { email, password, errors } = this.state;
+    const { status, isAuth } = this.props;
+    const { email, password, errors, rememberMe } = this.state;
+
+    if (isAuth) {
+      return <Redirect to="/" />;
+    }
 
     const isLoading = status === 'request';
 
@@ -70,6 +76,7 @@ class Login extends React.Component {
                 readOnly={isLoading}
               />
               <PasswordInput
+                forgotPassword
                 value={password}
                 name="password"
                 onChange={this.onChange}
@@ -77,17 +84,23 @@ class Login extends React.Component {
                 labelText={i18next.t('login.password')}
                 readOnly={isLoading}
               />
-              <div className="form__bottom">
+              <div className="form__bottom d-flex jc-between">
                 <Button
                   type="submit"
+                  className="m-0"
                   isLoading={isLoading}
                   title={i18next.t('login.buttons.login')}
                 />
+                <CheckboxInput
+                  withFill
+                  name="rememberMe"
+                  checked={rememberMe}
+                  onChange={this.onChange}
+                  className="flex-center m-0"
+                  labelText="Remember me"
+                />
               </div>
             </form>
-            <div className="text-center">
-              <Link to={routing().forgotPassword}>{i18next.t('login.forgotPassword')}</Link>
-            </div>
           </div>
         </div>
       </div>
@@ -96,7 +109,8 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  status: authSelectors.status(state)
+  status: authSelectors.status(state),
+  isAuth: authSelectors.isAuth(state)
 });
 
 const mapDispatchToProps = {
