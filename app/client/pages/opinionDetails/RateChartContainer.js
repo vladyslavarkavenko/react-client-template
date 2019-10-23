@@ -5,12 +5,13 @@ import { connect } from 'react-redux';
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
 import RateChart from './RateChart';
 import { minMaxRandom } from '../../utils/helpers';
+import { setDateOffset } from '../../modules/opinionDetails/opinionDetailsActions';
 
 const generateData = (min, max) => {
   const data = [];
 
   for (let i = 0; i <= 11; i++) {
-    const date = new Date(2000, i);
+    const date = new Date(Date.UTC(2000, i)).getTime();
     data.push({ x: date, y0: 1, y: minMaxRandom(min, max) });
   }
 
@@ -39,9 +40,13 @@ class RateChartContainer extends React.Component {
 const mapStateToProps = (state) => {
   return {
     theme: opinionDetailsSelectors.selectedCriteria(state),
-    data: opinionDetailsSelectors.getChartSliceData(state),
-    visibleLines: opinionDetailsSelectors.getLineFilter(state)
+    // data: opinionDetailsSelectors.getChartSliceData(state),
+    visibleLines: opinionDetailsSelectors.getLineFilter(state),
+    tickType: opinionDetailsSelectors.getDateOffset(state)
   };
 };
 
-export default connect(mapStateToProps)(RateChartContainer);
+export default connect(
+  mapStateToProps,
+  { setDateOffset }
+)(RateChartContainer);
