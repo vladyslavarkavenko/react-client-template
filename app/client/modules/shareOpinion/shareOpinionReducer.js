@@ -353,6 +353,7 @@ const isSharedComment = handleActions(
 );
 
 const finishStatus = makeStatusReducer(actions.pushTopicsRate);
+const saveTopicStatus = makeStatusReducer(actions.saveTopicRate);
 
 const averageRate = handleActions(
   {
@@ -411,6 +412,7 @@ const newTopic = combineReducers({
 });
 
 const shareOpinion = combineReducers({
+  saveTopicStatus,
   globalExpired,
   topicOpinions,
   averageRate,

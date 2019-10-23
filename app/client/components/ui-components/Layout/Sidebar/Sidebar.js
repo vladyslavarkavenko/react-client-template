@@ -14,7 +14,6 @@ const Sidebar = ({ role }) => (
       return (
         <li key={title}>
           <NavLink
-            exact
             isActive={isActive}
             to={to}
             activeClassName="active"
