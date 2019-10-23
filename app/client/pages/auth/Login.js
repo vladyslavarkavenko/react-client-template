@@ -85,12 +85,6 @@ class Login extends React.Component {
                 readOnly={isLoading}
               />
               <div className="form__bottom d-flex jc-between">
-                <Button
-                  type="submit"
-                  className="m-0"
-                  isLoading={isLoading}
-                  title={i18next.t('login.buttons.login')}
-                />
                 <CheckboxInput
                   withFill
                   name="rememberMe"
@@ -98,6 +92,12 @@ class Login extends React.Component {
                   onChange={this.onChange}
                   className="flex-center m-0"
                   labelText="Remember me"
+                />
+                <Button
+                  type="submit"
+                  className="m-0"
+                  isLoading={isLoading}
+                  title={i18next.t('login.buttons.login')}
                 />
               </div>
             </form>

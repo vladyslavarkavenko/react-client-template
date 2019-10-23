@@ -76,7 +76,8 @@ const MY_PROFILE = {
   Icon: SvgProfile,
   to: routing().about,
   isActive(match, location) {
-    return location.pathname.indexOf('account/profile') !== -1;
+    const { pathname: path } = location;
+    return path === routing().about || path === routing().overview;
   }
 };
 

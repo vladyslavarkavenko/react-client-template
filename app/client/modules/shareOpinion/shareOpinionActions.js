@@ -281,7 +281,12 @@ function* newTopicWorker() {
   }
 }
 
-function* saveTopicRateWorker({ payload: { satisfaction, importance } }) {
+function* saveTopicRateWorker({
+  payload: {
+    data: { satisfaction, importance },
+    cb
+  }
+}) {
   yield put(saveTopicRate.request());
   try {
     const currentTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
@@ -303,6 +308,7 @@ function* saveTopicRateWorker({ payload: { satisfaction, importance } }) {
       yield put(calcAverageRate.trigger(rate));
       yield put(historyPush({ to: routing().shareOpinionMessage, method: 'replace' }));
     }
+    cb && cb();
   } catch (err) {
     console.error(err);
     Notification.error(err);

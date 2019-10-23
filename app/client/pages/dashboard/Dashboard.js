@@ -71,6 +71,7 @@ class Dashboard extends React.Component {
 const mapStateToProps = (state) => ({
   radarData: profileSelectors.radarData(state),
   activeRole: authSelectors.activeRole(state),
+  detailsData: profileSelectors.detailsData(state),
   avgSatisfaction: profileSelectors.avgSatisfaction(state)
 });
 
