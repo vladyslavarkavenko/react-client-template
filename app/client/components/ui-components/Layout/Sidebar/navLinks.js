@@ -29,6 +29,12 @@ const OPINIONS = {
   to: routing().opinions
 };
 
+const MANAGER_OPINIONS = {
+  title: 'Opinions',
+  Icon: SvgEyeEmpty,
+  to: routing().myOpinionDetails
+};
+
 const MATCHING = {
   title: 'Matching',
   Icon: SvgMatch,
@@ -50,7 +56,7 @@ const STAFF = {
 const MY_CLIENTS = {
   title: 'My clients',
   Icon: SvgClients,
-  to: routing().notFound
+  to: routing().clients
 };
 
 const COMMUNITY = {
@@ -65,16 +71,31 @@ const SUBJECTS = {
   to: routing().notFound
 };
 
-const MY_COMPANY = {
-  title: 'My company',
-  Icon: SvgCompany,
-  to: routing().company
-};
-
 const MY_PROFILE = {
   title: 'My profile',
   Icon: SvgProfile,
-  to: routing().about
+  to: routing().about,
+  isActive(match, location) {
+    return location.pathname.indexOf('account/profile') !== -1;
+  }
+};
+
+const MY_MANAGER = {
+  title: 'My manager',
+  Icon: SvgManager,
+  to: routing().manager,
+  isActive(match, location) {
+    return location.pathname.indexOf('manager/profile') !== -1;
+  }
+};
+
+const MY_COMPANY = {
+  title: 'My company',
+  Icon: SvgCompany,
+  to: routing().company,
+  isActive(match, location) {
+    return location.pathname.indexOf('company/profile') !== -1;
+  }
 };
 
 const MESSAGES = {
@@ -83,17 +104,11 @@ const MESSAGES = {
   to: routing().messages
 };
 
-const MY_MANAGER = {
-  title: 'My manager',
-  Icon: SvgManager,
-  to: routing().manager
-};
-
 const NAV_LINKS = {
   [ADMIN]: [DASHBOARD, OPINIONS, MATCHING, BENCHMARKS, STAFF, MY_CLIENTS, COMMUNITY, SUBJECTS],
   [MANAGER]: [
     DASHBOARD,
-    OPINIONS,
+    MANAGER_OPINIONS,
     MATCHING,
     MY_COMPANY,
     MY_PROFILE,
@@ -112,6 +127,13 @@ const NAV_LINKS = {
     MESSAGES,
     COMMUNITY
   ]
+};
+
+export const WORKING_NAV_LINKS = {
+  [ADMIN]: [DASHBOARD, STAFF, MY_CLIENTS],
+  [MANAGER]: [MY_PROFILE, MANAGER_OPINIONS],
+  [ANALYST]: [DASHBOARD],
+  [CUSTOMER]: [OPINIONS, MY_PROFILE]
 };
 
 export default NAV_LINKS;
