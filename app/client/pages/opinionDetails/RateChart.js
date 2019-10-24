@@ -163,7 +163,7 @@ class RateChart extends React.Component {
       case DATE_OFFSET.YEAR:
         return 12;
       case DATE_OFFSET.MONTH:
-        return 6;
+        return 10;
       case DATE_OFFSET.WEEK:
         return 7;
     }
