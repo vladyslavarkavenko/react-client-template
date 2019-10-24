@@ -75,6 +75,10 @@ const OpinionDetails = customLoadable({
   loader: () => import('../pages/opinionDetails/OpinionDetails')
 });
 
+const Benchmarks = customLoadable({
+  loader: () => import('../pages/benchmarks/Benchmarks')
+});
+
 const PageNotFound = customLoadable({
   loader: () => import('../pages/notFound/NotFound')
 });
@@ -113,6 +117,8 @@ export default function App() {
       <AuthRoute exact path={routing().opinions} component={Opinions} />
       <RolesRoute exact path={routing().staff} forAdmin={Staff} />
       <RolesRoute exact path={routing().clients} forAdmin={Clients} />
+      <RolesRoute exact path={routing().benchmarks} forAdmin={Benchmarks} />
+      <RolesRoute exact path={routing().benchmarksWithTab} forAdmin={Benchmarks} />
 
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />

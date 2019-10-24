@@ -1,0 +1,166 @@
+.benchmark-scores {
+  display: flex;
+  flex-direction: column;
+
+  @grid-color: #e5e5e5;
+  @progress-color: @secondary-bg-color;
+
+  @chart-height: 650px;
+  @row-height: 50px;
+  @progress-height: 24px;
+  @progress-line-position: @row-height / 2 - @progress-height / 2;
+
+  @point-size-white: 22px;
+  @point-size-inner: 16px;
+  @point-size-center: 8px;
+
+  @scroll-width: 5px;
+  @content-gap: 20px;
+  @legend-margin: 25px;
+  @legend-height: 26px;
+  @sidebar-width: 200px;
+
+  @z-index-progress: 1;
+
+  .line-position-calc(@height, @line-height: @row-height) {
+    top: @line-height / 2 - @height / 2;
+  }
+
+  &.title {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .title-label.info-block__title {
+      margin-bottom: unset;
+    }
+  }
+
+
+  &__container {
+    display: flex;
+    flex-grow: 1;
+    height: @chart-height;
+    overflow-y: scroll;
+    margin-bottom: @legend-margin;
+    .makeCustomScrollbar();
+  }
+
+  &__sidebar {
+    flex-grow: 0;
+    width: @sidebar-width;
+    font-size: 1.125rem;
+    line-height: 1.25rem;
+    color: @font-color-dark;
+
+    .sidebar-item {
+      display: flex;
+      //padding: 0 10px;
+      height: @row-height;
+      align-items: center;
+    }
+  }
+
+  &__main {
+    flex-grow: 1;
+    margin: 0 @content-gap;
+    min-height: 100%;
+
+    // lines for empty space
+    background-size: 100% / 9; // nine lines
+    background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
+
+    .main-item {
+      position: relative;
+      height: @row-height;
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      // lines for overflow
+      background-size: 100% / 9; // nine lines
+      background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
+
+
+      .progress-bar {
+        position: relative;
+        z-index: @z-index-progress;
+        width: 100%;
+        height: @progress-height;
+        background-color: @progress-color;
+        .makeGradient(#51B7EF, #1974B2, 90deg);
+
+        .label {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          color: black;
+          font-size: 0.95rem;
+          line-height: @progress-height;
+          font-weight: bold;
+
+          &.left {
+            color: white;
+            right: 0.5rem;
+          }
+
+          &.right {
+            right: -1.75rem;
+          }
+        }
+      }
+
+    }
+  }
+
+  .legend {
+    &-wrapper {
+      display: flex;
+      margin-right: @content-gap / 2;
+    }
+    &-container {
+      display: flex;
+      flex-grow: 1;
+    }
+    &-spacer {
+      height: @legend-height;
+      width: @sidebar-width;
+      margin-right: @content-gap / 2;
+    }
+
+    &-content {
+      display: flex;
+      opacity: 0.9;
+      flex-grow: 1;
+      height: @legend-height;
+      color: @font-color-lighter;
+
+      justify-content: space-between;
+
+      span {
+        width: 6px;
+        position: relative;
+        display: inline-flex;
+        justify-content: center;
+
+        &:first-child {
+          padding-left: 10px;
+        }
+
+        &:last-child {
+          padding-right: 14px;
+          position: relative;
+          &:before {
+            content: "";
+            top: -@chart-height - @legend-margin;
+            left: -1px;
+            width: 1px;
+            height: @chart-height;
+            position: absolute;
+            background-color: @grid-color;
+          }
+        }
+      }
+    }
+  }
+}

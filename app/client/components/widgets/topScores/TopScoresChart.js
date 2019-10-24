@@ -34,16 +34,11 @@ export default function TopScoresChart({ data }) {
         <div className="legend-spacer" />
         <div className="legend-container">
           <div className="legend-content">
-            <span>1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>4</span>
-            <span>5</span>
-            <span>6</span>
-            <span>7</span>
-            <span>8</span>
-            <span>9</span>
-            <span>10</span>
+            {Array(10)
+              .fill(null)
+              .map((item, index) => (
+                <span key={`${index}_top_legend`}>{index + 1}</span>
+              ))}
           </div>
         </div>
       </div>
