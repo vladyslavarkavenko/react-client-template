@@ -45,6 +45,7 @@ class ShareOpinionChart extends React.Component {
     this.chartWrapper = React.createRef();
 
     this.updateBG = this.updateBG.bind(this);
+    this.resetState = this.resetState.bind(this);
     this.onActivated = this.onActivated.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onNextClick = this.onNextClick.bind(this);
@@ -73,18 +74,26 @@ class ShareOpinionChart extends React.Component {
   }
 
   onNextClick() {
-    const { activePoint } = this.state;
-    const { pushRateTopic } = this.props;
+    const { activePoint: data } = this.state;
+    const { pushRateTopic, saveTopicStatus } = this.props;
 
-    pushRateTopic(activePoint);
+    if (saveTopicStatus !== 'request') {
+      pushRateTopic({ data, cb: this.resetState });
+    }
+  }
+
+  resetState() {
     this.setState({ ...initialState });
   }
 
   saveOpinion() {
+    const { activePoint } = this.state;
     const { fetchTopicOpinions } = this.props;
 
-    fetchTopicOpinions();
-    this.setState({ showOpinions: true });
+    if (activePoint !== initialState.activePoint) {
+      fetchTopicOpinions();
+      this.setState({ showOpinions: true });
+    }
   }
 
   updateBG() {
@@ -211,7 +220,10 @@ class ShareOpinionChart extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({ opinions: shareOpinionSelectors.topicOpinions(state) });
+const mapStateToProps = (state) => ({
+  opinions: shareOpinionSelectors.topicOpinions(state),
+  saveTopicStatus: shareOpinionSelectors.saveTopicStatus(state)
+});
 
 export default connect(
   mapStateToProps,

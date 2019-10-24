@@ -31,6 +31,7 @@ const getGlobalExpired = (state, { profileType, subjectId } = {}) => {
 };
 
 export default {
+  saveTopicStatus: (state) => state.shareOpinion.saveTopicStatus,
   topicOpinions: (state) => state.shareOpinion.topicOpinions,
   selectedTopics: getSelectedTopics,
   selectedTopicsId: getSelectedTopicsId,
