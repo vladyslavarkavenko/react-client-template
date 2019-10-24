@@ -165,50 +165,9 @@
       display: flex;
     }
 
-    .content-nav-bar {
-      height: 40px;
-      background-color: #fff;
-      border: 0.5px solid #E6E9EE;
-      display: flex;
-      padding-left: 150px;
-
-      li {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 144px;
-        cursor: pointer;
-        a {
-          min-width: 100%;
-          text-align: center;
-          padding: 2px 32px 0 32px;
-
-          &.active {
-            font-weight: bold;
-            &:before {
-              content: "";
-              bottom: 0;
-              left: 0;
-              right: 0;
-              height: 2px;
-              position: absolute;
-              background-color: @button-bg-dark-blue;
-            }
-          }
-
-          &:hover {
-            &:before {
-              content: "";
-              bottom: 0;
-              left: 0;
-              right: 0;
-              height: 2px;
-              position: absolute;
-              background-color: @button-bg-loading;
-            }
-          }
-        }
+    .nav-tabs {
+      &__list {
+        padding-left: 150px;
       }
     }
   }

@@ -1,10 +1,9 @@
 /* eslint-disable */
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 
+import NavTabs from '../../../components/ui-components/Layout/NavTabs';
 import Button from './Button';
 import { HEADER_ICONS, BTN_TYPES } from '../../../utils/constants';
-
 import SvgMapMarker from '../../../../../public/assets/svg/map-marker.svg';
 
 const { PEN, CAMERA, DELETE } = HEADER_ICONS;
@@ -95,17 +94,8 @@ class ContentHeader extends React.Component {
         )}
 
         {isEdit && editForm}
-        {navLinks && (
-          <ul className="content-nav-bar">
-            {navLinks.map(({ to, title }) => (
-              <li key={to}>
-                <NavLink to={to} activeClassName="active" exact>
-                  {title}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        )}
+
+        <NavTabs navLinks={navLinks} />
       </div>
     );
   }
