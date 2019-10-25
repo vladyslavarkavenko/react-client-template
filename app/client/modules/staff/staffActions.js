@@ -10,7 +10,6 @@ import { ROLES, STAFF_TABLE_STATUS, STAFF_TABLE_TYPE } from '../../utils/constan
 import staffSelectors from './staffSelectors';
 import { validateInviteStaffRow, validateUpdateStaffRow } from '../../utils/validator';
 
-import normalizeTopics from './helpers/normalizeTopics';
 import normalizeUserData from './helpers/normalizeUserData';
 import sortUserRowsByDate from './helpers/sortUserRowsByDate';
 
@@ -33,7 +32,7 @@ export const saveTableField = createOnlyTriggerBound('FIELD_SAVE');
 export const createNewRow = createOnlyTriggerBound('NEW_ROW_CREATE');
 export const selectAllRows = createOnlyTriggerBound('ALL_ROWS_SELECT');
 export const changeTableRole = createOnlyTriggerBound('ROLE_CHANGE');
-export const changeTableTopic = createOnlyTriggerBound('TOPIC_CHANGE');
+export const changeTableSubject = createOnlyTriggerBound('TOPIC_CHANGE');
 
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
@@ -46,19 +45,17 @@ function* staffTablesWorker() {
       call(ShareOpinionService.getAllowedSubjects)
     ]);
 
-    const subjectsFlatten = normalizeTopics(subjects);
-
     const pending = pendingData
-      .map((userData) => normalizeUserData(userData, subjectsFlatten))
+      .map((userData) => normalizeUserData(userData, subjects))
       .sort(sortUserRowsByDate);
 
     const currentUserId = yield select(authSelectors.getCurrentUserId);
     const active = activeData
       .filter((userData) => userData.id !== currentUserId)
-      .map((userData) => normalizeUserData(userData, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE))
+      .map((userData) => normalizeUserData(userData, subjects, STAFF_TABLE_STATUS.ACTIVE))
       .sort(sortUserRowsByDate);
 
-    yield put(fetchStaffTables.success({ pending, active, subjects, subjectsFlatten }));
+    yield put(fetchStaffTables.success({ pending, active, subjects }));
   } catch (err) {
     console.error(err);
     Notification.error(err);
@@ -66,19 +63,19 @@ function* staffTablesWorker() {
   }
 }
 
-function* createStaffTask({ fields, topics, tempId }) {
+function* createStaffTask({ fields, subjects, tempId }) {
   try {
     const user = yield call(StaffService.sendInvite, fields);
-    const topicsId = topics.map((topic) => topic.value);
+    const subjectsId = subjects.map((subject) => subject.id);
 
-    if (topics.length) {
+    if (subjects.length) {
       yield call(StaffService.setTopicsPermission, {
         staff: String(user.id),
-        topics: topicsId
+        subjects: subjectsId
       });
     }
 
-    user.topics = topicsId;
+    user.subjects = subjectsId;
     user.tempId = tempId;
 
     Notification.success(
@@ -106,7 +103,7 @@ function* staffInvitationsWorker() {
 
     if (isValid) {
       const tasks = selectedRows.map((item) => {
-        const { email, firstName, lastName, topics, roles, id } = item;
+        const { email, firstName, lastName, subjects, roles, id } = item;
         const fields = {
           userData: { email, firstName, lastName },
           isManager: roles.includes(ROLES.MANAGER),
@@ -114,22 +111,20 @@ function* staffInvitationsWorker() {
           isAdmin: roles.includes(ROLES.ADMIN)
         };
 
-        return call(createStaffTask, { fields, topics, tempId: id });
+        return call(createStaffTask, { fields, subjects, tempId: id });
       });
 
       const resolvedTasks = yield all(tasks);
 
-      // const result = yield join(onlySuccessTasks);
-
       const onlySuccess = resolvedTasks.filter((item) => item !== null);
 
-      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+      const subjects = yield select(staffSelectors.subjectList);
+
       const normalized = onlySuccess.map((user) => ({
-        ...normalizeUserData(user, subjectsFlatten, STAFF_TABLE_STATUS.PENDING),
+        ...normalizeUserData(user, subjects, STAFF_TABLE_STATUS.PENDING),
         tempId: user.tempId
       }));
-      // console.log(onlySuccessTasks);
-      // console.log(result);
+
       yield put(pushSendInvitations.success(normalized));
     } else {
       console.error(errors);
@@ -160,10 +155,10 @@ function* staffResendWorker() {
   }
 }
 
-function* updateStaffTask({ fields, topics, id, originalUser }) {
+function* updateStaffTask({ fields, subjects, id, originalUser }) {
   try {
     const { firstName, lastName } = originalUser;
-    const topicsId = topics.map((topic) => topic.value);
+    const subjectsId = subjects.map((topic) => topic.id);
     let user = originalUser;
 
     if (Object.keys(fields).length) {
@@ -173,10 +168,10 @@ function* updateStaffTask({ fields, topics, id, originalUser }) {
 
     yield call(StaffService.setTopicsPermission, {
       staff: String(id),
-      topics: topicsId
+      subjects: subjectsId
     });
-    // attach topics to model then normalize
-    user.topics = topicsId;
+    // attach subjects to model then normalize
+    user.subjects = subjectsId;
 
     Notification.success(`User ${firstName} ${lastName} has been updated`);
 
@@ -200,7 +195,7 @@ function* staffUpdateWorker() {
     if (isValid) {
       const tasks = selectedRows.map((item) => {
         const { id, _changes } = item;
-        const { topics = [], roles } = _changes;
+        const { subjects = [], roles } = _changes;
         const fields = {};
 
         if (roles) {
@@ -209,17 +204,17 @@ function* staffUpdateWorker() {
           fields.isAdmin = roles.includes(ROLES.ADMIN);
         }
 
-        return call(updateStaffTask, { fields, topics, id, originalUser: item });
+        return call(updateStaffTask, { fields, subjects, id, originalUser: item });
       });
 
       const resolvedTasks = yield all(tasks);
 
       const onlySuccess = resolvedTasks.filter((item) => item !== null);
 
-      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+      const subjects = yield select(staffSelectors.subjectList);
 
       const normalized = onlySuccess.map((user) =>
-        normalizeUserData(user, subjectsFlatten, STAFF_TABLE_STATUS.ACTIVE)
+        normalizeUserData(user, subjects, STAFF_TABLE_STATUS.ACTIVE)
       );
 
       const updatedUsers = {};
@@ -302,11 +297,9 @@ function* staffStatusWorker({ payload }) {
 
       const onlySuccess = resolvedTasks.filter((item) => item !== null);
 
-      const subjectsFlatten = yield select(staffSelectors.subjectListNormalized);
+      const subjects = yield select(staffSelectors.subjectList);
 
-      const normalized = onlySuccess.map((user) =>
-        normalizeUserData(user, subjectsFlatten, status)
-      );
+      const normalized = onlySuccess.map((user) => normalizeUserData(user, subjects, status));
 
       const updatedUsers = {};
 

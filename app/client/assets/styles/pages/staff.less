@@ -111,7 +111,7 @@
       flex-grow: 1.25;
     }
 
-    &-topics {
+    &-subjects {
       flex-grow: 3;
     }
 
@@ -351,27 +351,10 @@
 
   }
 
+  .topic-select-wrapper,
   .role-select-wrapper {
     flex-grow: 1;
-  }
-
-  .topic-select-wrapper {
-    display: flex;
-    flex-grow: 1;
     margin: 10px 0;
-
-    .select {
-      flex-grow: 1;
-      margin-right: 10px;
-    }
-
-    .topic-expand-btn {
-      margin: unset;
-      flex-grow: 0;
-      max-height: 50px;
-      min-width: 125px;
-      font-size: 1rem;
-    }
   }
 
   .role-select,
@@ -403,61 +386,6 @@
     }
   }
 
-  .role-select {
-    &__value-container {
-    }
-  }
-
-  .topic-select {
-
-    &__group-heading {
-      color: @header-color;
-      font-weight: bold;
-      align-self: center;
-      font-size: 1rem;
-      //line-height: 1.2rem;
-      margin: 0;
-      padding: 0.5rem 0.5rem;
-      cursor: pointer;
-    }
-
-    &__group-head {
-      display: flex;
-      width: 100%;
-      justify-content: center;
-      background-color: lighten(@header-color, 45%);
-      cursor: pointer;
-
-      .remain {
-        color: white;
-        width: 100%;
-        justify-self: flex-end;
-        font-size: 0.8rem;
-        padding: 4px;
-        align-self: center;
-        align-content: center;
-        width: 26px;
-        height: 26px;
-        //line-height: 20px;
-        border-radius: 50%;
-        background-color: @header-color;
-      }
-    }
-
-    &__value-container {
-
-    }
-
-    &__indicators {
-    }
-
-    &__menu {
-    }
-
-    &__menu-list {
-    }
-
-  }
 }
 
 

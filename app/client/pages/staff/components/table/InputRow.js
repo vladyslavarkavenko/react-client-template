@@ -2,7 +2,7 @@ import React from 'react';
 import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
 import ErrorSvg from '../../../../../../public/assets/svg/exclamation-circle.svg';
 import RoleSelect from './RoleSelect';
-import TopicSelect from './TopicSelect';
+import SubjectSelect from './SubjectSelect';
 import Notification from '../../../../utils/notifications';
 import StatusLabel from './StatusLabel';
 
@@ -100,8 +100,8 @@ export default function InputRow({
         />
         <ErrorCircle field="role" errors={errors} />
       </div>
-      <div className="item item-topics drop">
-        <TopicSelect rowId={id} table={table} />
+      <div className="item item-subjects drop">
+        <SubjectSelect rowId={id} table={table} />
       </div>
 
       <div className="item item-status">

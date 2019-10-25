@@ -55,7 +55,7 @@ export default function Table({
         <li className="item item-surname">Surname</li>
         <li className="item item-email">Email</li>
         <li className="item item-roles">Roles</li>
-        <li className="item item-topics">Topics</li>
+        <li className="item item-subjects">Subjects</li>
         <li className="item item-status">Status</li>
       </ul>
       <ul className="body">{rows}</ul>
