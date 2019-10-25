@@ -85,7 +85,7 @@
 
           //hide border from another block
           &:before {
-            z-index: @z-index-tooltip;
+            z-index: @z-index-state-default;
             content: "";
             left: 0;
             right: 0;
@@ -126,6 +126,8 @@
   @sidebar-width: 325px;
   @transition-time: 0.25s;
 
+  @header-offset: 0; //60px
+
   @head-color: #2d3d50;
   @content-padding: 0.75rem;
 
@@ -133,7 +135,7 @@
     position: fixed;
     width: @sidebar-width;
     right: -@sidebar-width;
-    top: 0;
+    top: @header-offset;
     bottom: 0;
     overflow: auto;
     z-index: @z-index-modal;
@@ -145,7 +147,7 @@
     &:after {
       position: fixed;
       content: '';
-      top: 0;
+      top: @header-offset;
       right: 0;
       left: 0;
       bottom: 100%;

@@ -58,10 +58,10 @@ const getCurrentManager = (state, managerId) => {
 
 const getCurrentCompany = (state, companyId) => {
   const companies = getCompanyData(state); //state.companies.data
-  let currentUserId = authSelectors.getCurrentUserId(state); // permission[activeRole];
-  currentUserId = Array.isArray(currentUserId) ? currentUserId[0] : currentUserId;
+  const userIdList = authSelectors.getCurrentUserId(state); // permission[activeRole];
+  const currentUserId = Array.isArray(userIdList) ? userIdList[0] : userIdList;
 
-  return companies[companyId || currentUserId || null];
+  return companies[companyId || currentUserId] || null;
 };
 
 const getManagersWithCompanies = (state) => {

@@ -3,7 +3,7 @@ import BenchmarkChart from '../../components/widgets/benchmarkScores/BenchmarkCh
 import BlockWrapper from '../../components/widgets/BlockWrapper';
 import CompareWidget from './CompareWidget';
 import ChartHeader from './ChartHeader';
-import FilterSidebar from './FilterSidebar';
+import FilterSidebar from './filterSidebar/FilterSidebar';
 
 export default function Internal() {
   return (
