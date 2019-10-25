@@ -7,6 +7,10 @@ export default function SubjectList() {
       <SubjectItem />
       <SubjectItem />
       <SubjectItem />
+      <SubjectItem />
+      <SubjectItem />
+      <SubjectItem />
+      <SubjectItem />
     </ul>
   );
 }
