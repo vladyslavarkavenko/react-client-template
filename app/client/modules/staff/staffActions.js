@@ -49,9 +49,9 @@ function* staffTablesWorker() {
       .map((userData) => normalizeUserData(userData, subjects))
       .sort(sortUserRowsByDate);
 
-    const currentUserId = yield select(authSelectors.getCurrentUserId);
+    const currentUser = yield select(authSelectors.user);
     const active = activeData
-      .filter((userData) => userData.id !== currentUserId)
+      .filter((userData) => userData.id !== currentUser.staffId)
       .map((userData) => normalizeUserData(userData, subjects, STAFF_TABLE_STATUS.ACTIVE))
       .sort(sortUserRowsByDate);
 

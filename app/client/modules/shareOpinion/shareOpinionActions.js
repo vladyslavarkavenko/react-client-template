@@ -238,6 +238,9 @@ function* newTopicWorker() {
       const newSubject = yield call(ShareOpinionService.pushCreateSubject, {
         name: input.subject,
         author: selectedProfile.customerId,
+        manager:
+          selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined,
+
         topics: [{ name: input.topic }]
       });
 
