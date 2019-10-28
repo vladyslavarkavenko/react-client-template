@@ -8,9 +8,9 @@ const mockData = [
   { id: 5, name: 'E-banking' }
 ];
 
-export default function SubjectsBlock({ subjects = mockData, key }) {
+export default function SubjectsBlock({ subjects = mockData, additionalKey }) {
   const list = subjects.map(({ id, name }) => (
-    <li key={`${id}_${key}_sub_w`} className="widget-subject__item">
+    <li key={`${id}_${additionalKey}_sub_w`} className="widget-subject__item">
       {name}
     </li>
   ));
