@@ -233,41 +233,37 @@ function* newTopicWorker() {
   }
 
   try {
-    // if it's unique subject then create this subject
+    // if it's unique subject then create this subject first
     if (!selectedSubject) {
-      const newSubject = yield call(() =>
-        ShareOpinionService.pushCreateSubject({
-          name: input.subject,
-          author: selectedProfile.customerId
-        })
-      );
+      const newSubject = yield call(ShareOpinionService.pushCreateSubject, {
+        name: input.subject,
+        author: selectedProfile.customerId,
+        topics: [{ name: input.topic }]
+      });
 
       // then create topic for this subject
-      const newTopic = yield call(() =>
-        ShareOpinionService.pushCreateTopic({
-          name: input.topic,
-          subject: newSubject.id,
-          author: selectedProfile.customerId,
-
-          manager:
-            selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
-        })
-      );
+      // const newTopic = yield call(() =>
+      //   ShareOpinionService.pushCreateTopic({
+      //     name: input.topic,
+      //     subject: newSubject.id,
+      //     author: selectedProfile.customerId,
+      //
+      //     manager:
+      //       selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
+      //   })
+      // );
 
       //send new topic id and title
-      yield put(pushNewTopic.success(newTopic));
+      yield put(pushNewTopic.success(newSubject.topics[0]));
     } else {
       // create topic and attach it to existed subject
-      const newTopic = yield call(() =>
-        ShareOpinionService.pushCreateTopic({
-          name: input.topic,
-          subject: selectedSubject.id,
-          author: selectedProfile.customerId,
+      const newTopic = yield call(ShareOpinionService.pushCreateTopic, {
+        name: input.topic,
+        subject: selectedSubject.id,
+        author: selectedProfile.customerId,
 
-          manager:
-            selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
-        })
-      );
+        manager: selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
+      });
 
       //send new topic id and title
       yield put(pushNewTopic.success(newTopic));
