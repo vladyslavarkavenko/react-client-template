@@ -47,8 +47,8 @@ function* expiredGlobalTask({ type, id, time }) {
   try {
     const subjects =
       type === RATE_PROFILE_TYPE.MANAGER
-        ? yield call(ShareOpinionService.getSubjectsByManager, id)
-        : yield call(ShareOpinionService.getSubjectsByCompany, id);
+        ? yield call(ShareOpinionService.getOpinionsByManager, id)
+        : yield call(ShareOpinionService.getOpinionsByCompany, id);
 
     const expired = getOnlyExpired(subjects, time);
 
@@ -114,9 +114,9 @@ function* fetchOpinionSubjectsWorker({ payload = {} }) {
     let subjects;
 
     if (type === RATE_PROFILE_TYPE.MANAGER) {
-      subjects = yield call(ShareOpinionService.getSubjectsByManager, id);
+      subjects = yield call(ShareOpinionService.getOpinionsByManager, id);
     } else {
-      subjects = yield call(ShareOpinionService.getSubjectsByCompany, id);
+      subjects = yield call(ShareOpinionService.getOpinionsByCompany, id);
     }
 
     yield put(fetchOpinionSubjects.success(subjects));

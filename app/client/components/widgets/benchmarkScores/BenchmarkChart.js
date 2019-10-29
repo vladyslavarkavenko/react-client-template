@@ -1,5 +1,6 @@
 import React from 'react';
 import RateItem from './RateItem';
+import Legend from './Legend';
 
 const SidebarItem = ({ title }) => (
   <li className="sidebar-item">
@@ -135,7 +136,7 @@ const mockData = [
   }
 ];
 
-export default function BenchmarkChart({ data = mockData }) {
+export default function BenchmarkChart({ data = mockData, selected = [] }) {
   const sidebarList = [];
   const rateList = [];
 
@@ -143,11 +144,16 @@ export default function BenchmarkChart({ data = mockData }) {
     .sort((a, b) => b.score - a.score)
     .forEach(({ id, score, name }) => {
       sidebarList.push(<SidebarItem key={`${id}_b_u`} title={name} />);
-      rateList.push(<RateItem key={`${id}_b_r`} score={score} />);
+      rateList.push(<RateItem key={`${id}_b_r`} score={score} selected={selected} />);
     });
 
   return (
-    <div className="benchmark-scores">
+    <div
+      className={`benchmark-scores ${
+        selected.length ? `lines-${selected.length} lines-multiple` : ''
+      }`}
+    >
+      <Legend selected={selected} />
       <div className="benchmark-scores__container">
         <ul className="benchmark-scores__sidebar">{sidebarList}</ul>
         <ul className="benchmark-scores__main">{rateList}</ul>

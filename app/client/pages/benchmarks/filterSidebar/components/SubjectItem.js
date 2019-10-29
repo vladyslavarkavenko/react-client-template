@@ -3,31 +3,77 @@ import React from 'react';
 import ArrowSvg from '../../../../../../public/assets/svg/arrow-down.svg';
 import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
 
-export default function SubjectItem() {
-  return (
-    <li className="subject__item active">
-      <button type="button" className="head">
-        <span className="label">Mortage</span>
+export default class SubjectItem extends React.Component {
+  constructor(props) {
+    super(props);
 
-        <div className="controls">
-          <span className="count">3</span>
-          <ArrowSvg />
-        </div>
-      </button>
+    this.state = {
+      isOpen: false
+    };
 
-      <ul className="topic__list">
-        <li className="topic__item">
-          <CheckboxInput withFill labelText="Good performance" />
-        </li>
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.isTopicChecked = this.isTopicChecked.bind(this);
+  }
 
-        <li className="topic__item">
-          <CheckboxInput withFill labelText="Low commissions" checked />
-        </li>
+  handleOpen() {
+    this.setState((prevState) => ({
+      isOpen: !prevState.isOpen
+    }));
+  }
 
-        <li className="topic__item">
-          <CheckboxInput withFill labelText="Low fees" />
-        </li>
-      </ul>
-    </li>
-  );
+  handleChange(topic) {
+    const {
+      selectFilter,
+      data: { id }
+    } = this.props;
+
+    topic.subjectId = id;
+
+    selectFilter(topic);
+  }
+
+  isTopicChecked(id) {
+    const { selected } = this.props;
+
+    const isChecked = Boolean(selected.find((item) => item.id === id));
+
+    return isChecked;
+  }
+
+  render() {
+    const { isOpen } = this.state;
+    const {
+      data: { name, topics },
+      selected
+    } = this.props;
+
+    const list = topics.map((item) => (
+      <li className="topic__item" key={`${item.id}_${name}_k`}>
+        <CheckboxInput
+          withFill
+          name={`${item.id}_${name}`}
+          checked={this.isTopicChecked(item.id)}
+          labelText={item.name}
+          data-id={item.id}
+          onChange={isOpen ? () => this.handleChange(item) : null}
+        />
+      </li>
+    ));
+
+    return (
+      <li className={`subject__item ${isOpen ? 'active' : ''}`}>
+        <button type="button" className="head" onClick={this.handleOpen}>
+          <span className="label">{name}</span>
+
+          <div className="controls">
+            {selected.length !== 0 && <span className="count">{selected.length}</span>}
+            <ArrowSvg />
+          </div>
+        </button>
+
+        <ul className="topic__list">{isOpen && list}</ul>
+      </li>
+    );
+  }
 }

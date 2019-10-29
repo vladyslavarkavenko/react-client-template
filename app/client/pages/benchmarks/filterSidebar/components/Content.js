@@ -17,7 +17,7 @@ export default function Content({ isOpen, handleModal, forwardRef, closeModalHan
           <Head handleModal={handleModal} />
 
           <div className="filter-sidebar__body">
-            <SubjectList />
+            <SubjectList isOpen={isOpen} />
           </div>
         </div>
       </div>

@@ -22,8 +22,70 @@
 
   @z-index-progress: 1;
 
+  @color-list: @convenient-color, @caring-color, @courtegious-color, @cost-conscious-color, @compensating-color;
+
   .line-position-calc(@height, @line-height: @row-height) {
     top: @line-height / 2 - @height / 2;
+  }
+
+  .makeCountReflow(@count) {
+    .sidebar-item {
+      height: @row-height + @progress-height * @count;
+    }
+
+    .main-item {
+      height: unset;
+    }
+
+    .group {
+      height: @row-height + @progress-height * @count;
+    }
+  }
+
+  &.lines {
+    &-multiple {
+      .legend__item {
+        each(range(5), {
+          &:nth-child(@{value}) {
+            .legend__dot {
+              background-color: extract(@color-list, @value);
+            }
+          }
+        })
+      }
+
+      .main-item {
+        each(range(5), {
+          &:nth-child(@{value}) {
+            .progress-bar {
+              @color: extract(@color-list, @value);
+
+              .makeGradient(darken(@color, 5), darken(@color, 15%), 90deg);
+            }
+          }
+        })
+      }
+    }
+
+    &-1 {
+      .makeCountReflow(0);
+    }
+
+    &-2 {
+      .makeCountReflow(2);
+    }
+
+    &-3 {
+      .makeCountReflow(3);
+    }
+
+    &-4 {
+      .makeCountReflow(4);
+    }
+
+    &-5 {
+      .makeCountReflow(5);
+    }
   }
 
   &.title {
@@ -62,6 +124,31 @@
     }
   }
 
+  &__legend {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    .legend {
+      &__item {
+        display: flex;
+        align-items: center;
+
+        &:not(:first-child) {
+          margin-left: 1rem;
+        }
+
+      }
+
+      &__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        background-color: @secondary-bg-color;
+      }
+    }
+  }
+
   &__main {
     flex-grow: 1;
     margin: 0 @content-gap;
@@ -71,15 +158,25 @@
     background-size: 100% / 9; // nine lines
     background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
 
+    .group {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-size: 100% / 9; // nine lines
+      background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
+    }
+
     .main-item {
       position: relative;
       height: @row-height;
       display: flex;
+      //flex-direction: column;
+      //justify-items: center;
       align-items: center;
-      flex-grow: 1;
+      //flex-grow: 1;
       // lines for overflow
-      background-size: 100% / 9; // nine lines
-      background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
+      //background-size: 100% / 9; // nine lines
+      //background-image: linear-gradient(to right, @grid-color 1px, transparent 1px);
 
 
       .progress-bar {

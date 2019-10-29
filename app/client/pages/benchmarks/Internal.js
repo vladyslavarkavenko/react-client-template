@@ -1,9 +1,10 @@
 import React from 'react';
-import BenchmarkChart from '../../components/widgets/benchmarkScores/BenchmarkChart';
+
 import BlockWrapper from '../../components/widgets/BlockWrapper';
 import CompareWidget from './CompareWidget';
 import ChartHeader from './ChartHeader';
 import FilterSidebar from './filterSidebar/FilterSidebar';
+import BenchmarkChartContainer from './BenchmarkChartContainer';
 
 export default function Internal() {
   return (
@@ -11,7 +12,7 @@ export default function Internal() {
       <main className="main">
         <ChartHeader />
         <BlockWrapper>
-          <BenchmarkChart />
+          <BenchmarkChartContainer />
         </BlockWrapper>
       </main>
       <aside className="sidebar">

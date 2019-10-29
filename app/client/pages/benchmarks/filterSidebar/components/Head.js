@@ -1,7 +1,20 @@
 import React from 'react';
-import TimesSvg from '../../../../../../public/assets/svg/times.svg';
+import { connect } from 'react-redux';
 
-export default function Head({ handleModal }) {
+import TimesSvg from '../../../../../../public/assets/svg/times.svg';
+import benchmarksSelectors from '../../../../modules/benchmarks/benchmarksSelectors';
+import { selectFilter } from '../../../../modules/benchmarks/benchmarksActions';
+
+function Head({ handleModal, selected, handleDelete }) {
+  const list = selected.map((item) => (
+    <li className="selected-filters__item" key={`${item.id}_s_f`}>
+      <span className="label">{item.name}</span>
+      <button type="button" className="delete-btn" onClick={() => handleDelete(item)}>
+        <TimesSvg />
+      </button>
+    </li>
+  ));
+
   return (
     <div className="filter-sidebar__head">
       <p className="title">
@@ -11,28 +24,19 @@ export default function Head({ handleModal }) {
         </span>
       </p>
 
-      <ul className="selected-filters__list">
-        <li className="selected-filters__item">
-          <span className="label">Good performance</span>
-          <button type="button" className="delete-btn">
-            <TimesSvg />
-          </button>
-        </li>
-
-        <li className="selected-filters__item">
-          <span className="label">Safe</span>
-          <button type="button" className="delete-btn">
-            <TimesSvg />
-          </button>
-        </li>
-
-        <li className="selected-filters__item">
-          <span className="label">Exclusive</span>
-          <button type="button" className="delete-btn">
-            <TimesSvg />
-          </button>
-        </li>
-      </ul>
+      <ul className="selected-filters__list">{list}</ul>
     </div>
   );
 }
+const mapStateToProps = (state) => ({
+  selected: benchmarksSelectors.getSelectedFilters(state)
+});
+
+const mapDispatchToProps = {
+  handleDelete: selectFilter // redux handles toggle logic
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Head);
