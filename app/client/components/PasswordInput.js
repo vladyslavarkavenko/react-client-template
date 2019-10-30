@@ -51,7 +51,7 @@ class PasswordInput extends React.Component {
             {labelText}
             {forgotPassword && (
               <div className="text-center forgot-password">
-                <Link tabindex="-1" to={routing().forgotPassword}>
+                <Link tabIndex="-1" to={routing().forgotPassword}>
                   {i18next.t('login.forgotPassword')}
                 </Link>
               </div>

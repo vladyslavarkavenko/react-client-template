@@ -10,7 +10,6 @@ import routing from '../../utils/routing';
 import authSelectors from '../../modules/auth/authSelectors';
 import { ROLES } from '../../utils/constants';
 
-// TODO: Split text to locales file.
 class ChooseRole extends React.Component {
   constructor(props) {
     super(props);
