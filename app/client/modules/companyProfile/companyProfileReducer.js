@@ -87,11 +87,46 @@ const comments = combineReducers({
   data: commentsData
 });
 
+const productsStatus = makeStatusWithResetReducer(actions.fetchProducts, actions.clearAll.TRIGGER);
+
+const subjectsData = handleActions(
+  {
+    [actions.fetchProducts.SUCCESS](state, { payload }) {
+      return payload.subjects;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const tagsData = handleActions(
+  {
+    [actions.fetchProducts.SUCCESS](state, { payload }) {
+      return payload.tags;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const products = combineReducers({
+  status: productsStatus,
+  data: combineReducers({
+    tags: tagsData,
+    subjects: subjectsData
+  })
+});
+
 const companyProfile = combineReducers({
   radar,
   topScores,
   stats,
-  comments
+  comments,
+  products
 });
 
 export default companyProfile;

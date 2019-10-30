@@ -396,7 +396,6 @@
 .service-products {
   .service-table {
     //margin: 20px;
-
     @min-row-height: 60px;
 
     @border-color: @font-color-light;
@@ -407,10 +406,21 @@
     @row-color: white;
 
     //@shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.18);
-
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+
+    .makeTheme(@color, @index) {
+      .item.item-product:nth-child(@{index}) .score {
+        background-color: @color;
+      }
+    }
+
+    each(range(8), {
+      .makeTheme(extract(@criteria-color, @value), @value);
+    });
+
+
 
     .head {
       display: flex;

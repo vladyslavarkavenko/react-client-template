@@ -68,6 +68,10 @@ class ShareOpinionService {
   static getOpinionScore(data) {
     return api.post('/formula/calculator/topic_score/', data);
   }
+
+  static getTags() {
+    return api.get('/opinion/tag/');
+  }
 }
 
 export default ShareOpinionService;

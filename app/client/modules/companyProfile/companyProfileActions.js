@@ -4,6 +4,7 @@ import createRequestRoutine from '../helpers/createRequestRoutine';
 import CompaniesService from '../../services/companies';
 import parseRadarScores from '../helpers/parseRadarScores';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
+import ShareOpinionService from '../../services/shareOpinion';
 
 export const prefix = 'companyProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -14,7 +15,25 @@ export const fetchTopScores = createRequestBound('TOP_SCORES_FETCH');
 export const fetchStatistics = createRequestBound('STATISTICS_FETCH');
 export const fetchComments = createRequestBound('COMMENTS_FETCH');
 
+export const fetchProducts = createRequestBound('SERVICES_FETCH');
+
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
+
+function* getProductsWorker({ payload }) {
+  yield put(fetchProducts.request());
+  try {
+    const [subjects, tags] = yield all([
+      call(ShareOpinionService.getSubjectsByCompany, payload),
+      call(ShareOpinionService.getTags)
+    ]);
+
+    yield put(fetchProducts.success({ subjects, tags }));
+  } catch (err) {
+    console.error(err);
+    // Notification.error(err);
+    yield put(fetchProducts.failure());
+  }
+}
 
 function* getRadarScoresWorker({ payload }) {
   yield put(fetchRadarScores.request());
@@ -73,6 +92,7 @@ export function* companyProfileWatcher() {
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
     takeLatest(fetchTopScores.TRIGGER, getTopScoresWorker),
     takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker),
-    takeLatest(fetchComments.TRIGGER, getCommentsWorker)
+    takeLatest(fetchComments.TRIGGER, getCommentsWorker),
+    takeLatest(fetchProducts.TRIGGER, getProductsWorker)
   ]);
 }
