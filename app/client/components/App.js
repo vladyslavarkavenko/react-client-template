@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Switch, Redirect } from 'react-router-dom';
 
 import routing from '../utils/routing';
 import customLoadable from './customLoadable';
@@ -87,10 +87,8 @@ const PageNotFound = customLoadable({
 // Overview, CompanyAbout
 
 // TODO: Add stylelint before commits.
-// TODO: Add favicon.
 // TODO: Clean webpack configs, it seems that there is some redundant code.
 // TODO: Add local environment.
-// TODO: Choose better default avatar.
 
 export default function App() {
   return (
@@ -139,9 +137,8 @@ export default function App() {
         step={3}
         component={ShareOpinionMessage}
       />
-      {/*<AuthRoute exact path={routing().shareOpinionChart} component={ShareOpinionChart} />*/}
-      {/* TODO: Change to actual root */}
-      <AuthRoute exact path={routing().root} component={Account} />
+
+      <AuthRoute exact path={routing().root} render={() => <Redirect to={routing().overview} />} />
       <WrappedRoute exact path={routing().notFound} component={PageNotFound} />
       <WrappedRoute component={PageNotFound} />
     </Switch>
