@@ -3,7 +3,7 @@ import { call, select, put, takeLatest, all } from 'redux-saga/effects';
 import i18next from 'i18next';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import AuthService from '../../services/auth';
-import { setTokens, removeTokens, formatRolesPayload } from '../helpers/helpers';
+import { setTokens, clearLocalStorage, formatRolesPayload } from '../helpers/helpers';
 import { ROLES, TOKENS } from '../../utils/constants';
 import routing from '../../utils/routing';
 import { historyPush } from '../redirect/redirectActions';
@@ -73,7 +73,7 @@ export function* refreshTokenWorker() {
 
     return tokens;
   } catch (err) {
-    removeTokens();
+    clearLocalStorage();
     throw err;
   }
 }
@@ -113,7 +113,7 @@ function* loginByTokenWorker() {
       yield put(fetchExpiredGlobal());
     } catch (err) {
       console.error(err);
-      removeTokens();
+      clearLocalStorage();
       yield put(pushLoginByToken.failure());
     }
   }
@@ -161,7 +161,7 @@ function* loginWorker({ payload: { email, password, rememberMe } }) {
 }
 
 function* logoutWorker() {
-  yield removeTokens();
+  yield clearLocalStorage();
 }
 
 function* signUpWorker({ payload: { input } }) {

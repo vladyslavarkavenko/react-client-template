@@ -2,39 +2,38 @@ import axios from 'axios';
 
 import CONFIG from './config';
 import { refreshTokenWorker } from '../modules/auth/authActions';
+import { clearLocalStorage } from '../modules/helpers/helpers';
+
+const { APP_URL, SESSION_TIME } = CONFIG;
 
 const instance = axios.create({
-  baseURL: `${CONFIG.APP_URL}/api`
+  baseURL: `${APP_URL}/api`
 });
-
-// const request = (method, url, data) =>
-//   new Promise((resolve) => {
-//     if (method === 'get') {
-//       return instance
-//         .request({
-//           url,
-//           method,
-//           params: data,
-//           headers: {}
-//         })
-//         .then((res) => resolve(res.data));
-//     }
-//     return instance
-//       .request({
-//         url,
-//         method,
-//         data,
-//         headers: {}
-//       })
-//       .then((res) => resolve(res.data));
-//   });
-// // .catch((err) => {
-// //   reject(err.response);
-// // });
 
 export function setApiHeaders(headers) {
   Object.keys(headers).forEach((header) => {
     instance.defaults.headers.common[header] = headers[header];
+  });
+}
+
+(function() {
+  const now = Date.now();
+  const rememberMe = +localStorage.getItem('rememberMe');
+  const lastRequest = +localStorage.getItem('lastRequest');
+
+  console.log('SESSION_TIME', SESSION_TIME);
+  if (!rememberMe && lastRequest && now - lastRequest >= SESSION_TIME) {
+    clearLocalStorage();
+  }
+})();
+
+export function addRequestIntercept() {
+  instance.interceptors.request.use((config) => {
+    const now = Date.now();
+
+    localStorage.setItem('lastRequest', now.toString());
+
+    return config;
   });
 }
 

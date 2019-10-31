@@ -91,12 +91,14 @@ class Radar extends React.Component {
   }
 
   showTooltip(points) {
+    console.log('points', points);
     if (!points.length || points[0].y === null) {
       return;
     }
 
-    const { eventKey, childName, x, y } = points[0];
+    const { eventKey, childName, x, y, _stack: line } = points[0];
     const tooltipData = {
+      line,
       eventKey,
       childName,
       x,
@@ -124,13 +126,14 @@ class Radar extends React.Component {
 
   render() {
     const features = Object.values(FEATURES.NAMES);
-    const colorScale = Object.values(LEGEND_COLORS);
     const { mainAxis, dependentAxis, lines, dots, container } = styles;
 
-    console.log('this.props', this.props);
-
     const {
+      colorScale = Object.values(LEGEND_COLORS),
       detailsData,
+      onFeatureActivate,
+      onCategoryActivate,
+      withBgIcons = true,
       data: { grades, categoriesDetails, featuresDetails } = emptyData
     } = this.props;
     const { activeFeature, activeCategory, tooltipData } = this.state;
@@ -179,8 +182,8 @@ class Radar extends React.Component {
               {activeFeature && <VictoryBar {...activeFeature} />}
               {activeCategory && <VictoryBar {...activeCategory} />}
             </VictoryChart>
-            <FeaturesLabels onClick={this.activateFeature} />
-            <CategoriesLabels onClick={this.activateCategory} />
+            <FeaturesLabels onClick={onFeatureActivate || this.activateFeature} />
+            <CategoriesLabels onClick={onCategoryActivate || this.activateCategory} />
             <Details
               feature={activeFeature}
               category={activeCategory}
@@ -188,14 +191,16 @@ class Radar extends React.Component {
               featuresDetails={featuresDetails}
               categoriesDetails={categoriesDetails}
             />
-            <Tooltip data={grades} tooltipData={tooltipData} />
+            <Tooltip colorScale={colorScale} data={grades} tooltipData={tooltipData} />
           </div>
         </div>
-        <div className="icons-wrapper">
-          {Object.values(ICONS).map((src, i) => (
-            <ReactSVG className={`bg-icon bg-icon-${i}`} src={src} />
-          ))}
-        </div>
+        {withBgIcons && (
+          <div className="icons-wrapper">
+            {Object.values(ICONS).map((src, i) => (
+              <ReactSVG className={`bg-icon bg-icon-${i}`} src={src} />
+            ))}
+          </div>
+        )}
       </>
     );
   }

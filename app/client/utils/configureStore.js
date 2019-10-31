@@ -7,7 +7,7 @@ import createSagaMiddleware from 'redux-saga';
 import rootReducer from '../rootReducer';
 
 // import reducerRegistry from './reducerRegistry';
-import { addResponseIntercept } from './api';
+import { addRequestIntercept, addResponseIntercept } from './api';
 // import CONFIG from './config';
 import rootSaga from '../rootSaga';
 import { pushLoginByToken } from '../modules/auth/authActions';
@@ -21,6 +21,7 @@ const store = createStore(rootReducer, undefined, enhancer);
 store.runSaga = sagaMiddleware.run;
 store.runSaga(rootSaga);
 
+addRequestIntercept(store);
 addResponseIntercept(store);
 
 store.dispatch(pushLoginByToken.trigger());
