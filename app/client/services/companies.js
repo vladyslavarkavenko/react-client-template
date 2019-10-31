@@ -5,6 +5,10 @@ class CompaniesService {
     return api.patch('/company/company/', data);
   }
 
+  static getManager(managerId) {
+    return api.get(`/company/detail/manager/${managerId}/`);
+  }
+
   static getRadarScores(companyId) {
     return api.get(`/opinion/company/${companyId}/radar_scores/`);
   }

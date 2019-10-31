@@ -5,13 +5,12 @@ import calculatePositionByAngle from './helpers/calculatePositionByAngle';
 
 const { NAMES } = FEATURES;
 const { domain, a, p } = PROPS;
-const { SATISFACTION, IMPORTANCE } = LEGEND_COLORS;
 
-const Tooltip = ({ data, tooltipData }) => {
+const Tooltip = ({ data, tooltipData, colorScale = Object.values(LEGEND_COLORS) }) => {
   if (!tooltipData || !data) return null;
 
   const features = Object.values(NAMES);
-  const { x, y, childName } = tooltipData;
+  const { x, y, childName, line } = tooltipData;
 
   // Calculate position
   const point = {
@@ -44,12 +43,12 @@ const Tooltip = ({ data, tooltipData }) => {
     >
       <h5>{x}</h5>
       <div className="info-line">
-        <span className="dot" style={{ background: SATISFACTION }} />
+        <span className="dot" style={{ background: colorScale[line > 2 ? 3 : 1] }} />
         <p>Satisfaction</p>
         <h6>{Math.round(satisfaction * 10) / 10}</h6>
       </div>
       <div className="info-line">
-        <span className="dot" style={{ background: IMPORTANCE }} />
+        <span className="dot" style={{ background: colorScale[line > 2 ? 2 : 0] }} />
         <p>Importance</p>
         <h6>{Math.round(importance * 10) / 10}</h6>
       </div>

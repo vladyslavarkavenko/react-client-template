@@ -24,6 +24,12 @@ const Account = customLoadable({
 const Opinions = customLoadable({
   loader: () => import('../pages/opinions/Opinions')
 });
+const MyManagers = customLoadable({
+  loader: () => import('../pages/myManagers/MyManagers')
+});
+const MyCompanies = customLoadable({
+  loader: () => import('../pages/myCompanies/MyCompanies')
+});
 const ProfileForAdmin = customLoadable({
   loader: () => import('../pages/profile/ProfileForAdmin')
 });
@@ -45,7 +51,12 @@ const CompanyProfile = customLoadable({
   loader: () => import('../pages/companyProfile/CompanyProfile')
 });
 
-const Dashboard = customLoadable({ loader: () => import('../pages/dashboard/Dashboard') });
+const Dashboard = customLoadable({
+  loader: () => import('../pages/dashboard/Dashboard')
+});
+const Compare = customLoadable({
+  loader: () => import('../pages/compare/Compare')
+});
 const ShareOpinion = customLoadable({
   loader: () => import('../pages/shareOpinion/Subjects')
 });
@@ -111,6 +122,9 @@ export default function App() {
       <AuthRoute exact path={routing().managerProfile} component={ManagerProfile} />
       <AuthRoute exact path={routing().companyProfile} component={CompanyProfile} />
       <AuthRoute exact path={routing().opinions} component={Opinions} />
+      <AuthRoute exact path={routing().myManagers} component={MyManagers} />
+      <AuthRoute exact path={routing().myCompanies} component={MyCompanies} />
+      <AuthRoute exact path={routing().compare} component={Compare} />
       <RolesRoute exact path={routing().staff} forAdmin={Staff} />
       <RolesRoute exact path={routing().clients} forAdmin={Clients} />
 

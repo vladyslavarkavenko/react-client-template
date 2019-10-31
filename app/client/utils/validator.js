@@ -136,7 +136,7 @@ function validateCompanySite(value, messages = {}) {
 function validateCompanyAbout(value, messages = {}) {
   const limit = {
     min: 2,
-    max: 256
+    max: 3500
   };
 
   const {
@@ -209,7 +209,7 @@ function validatePassword(value, messages = {}) {
 function validateUserAbout(value, messages = {}) {
   const limit = {
     min: 2,
-    max: 256
+    max: 3500
   };
 
   const {

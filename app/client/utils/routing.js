@@ -10,6 +10,27 @@ import { RATE_PROFILE_TYPE, ROUTING_PARAMS } from './constants';
 //       return '';
 //   }
 // }
+function generateCompareLink({ type, ids } = {}) {
+  const paramObj = new URLSearchParams();
+
+  if (Array.isArray(ids) && ids.length === 2) {
+    paramObj.append(ROUTING_PARAMS.MAIN_ID, ids[0]);
+    paramObj.append(ROUTING_PARAMS.COMPARE_ID, ids[1]);
+  }
+
+  const paramsStr = paramObj.toString();
+  const params = paramsStr.length ? `?${paramsStr}` : '';
+
+  switch (type) {
+    case ROUTING_PARAMS.MANAGER:
+      return `${ROUTING_PARAMS.MANAGER}/${params}`;
+
+    case ROUTING_PARAMS.COMPANY:
+      return `${ROUTING_PARAMS.COMPANY}/${params}`;
+    default:
+      return ':type';
+  }
+}
 
 function generateOpinionLink({ id, type, criteriaId, subjectId, topicId }) {
   const paramObj = new URLSearchParams();
@@ -84,10 +105,12 @@ export default (params) => ({
   staff: '/manage/staff',
   clients: '/manage/clients',
 
-  company: '/account/company',
   messages: '/account/messages',
-  manager: '/account/manager',
-  opinions: '/account/opinions'
+  opinions: '/account/opinions',
+  myManagers: '/account/managers',
+  myCompanies: '/account/companies',
+
+  compare: `/compare/${generateCompareLink(params)}`
 
   // route with params example:
   // changePassword: `/auth/reset/${params ? params : ':token'}`,

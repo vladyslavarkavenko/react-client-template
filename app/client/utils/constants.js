@@ -71,6 +71,9 @@ module.exports = {
     COMPANY: 'company',
     CRITERIA_ID: 'criteriaId',
     SUBJECT_ID: 'subjectId',
-    TOPIC_ID: 'topicId'
+    TOPIC_ID: 'topicId',
+
+    MAIN_ID: 'mainId',
+    COMPARE_ID: 'compareId'
   }
 };

@@ -9,11 +9,13 @@ import { profileWatcher } from './modules/profile/profileActions';
 import { managerProfileWatcher } from './modules/managerProfile/managerProfileActions';
 import { companyProfileWatcher } from './modules/companyProfile/companyProfileActions';
 import { dashboardWatcher } from './modules/dashboard/dashboardActions';
+import { compareWatcher } from './modules/compare/compareActions';
 import { staffStatisticsWatcher } from './modules/opinions/opinionsActions';
 import { opinionDetailsWatcher } from './modules/opinionDetails/opinionDetailsActions';
 
 export default function* rootSaga() {
   yield all([
+    fork(compareWatcher),
     fork(authWatcher),
     fork(companiesWatcher),
     fork(redirectWatcher),
