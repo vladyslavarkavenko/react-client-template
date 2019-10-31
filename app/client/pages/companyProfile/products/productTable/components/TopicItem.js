@@ -18,7 +18,13 @@ export default function TopicItem({ topic }) {
         <Link to={routing(params).opinionDetails} className="title">
           {topic.name}
         </Link>
-        <span className="score">{topic.ctruScore ? topic.ctruScore.toFixed(1) : '0.0'}</span>
+        {topic.ctruScore ? (
+          <span className={`score score-${Math.round(topic.ctruScore)}`}>
+            {topic.ctruScore.toFixed(1)}
+          </span>
+        ) : (
+          <span className="score">0.0</span>
+        )}
       </li>
     );
   }
