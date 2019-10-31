@@ -16,16 +16,16 @@ export default function SubjectRow({ tags, data }) {
       tagsCols[tag.id].push(topic);
     });
 
-    if (!topic.tags.length) {
-      tagsCols[1].push(topic);
-    }
+    // if (!topic.tags.length) {
+    //   tagsCols[1].push(topic);
+    // }
   });
 
   const tagList = Object.values(tagsCols);
 
   const maxLength = tagList.reduce(
     (maxValue, col) => (col.length > maxValue ? col.length : maxValue),
-    0
+    1
   );
 
   const rows = Array(maxLength)
