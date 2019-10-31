@@ -27,7 +27,18 @@ function* getProductsWorker({ payload }) {
       call(ShareOpinionService.getTags)
     ]);
 
-    yield put(fetchProducts.success({ subjects, tags }));
+    const normalizedSubjects = subjects.map((subject) => {
+      const cloned = { ...subject };
+      cloned.topics = cloned.topics.map((topic) => ({
+        ...topic,
+        subjectId: subject.id,
+        companyId: payload
+      }));
+
+      return cloned;
+    });
+
+    yield put(fetchProducts.success({ subjects: normalizedSubjects, tags }));
   } catch (err) {
     console.error(err);
     // Notification.error(err);
