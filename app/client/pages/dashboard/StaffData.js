@@ -6,7 +6,7 @@ import dashboardSelectors from '../../modules/dashboard/dashboardSelectors';
 
 function parseStaff(data) {
   return data.map(({ userData: { avatar, name, title }, avgSatisfaction, ctruScore }) => ({
-    avatar: avatar || '/assets/img/empty-avatar.jpeg',
+    avatar: avatar || '/assets/img/empty-avatar.jpg',
     name,
     title,
     rating: Math.floor(ctruScore * 10) / 10,
