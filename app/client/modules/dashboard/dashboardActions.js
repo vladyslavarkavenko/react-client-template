@@ -15,7 +15,11 @@ function* getActiveStaffWorker() {
   yield put(fetchActiveStaff.request());
   try {
     const data = yield call(StaffService.getActiveStaff);
-    const stats = yield all(data.map(({ id }) => call(CompaniesService.getManager, id)));
+    const stats = yield all(
+      data
+        .filter(({ isManager }) => isManager)
+        .map(({ id }) => call(CompaniesService.getManager, id))
+    );
 
     yield put(fetchActiveStaff.success(stats));
   } catch (err) {
