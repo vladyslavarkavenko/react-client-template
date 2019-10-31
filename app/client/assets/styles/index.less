@@ -13,11 +13,14 @@
 @import "ui/_alert";
 // Components
 @import "components/_navbar";
+@import "components/_nav-tabs";
 @import "components/_userprofile";
 @import "components/_comments";
 @import "components/_top-scores-chart";
+@import "components/_benchmark-scores-chart";
 @import "components/_circle-charts";
 @import "components/_radar";
+@import "components/_progress-bar";
 // Pages
 @import "pages/chart";
 @import "pages/profile";
@@ -25,13 +28,13 @@
 @import "pages/share-opinion";
 @import "pages/staff";
 @import "pages/opinion-details";
+@import "pages/benchmarks";
 
 
 // TODO: Add code splitting.
 // TODO: Reorganize styling and prepare it for adaptive layout.
 // TODO: Make another file for styling svg and one more for export.
 // NOTES: Font size(line height): 24(30), 20(28), 16(20/22), 13(18/13), 14(22)
-
 
 * {
   box-sizing: border-box;
@@ -92,7 +95,6 @@ ul, ol {
 }
 
 .app-wrap {
-  position: relative;
   min-height: 100vh;
   display: flex;
   padding-top: 60px;
@@ -112,7 +114,7 @@ ul, ol {
 }
 
 .decor {
-  position: absolute;
+  position: fixed;
   z-index: -1;
 
   &-rt {

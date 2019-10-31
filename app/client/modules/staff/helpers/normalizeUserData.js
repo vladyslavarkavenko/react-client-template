@@ -1,22 +1,22 @@
 import { differenceInDays } from 'date-fns';
 import { ROLES, STAFF_TABLE_STATUS } from '../../../utils/constants';
 
-function findTopics(topicListId, subjectList) {
-  const topics = [];
+function findSubjects(subjectListId, subjectList) {
+  const subjects = [];
 
-  topicListId.forEach((topicId) => {
-    const value = subjectList.find((item) => item.value === topicId);
+  subjectListId.forEach((topicId) => {
+    const value = subjectList.find((item) => item.id === topicId);
     if (value) {
-      topics.push(value);
+      subjects.push(value);
     }
   });
 
-  return topics;
+  return subjects;
 }
 
 export default function normalizeUserData(user, subjectList, forceStatus) {
   const roles = user.roles || [];
-  const topics = findTopics(user.topics, subjectList);
+  const subjects = findSubjects(user.subjects, subjectList);
   let status = STAFF_TABLE_STATUS.ACTIVE;
 
   if (user.isAdmin) {
@@ -52,7 +52,7 @@ export default function normalizeUserData(user, subjectList, forceStatus) {
     email: user.userData ? user.userData.email : user.email,
     expiredIn: user.expiredIn,
 
-    topics,
+    subjects,
     status,
     roles,
     isChecked: false,

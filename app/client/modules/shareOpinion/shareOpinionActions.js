@@ -47,8 +47,8 @@ function* expiredGlobalTask({ type, id, time }) {
   try {
     const subjects =
       type === RATE_PROFILE_TYPE.MANAGER
-        ? yield call(ShareOpinionService.getSubjectsByManager, id)
-        : yield call(ShareOpinionService.getSubjectsByCompany, id);
+        ? yield call(ShareOpinionService.getOpinionsByManager, id)
+        : yield call(ShareOpinionService.getOpinionsByCompany, id);
 
     const expired = getOnlyExpired(subjects, time);
 
@@ -114,9 +114,9 @@ function* fetchOpinionSubjectsWorker({ payload = {} }) {
     let subjects;
 
     if (type === RATE_PROFILE_TYPE.MANAGER) {
-      subjects = yield call(ShareOpinionService.getSubjectsByManager, id);
+      subjects = yield call(ShareOpinionService.getOpinionsByManager, id);
     } else {
-      subjects = yield call(ShareOpinionService.getSubjectsByCompany, id);
+      subjects = yield call(ShareOpinionService.getOpinionsByCompany, id);
     }
 
     yield put(fetchOpinionSubjects.success(subjects));
@@ -233,41 +233,40 @@ function* newTopicWorker() {
   }
 
   try {
-    // if it's unique subject then create this subject
+    // if it's unique subject then create this subject first
     if (!selectedSubject) {
-      const newSubject = yield call(() =>
-        ShareOpinionService.pushCreateSubject({
-          name: input.subject,
-          author: selectedProfile.customerId
-        })
-      );
+      const newSubject = yield call(ShareOpinionService.pushCreateSubject, {
+        name: input.subject,
+        author: selectedProfile.customerId,
+        manager:
+          selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined,
+
+        topics: [{ name: input.topic }]
+      });
 
       // then create topic for this subject
-      const newTopic = yield call(() =>
-        ShareOpinionService.pushCreateTopic({
-          name: input.topic,
-          subject: newSubject.id,
-          author: selectedProfile.customerId,
-
-          manager:
-            selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
-        })
-      );
+      // const newTopic = yield call(() =>
+      //   ShareOpinionService.pushCreateTopic({
+      //     name: input.topic,
+      //     subject: newSubject.id,
+      //     author: selectedProfile.customerId,
+      //
+      //     manager:
+      //       selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
+      //   })
+      // );
 
       //send new topic id and title
-      yield put(pushNewTopic.success(newTopic));
+      yield put(pushNewTopic.success(newSubject.topics[0]));
     } else {
       // create topic and attach it to existed subject
-      const newTopic = yield call(() =>
-        ShareOpinionService.pushCreateTopic({
-          name: input.topic,
-          subject: selectedSubject.id,
-          author: selectedProfile.customerId,
+      const newTopic = yield call(ShareOpinionService.pushCreateTopic, {
+        name: input.topic,
+        subject: selectedSubject.id,
+        author: selectedProfile.customerId,
 
-          manager:
-            selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
-        })
-      );
+        manager: selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
+      });
 
       //send new topic id and title
       yield put(pushNewTopic.success(newTopic));

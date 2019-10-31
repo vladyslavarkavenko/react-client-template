@@ -1,0 +1,64 @@
+.nav-tabs {
+  &__list {
+    height: 40px;
+    background-color: white;
+    border-bottom: 0.5px solid @font-color-light;
+    display: flex;
+    padding-left: 20px; //like block-wrapper gap
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 144px;
+    cursor: pointer;
+
+    &.disabled {
+      cursor: unset;
+      .link {
+        &:hover {
+          color: @font-color-lighter;
+          &:before {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+
+    .link {
+      min-width: 100%;
+      text-align: center;
+      padding: 2px 2rem 0 2rem;
+      font-weight: bold;
+      color: @font-color-lighter;
+
+      &:before {
+        content: "";
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        position: absolute;
+        background-color: transparent;
+      }
+
+      &.active {
+        color: black;
+
+        &:before {
+          background-color: @button-bg-dark-blue;
+        }
+      }
+
+      &:hover {
+        color: black;
+
+        &:before {
+          background-color: @button-bg-loading;
+        }
+      }
+    }
+  }
+}

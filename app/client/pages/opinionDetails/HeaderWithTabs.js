@@ -146,7 +146,6 @@ class HeaderWithTabs extends React.Component {
             {criteria}
           </ul>
         </SimpleContentHeader>
-
         <ul className="subject-tabs__list" onClick={this.handleSelect}>
           {subjects}
         </ul>

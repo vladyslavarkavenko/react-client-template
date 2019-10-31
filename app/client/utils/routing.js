@@ -92,6 +92,11 @@ export default (params) => ({
 
   dashboard: '/account/dashboard',
 
+  benchmarks: '/account/benchmarks',
+  benchmarksWithTab: `/account/benchmarks/${params || ':tab'}`,
+  benchmarksInternal: '/account/benchmarks/internal',
+  benchmarksExternal: '/account/benchmarks/external',
+
   shareOpinion: '/account/share-opinion',
   shareOpinionWithProfile: `/account/share-opinion/${
     params ? generateOpinionLink(params) : ':type\\_:id'

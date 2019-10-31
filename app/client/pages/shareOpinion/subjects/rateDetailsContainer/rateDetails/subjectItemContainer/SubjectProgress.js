@@ -1,4 +1,5 @@
 import React from 'react';
+import ProgressBar from '../../../../../../components/ui-components/ProgressBar';
 
 export default function SubjectProgress({ topics }) {
   const filledCount = topics.reduce((acc, topic) => (topic.dateLastOpinion ? acc + 1 : acc), 0);
@@ -9,9 +10,7 @@ export default function SubjectProgress({ topics }) {
   return (
     <>
       <div className="subject-count">{`${filledCount} of ${totalCount}`}</div>
-      <div className="subject-progress-bar">
-        <div className="fill-bar" style={{ width: `${percentage}%` }} />
-      </div>
+      <ProgressBar percentage={percentage} />
     </>
   );
 }

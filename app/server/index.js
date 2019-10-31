@@ -32,7 +32,7 @@ const app = express();
 app.use(cors());
 app.use(express.static(path.resolve('./public')));
 
-// TODO: We have Nginx for that in prod.
+// We have Nginx for that in prod.
 app.use(
   '/api',
   proxy(API_URL, {

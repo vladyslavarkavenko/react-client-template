@@ -6,11 +6,11 @@ import Contacts from '../../profile/components/Contacts';
 import companiesSelectors from '../../../modules/companies/companiesSelectors';
 
 function About({ company }) {
-  const { email, phone, web } = company;
+  const { email, phone, web, about } = company;
   return (
     <section className="content-body">
       <main className="main">
-        <BlockWrapper title="Portrait">Some text about</BlockWrapper>
+        <BlockWrapper title="Portrait">{about}</BlockWrapper>
       </main>
       <aside className="sidebar">
         <BlockWrapper title="Contacts">

@@ -7,6 +7,7 @@ import {
   fetchTopScores,
   fetchStatistics,
   fetchComments,
+  fetchProducts,
   clearAll
 } from '../../modules/companyProfile/companyProfileActions';
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
@@ -53,12 +54,19 @@ class CompanyProfile extends React.Component {
   }
 
   fetchData(id) {
-    const { fetchRadarScores, fetchTopScores, fetchStatistics, fetchComments } = this.props;
+    const {
+      fetchRadarScores,
+      fetchTopScores,
+      fetchStatistics,
+      fetchComments,
+      fetchProducts
+    } = this.props;
 
     fetchRadarScores(id);
     fetchTopScores(id);
     fetchStatistics(id);
     fetchComments(id);
+    fetchProducts(id);
   }
 
   render() {
@@ -91,7 +99,7 @@ class CompanyProfile extends React.Component {
       </Link>
     ];
 
-    const { name, avatar, avgSatisfaction } = company;
+    const { name, avatar, avgSatisfaction, location } = company;
 
     return (
       <section className="manager-profile">
@@ -100,6 +108,7 @@ class CompanyProfile extends React.Component {
           avatar={avatar}
           title={name}
           subTitle={avgSatisfaction ? `${avgSatisfaction}% of clients are satisfied` : ''}
+          location={location}
           navLinks={navLinks}
           customButtons={customButtons}
         />
@@ -131,6 +140,7 @@ const mapDispatchToProps = {
   fetchTopScores,
   fetchStatistics,
   fetchComments,
+  fetchProducts,
   clearAll
 };
 

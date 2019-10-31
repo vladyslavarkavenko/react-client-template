@@ -6,15 +6,15 @@ const getTableErrors = (state, table) => state.staff[table.toLowerCase()].errors
 
 const subjectList = (state) => state.staff.subjectList;
 const subjectListNormalized = (state) => state.staff.subjectListNormalized;
-const getTopicsByRowId = (state, { id, table }) => {
+const getSubjectsByRowId = (state, { id, table }) => {
   const row = getTableData(state, table).find((item) => item.id === id);
 
   if (row) {
-    if (row._changes && row._changes.topics) {
-      return row._changes.topics;
+    if (row._changes && row._changes.subjects) {
+      return row._changes.subjects;
     }
 
-    return row.topics;
+    return row.subjects;
   }
 
   return [];
@@ -39,7 +39,7 @@ export default {
   subjectList,
   subjectListNormalized,
 
-  getTopicsByRowId,
+  getSubjectsByRowId,
   getOnlyCheckedRows,
   getOnlyChangedRows,
   getCheckedAndChangedRows

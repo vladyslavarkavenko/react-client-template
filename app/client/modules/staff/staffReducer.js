@@ -9,7 +9,7 @@ import * as actions from './staffActions';
 const userScheme = {
   id: null,
   roles: [ROLES.MANAGER],
-  topics: [],
+  subjects: [],
   email: '',
   firstName: '',
   lastName: '',
@@ -63,8 +63,8 @@ const invitationsData = handleActions(
 
       return state;
     },
-    [actions.changeTableTopic.TRIGGER](state, { payload }) {
-      const { table, id, values, action } = payload;
+    [actions.changeTableSubject.TRIGGER](state, { payload }) {
+      const { table, id, values } = payload;
 
       if (table === STAFF_TABLE_TYPE.INVITATIONS) {
         const row = state.findIndex((item) => item.id === id);
@@ -72,16 +72,7 @@ const invitationsData = handleActions(
         if (row !== -1) {
           const cloned = [...state];
 
-          if (action === 'select-group') {
-            const selectedId = cloned[row].topics.map((topic) => topic.value);
-            const uniqueOptions = values.filter(
-              (option) => selectedId.indexOf(option.value) === -1
-            );
-
-            cloned[row].topics = [...cloned[row].topics, ...uniqueOptions];
-          } else {
-            cloned[row].topics = values || [];
-          }
+          cloned[row].subjects = values || [];
 
           cloned[row] = { ...cloned[row], isChanged: true };
           return cloned;
@@ -329,26 +320,17 @@ const activeData = handleActions(
 
       return state;
     },
-    [actions.changeTableTopic.TRIGGER](state, { payload }) {
-      const { table, id, values, action } = payload;
+    [actions.changeTableSubject.TRIGGER](state, { payload }) {
+      const { table, id, values } = payload;
 
       if (table === STAFF_TABLE_TYPE.ACTIVE) {
         const row = state.findIndex((item) => item.id === Number(id));
 
         if (row !== -1) {
           const cloned = [...state];
-          const _changes = cloned[row]._changes || { topics: [...cloned[row].topics] };
+          const _changes = cloned[row]._changes || { subjects: [...cloned[row].subjects] };
 
-          if (action === 'select-group') {
-            const selectedId = _changes.topics.map((topic) => topic.value);
-            const uniqueOptions = values.filter(
-              (option) => selectedId.indexOf(option.value) === -1
-            );
-
-            _changes.topics = [..._changes.topics, ...uniqueOptions];
-          } else {
-            _changes.topics = values || [];
-          }
+          _changes.subjects = values || [];
 
           cloned[row] = { ...cloned[row], _changes, isChanged: true };
           return cloned;
@@ -415,18 +397,6 @@ const subjectList = handleActions(
   []
 );
 
-const subjectListNormalized = handleActions(
-  {
-    [actions.fetchStaffTables.SUCCESS](state, { payload }) {
-      return payload.subjectsFlatten;
-    },
-    [actions.clearAll.TRIGGER]() {
-      return [];
-    }
-  },
-  []
-);
-
 const tablesStatus = makeStatusWithResetReducer(actions.fetchStaffTables, actions.clearAll.TRIGGER);
 
 const staff = combineReducers({
@@ -435,8 +405,7 @@ const staff = combineReducers({
   pending,
   active,
 
-  subjectList,
-  subjectListNormalized
+  subjectList
 });
 
 export default staff;

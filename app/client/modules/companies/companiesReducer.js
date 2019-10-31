@@ -7,7 +7,6 @@ import * as auth from '../auth/authActions';
 
 const companiesInitial = null; // { id1: {}, id2: {}, ... }
 
-// TODO: Need refactoring
 const companiesReducer = handleActions(
   {
     [auth.pushLogin.SUCCESS](state, { payload }) {

@@ -44,7 +44,10 @@ const MATCHING = {
 const BENCHMARKS = {
   title: 'Benchmarks',
   Icon: SvgAnalyst,
-  to: routing().notFound
+  to: routing().benchmarksInternal,
+  isActive(match, { pathname }) {
+    return pathname.includes(routing().benchmarks);
+  }
 };
 
 const STAFF = {
@@ -125,7 +128,7 @@ const NAV_LINKS = {
 };
 
 export const WORKING_NAV_LINKS = {
-  [ADMIN]: [DASHBOARD, STAFF, MY_CLIENTS],
+  [ADMIN]: [DASHBOARD, BENCHMARKS, STAFF, MY_CLIENTS],
   [MANAGER]: [MY_PROFILE, MANAGER_OPINIONS],
   [ANALYST]: [DASHBOARD],
   [CUSTOMER]: [OPINIONS, MY_PROFILE, MY_MANAGERS, MY_COMPANIES]

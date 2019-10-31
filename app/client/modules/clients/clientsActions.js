@@ -54,9 +54,7 @@ function* clientsTablesWorker() {
       .map((userData) => normalizeUserData(userData, managers))
       .sort(sortUserRowsByDate);
 
-    const currentUserId = yield select(authSelectors.getCurrentUserId);
     const active = activeData
-      .filter((userData) => userData.id !== currentUserId)
       .map((userData) => normalizeUserData(userData, managers))
       .sort(sortUserRowsByDate);
 

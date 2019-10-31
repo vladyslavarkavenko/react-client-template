@@ -12,6 +12,7 @@ import { dashboardWatcher } from './modules/dashboard/dashboardActions';
 import { compareWatcher } from './modules/compare/compareActions';
 import { staffStatisticsWatcher } from './modules/opinions/opinionsActions';
 import { opinionDetailsWatcher } from './modules/opinionDetails/opinionDetailsActions';
+import { benchmarkWatcher } from './modules/benchmarks/benchmarksActions';
 
 export default function* rootSaga() {
   yield all([
@@ -27,6 +28,7 @@ export default function* rootSaga() {
     fork(companyProfileWatcher),
     fork(opinionDetailsWatcher),
     fork(dashboardWatcher),
-    fork(staffStatisticsWatcher)
+    fork(staffStatisticsWatcher),
+    fork(benchmarkWatcher)
   ]);
 }

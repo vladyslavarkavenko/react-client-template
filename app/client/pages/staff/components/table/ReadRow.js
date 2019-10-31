@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
 import RoleSelect from './RoleSelect';
-import TopicSelect from './TopicSelect';
+import SubjectSelect from './SubjectSelect';
 import StatusLabel from './StatusLabel';
 
 export default function ReadRow({ table, data, handleEdit, multipleRoles }) {
@@ -32,8 +32,8 @@ export default function ReadRow({ table, data, handleEdit, multipleRoles }) {
       <div className="item item-roles drop">
         <RoleSelect rowId={id} table={table} multipleRoles={multipleRoles} roles={roles} readOnly />
       </div>
-      <div className="item item-topics drop">
-        <TopicSelect rowId={id} table={table} readOnly />
+      <div className="item item-subjects drop">
+        <SubjectSelect rowId={id} table={table} readOnly />
       </div>
       <div className="item item-status">
         <StatusLabel status={status} />

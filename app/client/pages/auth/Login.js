@@ -11,8 +11,6 @@ import authSelectors from '../../modules/auth/authSelectors';
 import Button from '../../components/ui-components/Form/Button';
 import CheckboxInput from '../../components/ui-components/Form/CheckboxInput';
 
-// TODO: Remove errors when user starts typing in that field. (Think about it)
-
 class Login extends React.Component {
   constructor(props) {
     super(props);

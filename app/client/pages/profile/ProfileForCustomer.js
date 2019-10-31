@@ -8,7 +8,7 @@ import EditForm from './components/EditForm';
 import ContentHeader from './components/ContentHeader';
 import ForUser from './HOCs/ForUser';
 
-const Overview = customLoadable({ loader: () => import('./Overview') });
+const Overview = customLoadable({ loader: () => import('./overview/CustomerOverview') });
 const About = customLoadable({ loader: () => import('./about/UserAbout') });
 
 class ProfileForCustomer extends React.Component {

@@ -9,12 +9,20 @@ class ShareOpinionService {
     return api.get(`/opinion/manager/${companyId}/avg_satisfaction/`);
   }
 
-  static getSubjectsByManager(managerId) {
+  static getOpinionsByManager(managerId) {
     return api.get(`/opinion/manager/${managerId}/`);
   }
 
-  static getSubjectsByCompany(companyId) {
+  static getOpinionsByCompany(companyId) {
     return api.get(`/opinion/company/${companyId}/`);
+  }
+
+  static getSubjectsByCompany(companyId) {
+    return api.get(`/opinion/company/${companyId}/subjects/`);
+  }
+
+  static getSubjectsByManager(managerId) {
+    return api.get(`/opinion/manager/${managerId}/subjects/`);
   }
 
   static getTopicsBySubject(subjectId) {
@@ -59,6 +67,10 @@ class ShareOpinionService {
 
   static getOpinionScore(data) {
     return api.post('/formula/calculator/topic_score/', data);
+  }
+
+  static getTags() {
+    return api.get('/opinion/tag/');
   }
 }
 
