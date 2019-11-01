@@ -4,9 +4,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import SubjectItem from './SubjectItem';
-import { selectFilter } from '../../../../modules/benchmarks/benchmarksActions';
-import benchmarksSelectors from '../../../../modules/benchmarks/benchmarksSelectors';
-import { LoaderBlock } from '../../../../components/ui-components/Layout/Loader';
+import { selectFilter } from '../../../../../modules/benchmarks/benchmarksActions';
+import benchmarksSelectors from '../../../../../modules/benchmarks/benchmarksSelectors';
+import { LoaderBlock } from '../../../../../components/ui-components/Layout/Loader';
 
 function SubjectList({ status, subjects, selected, selectFilter, clearFilters, isOpen }) {
   const list = subjects.map((subject) => {

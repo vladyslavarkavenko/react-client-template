@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import TimesSvg from '../../../../../../public/assets/svg/times.svg';
-import benchmarksSelectors from '../../../../modules/benchmarks/benchmarksSelectors';
-import { selectFilter } from '../../../../modules/benchmarks/benchmarksActions';
+import TimesSvg from '../../../../../../../public/assets/svg/times.svg';
+import benchmarksSelectors from '../../../../../modules/benchmarks/benchmarksSelectors';
+import { selectFilter } from '../../../../../modules/benchmarks/benchmarksActions';
 
 function Head({ handleModal, selected, handleDelete }) {
   const list = selected.map((item) => (

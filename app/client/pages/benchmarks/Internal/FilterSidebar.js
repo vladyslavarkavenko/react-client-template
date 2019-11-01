@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 /* eslint-disable */
 
-import Content from './components/Content';
+import Content from './filterSidebar/components/Content';
 import { connect } from 'react-redux';
 import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 

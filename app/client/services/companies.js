@@ -28,6 +28,10 @@ class CompaniesService {
   static getManagersList() {
     return api.get('/company/company/managers/');
   }
+
+  static getStaffBenchmark(data) {
+    return api.post('/company/company/benchmark/', data);
+  }
 }
 
 export default CompaniesService;

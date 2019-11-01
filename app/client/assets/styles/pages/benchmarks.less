@@ -1,57 +1,4 @@
 .benchmarks {
-  .compare-widget {
-    &__title {
-      font-weight: 700;
-      font-size: 1rem;
-      color: @font-color-lighter;
-      line-height: 1.25rem;
-      padding-bottom: 0.5rem;
-    }
-
-    &__ctrl {
-      margin: 2rem 0 0.5rem 0;
-      display: flex;
-    }
-
-    &__btn {
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      font-weight: bold;
-      color: @button-bg-dark-blue;
-      border: 1px solid @button-bg-dark-blue;
-      border-radius: @border-radius-block;
-      background-color: transparent;
-      transition: background-color 0.2s ease;
-
-      &:hover {
-        background-color: @button-bg-dark-blue;
-        color: white;
-      }
-    }
-
-    .compare-select {
-      &-container {
-        border-bottom: 1px solid @font-color-light;
-        margin: 0.25rem 0 0.5rem 0 ;
-      }
-
-      &__control {
-        border-radius: unset;
-        border: unset;
-      }
-
-      &__value-container {
-        padding: 0;
-      }
-
-      &__option {
-        cursor: pointer;
-      }
-
-    }
-
-  }
-
   .bench-chart-header {
     display: flex;
     justify-content: space-between;
@@ -116,6 +63,13 @@
       .title {
         font-weight: 600;
         //font-size: 1rem;
+      }
+
+      &:hover {
+        background-color: darken(white, 3%);
+        .label {
+          color: black;
+        }
       }
     }
   }
@@ -352,7 +306,6 @@
         //bottom: -@controls-height * 2.5;
         height: @controls-height;
         width: @sidebar-width;
-        right: 0;
         bottom: 0;
         display: flex;
         background-color: @secondary-bg-color;
