@@ -12,12 +12,12 @@ export default function parseRadarScores(aspects) {
   }
 
   const data = [
-    names.map((x) => ({
-      x,
+    names.map((feature) => ({
+      x: feature,
       y: []
     })), // Importance
-    names.map((x) => ({
-      x,
+    names.map((feature) => ({
+      x: feature,
       y: []
     })) //  Satisfaction
   ];
