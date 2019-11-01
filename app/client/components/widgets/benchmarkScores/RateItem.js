@@ -4,7 +4,6 @@ const factor = 100 / 9;
 
 export default function RateItem({ ctruScore, selected, topics, staffId }) {
   const mainWidth = (10 - ctruScore) * factor;
-
   const progressList = selected.map(({ id }) => {
     const topic = topics.find((topic) => topic.id === id) || { ctruScore: 0 };
 
@@ -18,13 +17,13 @@ export default function RateItem({ ctruScore, selected, topics, staffId }) {
           className="progress-bar"
           style={{
             marginLeft: '0%',
-            marginRight: `${progressWidth || 98}%`
+            marginRight: `${progressWidth}%`
           }}
         >
           <span
             className={`
               label withColor
-              ${progressWidth <= 5 ? 'left' : 'right'}
+              ${progressWidth <= 98 ? 'left' : 'right'}
             `}
             style={ctruScore === 0 ? { left: '0.25rem' } : {}}
           >
@@ -48,7 +47,7 @@ export default function RateItem({ ctruScore, selected, topics, staffId }) {
               marginRight: `${mainWidth}%`
             }}
           >
-            <span className={`label ${mainWidth <= 5 ? 'left' : 'right'}`}>
+            <span className={`label ${mainWidth <= 98 ? 'left' : 'right'}`}>
               {ctruScore.toFixed(1)}
             </span>
           </div>
