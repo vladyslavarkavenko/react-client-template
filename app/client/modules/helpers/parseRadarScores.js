@@ -12,8 +12,14 @@ export default function parseRadarScores(aspects) {
   }
 
   const data = [
-    names.map((x) => ({ x, y: [] })), // Importance
-    names.map((x) => ({ x, y: [] })) //  Satisfaction
+    names.map((x) => ({
+      x,
+      y: []
+    })), // Importance
+    names.map((x) => ({
+      x,
+      y: []
+    })) //  Satisfaction
   ];
 
   const categoriesDetails = {};
@@ -23,28 +29,27 @@ export default function parseRadarScores(aspects) {
     ({ aspectId: aId, criteria, numberGrades: aCount, participationShare: aParticipation }) => {
       const category = C_ID_NAME[aId];
 
-      categoriesDetails[category] = { count: aCount, participation: aParticipation };
+      categoriesDetails[category] = {
+        count: aCount,
+        participation: aParticipation
+      };
 
       criteria.forEach(
-        ({
-          criteriaId: cId,
-          subjects,
-          numberGrades: cCount,
-          participationShare: cParticipation
-        }) => {
+        ({ criteriaId: cId, topics, numberGrades: cCount, participationShare: cParticipation }) => {
           const feature = F_ID_NAME[cId];
 
-          featuresDetails[feature] = { count: cCount, participation: cParticipation };
+          featuresDetails[feature] = {
+            count: cCount,
+            participation: cParticipation
+          };
 
           const i = data[0].find(({ x }) => x === feature).y;
           const s = data[1].find(({ x }) => x === feature).y;
 
-          subjects.forEach(({ topics }) => {
-            topics.forEach(({ grades }) => {
-              grades.forEach(({ importance, satisfaction }) => {
-                i.push(importance);
-                s.push(satisfaction);
-              });
+          topics.forEach(({ grades }) => {
+            grades.forEach(({ importance, satisfaction }) => {
+              i.push(importance);
+              s.push(satisfaction);
             });
           });
         }
@@ -52,7 +57,14 @@ export default function parseRadarScores(aspects) {
     }
   );
 
-  const cb = ({ x, y }) => ({ x, y: y.length ? y.reduce((a, b) => a + b) / y.length : null });
+  const cb = ({ x, y }) => ({
+    x,
+    y: y.length ? y.reduce((a, b) => a + b) / y.length : null
+  });
 
-  return { grades: [data[0].map(cb), data[1].map(cb)], categoriesDetails, featuresDetails };
+  return {
+    grades: [data[0].map(cb), data[1].map(cb)],
+    categoriesDetails,
+    featuresDetails
+  };
 }
