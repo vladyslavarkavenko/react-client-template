@@ -2,22 +2,25 @@ import React from 'react';
 
 const factor = 100 / 9;
 
-export default function RateItem({ score, selected }) {
-  const mainWidth = (10 - score) * factor;
+export default function RateItem({ ctruScore, selected, topics, staffId }) {
+  const mainWidth = (10 - ctruScore) * factor;
 
-  const progressList = selected.map((item, i) => {
-    const progressWidth = (10 - score) * factor * 0.2 * (i + 1);
+  const progressList = selected.map(({ id }) => {
+    const topic = topics.find((topic) => topic.id === id) || { ctruScore: 0 };
+
+    const progressWidth = (10 - (topic.ctruScore || 1.15)) * factor;
+
     return (
-      <div className="main-item">
+      <div className="main-item" key={`${staffId}_${id}_progress`}>
         <div
           className="progress-bar"
           style={{
             marginLeft: '0%',
-            marginRight: `${progressWidth}%`
+            marginRight: `${progressWidth || 98}%`
           }}
         >
           <span className={`label ${progressWidth <= 5 ? 'left' : 'right'}`}>
-            {score.toFixed(1)}
+            {topic.ctruScore.toFixed(1)}
           </span>
         </div>
       </div>
@@ -37,7 +40,9 @@ export default function RateItem({ score, selected }) {
               marginRight: `${mainWidth}%`
             }}
           >
-            <span className={`label ${mainWidth <= 5 ? 'left' : 'right'}`}>{score.toFixed(1)}</span>
+            <span className={`label ${mainWidth <= 5 ? 'left' : 'right'}`}>
+              {ctruScore.toFixed(1)}
+            </span>
           </div>
         </div>
       )}

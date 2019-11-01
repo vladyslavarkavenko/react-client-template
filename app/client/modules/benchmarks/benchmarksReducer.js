@@ -21,17 +21,7 @@ const filterData = handleActions(
 const filterSelected = handleActions(
   {
     [actions.selectFilter.SUCCESS](state, { payload }) {
-      const idList = state.map((topic) => topic.id);
-
-      if (idList.includes(payload.id)) {
-        return state.filter((topic) => topic.id !== payload.id);
-      }
-
-      if (idList.length >= 5) {
-        return state;
-      }
-
-      return [...state, payload];
+      return payload;
     },
     [actions.selectFilter.FULFILL]() {
       return [];
@@ -60,8 +50,43 @@ const filters = combineReducers({
   selected: filterSelected
 });
 
+const staffStatus = makeStatusWithResetReducer(actions.fetchBenchmarks, actions.clearAll.TRIGGER);
+
+const staffData = handleActions(
+  {
+    [actions.fetchBenchmarks.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const fullStaffData = handleActions(
+  {
+    [actions.fetchAllStaff.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
+const staff = combineReducers({
+  status: staffStatus,
+  data: combineReducers({
+    filtered: staffData,
+    full: fullStaffData
+  })
+});
+
 const benchmarks = combineReducers({
-  filters
+  filters,
+  staff
 });
 
 export default benchmarks;

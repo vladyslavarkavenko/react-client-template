@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleFilterSidebar } from '../../modules/benchmarks/benchmarksActions';
+import { toggleFilterSidebar } from '../../../../modules/benchmarks/benchmarksActions';
 
 function FilterSelectButton({ handleOpen }) {
   return (
