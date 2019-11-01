@@ -23,16 +23,16 @@ function generateCompareLink({ type, ids } = {}) {
 
   switch (type) {
     case ROUTING_PARAMS.MANAGER:
-      return `${ROUTING_PARAMS.MANAGER}/${params}`;
+      return `${ROUTING_PARAMS.MANAGER}${params}`;
 
     case ROUTING_PARAMS.COMPANY:
-      return `${ROUTING_PARAMS.COMPANY}/${params}`;
+      return `${ROUTING_PARAMS.COMPANY}${params}`;
     default:
       return ':type';
   }
 }
 
-function generateOpinionLink({ id, type, criteriaId, subjectId, topicId }) {
+function generateOpinionLink({ id, type, criteriaId, subjectId, topicId } = {}) {
   const paramObj = new URLSearchParams();
 
   if (criteriaId) {
@@ -59,7 +59,7 @@ function generateOpinionLink({ id, type, criteriaId, subjectId, topicId }) {
     case RATE_PROFILE_TYPE.COMPANY:
       return `${ROUTING_PARAMS.COMPANY}_${id}${params}`;
     default:
-      return '';
+      return ':type\\_:id';
   }
 }
 
@@ -98,13 +98,11 @@ export default (params) => ({
   benchmarksExternal: '/account/benchmarks/external',
 
   shareOpinion: '/account/share-opinion',
-  shareOpinionWithProfile: `/account/share-opinion/${
-    params ? generateOpinionLink(params) : ':type\\_:id'
-  }`,
+  shareOpinionWithProfile: `/account/share-opinion/${generateOpinionLink(params)}`,
   shareOpinionChart: '/account/share-opinion/rate',
   shareOpinionMessage: '/account/share-opinion/message',
 
-  opinionDetails: `/opinions/${params ? generateOpinionLink(params) : ':type\\_:id'}`,
+  opinionDetails: `/opinions/${generateOpinionLink(params)}`,
   myOpinionDetails: `/opinions/dashboard`,
 
   staff: '/manage/staff',
