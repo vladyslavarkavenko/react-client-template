@@ -19,10 +19,6 @@ class InfoBlock extends React.Component {
     this.onCancelClick = this.onCancelClick.bind(this);
   }
 
-  componentDidMount() {
-    console.log('here');
-  }
-
   componentWillReceiveProps(nextProps) {
     if (!nextProps.isEdit) {
       this.setState({ isBlockEditing: false });

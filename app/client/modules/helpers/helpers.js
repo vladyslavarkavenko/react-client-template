@@ -4,19 +4,24 @@ import { ROLES } from '../../utils/constants';
 const { CUSTOMER, ADMIN, ANALYST, MANAGER } = ROLES;
 
 export const setTokens = ({ access, refresh }, rememberMe = false) => {
+  if (rememberMe) {
+    localStorage.setItem('rememberMe', '1');
+  }
   if (access) {
-    rememberMe && localStorage.setItem('access_token', access);
-    setApiHeaders({ Authorization: `Bearer ${access}` });
+    localStorage.setItem('access_token', access);
   }
   if (refresh) {
-    rememberMe && localStorage.setItem('refresh_token', refresh);
+    localStorage.setItem('refresh_token', refresh);
   }
+  setApiHeaders({ Authorization: `Bearer ${access}` });
 };
 
-export const removeTokens = () => {
+export const clearLocalStorage = () => {
+  localStorage.removeItem('role');
+  localStorage.removeItem('rememberMe');
+  localStorage.removeItem('lastRequest');
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
-  localStorage.removeItem('role');
   setApiHeaders({ Authorization: '' });
 };
 

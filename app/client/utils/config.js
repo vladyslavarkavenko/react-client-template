@@ -6,5 +6,6 @@ CONFIG.PORT = process.env.PORT || 3000;
 CONFIG.API_URL = process.env.API_URL || 'https://dev-ctru.skywell.software';
 CONFIG.APP_URL = process.env.APP_URL || 'http://localhost:3000';
 CONFIG.DEFAULT_LANGUAGE = process.env.DEFAULT_LANGUAGE || 'en';
+CONFIG.SESSION_TIME = process.env.SESSION_TIME || 3600000;
 
 module.exports = CONFIG;

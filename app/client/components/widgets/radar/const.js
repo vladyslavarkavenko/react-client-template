@@ -3,6 +3,11 @@ export const LEGEND_COLORS = {
   SATISFACTION: '#33BCDB'
 };
 
+export const LEGEND_COLORS_2 = {
+  IMPORTANCE: '#fb9900',
+  SATISFACTION: '#ff0018'
+};
+
 const CLEAR = 'Clear';
 const CREATIVE = 'Creative';
 const CONVENIENT = 'Convenient';
@@ -124,7 +129,7 @@ export const CATEGORIES = {
     [RESULT]: [CONFIDENT, COMPENSATING, COST_CONSCIOUS]
   }
 };
-0;
+
 const a = 600;
 const factor = 0.4; // For categories bars that overflow chart
 

@@ -10,10 +10,12 @@ import profile from './modules/profile/profileReducer';
 import opinionDetails from './modules/opinionDetails/opinionDetailsReducer';
 import dashboard from './modules/dashboard/dashboardReducer';
 import opinions from './modules/opinions/opinionsReducer';
+import compare from './modules/compare/compareReducer';
 import benchmarks from './modules/benchmarks/benchmarksReducer';
 import { pushLogout } from './modules/auth/authActions';
 
 const appReducer = combineReducers({
+  compare,
   auth,
   companies,
   shareOpinion,

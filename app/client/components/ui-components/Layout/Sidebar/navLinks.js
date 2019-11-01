@@ -84,22 +84,16 @@ const MY_PROFILE = {
   }
 };
 
-const MY_MANAGER = {
-  title: 'My manager',
+const MY_MANAGERS = {
+  title: 'My managers',
   Icon: SvgManager,
-  to: routing().manager,
-  isActive(match, location) {
-    return location.pathname.indexOf('manager/profile') !== -1;
-  }
+  to: routing().myManagers
 };
 
-const MY_COMPANY = {
-  title: 'My company',
+const MY_COMPANIES = {
+  title: 'My companies',
   Icon: SvgCompany,
-  to: routing().company,
-  isActive(match, location) {
-    return location.pathname.indexOf('company/profile') !== -1;
-  }
+  to: routing().myCompanies
 };
 
 const MESSAGES = {
@@ -114,7 +108,7 @@ const NAV_LINKS = {
     DASHBOARD,
     MANAGER_OPINIONS,
     MATCHING,
-    MY_COMPANY,
+    MY_COMPANIES,
     MY_PROFILE,
     MY_CLIENTS,
     MESSAGES,
@@ -125,8 +119,8 @@ const NAV_LINKS = {
     DASHBOARD,
     OPINIONS,
     MATCHING,
-    MY_COMPANY,
-    MY_MANAGER,
+    MY_COMPANIES,
+    MY_MANAGERS,
     MY_PROFILE,
     MESSAGES,
     COMMUNITY
@@ -137,7 +131,7 @@ export const WORKING_NAV_LINKS = {
   [ADMIN]: [DASHBOARD, BENCHMARKS, STAFF, MY_CLIENTS],
   [MANAGER]: [MY_PROFILE, MANAGER_OPINIONS],
   [ANALYST]: [DASHBOARD],
-  [CUSTOMER]: [OPINIONS, MY_PROFILE]
+  [CUSTOMER]: [OPINIONS, MY_PROFILE, MY_MANAGERS, MY_COMPANIES]
 };
 
 export default NAV_LINKS;
