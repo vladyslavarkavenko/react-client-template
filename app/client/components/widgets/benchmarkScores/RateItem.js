@@ -8,7 +8,9 @@ export default function RateItem({ ctruScore, selected, topics, staffId }) {
   const progressList = selected.map(({ id }) => {
     const topic = topics.find((topic) => topic.id === id) || { ctruScore: 0 };
 
-    const progressWidth = (10 - (topic.ctruScore || 1.15)) * factor;
+    const { ctruScore } = topic;
+
+    const progressWidth = (10 - ctruScore) * factor;
 
     return (
       <div className="main-item" key={`${staffId}_${id}_progress`}>
@@ -19,8 +21,14 @@ export default function RateItem({ ctruScore, selected, topics, staffId }) {
             marginRight: `${progressWidth || 98}%`
           }}
         >
-          <span className={`label ${progressWidth <= 5 ? 'left' : 'right'}`}>
-            {topic.ctruScore.toFixed(1)}
+          <span
+            className={`
+              label withColor
+              ${progressWidth <= 5 ? 'left' : 'right'}
+            `}
+            style={ctruScore === 0 ? { left: '0.25rem' } : {}}
+          >
+            {topic.ctruScore === 0 ? 'None' : topic.ctruScore.toFixed(1)}
           </span>
         </div>
       </div>
