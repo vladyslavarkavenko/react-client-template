@@ -11,6 +11,13 @@ const colors = [
   [90, 170, 220]
 ];
 
+const parseScores = (scores) =>
+  scores.map(({ name, ctruScore }, i) => ({
+    grade: Math.floor(ctruScore * 10) / 10,
+    topic: name,
+    color: colors[i]
+  }));
+
 export function parseManager(manager, statistics) {
   const { id, firstName, lastName, title, avatar, confirmed = true, avgSatisfaction } = manager;
 
@@ -24,11 +31,7 @@ export function parseManager(manager, statistics) {
     title,
     avatar: avatar || '/assets/img/empty-avatar.jpg',
     confirmed,
-    grades: topFiveScores.map(({ topicName, topicScore }, i) => ({
-      grade: Math.floor(topicScore * 10) / 10,
-      topic: topicName,
-      color: colors[i]
-    })),
+    grades: parseScores(topFiveScores),
     type: MANAGER,
     description: `${avgSatisfaction}% of the clients are satisfied with this manager`
   };
@@ -46,11 +49,7 @@ export function parseCompany(company, statistics) {
     count,
     score: Math.floor(score * 10) / 10,
     confirmed,
-    grades: topFiveScores.map(({ topicName, topicScore }, i) => ({
-      grade: Math.floor(topicScore * 10) / 10,
-      topic: topicName,
-      color: colors[i]
-    })),
+    grades: parseScores(topFiveScores),
     type: COMPANY,
     description: `${avgSatisfaction}% clients satisfied with the company`
   };

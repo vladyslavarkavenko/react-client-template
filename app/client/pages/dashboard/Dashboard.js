@@ -23,7 +23,7 @@ const {
 // eslint-disable-next-line react/prefer-stateless-function
 class Dashboard extends React.Component {
   render() {
-    const { radarData, avgSatisfaction, activeRole, getRadarScores } = this.props;
+    const { radarData, avgSatisfaction, activeRole, getRadarScores, detailsData } = this.props;
 
     if (activeRole === CUSTOMER || activeRole === MANAGER) {
       return (
@@ -44,7 +44,9 @@ class Dashboard extends React.Component {
           main={[
             {
               title: <RadarTitle />,
-              body: <Radar getRadarScores={getRadarScores} data={radarData} />
+              body: (
+                <Radar detailsData={detailsData} getRadarScores={getRadarScores} data={radarData} />
+              )
             },
             {
               title: 'Staff',
