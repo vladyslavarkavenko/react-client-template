@@ -7,6 +7,7 @@ import opinionsSelectors from '../../modules/opinions/opinionsSelectors';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { fetchCompaniesStatistics } from '../../modules/opinions/opinionsActions';
 import Button from '../../components/ui-components/Form/Button';
+import routing from '../../utils/routing';
 
 class MyManagers extends React.Component {
   componentDidMount() {
@@ -36,9 +37,12 @@ class MyManagers extends React.Component {
         <div className="body">
           <ul>
             {companies.map((company) => {
+              const { id } = company;
               const data = parseCompany(company, companiesStatistics);
 
-              return <Block shareOpinion key={company.id} {...data} />;
+              return (
+                <Block key={id} shareOpinion to={routing(id).companyProfileOverview} {...data} />
+              );
             })}
           </ul>
           <Button className="others-btn block-btn" title="Other companies" />
