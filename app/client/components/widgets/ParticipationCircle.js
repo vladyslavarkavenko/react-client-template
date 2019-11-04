@@ -19,7 +19,6 @@ export default function ParticipationCircle({ data = {}, profileLabel = '' }) {
 
   const percent = Math.round(participationShare * 100);
 
-
   return (
     <div className="participation">
       <div className="participation__chart">
