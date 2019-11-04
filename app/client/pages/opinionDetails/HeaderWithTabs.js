@@ -138,19 +138,22 @@ class HeaderWithTabs extends React.Component {
     });
 
     return (
-      <div className={`theme-${selectedCriteria}`}>
+      <>
         <SimpleContentHeader title="Opinions" className="with-tabs">
-          <ul className="criteria-tabs__list" onClick={this.handleSelect}>
+          <ul
+            className={`criteria-tabs__list theme-${selectedCriteria}`}
+            onClick={this.handleSelect}
+          >
             {criteria}
           </ul>
         </SimpleContentHeader>
-        <ul className="subject-tabs__list" onClick={this.handleSelect}>
+        <ul className={`subject-tabs__list theme-${selectedCriteria}`} onClick={this.handleSelect}>
           {subjects}
         </ul>
-        <ul className="topic-tabs__list" onClick={this.handleSelect}>
+        <ul className={`topic-tabs__list theme-${selectedCriteria}`} onClick={this.handleSelect}>
           {topics}
         </ul>
-      </div>
+      </>
     );
   }
 }
