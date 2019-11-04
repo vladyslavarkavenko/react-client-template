@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FilterSelectButton from './FilterSelectButton';
+import FilterSelectButton from './chartHeader/FilterSelectButton';
 
 export default function ChartHeader() {
   return (
@@ -10,7 +10,6 @@ export default function ChartHeader() {
         <li className="chart-tabs__item">Departments</li>
         <li className="chart-tabs__item">Branches</li>
       </ul>
-
       <FilterSelectButton />
     </div>
   );

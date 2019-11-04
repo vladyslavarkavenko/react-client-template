@@ -129,8 +129,13 @@ export default function App() {
       <AuthRoute exact path={routing().compare} component={Compare} />
       <RolesRoute exact path={routing().staff} forAdmin={Staff} />
       <RolesRoute exact path={routing().clients} forAdmin={Clients} />
-      <RolesRoute exact path={routing().benchmarks} forAdmin={Benchmarks} />
-      <RolesRoute exact path={routing().benchmarksWithTab} forAdmin={Benchmarks} />
+      <RolesRoute exact path={routing().benchmarks} forAdmin={Benchmarks} forAnalyst={Benchmarks} />
+      <RolesRoute
+        exact
+        path={routing().benchmarksWithTab}
+        forAdmin={Benchmarks}
+        forAnalyst={Benchmarks}
+      />
 
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />

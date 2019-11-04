@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ArrowSvg from '../../../../../../public/assets/svg/arrow-down.svg';
-import CheckboxInput from '../../../../components/ui-components/Form/CheckboxInput';
+import ArrowSvg from '../../../../../../../public/assets/svg/arrow-down.svg';
+import CheckboxInput from '../../../../../components/ui-components/Form/CheckboxInput';
 
 export default class SubjectItem extends React.Component {
   constructor(props) {

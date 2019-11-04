@@ -1,10 +1,10 @@
 import React from 'react';
 
-import BlockWrapper from '../../components/widgets/BlockWrapper';
-import CompareWidget from './CompareWidget';
+import BlockWrapper from '../../../components/widgets/BlockWrapper';
 import ChartHeader from './ChartHeader';
-import FilterSidebar from './filterSidebar/FilterSidebar';
+import FilterSidebar from './FilterSidebar';
 import BenchmarkChartContainer from './BenchmarkChartContainer';
+import CompareWidgetContainer from './CompareWidgetContainer';
 
 export default function Internal() {
   return (
@@ -17,7 +17,7 @@ export default function Internal() {
       </main>
       <aside className="sidebar">
         <BlockWrapper title="Compare">
-          <CompareWidget />
+          <CompareWidgetContainer />
         </BlockWrapper>
       </aside>
       <FilterSidebar />

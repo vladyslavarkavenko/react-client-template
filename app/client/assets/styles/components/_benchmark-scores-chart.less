@@ -59,8 +59,15 @@
           &:nth-child(@{value}) {
             .progress-bar {
               @color: extract(@color-list, @value);
-
               .makeGradient(darken(@color, 5), darken(@color, 15%), 90deg);
+
+              .label.withColor {
+                color: darken(@color, 15%);
+              }
+
+              .label.withColor.left {
+                color: white;
+              }
             }
           }
         })
@@ -187,6 +194,9 @@
         background-color: @progress-color;
         .makeGradient(#51B7EF, #1974B2, 90deg);
 
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+
         .label {
           position: absolute;
           top: 0;
@@ -196,9 +206,13 @@
           line-height: @progress-height;
           font-weight: bold;
 
+          &.withColor {
+            color: black;
+          }
+
           &.left {
-            color: white;
             right: 0.5rem;
+            color: white;
           }
 
           &.right {

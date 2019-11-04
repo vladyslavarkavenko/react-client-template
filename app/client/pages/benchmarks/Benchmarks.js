@@ -5,7 +5,7 @@ import SimpleContentHeader from '../../components/ui-components/Layout/SimpleCon
 import NavTabs from '../../components/ui-components/Layout/NavTabs';
 import routing from '../../utils/routing';
 import External from './External';
-import Internal from './Internal';
+import Internal from './Internal/Internal';
 
 const navLinks = [
   { to: routing().benchmarksInternal, title: 'Internal' },

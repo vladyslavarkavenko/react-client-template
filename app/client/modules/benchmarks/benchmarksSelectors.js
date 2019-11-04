@@ -3,6 +3,10 @@ const getFilterStatus = (state) => state.benchmarks.filters.status;
 const getFilterData = (state) => state.benchmarks.filters.data;
 const getSelectedFilters = (state) => state.benchmarks.filters.selected;
 
+const getStaffStatus = (state) => state.benchmarks.staff.status;
+const getStaff = (state) => state.benchmarks.staff.data.filtered;
+const getFullStaff = (state) => state.benchmarks.staff.data.full;
+
 const isFilterChecked = (state, id) => {
   const selected = getSelectedFilters(state).map((item) => item.id);
 
@@ -35,6 +39,9 @@ export default {
   getSelectedFilters,
   isFilterChecked,
 
+  getStaff,
+  getStaffStatus,
+  getFullStaff,
   // getCheckedCountBySubject,
   getCheckedBySubject
 };
