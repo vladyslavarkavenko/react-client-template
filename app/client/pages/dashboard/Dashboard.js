@@ -12,6 +12,7 @@ import profileSelectors from '../../modules/profile/profileSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
 import StaffData from './StaffData';
+import Feedback from './Feedback';
 
 const {
   ROLES: { CUSTOMER, MANAGER }
@@ -51,6 +52,10 @@ class Dashboard extends React.Component {
             {
               title: 'Staff',
               body: <StaffData />
+            },
+            {
+              title: 'New feedback',
+              body: <Feedback />
             }
           ]}
           sidebar={[

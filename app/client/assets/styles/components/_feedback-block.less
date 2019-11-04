@@ -1,0 +1,44 @@
+.feedback-block {
+
+  .feedback-item {
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(128, 143, 163, 0.31);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .avatar {
+      height: 2.5rem;
+      width: 2.5rem;
+      margin-right: 1rem;
+    }
+
+    .name {
+      margin-bottom: 1rem;
+    }
+
+    .date {
+      color: #808FA3;
+      font-size: 0.75rem;
+    }
+
+    .topics {
+      display: flex;
+      flex-wrap: wrap;
+
+      .topic-block {
+        color: #353535;
+        font-size: 0.825rem;
+        font-weight: bold;
+        background: #F7F8FA;
+        border-radius: 0.5rem;
+        padding: 0.25rem 0.5rem;
+
+        &:not(:last-child) {
+          margin-right: 0.825rem;
+        }
+      }
+    }
+  }
+}
