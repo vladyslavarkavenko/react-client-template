@@ -1,6 +1,8 @@
 import React from 'react';
 import { format } from 'date-fns';
 
+const limit = 5;
+
 class FeedbackItem extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +16,7 @@ class FeedbackItem extends React.Component {
 
   increaseShowCount() {
     this.setState((state) => ({
-      showCount: state.showCount + 5
+      showCount: state.showCount + limit
     }));
   }
 
@@ -42,9 +44,9 @@ class FeedbackItem extends React.Component {
                 <span>{opinionCtruScore}</span> {name}
               </li>
             ))}
-            {restTopics && (
+            {restTopics > 0 && (
               <li key={id} className="topic-block cursor-pointer" onClick={this.increaseShowCount}>
-                +{restTopics > 5 ? 5 : restTopics}
+                +{restTopics > limit ? limit : restTopics}
               </li>
             )}
           </ul>
