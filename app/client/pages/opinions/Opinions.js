@@ -10,6 +10,7 @@ import {
   fetchCompaniesStatistics
 } from '../../modules/opinions/opinionsActions';
 import opinionsSelectors from '../../modules/opinions/opinionsSelectors';
+import routing from '../../utils/routing';
 
 class Opinions extends React.Component {
   componentDidMount() {
@@ -44,9 +45,10 @@ class Opinions extends React.Component {
         </div>
         <div className="body">
           <ul>
-            {parseData(companies, staffStatistics, companiesStatistics).map((datum) => (
-              <Block key={datum.id} {...datum} />
-            ))}
+            {parseData(companies, staffStatistics, companiesStatistics).map((datum) => {
+              const { id, type } = datum;
+              return <Block key={datum.id} to={routing({ id, type }).opinionDetails} {...datum} />;
+            })}
           </ul>
         </div>
       </div>

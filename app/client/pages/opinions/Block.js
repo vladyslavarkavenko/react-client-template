@@ -8,6 +8,7 @@ import { RATE_PROFILE_TYPE } from '../../utils/constants';
 const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 
 const Block = ({
+  to,
   id,
   name,
   type,
@@ -22,11 +23,7 @@ const Block = ({
   shareOpinion
 }) => (
   <li className="block">
-    <Link
-      to={
-        type === MANAGER ? routing(id).managerProfileOverview : routing(id).companyProfileOverview
-      }
-    >
+    <Link to={to}>
       <div className="d-flex mb-1">
         <div className={`avatar mr-1 ${type === MANAGER ? 'circle' : ''}`}>
           <img src={avatar} alt="Avatar" />
@@ -40,7 +37,15 @@ const Block = ({
           <p className="description">{description}</p>
         </div>
         {shareOpinion ? (
-          <Link className="block-btn" to={routing({ id, type }).shareOpinionWithProfile}>
+          <Link
+            className="block-btn"
+            to={
+              routing({
+                id,
+                type
+              }).shareOpinionWithProfile
+            }
+          >
             Share your opinion
           </Link>
         ) : (

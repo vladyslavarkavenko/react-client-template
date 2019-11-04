@@ -7,6 +7,7 @@ import opinionsSelectors from '../../modules/opinions/opinionsSelectors';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { fetchStaffStatistics } from '../../modules/opinions/opinionsActions';
 import Button from '../../components/ui-components/Form/Button';
+import routing from '../../utils/routing';
 
 class MyManagers extends React.Component {
   componentDidMount() {
@@ -36,9 +37,18 @@ class MyManagers extends React.Component {
         <div className="body">
           <ul>
             {managers.map((manager) => {
+              const { id } = manager;
               const data = parseManager(manager, staffStatistics);
 
-              return <Block shareOpinion withContact key={manager.id} {...data} />;
+              return (
+                <Block
+                  key={id}
+                  shareOpinion
+                  withContact
+                  to={routing(id).managerProfileOverview}
+                  {...data}
+                />
+              );
             })}
           </ul>
           <Button className="others-btn block-btn" title="Other managers" />
