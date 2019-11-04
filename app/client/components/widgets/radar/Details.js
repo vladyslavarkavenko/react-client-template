@@ -45,7 +45,7 @@ const Details = ({ detailsData, feature, category, featuresDetails, categoriesDe
   let participationShare;
 
   if (feature) {
-    const { count = 0, participation = 0 } = featuresDetails ? featuresDetails[name] : {};
+    const { count = 0, participation = 0 } = (featuresDetails && featuresDetails[name]) || {};
 
     const params = {
       ...detailsData,
