@@ -13,6 +13,10 @@ class CompaniesService {
     return api.get(`/company/detail/manager/${managerId}/`);
   }
 
+  static getCriteria(companyId) {
+    return api.get(`/opinion/company/${companyId}/criteria/`);
+  }
+
   static getRadarScores(companyId) {
     return api.get(`/opinion/company/${companyId}/radar_scores/`);
   }

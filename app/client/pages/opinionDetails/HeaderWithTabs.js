@@ -91,50 +91,48 @@ class HeaderWithTabs extends React.Component {
       selectedTopic
     } = this.props;
 
-    console.log(this.props);
-
     if (status === 'request') {
       return <SimpleContentHeader title="Opinions" />;
     }
 
-    const criteria = criteriaList.map(({ criteriaName, criteriaId }) => {
-      const isActive = criteriaId === selectedCriteria;
+    const criteria = criteriaList.map(({ name, id }) => {
+      const isActive = id === selectedCriteria;
       return (
         <li
-          key={`${criteriaId}_c`}
+          key={`${id}_c`}
           data-type={this.CRITERIA}
-          data-id={criteriaId}
+          data-id={id}
           className={`criteria-tabs__item ${isActive ? 'active' : ''}`}
         >
-          {criteriaName}
+          {name}
         </li>
       );
     });
 
-    const subjects = subjectList.map(({ subjectName, subjectId }) => {
-      const isActive = subjectId === selectedSubject;
+    const subjects = subjectList.map(({ name, id }) => {
+      const isActive = id === selectedSubject;
       return (
         <li
-          key={`${subjectId}_s`}
+          key={`${id}_s`}
           data-type={this.SUBJECT}
-          data-id={subjectId}
+          data-id={id}
           className={`subject-tabs__item ${isActive ? 'active' : ''}`}
         >
-          {subjectName}
+          {name}
         </li>
       );
     });
 
-    const topics = topicList.map(({ topicName, topicId }) => {
-      const isActive = topicId === selectedTopic.topicId;
+    const topics = topicList.map(({ name, id }) => {
+      const isActive = id === selectedTopic.id;
       return (
         <li
-          key={`${topicId}_s`}
+          key={`${id}_s`}
           data-type={this.TOPIC}
-          data-id={topicId}
+          data-id={id}
           className={`topic-tabs__item ${isActive ? 'active' : ''}`}
         >
-          {topicName}
+          {name}
         </li>
       );
     });

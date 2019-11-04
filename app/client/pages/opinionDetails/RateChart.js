@@ -189,8 +189,6 @@ class RateChart extends React.Component {
 
     const tickCount = this.getTickCount();
 
-    console.log(this.props.tickType);
-
     return (
       <div className="rate-chart">
         <div className="rate-chart__wrapper">

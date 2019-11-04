@@ -9,6 +9,10 @@ class ManagerService {
     return api.get(`/opinion/manager/${managerId}/radar_scores/`);
   }
 
+  static getCriteria(managerId) {
+    return api.get(`/opinion/manager/${managerId}/criteria/`);
+  }
+
   static getSatisfiedClients(managerId) {
     return api.get(`/opinion/manager/${managerId}/avg_satisfaction/`);
   }

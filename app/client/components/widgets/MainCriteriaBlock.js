@@ -9,8 +9,8 @@ const mockData = [
   { id: 6, name: 'Compensating', percentage: 55 }
 ];
 
-export default function MainCriteriaBlock({ criteria = mockData }) {
-  const list = criteria
+export default function MainCriteriaBlock({ data = mockData }) {
+  const list = data
     .sort((a, b) => b.percentage - a.percentage)
     .map(({ id, name, percentage }) => (
       <li key={`${id}_m_crit_w`} className={`widget-main-criteria__item theme-${id}`}>

@@ -47,7 +47,6 @@ function* calculatePaginationWorker() {
 
   const minDate = min(dates);
   const maxDate = max(dates);
-  console.log(minDate, maxDate);
 
   switch (dateOffset) {
     case DATE_OFFSET.YEAR:
@@ -87,12 +86,12 @@ function* getDetailsWorker({ payload }) {
 
     if (type === ROUTING_PARAMS.MANAGER) {
       [data, comments] = yield all([
-        call(ManagerService.getRadarScores, id),
+        call(ManagerService.getCriteria, id),
         call(ManagerService.getComments, id)
       ]);
     } else {
       [data, comments] = yield all([
-        call(CompaniesService.getRadarScores, id),
+        call(CompaniesService.getCriteria, id),
         call(CompaniesService.getComments, id)
       ]);
     }
@@ -123,7 +122,7 @@ function* selectOptionWorker({ payload }) {
   const selected = recursiveSelect(criteria, {
     criteriaId: criteriaId || oldCriteria,
     subjectId: subjectId || oldSubject,
-    topicId: topicId || oldTopic.topicId
+    topicId: topicId || oldTopic.id
   });
 
   yield put(setProfile.success(selected));
