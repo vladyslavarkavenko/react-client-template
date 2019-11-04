@@ -24,6 +24,8 @@ class FeedbackItem extends React.Component {
       data: { id, date, fullName, avatar, topics }
     } = this.props;
 
+    const restTopics = topics.length - showCount;
+
     return (
       <li key={id} className="d-flex feedback-item">
         <div className="avatar circle">
@@ -40,9 +42,9 @@ class FeedbackItem extends React.Component {
                 <span>{opinionCtruScore}</span> {name}
               </li>
             ))}
-            {topics.length > showCount && (
+            {restTopics && (
               <li key={id} className="topic-block cursor-pointer" onClick={this.increaseShowCount}>
-                +{topics.length - showCount}
+                +{restTopics > 5 ? 5 : restTopics}
               </li>
             )}
           </ul>
