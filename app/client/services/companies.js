@@ -1,6 +1,10 @@
 import api from '../utils/api';
 
 class CompaniesService {
+  static getFeedback() {
+    return api.get('/company/company/feedbacks/');
+  }
+
   static updateCompany(data) {
     return api.patch('/company/company/', data);
   }

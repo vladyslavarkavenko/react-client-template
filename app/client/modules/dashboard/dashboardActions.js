@@ -10,6 +10,7 @@ const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const fetchActiveStaff = createRequestBound('FETCH_ACTIVE_STAFF');
 export const fetchStatistics = createRequestBound('STATISTICS_FETCH');
+export const fetchFeedback = createRequestBound('FEEDBACK_FETCH');
 
 function* getActiveStaffWorker() {
   yield put(fetchActiveStaff.request());
@@ -42,7 +43,20 @@ function* getStatisticsWorker() {
   }
 }
 
+function* getFeedbackWorker() {
+  yield put(fetchFeedback.request());
+  try {
+    const feedback = yield call(CompaniesService.getFeedback);
+
+    yield put(fetchFeedback.success(feedback));
+  } catch (err) {
+    console.error(err);
+    yield put(fetchFeedback.failure());
+  }
+}
+
 export function* dashboardWatcher() {
   yield all([takeLatest(fetchActiveStaff.TRIGGER, getActiveStaffWorker)]);
   yield all([takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker)]);
+  yield all([takeLatest(fetchFeedback.TRIGGER, getFeedbackWorker)]);
 }
