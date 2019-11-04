@@ -8,9 +8,7 @@ function validateText({ value, min = 2, max }) {
 
 function validate(validators, data, keys) {
   let errors = {};
-  console.log(validators, data, keys);
   keys.forEach((key) => {
-    console.log(key);
     const value = data[key];
     const validFn = validators[key];
 

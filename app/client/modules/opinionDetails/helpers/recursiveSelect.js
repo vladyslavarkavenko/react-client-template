@@ -4,8 +4,8 @@ export default function recursiveSelect(obj, { criteriaId, subjectId, topicId })
   const topic = subject.topics[topicId] || Object.values(subject.topics)[0];
 
   return {
-    criteria: criteria.criteriaId,
-    subject: subject.subjectId,
+    criteria: criteria.id,
+    subject: subject.id,
     topic
   };
 }
