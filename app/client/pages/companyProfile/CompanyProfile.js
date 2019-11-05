@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Switch } from 'react-router-dom';
 
+import Overview from './overview/Overview';
+import About from './about/About';
+import Products from './products/Products';
 import { fetchAll, clearAll } from '../../modules/companyProfile/companyProfileActions';
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import ContentHeader from '../profile/components/ContentHeader';
 import routing from '../../utils/routing';
-import Overview from './overview/Overview';
-import About from './about/About';
-import Products from './products/Products';
 import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';

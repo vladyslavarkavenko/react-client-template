@@ -1,0 +1,97 @@
+.customer-dashboard {
+
+  .profile {
+    &__list {
+      display: flex;
+      padding: 0 1rem;
+      justify-content: space-between;
+    }
+
+    &__item {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      justify-self: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+
+      &.manager {
+        .profile__avatar {
+          border-radius: 50%;
+          overflow: hidden;
+          img {
+            border: unset;
+          }
+        }
+      }
+
+      &:not(:first-child) {
+        border-left: 1px solid @font-color-light;
+      }
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+
+      .title {
+        font-weight: bold;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .location {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 0.5rem;
+
+        font-size: 0.95rem;
+        line-height: 0.95rem;
+
+        color: @font-color-lighter;
+
+        svg {
+          fill: @font-color-lighter;
+          margin-right: 0.25rem;
+          height: 0.95rem;
+          width: 0.95rem;
+        }
+      }
+
+      .satisfaction {
+        font-size: 0.85rem;
+      }
+    }
+
+    &__avatar {
+      width: 75px;
+      height: 75px;
+      position: relative;
+      margin: 0 auto 1rem auto;
+
+      .grade-circle {
+        position: absolute;
+        right: -1.25rem;
+        top: -1.25rem;
+      }
+
+      img {
+        width: 75px;
+        height: 75px;
+        max-width: 100%;
+        object-fit: cover;
+        border: 1px solid @font-color-light
+      }
+    }
+
+    &__btns {
+      display: flex;
+      justify-content: center;
+    }
+
+  }
+}
