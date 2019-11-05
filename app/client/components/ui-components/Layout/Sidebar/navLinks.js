@@ -77,7 +77,7 @@ const SUBJECTS = {
 const MY_PROFILE = {
   title: 'My profile',
   Icon: SvgProfile,
-  to: routing().about,
+  to: routing().overview,
   isActive(match, location) {
     const { pathname: path } = location;
     return path === routing().about || path === routing().overview;
