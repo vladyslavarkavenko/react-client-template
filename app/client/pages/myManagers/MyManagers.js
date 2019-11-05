@@ -8,6 +8,7 @@ import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { fetchStaffStatistics } from '../../modules/opinions/opinionsActions';
 import Button from '../../components/ui-components/Form/Button';
 import routing from '../../utils/routing';
+import ShiftedHeader from '../../components/ui-components/Layout/ShiftedHeader';
 
 class MyManagers extends React.Component {
   componentDidMount() {
@@ -22,18 +23,14 @@ class MyManagers extends React.Component {
     if (!staffStatistics) {
       return (
         <div className="info-cards">
-          <div className="empty-header">
-            <h1>My managers</h1>
-          </div>
+          <ShiftedHeader title="My managers" />
         </div>
       );
     }
 
     return (
       <div className="info-cards">
-        <div className="empty-header">
-          <h1>My managers</h1>
-        </div>
+        <ShiftedHeader title="My managers" />
         <div className="body">
           <ul>
             {managers.map((manager) => {

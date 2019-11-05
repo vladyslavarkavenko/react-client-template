@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { setProfile, selectOption } from '../../modules/opinionDetails/opinionDetailsActions';
 import { ROUTING_PARAMS } from '../../utils/constants';
-import SimpleContentHeader from '../../components/ui-components/Layout/SimpleContentHeader';
+import SimpleHeader from '../../components/ui-components/Layout/SimpleHeader';
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
 import routing from '../../utils/routing';
@@ -92,7 +92,7 @@ class HeaderWithTabs extends React.Component {
     } = this.props;
 
     if (status === 'request') {
-      return <SimpleContentHeader title="Opinions" />;
+      return <SimpleHeader title="Opinions" />;
     }
 
     const criteria = criteriaList.map(({ name, id }) => {
@@ -139,14 +139,14 @@ class HeaderWithTabs extends React.Component {
 
     return (
       <>
-        <SimpleContentHeader title="Opinions" className="with-tabs">
+        <SimpleHeader title="Opinions" className="with-tabs">
           <ul
             className={`criteria-tabs__list theme-${selectedCriteria}`}
             onClick={this.handleSelect}
           >
             {criteria}
           </ul>
-        </SimpleContentHeader>
+        </SimpleHeader>
         <ul className={`subject-tabs__list theme-${selectedCriteria}`} onClick={this.handleSelect}>
           {subjects}
         </ul>

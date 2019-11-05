@@ -11,6 +11,7 @@ import {
 } from '../../modules/opinions/opinionsActions';
 import opinionsSelectors from '../../modules/opinions/opinionsSelectors';
 import routing from '../../utils/routing';
+import ShiftedHeader from '../../components/ui-components/Layout/ShiftedHeader';
 
 class Opinions extends React.Component {
   componentDidMount() {
@@ -31,18 +32,14 @@ class Opinions extends React.Component {
     if (!staffStatistics || !companiesStatistics) {
       return (
         <div className="info-cards">
-          <div className="empty-header">
-            <h1>Opinions</h1>
-          </div>
+          <ShiftedHeader title="Opinions" />
         </div>
       );
     }
 
     return (
       <div className="info-cards">
-        <div className="empty-header">
-          <h1>Opinions</h1>
-        </div>
+        <ShiftedHeader title="Opinions" />
         <div className="body">
           <ul>
             {parseData(companies, staffStatistics, companiesStatistics).map((datum) => {

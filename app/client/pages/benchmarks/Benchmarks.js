@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import SimpleContentHeader from '../../components/ui-components/Layout/SimpleContentHeader';
+import SimpleHeader from '../../components/ui-components/Layout/SimpleHeader';
 import NavTabs from '../../components/ui-components/Layout/NavTabs';
 import routing from '../../utils/routing';
 import External from './External';
@@ -19,7 +19,7 @@ export default function Benchmarks({ match }) {
 
   return (
     <section className="benchmarks">
-      <SimpleContentHeader title="Benchmarks" />
+      <SimpleHeader title="Benchmarks" />
       <NavTabs navLinks={navLinks} />
       <Switch>
         <Route path={routing().benchmarksInternal} exact component={Internal} />
