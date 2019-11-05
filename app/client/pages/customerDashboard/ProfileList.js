@@ -1,70 +1,35 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import MapMarker from '../../../../public/assets/svg/map-marker.svg';
-import routing from '../../utils/routing';
-import GradeCircle from '../../components/ui-components/GradeCircle';
+import customerDashboardSelectors from '../../modules/customerDashboard/customerDashboardSelectors';
+import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
+import CompanyItem from './CompanyItem';
+import ManagerItem from './ManagerItem';
 
-export default function ProfileList() {
+function ProfileList({ status, managers, companies }) {
+  if (status === 'request') {
+    return <LoaderBlock height="15vh" />;
+  }
+
+  const companyList = companies.map((company) => (
+    <CompanyItem key={`${company.id}_list_c`} company={company} />
+  ));
+  const managerList = managers.map((manager) => (
+    <ManagerItem key={`${manager.id}_list_m`} manager={manager} />
+  ));
+
   return (
     <ul className="profile__list">
-      <li className="profile__item company">
-        <div className="profile__content">
-          <div className="profile__avatar">
-            <GradeCircle score="7.5" />
-            <img src="/assets/img/empty-avatar.jpg" alt="avatar" />
-          </div>
-          <span className="title">Basler Kantonalbank</span>
-          <span className="location">
-            <MapMarker />
-            Zurich, Switzerland
-          </span>
-          <span className="satisfaction">89% clients satisfied with the bank</span>
-        </div>
-        <div className="profile__btns">
-          <Link to={routing().shareOpinion} className="component btn-default">
-            Share your opinion
-          </Link>
-        </div>
-      </li>
-
-      <li className="profile__item manager">
-        <div className="profile__content">
-          <div className="profile__avatar">
-            <img src="/assets/img/empty-avatar.jpg" alt="avatar" />
-          </div>
-          <span className="title">Basler Kantonalbank</span>
-          <span className="location">
-            <MapMarker />
-            Zurich, Switzerland
-          </span>
-          <span className="satisfaction">89% clients satisfied with the bank</span>
-        </div>
-        <div className="profile__btns">
-          <Link to={routing().shareOpinion} className="component btn-default">
-            Share your opinion
-          </Link>
-        </div>
-      </li>
-
-      <li className="profile__item company">
-        <div className="profile__content">
-          <div className="profile__avatar">
-            <img src="/assets/img/empty-avatar.jpg" alt="avatar" />
-          </div>
-          <span className="title">Basler Kantonalbank</span>
-          <span className="location">
-            <MapMarker />
-            Zurich, Switzerland
-          </span>
-          <span className="satisfaction">89% clients satisfied with the bank</span>
-        </div>
-        <div className="profile__btns">
-          <Link to={routing().shareOpinion} className="component btn-default">
-            Share your opinion
-          </Link>
-        </div>
-      </li>
+      {companyList}
+      {managerList}
     </ul>
   );
 }
+
+const mapStateToProps = (state) => {
+  const { status, managers, companies } = customerDashboardSelectors.list(state);
+
+  return { status, managers, companies };
+};
+
+export default connect(mapStateToProps)(ProfileList);

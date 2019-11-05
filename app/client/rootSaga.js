@@ -13,6 +13,7 @@ import { compareWatcher } from './modules/compare/compareActions';
 import { staffStatisticsWatcher } from './modules/opinions/opinionsActions';
 import { opinionDetailsWatcher } from './modules/opinionDetails/opinionDetailsActions';
 import { benchmarkWatcher } from './modules/benchmarks/benchmarksActions';
+import { customerDashboardWorker } from './modules/customerDashboard/customerDashboardActions';
 
 export default function* rootSaga() {
   yield all([
@@ -29,6 +30,7 @@ export default function* rootSaga() {
     fork(opinionDetailsWatcher),
     fork(dashboardWatcher),
     fork(staffStatisticsWatcher),
-    fork(benchmarkWatcher)
+    fork(benchmarkWatcher),
+    fork(customerDashboardWorker)
   ]);
 }
