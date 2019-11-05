@@ -1,9 +1,9 @@
 import api from '../utils/api';
 
 class ManagerService {
-  // static getProfile(managerId) {
-  //   return api.get(`/opinion/manager/${managerId}/`);
-  // }
+  static getProfile(managerId) {
+    return api.get(`/company/detail/manager/${managerId}/`);
+  }
 
   static getRadarScores(managerId) {
     return api.get(`/opinion/manager/${managerId}/radar_scores/`);

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import ProductTable from './productTable/ProductTable';
 import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
 import { LoaderBlock } from '../../../components/ui-components/Layout/Loader';
-import { fetchProducts } from '../../../modules/companyProfile/companyProfileActions';
 
 function Products({ status, subjects, tags }) {
   return (
@@ -28,11 +27,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = {
-  fetchProducts
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Products);
+export default connect(mapStateToProps)(Products);

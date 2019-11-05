@@ -8,6 +8,25 @@ import { PROPS } from '../../components/widgets/radar/const';
 
 const { emptyData } = PROPS;
 
+const managerStatus = makeStatusWithResetReducer(actions.fetchUserData, actions.clearAll.TRIGGER);
+
+const managerData = handleActions(
+  {
+    [actions.fetchUserData.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return null;
+    }
+  },
+  null
+);
+
+const manager = combineReducers({
+  status: managerStatus,
+  data: managerData
+});
+
 const radarStatus = makeStatusWithResetReducer(actions.fetchRadarScores, actions.clearAll.TRIGGER);
 
 const radarData = handleActions(
@@ -95,12 +114,16 @@ const commentsData = handleActions(
   []
 );
 
+const status = makeStatusWithResetReducer(actions.fetchAll, actions.clearAll.TRIGGER);
+
 const comments = combineReducers({
   status: commentsStatus,
   data: commentsData
 });
 
 const managerProfile = combineReducers({
+  status,
+  manager,
   radar,
   topScores,
   stats,
