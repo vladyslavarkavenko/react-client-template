@@ -6,16 +6,14 @@ import ProgressBar from '../../ui-components/ProgressBar';
 import routing from '../../../utils/routing';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
 
-function RadarExpiredBanner({ selected, expiredCount }) {
+function RadarExpiredBanner({ selected, expiredCount, totalCount }) {
   if (!selected || !expiredCount) {
     return null;
   }
 
   const { label, id, type } = selected;
 
-  const total = 10;
-
-  const percentage = Math.round((expiredCount / total) * 100);
+  const percentage = Math.round((expiredCount / totalCount) * 100);
 
   return (
     <div className="radar-banner">
@@ -24,7 +22,7 @@ function RadarExpiredBanner({ selected, expiredCount }) {
       </Link>
       <p className="radar-banner__title">{label}</p>
       <p className="radar-banner__subtitle">
-        {expiredCount} of {total} feedbacks has lost its impact
+        {expiredCount} of {totalCount} feedbacks has lost its impact
       </p>
       <ProgressBar className="white" percentage={percentage} />
     </div>
@@ -33,18 +31,22 @@ function RadarExpiredBanner({ selected, expiredCount }) {
 
 const mapStateToProps = (state, { selected }) => {
   let expiredCount = 0;
+  let totalCount = 0;
 
   if (selected && selected.id && selected.type) {
     const expired = shareOpinionSelectors.getGlobalExpired(state);
+    const opinions = shareOpinionSelectors.getGlobalOpinions(state);
 
     try {
       expiredCount = Object.keys(expired[selected.type.toUpperCase()][selected.id]).length;
+
+      totalCount = opinions[selected.type.toUpperCase()][selected.id];
     } catch (err) {
       console.error(err);
     }
   }
 
-  return { expiredCount };
+  return { expiredCount, totalCount };
 };
 
 export default connect(mapStateToProps)(RadarExpiredBanner);
