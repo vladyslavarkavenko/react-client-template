@@ -8,9 +8,9 @@ import ShiftedHeader from '../../components/ui-components/Layout/ShiftedHeader';
 import BlockWrapper from '../../components/widgets/BlockWrapper';
 import ProfileList from './ProfileList';
 import RadarContainer from './RadarContainer';
-import SatisfiedClients from '../../components/widgets/SatisfiedClients';
 import customerDashboardSelectors from '../../modules/customerDashboard/customerDashboardSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
+import SatisfiedContainer from './SatisfiedContainer';
 
 class CustomerDashboard extends React.Component {
   componentDidMount() {
@@ -60,9 +60,7 @@ class CustomerDashboard extends React.Component {
             <RadarContainer />
           </main>
           <aside className="sidebar">
-            <BlockWrapper className="no-border">
-              <SatisfiedClients />
-            </BlockWrapper>
+            <SatisfiedContainer />
           </aside>
         </section>
       </section>

@@ -1,9 +1,21 @@
 .customer-dashboard {
 
   .profile {
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__show-more {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
     &__list {
       display: flex;
       padding: 0 1rem;
+      flex-wrap: wrap;
     }
 
     &__item {
@@ -25,9 +37,11 @@
         }
       }
 
-      &:not(:first-child) {
-        border-left: 1px solid @font-color-light;
-      }
+
+
+      //&:not(:last-child) {
+      //  border-right: 1px solid @font-color-light;
+      //}
     }
 
     &__content {

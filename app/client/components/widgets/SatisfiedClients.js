@@ -1,42 +1,95 @@
 import React from 'react';
-
 import { VictoryBar } from 'victory';
 
-function randomInt(min = 0.1, max = 6) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+import { minMaxRandom } from '../../utils/helpers';
+
+function generateData({ satisfaction, avgSatisfaction }) {
+  const data = [];
+  let min = 2;
+  let max = 10;
+
+  if (satisfaction) {
+    switch (satisfaction) {
+      case 1:
+        min = 8;
+        max = 10;
+        break;
+      case 2:
+        min = 3;
+        max = 8;
+        break;
+      case 3:
+        min = 2;
+        max = 5;
+        break;
+      default:
+        min = 3;
+        max = 8;
+    }
+  } else {
+    if (avgSatisfaction >= 75) {
+      min = 8;
+      max = 10;
+    }
+    if (avgSatisfaction < 75 && avgSatisfaction >= 50) {
+      min = 3;
+      max = 8;
+    }
+    if (avgSatisfaction < 50) {
+      min = 2;
+      max = 5;
+    }
+  }
+
+  for (let x = 0; x < 7; x += 1) {
+    data.push({ x, y: minMaxRandom(min, max) });
+  }
+
+  return data;
 }
 
-const data = [];
-for (let x = 0; x < 8; x += 1) {
-  data.push({ x, y: randomInt() });
-}
+function getSatisfactionText({ satisfaction, avgSatisfaction }) {
+  if (!satisfaction) {
+    return avgSatisfaction ? `${avgSatisfaction}%` : '-';
+  }
 
-// eslint-disable-next-line react/prefer-stateless-function
-class SatisfiedClients extends React.Component {
-  render() {
-    const { avgSatisfaction } = this.props;
-
-    return (
-      <div className="d-flex satisfied-clients">
-        <div className="info">
-          <h1>{avgSatisfaction !== undefined ? `${avgSatisfaction}%` : '—'}</h1>
-          <p> Satisfied clients </p>
-        </div>
-        <VictoryBar
-          data={data}
-          domain={[0, 6]}
-          width={110}
-          height={25}
-          padding={{ top: 0, bottom: 0, right: 6, left: 6 }}
-          style={{
-            data: { width: 12, fill: 'white' }
-          }}
-        />
-      </div>
-    );
+  switch (satisfaction) {
+    case 1:
+      return 'Satisfied';
+    case 2:
+      return 'Average';
+    case 3:
+      return 'Unsatisfied';
+    default:
+      return 'Average';
   }
 }
 
-export default SatisfiedClients;
+export default function SatisfiedClients({ avgSatisfaction, satisfaction }) {
+  return (
+    <div className="d-flex satisfied-clients">
+      <h2 className="percent">{getSatisfactionText({ satisfaction, avgSatisfaction })}</h2>
+      <div className="chart-group">
+        <p className="chart-group__text">{satisfaction ? 'Overall level' : ' Satisfied clients'}</p>
+        <div className="chart-group__bar">
+          <VictoryBar
+            data={generateData({ satisfaction, avgSatisfaction })}
+            domain={{ x: [0, 6], y: [1, 10] }}
+            width={80}
+            height={15}
+            cornerRadius={1.5}
+            barWidth={10}
+            padding={{ top: 0, bottom: 0, right: 5, left: 5 }}
+            style={{
+              data: { fill: 'white' },
+              parent: {
+                display: 'flex',
+                alignItems: 'flex-end'
+              }
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

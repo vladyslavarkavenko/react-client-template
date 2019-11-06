@@ -3,27 +3,59 @@ import { connect } from 'react-redux';
 
 import customerDashboardSelectors from '../../modules/customerDashboard/customerDashboardSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
-import CompanyItem from './CompanyItem';
-import ManagerItem from './ManagerItem';
+import CompanyItem from './profileList/CompanyItem';
+import ManagerItem from './profileList/ManagerItem';
 
-function ProfileList({ companyStatus, managerStatus, managers, companies }) {
-  if (companyStatus === 'request' || managerStatus === 'request') {
-    return <LoaderBlock height="15vh" />;
+class ProfileList extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.lengthLimit = 3;
+
+    this.state = {
+      isExpanded: false
+    };
+
+    this.handleExpand = this.handleExpand.bind(this);
   }
 
-  const companyList = companies.map((company) => (
-    <CompanyItem key={`${company.id}_list_c`} company={company} />
-  ));
-  const managerList = managers.map((manager) => (
-    <ManagerItem key={`${manager.id}_list_m`} manager={manager} />
-  ));
+  handleExpand() {
+    this.setState({
+      isExpanded: true
+    });
+  }
 
-  return (
-    <ul className="profile__list">
-      {companyList}
-      {managerList}
-    </ul>
-  );
+  render() {
+    const { isExpanded } = this.state;
+
+    const { companyStatus, managerStatus, managers, companies } = this.props;
+    if (companyStatus === 'request' || managerStatus === 'request') {
+      return <LoaderBlock height="15vh" />;
+    }
+
+    const companyList = companies.map((company) => (
+      <CompanyItem key={`${company.id}_list_c`} company={company} />
+    ));
+
+    const managerList = managers.map((manager) => (
+      <ManagerItem key={`${manager.id}_list_m`} manager={manager} />
+    ));
+
+    const list = [...companyList, ...managerList];
+
+    return (
+      <div className="profile__wrapper">
+        <ul className="profile__list">{isExpanded ? list : list.slice(0, this.lengthLimit)}</ul>
+        <div className="profile__show-more">
+          {list.length > this.lengthLimit && !isExpanded && (
+            <button type="button" className="see-more" onClick={this.handleExpand}>
+              Show More <span>→</span>
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (state) => {

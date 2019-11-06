@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import MapMarker from '../../../../public/assets/svg/map-marker.svg';
-import { ROUTING_PARAMS } from '../../utils/constants';
-import GradeCircle from '../../components/ui-components/GradeCircle';
-import routing from '../../utils/routing';
+import MapMarker from '../../../../../public/assets/svg/map-marker.svg';
+import { ROUTING_PARAMS } from '../../../utils/constants';
+import GradeCircle from '../../../components/ui-components/GradeCircle';
+import routing from '../../../utils/routing';
 
 export default function CompanyItem({ company }) {
   const { avatar, location, name, avgSatisfaction, id, ctruScore } = company;

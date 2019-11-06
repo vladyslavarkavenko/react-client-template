@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import MapMarker from '../../../../public/assets/svg/map-marker.svg';
-import { ROUTING_PARAMS } from '../../utils/constants';
-import routing from '../../utils/routing';
+import MapMarker from '../../../../../public/assets/svg/map-marker.svg';
+import { ROUTING_PARAMS } from '../../../utils/constants';
+import routing from '../../../utils/routing';
 
 export default function ManagerItem({ manager }) {
   const { id, avgSatisfaction, name, avatar, location } = manager;
