@@ -381,7 +381,22 @@ const globalExpired = handleActions(
       return globalExpiredInitial;
     },
     [actions.fetchExpiredGlobal.SUCCESS](state, { payload }) {
-      return payload;
+      return payload.globalExpired;
+    }
+  },
+  globalExpiredInitial
+);
+
+const globalOpinions = handleActions(
+  {
+    [actions.fetchExpiredGlobal.TRIGGER]() {
+      return globalExpiredInitial;
+    },
+    [actions.fetchExpiredGlobal.FAILURE]() {
+      return globalExpiredInitial;
+    },
+    [actions.fetchExpiredGlobal.SUCCESS](state, { payload }) {
+      return payload.globalOpinions;
     }
   },
   globalExpiredInitial
@@ -412,8 +427,10 @@ const newTopic = combineReducers({
 });
 
 const shareOpinion = combineReducers({
-  saveTopicStatus,
   globalExpired,
+  globalOpinions,
+
+  saveTopicStatus,
   topicOpinions,
   averageRate,
   selectedProfile,

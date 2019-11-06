@@ -2,6 +2,7 @@ import { differenceInMonths } from 'date-fns';
 
 export default function getOnlyExpired(subjects, now = new Date()) {
   const expired = {};
+  let opinionCount = 0;
 
   subjects.forEach((subject) => {
     // for every topic
@@ -17,9 +18,15 @@ export default function getOnlyExpired(subjects, now = new Date()) {
         expired[subject.id]
           ? expired[subject.id].push(topic.id)
           : (expired[subject.id] = [topic.id]);
+      } else {
+        opinionCount += 1;
       }
     });
   });
 
-  return expired;
+  if (Object.keys(expired).length === 0) {
+    return { expired: null, opinionCount };
+  }
+
+  return { expired, opinionCount };
 }

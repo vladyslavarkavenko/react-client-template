@@ -6,6 +6,7 @@ import RadarTitle from '../../components/widgets/radar/RadarTitle';
 import BlockWrapper from '../../components/widgets/BlockWrapper';
 import { selectRadarOption } from '../../modules/customerDashboard/customerDashboardActions';
 import customerDashboardSelectors from '../../modules/customerDashboard/customerDashboardSelectors';
+import RadarExpiredBanner from '../../components/widgets/radar/RadarExpiredBanner';
 
 class RadarContainer extends React.Component {
   constructor(props) {
@@ -31,13 +32,16 @@ class RadarContainer extends React.Component {
       : {};
 
     return (
-      <BlockWrapper
-        title={
-          <RadarTitle options={options} selected={selected} handleSelect={this.handleSelect} />
-        }
-      >
-        <Radar data={data} detailsData={detailsData} status={status} />
-      </BlockWrapper>
+      <>
+        <BlockWrapper
+          title={
+            <RadarTitle options={options} selected={selected} handleSelect={this.handleSelect} />
+          }
+        >
+          <Radar data={data} detailsData={detailsData} status={status} />
+        </BlockWrapper>
+        <RadarExpiredBanner selected={selected} />
+      </>
     );
   }
 }

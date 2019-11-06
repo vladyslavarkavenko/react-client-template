@@ -16,18 +16,32 @@ const getNewTopicShowModal = (state) => getNewTopic(state).showModal;
 
 const getUnratedTopic = (state) => getSelectedTopics(state).find((topic) => topic.isRated !== true);
 
-const getGlobalExpired = (state, { profileType, subjectId } = {}) => {
+const getGlobalExpired = (state, { profileType, profileId, subjectId } = {}) => {
   const obj = state.shareOpinion.globalExpired;
 
   if (!profileType) {
     return obj;
   }
 
-  if (!subjectId) {
+  if (!profileId) {
     return obj[profileType];
   }
 
-  return obj[profileType][subjectId] || {};
+  if (!subjectId) {
+    return obj[profileType][profileId];
+  }
+
+  return obj[profileType][profileId][subjectId] || {};
+};
+
+const getGlobalOpinions = (state, { profileType } = {}) => {
+  const obj = state.shareOpinion.globalOpinions;
+
+  if (!profileType) {
+    return obj;
+  }
+
+  return obj[profileType];
 };
 
 export default {
@@ -59,5 +73,6 @@ export default {
 
   finishStatus: (state) => state.shareOpinion.selectedOptions.status,
 
-  getGlobalExpired
+  getGlobalExpired,
+  getGlobalOpinions
 };

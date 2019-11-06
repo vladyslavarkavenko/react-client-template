@@ -50,13 +50,9 @@ function* expiredGlobalTask({ type, id, time }) {
         ? yield call(ShareOpinionService.getOpinionsByManager, id)
         : yield call(ShareOpinionService.getOpinionsByCompany, id);
 
-    const expired = getOnlyExpired(subjects, time);
+    const { expired, opinionCount } = getOnlyExpired(subjects, time);
 
-    if (Object.keys(expired).length) {
-      return { type, id, expired };
-    }
-
-    return null;
+    return { type, id, expired, opinionCount };
   } catch (err) {
     console.error(err);
     return null;
@@ -91,14 +87,26 @@ function* fetchExpiredGlobalWorker() {
         [RATE_PROFILE_TYPE.COMPANY]: {}
       };
 
+      const globalOpinions = {
+        [RATE_PROFILE_TYPE.MANAGER]: {},
+        [RATE_PROFILE_TYPE.COMPANY]: {}
+      };
+
       onlySuccess.forEach((task) => {
-        globalExpired[task.type] = {
-          ...globalExpired[task.type],
-          [task.id]: task.expired
+        if (task.expired) {
+          globalExpired[task.type] = {
+            ...globalExpired[task.type],
+            [task.id]: task.expired
+          };
+        }
+
+        globalOpinions[task.type] = {
+          ...globalOpinions[task.type],
+          [task.id]: task.opinionCount
         };
       });
 
-      yield put(fetchExpiredGlobal.success(globalExpired));
+      yield put(fetchExpiredGlobal.success({ globalExpired, globalOpinions }));
     } catch (err) {
       console.error(err);
       yield put(fetchExpiredGlobal.failure());

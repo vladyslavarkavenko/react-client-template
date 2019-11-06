@@ -214,7 +214,7 @@ class Radar extends React.Component {
           </div>
         </div>
         {withBgIcons && (
-          <div className="icons-wrapper">
+          <div className="radar-icons-wrapper">
             {Object.values(ICONS).map((src, i) => (
               <ReactSVG className={`bg-icon bg-icon-${i}`} src={src} />
             ))}
