@@ -1,0 +1,27 @@
+.top-3 {
+  .info-item {
+    font-weight: bold;
+
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+
+    p, span {
+      border-radius: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      margin-right: 0.5rem;
+    }
+
+    span {
+      position: relative;
+
+      .arrow {
+        position: absolute;
+        transform: translate(-55%, -55%);
+        top: 50%;
+        font-size: 2rem;
+        right: -3rem;
+      }
+    }
+  }
+}

@@ -1,18 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getRadarScores } from '../../modules/profile/profileActions';
-import Radar from '../../components/widgets/radar/Radar';
 import ContentBody from '../profile/components/ContentBody';
 import RadarTitle from '../../components/widgets/radar/RadarTitle';
 import CtruScoreForCompany from './CtruScoreForCompany';
-import CtruScoreTitleForCompany from './CtruScoreTitleForCompany';
-import SatisfiedClients from '../../components/widgets/SatisfiedClients';
-import profileSelectors from '../../modules/profile/profileSelectors';
+import SatisfiedClientsWrapper from './SatisfiedClientsWrapper';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
 import StaffData from './StaffData';
 import Feedback from './Feedback';
+import RadarWrapper from './RadarWrapper';
+import TopParticipationShare from './TopParticipationShare';
+import companiesSelectors from '../../modules/companies/companiesSelectors';
 
 const {
   ROLES: { CUSTOMER, MANAGER }
@@ -21,72 +20,69 @@ const {
 // TODO: Create EmptyHeader.js
 // TODO: Split for different roles.
 
+const CtruScoreForCompanyTitle = connect((state) => ({
+  companyName: companiesSelectors.getCurrentCompany(state).name
+}))(({ companyName }) => <h2 className="info-block__title">cTRU score for {companyName}</h2>);
+
 // eslint-disable-next-line react/prefer-stateless-function
-class Dashboard extends React.Component {
-  render() {
-    const { radarData, avgSatisfaction, activeRole, getRadarScores, detailsData } = this.props;
-
-    if (activeRole === CUSTOMER || activeRole === MANAGER) {
-      return (
-        <div className="dashboard">
-          <div className="empty-header">
-            <h1>Dashboard</h1>
-          </div>
-        </div>
-      );
-    }
-
+const Dashboard = ({ activeRole }) => {
+  if (activeRole === CUSTOMER || activeRole === MANAGER) {
     return (
       <div className="dashboard">
         <div className="empty-header">
           <h1>Dashboard</h1>
         </div>
-        <ContentBody
-          main={[
-            {
-              title: <RadarTitle />,
-              body: (
-                <Radar detailsData={detailsData} getRadarScores={getRadarScores} data={radarData} />
-              )
-            },
-            {
-              title: 'Staff',
-              body: <StaffData />
-            },
-            {
-              title: 'New feedback',
-              body: <Feedback />
-            }
-          ]}
-          sidebar={[
-            {
-              // TODO: Insert real company name.
-              title: <CtruScoreTitleForCompany />,
-              body: <CtruScoreForCompany />
-            },
-            {
-              body: <SatisfiedClients avgSatisfaction={avgSatisfaction} />,
-              className: 'no-border'
-            }
-          ]}
-        />
       </div>
     );
   }
-}
 
-const mapStateToProps = (state) => ({
-  radarData: profileSelectors.radarData(state),
-  activeRole: authSelectors.activeRole(state),
-  detailsData: profileSelectors.detailsData(state),
-  avgSatisfaction: profileSelectors.avgSatisfaction(state)
-});
-
-const mapDispatchToProps = {
-  getRadarScores
+  return (
+    <div className="dashboard">
+      <div className="empty-header">
+        <h1>Dashboard</h1>
+      </div>
+      <ContentBody
+        main={[
+          {
+            title: <RadarTitle />,
+            body: <RadarWrapper />
+          },
+          {
+            title: 'Staff',
+            body: <StaffData />
+          },
+          {
+            title: 'New feedback',
+            body: <Feedback />
+          }
+        ]}
+        sidebar={[
+          {
+            title: <CtruScoreForCompanyTitle />,
+            body: <CtruScoreForCompany />
+          },
+          {
+            className: 'no-border',
+            body: <SatisfiedClientsWrapper />
+          },
+          {
+            title: 'Top 3 by participation share',
+            body: <TopParticipationShare />
+          },
+          {
+            title: 'Top 3 by importance',
+            body: <TopParticipationShare />
+          },
+          {
+            title: 'Worst 3 by cTRU Score',
+            body: <TopParticipationShare showIndicator={false} />
+          }
+        ]}
+      />
+    </div>
+  );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Dashboard);
+const mapStateToProps = (state) => ({ activeRole: authSelectors.activeRole(state) });
+
+export default connect(mapStateToProps)(Dashboard);
