@@ -1,0 +1,50 @@
+.satisfied-clients {
+  color: white;
+  padding: 1.25rem;
+  background: @default-gradient;
+  display: flex;
+  flex-direction: column;
+
+  .percent {
+    font-size: 2rem;
+    line-height: 115%;
+    margin-bottom: 0.25rem;
+  }
+
+  .chart-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 30px;
+    &__text {
+      align-content: flex-end;
+      font-size: 1.125rem;
+      line-height: 1.125rem;
+      flex-basis: 100px;
+      flex-grow: 1;
+      word-break: keep-all;
+      white-space: nowrap;
+      margin-right: 0.25rem;
+    }
+
+    &__bar {
+      flex-basis: 150px;
+      max-width: 150px;
+      flex-grow: 1;
+    }
+  }
+
+  .info {
+    width: 100%;
+    margin-right: 1.25rem;
+
+    h1 {
+      font-size: 1.875rem;
+      margin-bottom: 0;
+    }
+
+    p {
+      font-size: 0.875rem;
+    }
+  }
+}

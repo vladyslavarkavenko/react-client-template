@@ -27,6 +27,7 @@
 @import "components/_feedback-block";
 @import "components/_top-3";
 @import "components/_grade-circle";
+@import "components/_satisfied-clients";
 // Pages
 @import "pages/chart";
 @import "pages/profile";
@@ -198,7 +199,7 @@ ul, ol {
 .shifted-header {
   width: 100%;
   height: 8.75rem;
-  background: linear-gradient(322.07deg, #51B7EF 0%, #1974B2 100%);
+  background: @default-gradient;
   padding: 1.25rem;
   color: white;
   top: 0;
@@ -231,11 +232,15 @@ ul, ol {
 }
 
 .see-more {
-  color: #1974B2;
+  color: @button-bg-dark-blue;
   margin-top: 1rem;
   font-size: 0.875rem;
 
   span {
     font-size: 1.5rem;
+  }
+
+  &:hover {
+    color: @button-bg-dark-blue_hover
   }
 }

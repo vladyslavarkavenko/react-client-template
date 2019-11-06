@@ -1,21 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import MapMarker from '../../../../public/assets/svg/map-marker.svg';
-import { ROUTING_PARAMS } from '../../utils/constants';
-import GradeCircle from '../../components/ui-components/GradeCircle';
-import routing from '../../utils/routing';
+import MapMarker from '../../../../../public/assets/svg/map-marker.svg';
+import { ROUTING_PARAMS } from '../../../utils/constants';
+import routing from '../../../utils/routing';
 
-export default function CompanyItem({ company }) {
-  const { avatar, location, name, avgSatisfaction, id } = company;
+export default function ManagerItem({ manager }) {
+  const { id, avgSatisfaction, name, avatar, location } = manager;
   return (
-    <li className="profile__item company">
+    <li className="profile__item manager">
       <div className="profile__content">
         <div className="profile__avatar">
-          <GradeCircle score="7.5" />
           <img src={avatar || '/assets/img/empty-avatar.jpg'} alt="avatar" />
         </div>
-        <Link to={routing(id).companyProfileOverview} className="title">
+        <Link to={routing(id).managerProfileOverview} className="title">
           {name}
         </Link>
         <span className="location">
@@ -26,13 +24,13 @@ export default function CompanyItem({ company }) {
             </>
           )}
         </span>
-        <span className="satisfaction">{avgSatisfaction}% clients satisfied with the company</span>
+        <span className="satisfaction">{avgSatisfaction}% clients satisfied with the manager</span>
       </div>
       <div className="profile__btns">
         <Link
           to={
             routing({
-              type: ROUTING_PARAMS.COMPANY,
+              type: ROUTING_PARAMS.MANAGER,
               id
             }).shareOpinionWithProfile
           }

@@ -5,30 +5,48 @@ import Radar from '../../components/widgets/radar/Radar';
 import RadarTitle from '../../components/widgets/radar/RadarTitle';
 import BlockWrapper from '../../components/widgets/BlockWrapper';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
-import companyProfileSelectors from '../../modules/companyProfile/companyProfileSelectors';
+import { selectRadarOption } from '../../modules/customerDashboard/customerDashboardActions';
+import customerDashboardSelectors from '../../modules/customerDashboard/customerDashboardSelectors';
 
-function RadarContainer({ status, data }) {
-  if (status === 'failure') {
-    return null;
+class RadarContainer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
-  return (
-    <BlockWrapper
-      title={
-        <RadarTitle
-          options={[{ label: 'Basler Kantonal', id: 1 }, { label: 'Max Manager', id: 2 }]}
-        />
-      }
-    >
-      {status === 'request' ? <LoaderBlock height="20vh" /> : <Radar data={data} />}
-    </BlockWrapper>
-  );
+  handleSelect(value) {
+    const { selectRadarOption } = this.props;
+
+    selectRadarOption(value);
+  }
+
+  render() {
+    const { status, data, options, selected } = this.props;
+
+    return (
+      <BlockWrapper
+        title={
+          <RadarTitle options={options} selected={selected} handleSelect={this.handleSelect} />
+        }
+      >
+        {status === 'request' ? <LoaderBlock height="600px" /> : <Radar data={data} />}
+      </BlockWrapper>
+    );
+  }
 }
 
 const mapStateToProps = (state) => {
-  const { status, data } = companyProfileSelectors.radar(state) || {};
+  const { status, data, selected, options } = customerDashboardSelectors.radar(state);
 
-  return { status, data };
+  return { status, data, selected, options };
 };
 
-export default connect(mapStateToProps)(RadarContainer);
+const mapDispatchToProps = {
+  selectRadarOption
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RadarContainer);

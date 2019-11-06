@@ -26,10 +26,23 @@
 
     .radar-select {
       &__container {
+        z-index: @z-index-dropdown;
         right: 0;
         bottom: -3.5rem;
         width: 200px;
         position: absolute;
+        cursor: pointer;
+
+        .drop-icon {
+          fill: @font-color-lighter;
+          width: 1.125rem;
+          height: 1.125rem;
+        }
+      }
+
+      &__option,
+      &__control {
+        cursor: pointer;
       }
     }
   }

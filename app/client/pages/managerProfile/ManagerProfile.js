@@ -2,15 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Switch } from 'react-router-dom';
 
-import {
-  fetchAll,
-  // fetchRadarScores,
-  // fetchTopScores,
-  // fetchStatistics,
-  // fetchComments,
-  // fetchUserData,
-  clearAll
-} from '../../modules/managerProfile/managerProfileActions';
+import { fetchAll, clearAll } from '../../modules/managerProfile/managerProfileActions';
 import ContentHeader from '../profile/components/ContentHeader';
 import routing from '../../utils/routing';
 import Overview from './overview/Overview';
