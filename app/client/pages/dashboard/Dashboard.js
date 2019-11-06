@@ -11,7 +11,7 @@ import StaffData from './StaffData';
 import Feedback from './Feedback';
 import ShiftedHeader from '../../components/ui-components/Layout/ShiftedHeader';
 import RadarWrapper from './RadarWrapper';
-import TopParticipationShare from './TopParticipationShare';
+import TopBlock from './TopBlock';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 
 const {
@@ -64,15 +64,15 @@ const Dashboard = ({ activeRole }) => {
           },
           {
             title: 'Top 3 by participation share',
-            body: <TopParticipationShare />
+            body: <TopBlock requestKey={1} />
           },
           {
             title: 'Top 3 by importance',
-            body: <TopParticipationShare />
+            body: <TopBlock requestKey={2} />
           },
           {
             title: 'Worst 3 by cTRU Score',
-            body: <TopParticipationShare showIndicator={false} />
+            body: <TopBlock requestKey={3} />
           }
         ]}
       />

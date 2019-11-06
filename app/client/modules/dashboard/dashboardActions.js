@@ -1,4 +1,4 @@
-import { put, takeLatest, all, call, select } from 'redux-saga/effects';
+import { put, takeLatest, takeEvery, all, call, select } from 'redux-saga/effects';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import StaffService from '../../services/staff';
@@ -11,6 +11,7 @@ const createRequestBound = createRequestRoutine.bind(null, prefix);
 export const fetchActiveStaff = createRequestBound('FETCH_ACTIVE_STAFF');
 export const fetchStatistics = createRequestBound('STATISTICS_FETCH');
 export const fetchFeedback = createRequestBound('FEEDBACK_FETCH');
+export const fetchTop = createRequestBound('TOP_FETCH');
 
 function* getActiveStaffWorker() {
   yield put(fetchActiveStaff.request());
@@ -55,8 +56,23 @@ function* getFeedbackWorker() {
   }
 }
 
+function* getTopWorker({ payload: { key } }) {
+  // yield put(fetchTop.request());
+  try {
+    const top = yield call(CompaniesService.getTop, key);
+
+    yield put(fetchTop.success({ [key]: top }));
+  } catch (err) {
+    console.error(err);
+    // yield put(fetchTop.failure());
+  }
+}
+
 export function* dashboardWatcher() {
-  yield all([takeLatest(fetchActiveStaff.TRIGGER, getActiveStaffWorker)]);
-  yield all([takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker)]);
-  yield all([takeLatest(fetchFeedback.TRIGGER, getFeedbackWorker)]);
+  yield all([
+    takeLatest(fetchActiveStaff.TRIGGER, getActiveStaffWorker),
+    takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker),
+    takeLatest(fetchFeedback.TRIGGER, getFeedbackWorker),
+    takeEvery(fetchTop.TRIGGER, getTopWorker)
+  ]);
 }
