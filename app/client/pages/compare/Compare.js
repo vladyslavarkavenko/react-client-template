@@ -104,9 +104,9 @@ class Compare extends React.Component {
 
   render() {
     const { isCompare, animationFinished, linesData } = this.state;
-    const { compareData } = this.props;
+    const { compareData, history } = this.props;
 
-    if (!compareData) {
+    if (!linesData) {
       return <div>Loading...</div>;
     }
 
@@ -114,6 +114,15 @@ class Compare extends React.Component {
 
     return (
       <div className="compare">
+        <div className="content-header">
+          <button onClick={history.goBack}>
+            <span className="arrow" />
+            Back
+          </button>
+          <h1>
+            Comparison of {main.profile.name} & {compare.profile.name}
+          </h1>
+        </div>
         <div className="compare-line d-flex jc-center">
           <Profile {...main.profile} />
           <hr />

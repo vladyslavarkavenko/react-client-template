@@ -24,9 +24,7 @@ class CtruScoreForCompany extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  statistics: dashboardSelectors.companyData(state)
-});
+const mapStateToProps = (state) => ({ statistics: dashboardSelectors.companyData(state) });
 
 export default connect(
   mapStateToProps,
