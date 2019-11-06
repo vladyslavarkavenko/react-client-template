@@ -9,12 +9,13 @@ import parseRadarScores from '../helpers/parseRadarScores';
 // Helpers
 function formatProfile(profile) {
   const {
-    userData: { avatar, name, location },
+    userData: { id, avatar, name, location },
     avgSatisfaction,
     numberOpinions
   } = profile;
 
   return {
+    id,
     type: RATE_PROFILE_TYPE.MANAGER,
     avatar: avatar || '/assets/img/empty-avatar.jpg',
     avgSatisfaction,

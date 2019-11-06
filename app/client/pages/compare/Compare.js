@@ -53,12 +53,21 @@ class Compare extends React.Component {
     const mainId = paramsObj.get(ROUTING_PARAMS.MAIN_ID);
     const compareId = paramsObj.get(ROUTING_PARAMS.COMPARE_ID);
 
-    !compareData &&
+    if (
+      compareData &&
+      compareData.main.profile.id === mainId &&
+      compareData.compare.profile.id === compareId
+    ) {
+      this.setState({
+        linesData: parseLinesData(compareData)
+      });
+    } else {
       fetchCompareData({
         type,
         mainId,
         compareId
       });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
