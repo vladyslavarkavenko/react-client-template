@@ -30,6 +30,16 @@ const companyData = handleActions(
   null
 );
 
-const dashboard = combineReducers({ companyData, staff, feedback });
+const top = handleActions(
+  {
+    [actions.fetchTop.SUCCESS](state, { payload }) {
+      console.log('payload', payload);
+      return { ...state, ...payload };
+    }
+  },
+  { 1: null, 2: null, 3: null }
+);
+
+const dashboard = combineReducers({ companyData, staff, feedback, top });
 
 export default dashboard;

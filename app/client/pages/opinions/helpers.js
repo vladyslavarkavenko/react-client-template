@@ -56,14 +56,15 @@ export function parseCompany(company, statistics) {
 }
 
 export default function parseData(companies, staffStatistics, companiesStatistics) {
-  const newData = [];
+  const managersData = [];
+  const companiesData = [];
 
   companies.forEach((company) => {
     const { manager } = company;
 
-    newData.unshift(parseCompany(company, companiesStatistics));
-    manager && newData.unshift(parseManager(manager, staffStatistics));
+    companiesData.unshift(parseCompany(company, companiesStatistics));
+    manager && managersData.unshift(parseManager(manager, staffStatistics));
   });
 
-  return newData;
+  return [...managersData, ...companiesData];
 }

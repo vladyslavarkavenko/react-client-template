@@ -1,6 +1,10 @@
 import api from '../utils/api';
 
 class CompaniesService {
+  static getTop(key) {
+    return api.get(`/company/company/top/?key=${key}`);
+  }
+
   static getProfile(companyId) {
     return api.get(`/company/detail/company/${companyId}/`);
   }
