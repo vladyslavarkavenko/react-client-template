@@ -9,6 +9,7 @@ import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
 import StaffData from './StaffData';
 import Feedback from './Feedback';
+import ShiftedHeader from '../../components/ui-components/Layout/ShiftedHeader';
 import RadarWrapper from './RadarWrapper';
 import TopParticipationShare from './TopParticipationShare';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
@@ -29,18 +30,14 @@ const Dashboard = ({ activeRole }) => {
   if (activeRole === CUSTOMER || activeRole === MANAGER) {
     return (
       <div className="dashboard">
-        <div className="empty-header">
-          <h1>Dashboard</h1>
-        </div>
+        <ShiftedHeader title="Dashboard" />
       </div>
     );
   }
 
   return (
     <div className="dashboard">
-      <div className="empty-header">
-        <h1>Dashboard</h1>
-      </div>
+      <ShiftedHeader title="Dashboard" />
       <ContentBody
         main={[
           {

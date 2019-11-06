@@ -1,46 +1,29 @@
 /* eslint-disable */
 
 export default function normalizeCriteria(data) {
-  const t0 = window.performance.now();
   const criteriaObj = {};
 
-  const criteriaMerge = data.reduce((acc, { criteria }) => {
-    const idList = acc.map((item) => item.criteriaId);
-    const cloned = [...acc];
-
-    criteria.forEach((item) => {
-      if (idList.indexOf(item.criteriaId) === -1) {
-        cloned.push(item);
-      }
-    });
-
-    return cloned;
-  }, []);
-
-  criteriaMerge.forEach((criteria) => {
+  data.forEach((criteria) => {
     const { subjects, ...criteriaProps } = criteria;
-    const { criteriaId } = criteriaProps;
+    const { id: criteriaId } = criteriaProps;
 
     criteriaObj[criteriaId] = criteriaProps;
     criteriaObj[criteriaId].subjects = {};
 
     subjects.forEach((subject) => {
       const { topics, ...subjectProps } = subject;
-      const { subjectId } = subjectProps;
+      const { id: subjectId } = subjectProps;
 
       criteriaObj[criteriaId].subjects[subjectId] = subjectProps;
       criteriaObj[criteriaId].subjects[subjectId].topics = {};
 
       topics.forEach((topic) => {
-        const { topicId } = topic;
+        const { id: topicId } = topic;
         criteriaObj[criteriaId].subjects[subjectId].topics[topicId] = topic;
       });
     });
   });
 
-  console.log(criteriaObj);
-
-  console.log('time', window.performance.now() - t0);
   return criteriaObj;
 }
 

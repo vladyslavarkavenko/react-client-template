@@ -1,6 +1,10 @@
 import api from '../utils/api';
 
 class CompaniesService {
+  static getProfile(companyId) {
+    return api.get(`/company/detail/company/${companyId}/`);
+  }
+
   static getFeedback() {
     return api.get('/company/company/feedbacks/');
   }
@@ -11,6 +15,10 @@ class CompaniesService {
 
   static getManager(managerId) {
     return api.get(`/company/detail/manager/${managerId}/`);
+  }
+
+  static getCriteria(companyId) {
+    return api.get(`/opinion/company/${companyId}/criteria/`);
   }
 
   static getRadarScores(companyId) {

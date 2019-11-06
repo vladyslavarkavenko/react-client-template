@@ -54,6 +54,11 @@ const CompanyProfile = customLoadable({
 const Dashboard = customLoadable({
   loader: () => import('../pages/dashboard/Dashboard')
 });
+
+const CustomerDashboard = customLoadable({
+  loader: () => import('../pages/customerDashboard/CustomerDashboard')
+});
+
 const Compare = customLoadable({
   loader: () => import('../pages/compare/Compare')
 });
@@ -110,8 +115,14 @@ export default function App() {
       <SignInRoute exact path={routing().forgotPassword} component={ForgotPassword} />
       <SignInRoute exact path={routing().resetPassword} component={ResetPassword} />
       <AuthRoute exact path={routing().account} component={Account} />
-      <AuthRoute exact path={routing().dashboard} component={Dashboard} />
-      {/*<AuthRoute exact path={routing().profile} component={Profile} />*/}
+
+      <RolesRoute
+        exact
+        path={routing().dashboard}
+        forAdmin={Dashboard}
+        forCustomer={CustomerDashboard}
+      />
+
       <RolesRoute
         exact
         path={routing().profile}
@@ -127,6 +138,7 @@ export default function App() {
       <AuthRoute exact path={routing().myManagers} component={MyManagers} />
       <AuthRoute exact path={routing().myCompanies} component={MyCompanies} />
       <AuthRoute exact path={routing().compare} component={Compare} />
+
       <RolesRoute exact path={routing().staff} forAdmin={Staff} />
       <RolesRoute exact path={routing().clients} forAdmin={Clients} />
       <RolesRoute exact path={routing().benchmarks} forAdmin={Benchmarks} forAnalyst={Benchmarks} />

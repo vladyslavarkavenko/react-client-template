@@ -17,6 +17,7 @@ export const fetchComments = createRequestBound('COMMENTS_FETCH');
 
 export const fetchProducts = createRequestBound('SERVICES_FETCH');
 
+export const fetchAll = createRequestBound('FETCH_ALL');
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
 function* getProductsWorker({ payload }) {
@@ -98,8 +99,25 @@ function* getCommentsWorker({ payload }) {
   }
 }
 
+function* fetchAllWorker({ payload }) {
+  yield put(fetchAll.request());
+  const taskList = [
+    getTopScoresWorker,
+    getRadarScoresWorker,
+    getCommentsWorker,
+    getStatisticsWorker,
+    getProductsWorker
+  ];
+
+  yield all(taskList.map((task) => call(task, { payload })));
+
+  yield put(fetchAll.success());
+}
+
 export function* companyProfileWatcher() {
   yield all([
+    takeLatest(fetchAll.TRIGGER, fetchAllWorker),
+
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
     takeLatest(fetchTopScores.TRIGGER, getTopScoresWorker),
     takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker),

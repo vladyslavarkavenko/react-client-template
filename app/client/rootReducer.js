@@ -12,6 +12,7 @@ import dashboard from './modules/dashboard/dashboardReducer';
 import opinions from './modules/opinions/opinionsReducer';
 import compare from './modules/compare/compareReducer';
 import benchmarks from './modules/benchmarks/benchmarksReducer';
+import customerDashboard from './modules/customerDashboard/customerDashboardReducer';
 import { pushLogout } from './modules/auth/authActions';
 
 const appReducer = combineReducers({
@@ -28,7 +29,8 @@ const appReducer = combineReducers({
   opinions,
 
   opinionDetails,
-  benchmarks
+  benchmarks,
+  customerDashboard
 });
 
 export default (state, action) => {

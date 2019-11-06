@@ -2,33 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Switch } from 'react-router-dom';
 
-import {
-  fetchRadarScores,
-  fetchTopScores,
-  fetchStatistics,
-  fetchComments,
-  fetchProducts,
-  clearAll
-} from '../../modules/companyProfile/companyProfileActions';
-import { RATE_PROFILE_TYPE } from '../../utils/constants';
-import ContentHeader from '../profile/components/ContentHeader';
-import routing from '../../utils/routing';
 import Overview from './overview/Overview';
 import About from './about/About';
 import Products from './products/Products';
+import { fetchAll, clearAll } from '../../modules/companyProfile/companyProfileActions';
+import { RATE_PROFILE_TYPE } from '../../utils/constants';
+import ContentHeader from '../profile/components/ContentHeader';
+import routing from '../../utils/routing';
 import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
+import companyProfileSelectors from '../../modules/companyProfile/companyProfileSelectors';
 
 class CompanyProfile extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.fetchData = this.fetchData.bind(this);
-  }
-
   componentDidMount() {
-    const { match, history, company } = this.props;
+    const { match, history, company, fetchAll } = this.props;
     const {
       params: { id }
     } = match;
@@ -38,13 +26,13 @@ class CompanyProfile extends React.Component {
       return;
     }
 
-    this.fetchData(id);
+    fetchAll(id);
   }
 
   componentDidUpdate(prevProps) {
-    const { id } = this.props;
+    const { id, fetchAll } = this.props;
     if (prevProps.id !== id) {
-      this.fetchData(id);
+      fetchAll(id);
     }
   }
 
@@ -53,31 +41,15 @@ class CompanyProfile extends React.Component {
     clearAll();
   }
 
-  fetchData(id) {
-    const {
-      fetchRadarScores,
-      fetchTopScores,
-      fetchStatistics,
-      fetchComments,
-      fetchProducts
-    } = this.props;
-
-    fetchRadarScores(id);
-    fetchTopScores(id);
-    fetchStatistics(id);
-    fetchComments(id);
-    fetchProducts(id);
-  }
-
   render() {
-    const { match, company } = this.props;
+    const { match, company, status } = this.props;
     const {
       params: { id }
     } = match;
 
     if (!company || !id) {
       // redirect at componentDidMount
-      return <LoaderBlock height="50vh" />;
+      return null;
     }
 
     const navLinks = [
@@ -108,15 +80,20 @@ class CompanyProfile extends React.Component {
           avatar={avatar}
           title={name}
           subTitle={avgSatisfaction ? `${avgSatisfaction}% of clients are satisfied` : ''}
-          location={location}
+          loc={location}
           navLinks={navLinks}
           customButtons={customButtons}
         />
-        <Switch>
-          <WrappedRoute exact path={routing().companyProfileAbout} component={About} />
-          <WrappedRoute exact path={routing().companyProfileOverview} component={Overview} />
-          <WrappedRoute exact path={routing().companyProfileProducts} component={Products} />
-        </Switch>
+
+        {status === 'request' ? (
+          <LoaderBlock height="30vh" />
+        ) : (
+          <Switch>
+            <WrappedRoute exact path={routing().companyProfileAbout} component={About} />
+            <WrappedRoute exact path={routing().companyProfileOverview} component={Overview} />
+            <WrappedRoute exact path={routing().companyProfileProducts} component={Products} />
+          </Switch>
+        )}
       </section>
     );
   }
@@ -131,16 +108,13 @@ const mapStateToProps = (state, props) => {
   return {
     id,
     tab,
-    company: companiesSelectors.getCurrentCompany(state, id)
+    company: companiesSelectors.getCurrentCompany(state, id),
+    status: companyProfileSelectors.status(state)
   };
 };
 
 const mapDispatchToProps = {
-  fetchRadarScores,
-  fetchTopScores,
-  fetchStatistics,
-  fetchComments,
-  fetchProducts,
+  fetchAll,
   clearAll
 };
 

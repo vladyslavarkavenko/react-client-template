@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { Link, Switch } from 'react-router-dom';
 
 import {
-  fetchRadarScores,
-  fetchTopScores,
-  fetchStatistics,
-  fetchComments,
+  fetchAll,
+  // fetchRadarScores,
+  // fetchTopScores,
+  // fetchStatistics,
+  // fetchComments,
+  // fetchUserData,
   clearAll
 } from '../../modules/managerProfile/managerProfileActions';
 import ContentHeader from '../profile/components/ContentHeader';
@@ -14,34 +16,29 @@ import routing from '../../utils/routing';
 import Overview from './overview/Overview';
 import WrappedRoute from '../../components/Wrappers/WrappedRoute';
 import About from './about/About';
-import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
+import managerProfileSelectors from '../../modules/managerProfile/managerProfileSelectors';
+import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 
 class ManagerProfile extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.fetchData = this.fetchData.bind(this);
-  }
-
   componentDidMount() {
-    const { match, history, manager } = this.props;
+    const { match, history, manager, status, fetchAll } = this.props;
     const {
       params: { id }
     } = match;
 
-    if (!id || !manager) {
+    if (!id || (!manager && status === 'success')) {
       history.push(routing().notFound);
       return;
     }
 
-    this.fetchData(id);
+    fetchAll(id);
   }
 
   componentDidUpdate(prevProps) {
-    const { id } = this.props;
+    const { id, fetchAll } = this.props;
     if (prevProps.id !== id) {
-      this.fetchData(id);
+      fetchAll(id);
     }
   }
 
@@ -51,22 +48,17 @@ class ManagerProfile extends React.Component {
     clearAll();
   }
 
-  fetchData(id) {
-    const { fetchRadarScores, fetchTopScores, fetchStatistics, fetchComments } = this.props;
-
-    fetchRadarScores(id);
-    fetchTopScores(id);
-    fetchStatistics(id);
-    fetchComments(id);
-  }
-
   render() {
-    const { match, manager } = this.props;
+    const { match, manager, status } = this.props;
     const {
       params: { id }
     } = match;
 
-    if (!manager || !id) {
+    if (status === 'request') {
+      return <LoaderBlock height="50vh" />;
+    }
+
+    if (!id || !manager) {
       // redirect at componentDidMount
       return null;
     }
@@ -89,14 +81,15 @@ class ManagerProfile extends React.Component {
       </Link>
     ];
 
-    const { firstName, lastName, avatar, avgSatisfaction } = manager;
+    const { name, avatar, avgSatisfaction, location } = manager;
 
     return (
       <section className="manager-profile">
         <ContentHeader
           displayAvatar
           avatar={avatar}
-          title={`${firstName} ${lastName}`}
+          title={name}
+          loc={location}
           subTitle={avgSatisfaction ? `${avgSatisfaction}% of clients are satisfied` : ''}
           navLinks={navLinks}
           customButtons={customButtons}
@@ -119,15 +112,13 @@ const mapStateToProps = (state, props) => {
   return {
     id,
     tab,
-    manager: companiesSelectors.getCurrentManager(state, id)
+    manager: managerProfileSelectors.manager(state).data,
+    status: managerProfileSelectors.status(state)
   };
 };
 
 const mapDispatchToProps = {
-  fetchRadarScores,
-  fetchTopScores,
-  fetchStatistics,
-  fetchComments,
+  fetchAll,
   clearAll
 };
 

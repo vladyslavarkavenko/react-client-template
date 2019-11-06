@@ -1,0 +1,19 @@
+.grade-circle {
+  @size: 40px;
+
+  width: @size;
+  height: @size;
+  border-radius: 50%;
+  background-color: #33BCDB;
+
+  .inner-circle {
+    width: @size - 2px;
+    height: @size - 2px;
+    border-radius: 50%;
+    border: 1px solid white;
+    color: white;
+    font-size: 1.125rem;
+    line-height: @size / 2;
+    font-weight: bold;
+  }
+}

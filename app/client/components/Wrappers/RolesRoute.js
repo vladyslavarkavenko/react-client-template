@@ -39,9 +39,9 @@ function RolesRoute(props) {
     <>
       <TopBarWithProfile />
       <Sidebar />
-      <div className="content">
+      <section className="content main-content">
         <Route component={PageComponent} activeRole={activeRole} {...otherProps} />
-      </div>
+      </section>
     </>
   );
 }

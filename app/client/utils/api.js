@@ -21,7 +21,6 @@ export function setApiHeaders(headers) {
   const rememberMe = +localStorage.getItem('rememberMe');
   const lastRequest = +localStorage.getItem('lastRequest');
 
-  console.log('SESSION_TIME', SESSION_TIME);
   if (!rememberMe && lastRequest && now - lastRequest >= SESSION_TIME) {
     clearLocalStorage();
   }

@@ -10,9 +10,9 @@ function AuthRoute(props) {
     <>
       <TopBarWithProfile />
       <Sidebar />
-      <div className="content">
+      <section className="content main-content">
         <Route {...props} />
-      </div>
+      </section>
     </>
   );
 }

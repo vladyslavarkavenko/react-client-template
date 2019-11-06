@@ -121,7 +121,10 @@ const products = combineReducers({
   })
 });
 
+const status = makeStatusWithResetReducer(actions.fetchAll, actions.clearAll.TRIGGER);
+
 const companyProfile = combineReducers({
+  status,
   radar,
   topScores,
   stats,

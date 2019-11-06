@@ -11,11 +11,13 @@ export const prefix = 'managerProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 
+export const fetchUserData = createRequestBound('USER_DATA_FETCH');
 export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
 export const fetchTopScores = createRequestBound('TOP_SCORES_FETCH');
 export const fetchStatistics = createRequestBound('STATISTICS_FETCH');
 export const fetchComments = createRequestBound('COMMENTS_FETCH');
 
+export const fetchAll = createRequestBound('FETCH_ALL');
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
 function* getRadarScoresWorker({ payload }) {
@@ -37,6 +39,7 @@ function* getTopScoresWorker({ payload }) {
   yield put(fetchTopScores.request());
   try {
     const scores = yield call(ManagerService.getTopScores, payload);
+    yield call(ManagerService.getProfile, payload);
 
     yield put(fetchTopScores.success(scores));
   } catch (err) {
@@ -74,8 +77,39 @@ function* getCommentsWorker({ payload }) {
   }
 }
 
+function* getUserDataWorker({ payload }) {
+  yield put(fetchUserData.request());
+  try {
+    const { userData, ...managerStats } = yield call(ManagerService.getProfile, payload);
+
+    yield put(fetchUserData.success({ ...userData, ...managerStats }));
+  } catch (err) {
+    console.error(err);
+    // Notification.error(err);
+    yield put(fetchUserData.failure());
+  }
+}
+
+function* fetchAllWorker({ payload }) {
+  yield put(fetchAll.request());
+  const taskList = [
+    getUserDataWorker,
+    getTopScoresWorker,
+    getRadarScoresWorker,
+    getCommentsWorker,
+    getStatisticsWorker
+  ];
+
+  yield all(taskList.map((task) => call(task, { payload })));
+
+  yield put(fetchAll.success());
+}
+
 export function* managerProfileWatcher() {
   yield all([
+    takeLatest(fetchAll.TRIGGER, fetchAllWorker),
+
+    takeLatest(fetchUserData.TRIGGER, getUserDataWorker),
     takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
     takeLatest(fetchTopScores.TRIGGER, getTopScoresWorker),
     takeLatest(fetchStatistics.TRIGGER, getStatisticsWorker),
