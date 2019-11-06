@@ -64,20 +64,6 @@ const getCurrentCompany = (state, companyId) => {
   return companies[companyId || currentUserId] || null;
 };
 
-const getManagersWithCompanies = (state) => {
-  const data = getCompanyData(state);
-
-  const companyIds = Object.keys(data);
-
-  const list = {};
-
-  companyIds.forEach((companyId) => {
-    list[companyId] = getCompanyData(state).manager;
-  });
-
-  return list;
-};
-
 const findCompanyByManager = (state, managerId) => {
   const companies = getCompanyData(state);
 
@@ -91,7 +77,6 @@ const findCompanyByManager = (state, managerId) => {
 export default {
   getCompaniesList,
   getManagersList,
-  getManagersWithCompanies,
   getCompaniesForActiveRole,
   getCurrentManager,
   getCurrentCompany,

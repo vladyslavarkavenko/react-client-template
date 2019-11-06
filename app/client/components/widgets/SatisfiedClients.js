@@ -11,16 +11,17 @@ function generateData({ satisfaction, avgSatisfaction }) {
   if (satisfaction) {
     switch (satisfaction) {
       case 1:
-        min = 8;
-        max = 10;
+        min = 2;
+        max = 5;
+
         break;
       case 2:
         min = 3;
         max = 8;
         break;
       case 3:
-        min = 2;
-        max = 5;
+        min = 8;
+        max = 10;
         break;
       default:
         min = 3;
@@ -55,11 +56,11 @@ function getSatisfactionText({ satisfaction, avgSatisfaction }) {
 
   switch (satisfaction) {
     case 1:
-      return 'Satisfied';
+      return 'Unsatisfied';
     case 2:
       return 'Average';
     case 3:
-      return 'Unsatisfied';
+      return 'Satisfied';
     default:
       return 'Average';
   }

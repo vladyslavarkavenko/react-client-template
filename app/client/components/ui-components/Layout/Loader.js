@@ -9,6 +9,10 @@ export default function Loader() {
   );
 }
 
+export function InlineSvgLoader() {
+  return <LoaderSvg />;
+}
+
 export function InlineLoader() {
   return <div className="preloader" />;
 }

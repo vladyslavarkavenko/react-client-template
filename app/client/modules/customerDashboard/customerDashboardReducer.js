@@ -27,7 +27,9 @@ const radarOptions = handleActions(
   {
     [actions.fetchManagers.SUCCESS](state, { payload }) {
       const options = payload.map((manager) => ({
-        value: manager.id,
+        // unique value
+        value: `${manager.id}_${manager.name}_${manager.email}`,
+        id: manager.id,
         label: manager.name,
         type: ROUTING_PARAMS.MANAGER
       }));
@@ -37,6 +39,7 @@ const radarOptions = handleActions(
     [actions.fetchCompanies.SUCCESS](state, { payload }) {
       const options = payload.map((company) => ({
         value: company.id,
+        id: company.id,
         label: company.name,
         type: ROUTING_PARAMS.COMPANY
       }));

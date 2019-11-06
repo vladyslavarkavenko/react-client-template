@@ -15,10 +15,9 @@ import Tooltip from './Tooltip';
 import FeaturesLabels from './FeaturesLabels';
 
 import styles from './styles';
+import { InlineSvgLoader } from '../../ui-components/Layout/Loader';
 import CategoriesLabels from './CategoriesLabels';
 import { LEGEND_COLORS, FEATURES, CATEGORIES, PROPS } from './const';
-
-import '../../../assets/styles/pages/overview.less';
 
 const { a, p, domain, factor, tooltipTriggerRadius, emptyData } = PROPS;
 const { ICONS } = CATEGORIES;
@@ -138,6 +137,7 @@ class Radar extends React.Component {
       onFeatureActivate,
       onCategoryActivate,
       withBgIcons = true,
+      status,
       data: { grades, categoriesDetails, featuresDetails } = emptyData
     } = this.props;
     const { activeFeature, activeCategory, tooltipData } = this.state;
@@ -145,6 +145,11 @@ class Radar extends React.Component {
     return (
       <>
         <div className="radar-wrapper">
+          {status === 'request' && (
+            <div className="screen-loader">
+              <InlineSvgLoader />
+            </div>
+          )}
           <div className="radar p-relative">
             <VictoryChart
               polar

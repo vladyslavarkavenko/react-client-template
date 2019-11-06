@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Radar from '../../components/widgets/radar/Radar';
 import RadarTitle from '../../components/widgets/radar/RadarTitle';
 import BlockWrapper from '../../components/widgets/BlockWrapper';
-import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 import { selectRadarOption } from '../../modules/customerDashboard/customerDashboardActions';
 import customerDashboardSelectors from '../../modules/customerDashboard/customerDashboardSelectors';
 
@@ -24,13 +23,20 @@ class RadarContainer extends React.Component {
   render() {
     const { status, data, options, selected } = this.props;
 
+    const detailsData = selected
+      ? {
+          type: selected.type,
+          id: selected.value
+        }
+      : {};
+
     return (
       <BlockWrapper
         title={
           <RadarTitle options={options} selected={selected} handleSelect={this.handleSelect} />
         }
       >
-        {status === 'request' ? <LoaderBlock height="600px" /> : <Radar data={data} />}
+        <Radar data={data} detailsData={detailsData} status={status} />
       </BlockWrapper>
     );
   }

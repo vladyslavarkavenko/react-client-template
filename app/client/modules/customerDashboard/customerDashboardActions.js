@@ -80,8 +80,8 @@ function* getRadarScoresWorker() {
 
     const scores =
       selected.type === ROUTING_PARAMS.COMPANY
-        ? yield call(CompaniesService.getRadarScores, selected.value)
-        : yield call(ManagerService.getRadarScores, selected.value);
+        ? yield call(CompaniesService.getRadarScores, selected.id)
+        : yield call(ManagerService.getRadarScores, selected.id);
 
     const data = parseRadarScores(scores);
 
@@ -104,6 +104,7 @@ function* fetchAllWorker() {
   yield put(
     selectRadarOption.success({
       value: firstCompany.id,
+      id: firstCompany.id,
       label: firstCompany.name,
       type: ROUTING_PARAMS.COMPANY
     })
