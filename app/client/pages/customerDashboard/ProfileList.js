@@ -6,8 +6,8 @@ import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 import CompanyItem from './CompanyItem';
 import ManagerItem from './ManagerItem';
 
-function ProfileList({ status, managers, companies }) {
-  if (status === 'request') {
+function ProfileList({ companyStatus, managerStatus, managers, companies }) {
+  if (companyStatus === 'request' || managerStatus === 'request') {
     return <LoaderBlock height="15vh" />;
   }
 
@@ -27,9 +27,10 @@ function ProfileList({ status, managers, companies }) {
 }
 
 const mapStateToProps = (state) => {
-  const { status, managers, companies } = customerDashboardSelectors.list(state);
+  const { status: companyStatus, data: companies } = customerDashboardSelectors.companies(state);
+  const { status: managerStatus, data: managers } = customerDashboardSelectors.managers(state);
 
-  return { status, managers, companies };
+  return { companyStatus, managerStatus, managers, companies };
 };
 
 export default connect(mapStateToProps)(ProfileList);

@@ -1,53 +1,94 @@
-/* eslint-disable */
-
 import { put, takeLatest, all, call, select } from 'redux-saga/effects';
 
+import { ROUTING_PARAMS } from '../../utils/constants';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import CompaniesService from '../../services/companies';
 import parseRadarScores from '../helpers/parseRadarScores';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
-import ShareOpinionService from '../../services/shareOpinion';
 import ManagerService from '../../services/manager';
+import Notification from '../../utils/notifications';
 import companiesSelectors from '../companies/companiesSelectors';
+import customerDashboardSelectors from './customerDashboardSelectors';
 
 export const prefix = 'customerDashboard';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 
 export const fetchRadarScores = createRequestBound('RADAR_SCORES_FETCH');
+export const fetchCompanies = createRequestBound('COMPANIES_FETCH');
 export const fetchManagers = createRequestBound('MANAGERS_FETCH');
+
+export const selectRadarOption = createRequestBound('RADAR_OPTION_SELECT');
 
 export const fetchAll = createRequestBound('FETCH_ALL');
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
+function* getCompanyCtruTask(company) {
+  try {
+    const { ctruScore } = yield CompaniesService.getStatistics(company.id);
+    return { ...company, ctruScore };
+  } catch (err) {
+    return company;
+  }
+}
+
+function* getCompaniesWorker() {
+  yield put(fetchCompanies.request());
+  try {
+    const companies = yield select(companiesSelectors.getCompaniesAsCustomer);
+
+    const normalized = yield all(companies.map((company) => call(getCompanyCtruTask, company)));
+
+    yield put(fetchCompanies.success(normalized));
+  } catch (err) {
+    console.error(err);
+    yield put(fetchCompanies.failure());
+  }
+}
+
+function* getManagerDataTask(manager) {
+  try {
+    const { userData, ctruScore, avgSatisfaction } = yield ManagerService.getProfile(manager.id);
+    return { id: manager.id, ...userData, ctruScore, avgSatisfaction };
+  } catch (err) {
+    return {
+      name: `${manager.firstName} ${manager.lastName}`,
+      id: manager.id,
+      avatar: manager.avatar
+    };
+  }
+}
+
 function* getManagersWorker() {
   yield put(fetchManagers.request());
   try {
-    // yield call(CompaniesService.getManagersList);
-
     const managers = yield select(companiesSelectors.getManagersList);
-    const companies = yield select(companiesSelectors.getCompaniesAsCustomer);
 
-    console.log(managers, companies);
-    yield put(fetchManagers.success({ managers, companies }));
+    const normalized = yield all(managers.map((manager) => call(getManagerDataTask, manager)));
+
+    yield put(fetchManagers.success(normalized));
   } catch (err) {
     console.error(err);
-    // Notification.error(err);
     yield put(fetchManagers.failure());
   }
 }
 
-function* getRadarScoresWorker({ payload }) {
+function* getRadarScoresWorker() {
   yield put(fetchRadarScores.request());
   try {
-    const scores = yield call(CompaniesService.getRadarScores, payload);
+    const { selected = {} } = yield select(customerDashboardSelectors.radar);
+
+    const scores =
+      selected.type === ROUTING_PARAMS.COMPANY
+        ? yield call(CompaniesService.getRadarScores, selected.value)
+        : yield call(ManagerService.getRadarScores, selected.value);
 
     const data = parseRadarScores(scores);
 
     yield put(fetchRadarScores.success(data));
   } catch (err) {
     console.error(err);
-    // Notification.error(err);
+    Notification.error(err);
     yield put(fetchRadarScores.failure());
   }
 }
@@ -55,9 +96,20 @@ function* getRadarScoresWorker({ payload }) {
 //
 function* fetchAllWorker() {
   yield put(fetchAll.request());
-  const taskList = [getManagersWorker, getRadarScoresWorker];
+  const taskList = [getCompaniesWorker, getManagersWorker, getRadarScoresWorker];
 
-  yield all(taskList.map((task) => call(task, { payload: 1 })));
+  const companies = yield select(companiesSelectors.getCompaniesAsCustomer);
+  const firstCompany = companies[0];
+
+  yield put(
+    selectRadarOption.success({
+      value: firstCompany.id,
+      label: firstCompany.name,
+      type: ROUTING_PARAMS.COMPANY
+    })
+  );
+
+  yield all(taskList.map((task) => call(task)));
 
   yield put(fetchAll.success());
 }
@@ -66,7 +118,6 @@ export function* customerDashboardWorker() {
   yield all([
     takeLatest(fetchAll.TRIGGER, fetchAllWorker),
 
-    takeLatest(fetchRadarScores.TRIGGER, getRadarScoresWorker),
-    takeLatest(fetchManagers.TRIGGER, getManagersWorker)
+    takeLatest(selectRadarOption.TRIGGER, getRadarScoresWorker)
   ]);
 }

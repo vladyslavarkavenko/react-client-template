@@ -1,5 +1,6 @@
 export default {
   status: (state) => state.customerDashboard.status,
   radar: (state) => state.customerDashboard.radar,
-  list: (state) => state.customerDashboard.list
+  managers: (state) => state.customerDashboard.managers,
+  companies: (state) => state.customerDashboard.companies
 };

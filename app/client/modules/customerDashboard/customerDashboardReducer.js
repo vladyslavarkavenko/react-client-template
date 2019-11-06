@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 
+import { ROUTING_PARAMS } from '../../utils/constants';
 import * as actions from './customerDashboardActions';
 import { makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 
@@ -22,10 +23,41 @@ const radarData = handleActions(
   emptyData
 );
 
+const radarOptions = handleActions(
+  {
+    [actions.fetchManagers.SUCCESS](state, { payload }) {
+      const options = payload.map((manager) => ({
+        value: manager.id,
+        label: manager.name,
+        type: ROUTING_PARAMS.MANAGER
+      }));
+
+      return [...state, ...options];
+    },
+    [actions.fetchCompanies.SUCCESS](state, { payload }) {
+      const options = payload.map((company) => ({
+        value: company.id,
+        label: company.name,
+        type: ROUTING_PARAMS.COMPANY
+      }));
+
+      return [...state, ...options];
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
+
 const radarSelected = handleActions(
   {
-    [actions.fetchManagers.SUCCESS]() {
-      return null;
+    [actions.selectRadarOption.TRIGGER](state, { payload }) {
+      return payload;
+    },
+    //for init phase
+    [actions.selectRadarOption.SUCCESS](state, { payload }) {
+      return payload;
     },
     [actions.clearAll.TRIGGER]() {
       return null;
@@ -37,13 +69,14 @@ const radarSelected = handleActions(
 const radar = combineReducers({
   status: radarStatus,
   data: radarData,
-  selected: radarSelected
+  selected: radarSelected,
+  options: radarOptions
 });
 
-const managers = handleActions(
+const managersData = handleActions(
   {
     [actions.fetchManagers.SUCCESS](state, { payload }) {
-      return payload.managers;
+      return payload;
     },
     [actions.clearAll.TRIGGER]() {
       return [];
@@ -52,10 +85,10 @@ const managers = handleActions(
   []
 );
 
-const companies = handleActions(
+const companiesData = handleActions(
   {
-    [actions.fetchManagers.SUCCESS](state, { payload }) {
-      return payload.companies;
+    [actions.fetchCompanies.SUCCESS](state, { payload }) {
+      return payload;
     },
     [actions.clearAll.TRIGGER]() {
       return [];
@@ -64,10 +97,14 @@ const companies = handleActions(
   []
 );
 
-const list = combineReducers({
+const companies = combineReducers({
+  status: makeStatusWithResetReducer(actions.fetchCompanies, actions.clearAll.TRIGGER),
+  data: companiesData
+});
+
+const managers = combineReducers({
   status: makeStatusWithResetReducer(actions.fetchManagers, actions.clearAll.TRIGGER),
-  managers,
-  companies
+  data: managersData
 });
 
 const status = makeStatusWithResetReducer(actions.fetchAll, actions.clearAll.TRIGGER);
@@ -75,7 +112,8 @@ const status = makeStatusWithResetReducer(actions.fetchAll, actions.clearAll.TRI
 const customerDashboard = combineReducers({
   status,
   radar,
-  list
+  managers,
+  companies
 });
 
 export default customerDashboard;

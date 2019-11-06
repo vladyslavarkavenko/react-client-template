@@ -7,12 +7,12 @@ import GradeCircle from '../../components/ui-components/GradeCircle';
 import routing from '../../utils/routing';
 
 export default function CompanyItem({ company }) {
-  const { avatar, location, name, avgSatisfaction, id } = company;
+  const { avatar, location, name, avgSatisfaction, id, ctruScore } = company;
   return (
     <li className="profile__item company">
       <div className="profile__content">
         <div className="profile__avatar">
-          <GradeCircle score="7.5" />
+          <GradeCircle score={ctruScore} />
           <img src={avatar || '/assets/img/empty-avatar.jpg'} alt="avatar" />
         </div>
         <Link to={routing(id).companyProfileOverview} className="title">

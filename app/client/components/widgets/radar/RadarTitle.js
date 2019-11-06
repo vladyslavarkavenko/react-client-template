@@ -3,8 +3,15 @@ import React from 'react';
 
 import { LEGEND_COLORS } from './const';
 import Select from 'react-select';
+// import SortSvg from '../../../../../public/assets/svg/sort.solid.svg';
 
 const { IMPORTANCE, SATISFACTION } = LEGEND_COLORS;
+
+// const DropdownIndicator = (props) => (
+//   <components.DropdownIndicator {...props}>
+//     <SortSvg className="drop-icon" />
+//   </components.DropdownIndicator>
+// );
 
 const RadarTitle = ({ options, selected, handleSelect }) => (
   <div className="radar-header d-flex jc-between ai-center">
@@ -20,7 +27,17 @@ const RadarTitle = ({ options, selected, handleSelect }) => (
       </div>
     </div>
     {options && (
-      <Select className="radar-select__container" classNamePrefix="radar-select" options={[]} />
+      <Select
+        className="radar-select__container"
+        classNamePrefix="radar-select"
+        options={options}
+        value={selected}
+        onChange={handleSelect}
+        components={{
+          IndicatorSeparator: null
+          // DropdownIndicator
+        }}
+      />
     )}
   </div>
 );
