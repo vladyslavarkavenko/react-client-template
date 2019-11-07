@@ -58,11 +58,11 @@ function getSatisfactionText({ satisfaction, avgSatisfaction }) {
     case 1:
       return 'Unsatisfied';
     case 2:
-      return 'Average';
+      return 'Neutral';
     case 3:
       return 'Satisfied';
     default:
-      return 'Average';
+      return 'Neutral';
   }
 }
 
