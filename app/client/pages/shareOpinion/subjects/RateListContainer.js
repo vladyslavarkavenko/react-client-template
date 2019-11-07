@@ -24,10 +24,12 @@ const mapStateToProps = (state, props) => {
 
   const paramsObj = new URLSearchParams(search.slice(1));
 
+  // For fast select topic from url, or for fast select all expired topics
   const fastSelect = {
     isActive: false,
     subjectId: paramsObj.get(ROUTING_PARAMS.SUBJECT_ID),
-    topicId: paramsObj.get(ROUTING_PARAMS.TOPIC_ID)
+    topicId: paramsObj.get(ROUTING_PARAMS.TOPIC_ID),
+    onlyExpired: paramsObj.get(ROUTING_PARAMS.SELECT_EXPIRED) === '1'
   };
 
   if (id && type === ROUTING_PARAMS.COMPANY) {

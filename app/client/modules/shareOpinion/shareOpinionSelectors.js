@@ -3,8 +3,8 @@ const getSubjectsData = (state) => state.shareOpinion.subjects.data;
 const getSelectedTopics = (state) => state.shareOpinion.selectedTopics;
 const getSelectedTopicsId = (state) => getSelectedTopics(state).map((topic) => topic.id);
 
-const getExpiredOpinions = (state) => state.shareOpinion.expiredOpinions;
-const getExpiredOpinionsBySubject = (state, subjectId) => getExpiredOpinions(state)[subjectId];
+// const getExpiredOpinions = (state) => state.shareOpinion.expiredOpinions;
+// const getExpiredOpinionsBySubject = (state, subjectId) => getExpiredOpinions(state)[subjectId];
 
 const getNewTopic = (state) => state.shareOpinion.newTopic;
 const getNewTopicInput = (state) => getNewTopic(state).input;
@@ -24,24 +24,36 @@ const getGlobalExpired = (state, { profileType, profileId, subjectId } = {}) => 
   }
 
   if (!profileId) {
-    return obj[profileType];
+    return obj[profileType] || {};
   }
 
   if (!subjectId) {
-    return obj[profileType][profileId];
+    try {
+      return obj[profileType][profileId] || {};
+    } catch (err) {
+      return {};
+    }
   }
 
-  return obj[profileType][profileId][subjectId] || {};
+  try {
+    return obj[profileType][profileId][subjectId] || [];
+  } catch (err) {
+    return [];
+  }
 };
 
-const getGlobalOpinions = (state, { profileType } = {}) => {
+const getGlobalOpinions = (state, { profileType, profileId } = {}) => {
   const obj = state.shareOpinion.globalOpinions;
 
   if (!profileType) {
     return obj;
   }
 
-  return obj[profileType];
+  if (!profileId) {
+    return obj[profileType] || {};
+  }
+
+  return obj[profileType][profileId] || 0;
 };
 
 export default {
@@ -51,8 +63,8 @@ export default {
   selectedTopicsId: getSelectedTopicsId,
   selectedProfile: (state) => state.shareOpinion.selectedProfile,
   selectedOptions: (state) => state.shareOpinion.selectedOptions,
-  expiredOpinions: getExpiredOpinions,
-  expiredOpinionsById: getExpiredOpinionsBySubject,
+  // expiredOpinions: getExpiredOpinions,
+  // expiredOpinionsById: getExpiredOpinionsBySubject,
 
   actualSubjectsId: (state) => state.shareOpinion.actualSubjects,
 

@@ -6,8 +6,8 @@ import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpin
 import { selectOpinionExpired } from '../../../../../modules/shareOpinion/shareOpinionActions';
 import Alert from '../../../../../components/ui-components/Alert';
 
-function RateNotification({ expiredTopics, selectOpinionExpired }) {
-  if (!Object.keys(expiredTopics).length) {
+function RateNotification({ isExpired, selectOpinionExpired }) {
+  if (!isExpired) {
     return null;
   }
 
@@ -22,9 +22,24 @@ function RateNotification({ expiredTopics, selectOpinionExpired }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  expiredTopics: shareOpinionSelectors.expiredOpinions(state)
-});
+const mapStateToProps = (state) => {
+  let isExpired = false;
+
+  const profile = shareOpinionSelectors.selectedProfile(state);
+
+  if (profile) {
+    const { type, id } = profile;
+
+    const expired = shareOpinionSelectors.getGlobalExpired(state, {
+      profileType: type,
+      profileId: id
+    });
+
+    isExpired = Object.keys(expired).length !== 0;
+  }
+
+  return { isExpired };
+};
 
 const mapDispatchToProps = {
   selectOpinionExpired

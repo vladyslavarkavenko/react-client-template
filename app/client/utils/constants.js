@@ -25,8 +25,8 @@ module.exports = {
     TRANSPARENT: 'transparent'
   },
   RATE_PROFILE_TYPE: {
-    MANAGER: 'MANAGER',
-    COMPANY: 'COMPANY'
+    MANAGER: 'manager',
+    COMPANY: 'company'
   },
   STAFF_TABLE_STATUS: {
     PENDING: 'Pending',
@@ -74,6 +74,8 @@ module.exports = {
     TOPIC_ID: 'topicId',
 
     MAIN_ID: 'mainId',
-    COMPARE_ID: 'compareId'
+    COMPARE_ID: 'compareId',
+
+    SELECT_EXPIRED: 'getExpired'
   }
 };

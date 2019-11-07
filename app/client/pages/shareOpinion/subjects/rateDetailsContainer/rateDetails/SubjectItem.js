@@ -1,11 +1,19 @@
 import React from 'react';
-import ListArrowDownSvg from '../../../../../../../../public/assets/svg/arrow-down.svg';
-import ExclamationCircleEmptySvg from '../../../../../../../../public/assets/svg/exclamation-circle.svg';
-import CheckCircleEmptySvg from '../../../../../../../../public/assets/svg/check-circle.svg';
-import TopicItem from './TopicItem';
-import SubjectProgress from './SubjectProgress';
+import { connect } from 'react-redux';
 
-export default class SubjectItem extends React.Component {
+import shareOpinionSelectors from '../../../../../modules/shareOpinion/shareOpinionSelectors';
+import {
+  pushNewTopic,
+  selectOpinionTopic
+} from '../../../../../modules/shareOpinion/shareOpinionActions';
+import ListArrowDownSvg from '../../../../../../../public/assets/svg/arrow-down.svg';
+import ExclamationCircleEmptySvg from '../../../../../../../public/assets/svg/exclamation-circle.svg';
+import CheckCircleEmptySvg from '../../../../../../../public/assets/svg/check-circle.svg';
+
+import TopicItem from './subjectItem/TopicItem';
+import SubjectProgress from './subjectItem/SubjectProgress';
+
+class SubjectItem extends React.Component {
   constructor(props) {
     super(props);
 
@@ -35,6 +43,8 @@ export default class SubjectItem extends React.Component {
     const { id, name, image, topics } = data;
 
     const isActual = actualSubjectsId.includes(id);
+
+    console.log(expiredTopics);
 
     const topicsList = topics.map((topic) => {
       const key = `${id}_${topic.id}`;
@@ -68,7 +78,7 @@ export default class SubjectItem extends React.Component {
             <div className="subject-title">
               {name}
 
-              {expiredTopics && (
+              {expiredTopics.length !== 0 && (
                 <span className="red">
                   <ExclamationCircleEmptySvg />
                 </span>
@@ -92,3 +102,28 @@ export default class SubjectItem extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state, { data }) => {
+  const { id: subjectId } = data;
+  const { type: profileType, id: profileId } = shareOpinionSelectors.selectedProfile(state);
+
+  return {
+    selectedTopicsId: shareOpinionSelectors.selectedTopicsId(state),
+    expiredTopics: shareOpinionSelectors.getGlobalExpired(state, {
+      profileType,
+      profileId,
+      subjectId
+    }),
+    actualSubjectsId: shareOpinionSelectors.actualSubjectsId(state)
+  };
+};
+
+const mapDispatchToProps = {
+  handleSelect: selectOpinionTopic,
+  handleModal: pushNewTopic
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SubjectItem);

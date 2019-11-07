@@ -4,7 +4,6 @@ import { combineReducers } from 'redux';
 import { RATE_PROFILE_TYPE } from '../../utils/constants';
 import { makeStatusReducer, makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 import * as actions from './shareOpinionActions';
-import getOnlyExpired from './helpers/getOnlyExpired';
 import getOnlyActual from './helpers/getOnlyActual';
 
 const topicOpinions = handleActions(
@@ -50,7 +49,11 @@ const selectedProfile = handleActions(
 const selectedTopics = handleActions(
   {
     [actions.selectOpinionTopic.TRIGGER](state, { payload }) {
-      // payload is topic_model
+      // payload is topic_model or array of topic_model
+      if (Array.isArray(payload)) {
+        return payload;
+      }
+
       const idList = state.map((topic) => topic.id);
 
       if (idList.includes(payload.id)) {
@@ -136,20 +139,20 @@ const actualSubjects = handleActions(
   []
 );
 
-const expiredOpinions = handleActions(
-  {
-    [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
-      return getOnlyExpired(payload);
-    },
-    [actions.pushTopicsRate.SUCCESS]() {
-      return {};
-    },
-    [actions.selectOpinionProfile.TRIGGER]() {
-      return {};
-    }
-  },
-  {}
-);
+// const expiredOpinions = handleActions(
+//   {
+//     [actions.fetchOpinionSubjects.SUCCESS](state, { payload }) {
+//       return getOnlyExpired(payload);
+//     },
+//     [actions.pushTopicsRate.SUCCESS]() {
+//       return {};
+//     },
+//     [actions.selectOpinionProfile.TRIGGER]() {
+//       return {};
+//     }
+//   },
+//   {}
+// );
 
 const subjectsStatus = makeStatusWithResetReducer(
   actions.fetchOpinionSubjects,
@@ -436,7 +439,7 @@ const shareOpinion = combineReducers({
   selectedProfile,
   selectedTopics,
   selectedOptions,
-  expiredOpinions,
+  // expiredOpinions,
   actualSubjects,
   subjects,
   newTopic

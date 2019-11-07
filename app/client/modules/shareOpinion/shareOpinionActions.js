@@ -114,6 +114,59 @@ function* fetchExpiredGlobalWorker() {
   }
 }
 
+function* fastSelectTopicTask({ fastSelect, id, type }) {
+  const { subjectId, topicId, onlyExpired } = fastSelect || {};
+
+  const subjects = yield select(shareOpinionSelectors.subjectsData);
+
+  if (onlyExpired) {
+    const selectedTopics = [];
+
+    const expired = yield select(shareOpinionSelectors.getGlobalExpired, {
+      profileType: type,
+      profileId: id
+    });
+
+    Object.keys(expired).forEach((subjectKey) => {
+      const subject = subjects.find((subject) => subject.id === Number(subjectKey));
+
+      if (!subject) {
+        return;
+      }
+
+      expired[subject.id].forEach((topicKey) => {
+        const topic = subject.topics.find((topic) => topic.id === Number(topicKey));
+
+        if (!topic) {
+          return;
+        }
+
+        selectedTopics.push(topic);
+      });
+    });
+
+    if (selectedTopics.length !== 0) {
+      yield put(selectOpinionTopic(selectedTopics));
+      yield put(historyPush(routing().shareOpinionChart));
+    }
+  } else {
+    const subject = subjects.find((subject) => subject.id === Number(subjectId));
+
+    if (!subject) {
+      return;
+    }
+
+    const topic = subject.topics.find((topic) => topic.id === Number(topicId));
+
+    if (!topic) {
+      return;
+    }
+
+    yield put(selectOpinionTopic(topic));
+    yield put(historyPush(routing().shareOpinionChart));
+  }
+}
+
 function* fetchOpinionSubjectsWorker({ payload = {} }) {
   yield put(fetchOpinionSubjects.request());
   try {
@@ -132,24 +185,7 @@ function* fetchOpinionSubjectsWorker({ payload = {} }) {
     const { fastSelect } = payload;
 
     if (fastSelect && fastSelect.isActive) {
-      const { subjectId, topicId } = fastSelect || {};
-
-      const subjects = yield select(shareOpinionSelectors.subjectsData);
-
-      const subject = subjects.find((subject) => subject.id === Number(subjectId));
-
-      if (!subject) {
-        return;
-      }
-
-      const topic = subject.topics.find((topic) => topic.id === Number(topicId));
-
-      if (!topic) {
-        return;
-      }
-
-      yield put(selectOpinionTopic(topic));
-      yield put(historyPush(routing().shareOpinionChart));
+      yield call(fastSelectTopicTask, { fastSelect, id, type });
     }
   } catch (err) {
     console.error(err);
@@ -160,25 +196,33 @@ function* fetchOpinionSubjectsWorker({ payload = {} }) {
 
 function* selectExpiredOpinionsWorker() {
   const subjects = yield select(shareOpinionSelectors.subjectsData);
-  const expiredList = yield select(shareOpinionSelectors.expiredOpinions);
+  const profile = yield select(shareOpinionSelectors.selectedProfile);
 
-  let selectedTopics = [];
+  if (profile && profile.type && profile.id) {
+    const { type: profileType, id: profileId } = profile;
+    const expiredList = yield select(shareOpinionSelectors.getGlobalExpired, {
+      profileType,
+      profileId
+    });
 
-  Object.keys(expiredList).forEach((subjectId) => {
-    const currentSubject = subjects.find((subject) => subject.id === Number(subjectId));
+    let selectedTopics = [];
 
-    if (!currentSubject) {
-      return;
-    }
+    Object.keys(expiredList).forEach((subjectId) => {
+      const currentSubject = subjects.find((subject) => subject.id === Number(subjectId));
 
-    const partialSelection = currentSubject.topics.filter((topic) =>
-      expiredList[subjectId].includes(topic.id)
-    );
+      if (!currentSubject) {
+        return;
+      }
 
-    selectedTopics = [...selectedTopics, ...partialSelection];
-  });
+      const partialSelection = currentSubject.topics.filter((topic) =>
+        expiredList[subjectId].includes(topic.id)
+      );
 
-  yield put(selectOpinionExpired.success(selectedTopics));
+      selectedTopics = [...selectedTopics, ...partialSelection];
+    });
+
+    yield put(selectOpinionExpired.success(selectedTopics));
+  }
 }
 
 function* newTopicModalWorker({ payload }) {
@@ -251,18 +295,6 @@ function* newTopicWorker() {
 
         topics: [{ name: input.topic }]
       });
-
-      // then create topic for this subject
-      // const newTopic = yield call(() =>
-      //   ShareOpinionService.pushCreateTopic({
-      //     name: input.topic,
-      //     subject: newSubject.id,
-      //     author: selectedProfile.customerId,
-      //
-      //     manager:
-      //       selectedProfile.type === RATE_PROFILE_TYPE.MANAGER ? selectedProfile.id : undefined
-      //   })
-      // );
 
       //send new topic id and title
       yield put(pushNewTopic.success(newSubject.topics[0]));

@@ -32,7 +32,7 @@ function generateCompareLink({ type, ids } = {}) {
   }
 }
 
-function generateOpinionLink({ id, type, criteriaId, subjectId, topicId } = {}) {
+function generateOpinionLink({ id, type, criteriaId, subjectId, topicId, onlyExpired } = {}) {
   const paramObj = new URLSearchParams();
 
   if (criteriaId) {
@@ -45,6 +45,10 @@ function generateOpinionLink({ id, type, criteriaId, subjectId, topicId } = {}) 
 
   if (topicId) {
     paramObj.append(ROUTING_PARAMS.TOPIC_ID, topicId);
+  }
+
+  if (onlyExpired) {
+    paramObj.append(ROUTING_PARAMS.SELECT_EXPIRED, 1);
   }
 
   const paramsStr = paramObj.toString();

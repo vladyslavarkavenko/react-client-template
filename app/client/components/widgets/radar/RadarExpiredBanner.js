@@ -7,7 +7,7 @@ import routing from '../../../utils/routing';
 import shareOpinionSelectors from '../../../modules/shareOpinion/shareOpinionSelectors';
 
 function RadarExpiredBanner({ selected, expiredCount, totalCount }) {
-  if (!selected || !expiredCount) {
+  if (!selected || expiredCount === 0) {
     return null;
   }
 
@@ -17,12 +17,15 @@ function RadarExpiredBanner({ selected, expiredCount, totalCount }) {
 
   return (
     <div className="radar-banner">
-      <Link to={routing({ id, type }).shareOpinionWithProfile} className="update-now-btn">
+      <Link
+        to={routing({ id, type, onlyExpired: true }).shareOpinionWithProfile}
+        className="update-now-btn"
+      >
         Update Now
       </Link>
       <p className="radar-banner__title">{label}</p>
       <p className="radar-banner__subtitle">
-        {expiredCount} of {totalCount} feedbacks has lost its impact
+        {expiredCount} of {totalCount} feedback has lost its impact
       </p>
       <ProgressBar className="white" percentage={percentage} />
     </div>
@@ -34,16 +37,17 @@ const mapStateToProps = (state, { selected }) => {
   let totalCount = 0;
 
   if (selected && selected.id && selected.type) {
-    const expired = shareOpinionSelectors.getGlobalExpired(state);
-    const opinions = shareOpinionSelectors.getGlobalOpinions(state);
+    const expired = shareOpinionSelectors.getGlobalExpired(state, {
+      profileType: selected.type,
+      profileId: selected.id
+    });
 
-    try {
-      expiredCount = Object.keys(expired[selected.type.toUpperCase()][selected.id]).length;
+    totalCount = shareOpinionSelectors.getGlobalOpinions(state, {
+      profileType: selected.type,
+      profileId: selected.id
+    });
 
-      totalCount = opinions[selected.type.toUpperCase()][selected.id];
-    } catch (err) {
-      console.error(err);
-    }
+    expiredCount = Object.keys(expired).length;
   }
 
   return { expiredCount, totalCount };
