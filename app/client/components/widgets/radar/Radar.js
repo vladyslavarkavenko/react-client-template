@@ -169,10 +169,10 @@ class Radar extends React.Component {
               }
             >
               <VictoryPolarAxis style={mainAxis} />
-              {features.map(({ x }) => (
+              {features.map(({ x }, i) => (
                 <VictoryPolarAxis
                   dependentAxis
-                  key={x}
+                  key={`${x}_${i}_axis`}
                   axisValue={x}
                   tickCount={domain.y[1]}
                   style={dependentAxis}
@@ -190,7 +190,7 @@ class Radar extends React.Component {
                     .filter(({ y }) => y)
                     .map((d, i, arr) => (
                       <VictoryLine
-                        key={i + p}
+                        key={`${i}_${p}_${d}_line`}
                         name="line"
                         style={{ data: { stroke: colorScale[index] } }}
                         data={[d, arr[i + 1 === arr.length ? 0 : i + 1]]}
@@ -216,7 +216,7 @@ class Radar extends React.Component {
         {withBgIcons && (
           <div className="radar-icons-wrapper">
             {Object.values(ICONS).map((src, i) => (
-              <ReactSVG className={`bg-icon bg-icon-${i}`} src={src} />
+              <ReactSVG key={src} className={`bg-icon bg-icon-${i}`} src={src} />
             ))}
           </div>
         )}
