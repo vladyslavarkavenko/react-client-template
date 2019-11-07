@@ -1,12 +1,13 @@
-import { put, takeLatest, all, call, select } from 'redux-saga/effects';
+import { put, takeLatest, all, call, select, fork } from 'redux-saga/effects';
 import { min, max, differenceInYears, differenceInMonths } from 'date-fns';
 
 import { ROUTING_PARAMS } from '../../utils/constants';
 import Notification from '../../utils/notifications';
 import ManagerService from '../../services/manager';
+import ShareOpinionService from '../../services/shareOpinion';
+import CompaniesService from '../../services/companies';
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
-import CompaniesService from '../../services/companies';
 import normalizeCriteria from './helpers/normalizeCriteria';
 import recursiveSelect from './helpers/recursiveSelect';
 import opinionDetailsSelectors from './opinionDetailsSelectors';
@@ -18,6 +19,9 @@ const createRequestBound = createRequestRoutine.bind(null, prefix);
 const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 
 export const fetchOpinionDetails = createRequestBound('OPINION_DETAILS_FETCH');
+
+export const fetchOpinionParticipation = createRequestBound('OPINION_PARTICIPATION_FETCH');
+
 export const setProfile = createRequestBound('PROFILE_SET');
 
 export const selectOption = createRequestBound('OPTION_SELECT');
@@ -33,7 +37,6 @@ export const handlePrevOffset = createOnlyTriggerBound('C_OFFSET_PREV');
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
 /* eslint-disable */
-
 function* calculatePaginationWorker() {
   yield put(calcChartOffset.request());
 
@@ -100,13 +103,41 @@ function* getDetailsWorker({ payload }) {
 
     const selected = recursiveSelect(normalize, { criteriaId, subjectId, topicId });
 
+    const profile = { type, id };
+
     yield put(setProfile.success(selected));
-    yield put(fetchOpinionDetails.success({ data: normalize, comments }));
+    yield put(fetchOpinionDetails.success({ data: normalize, comments, profile }));
+
+    yield fork(getOpinionParticipationWorker);
     yield call(calculatePaginationWorker);
   } catch (err) {
     console.error(err);
     Notification.error(err);
     yield put(fetchOpinionDetails.failure());
+  }
+}
+
+function* getOpinionParticipationWorker() {
+  yield put(fetchOpinionParticipation.request());
+  try {
+    const profile = yield select(opinionDetailsSelectors.selectedProfile);
+    const topic = yield select(opinionDetailsSelectors.selectedTopic);
+
+    const participation =
+      profile.type === ROUTING_PARAMS.MANAGER
+        ? yield call(ShareOpinionService.getTopicStatsByManager, {
+            id: profile.id,
+            topic: topic.id
+          })
+        : yield call(ShareOpinionService.getTopicStatsByCompany, {
+            id: profile.id,
+            topic: topic.id
+          });
+
+    yield put(fetchOpinionParticipation.success(participation));
+  } catch (err) {
+    console.error(err);
+    yield put(fetchOpinionParticipation.failure());
   }
 }
 
@@ -126,6 +157,7 @@ function* selectOptionWorker({ payload }) {
   });
 
   yield put(setProfile.success(selected));
+  yield fork(getOpinionParticipationWorker);
 }
 
 export function* opinionDetailsWatcher() {

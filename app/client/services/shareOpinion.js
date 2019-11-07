@@ -1,6 +1,14 @@
 import api from '../utils/api';
 
 class ShareOpinionService {
+  static getTopicStatsByCompany({ id, topic }) {
+    return api.post(`/opinion/company/${id}/topic_statistics/`, { topic });
+  }
+
+  static getTopicStatsByManager({ id, topic }) {
+    return api.post(`/opinion/manager/${id}/topic_statistics/`, { topic });
+  }
+
   static getSatisfactionByCompany(companyId) {
     return api.get(`/opinion/company/${companyId}/avg_satisfaction/`);
   }

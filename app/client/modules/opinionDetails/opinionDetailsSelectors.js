@@ -7,6 +7,8 @@ const selectedCriteria = (state) => state.opinionDetails.selectedCriteria;
 const selectedSubject = (state) => state.opinionDetails.selectedSubject;
 const selectedTopic = (state) => state.opinionDetails.selectedTopic;
 
+const selectedProfile = (state) => state.opinionDetails.selectedProfile;
+
 const getLineFilter = (state) => state.opinionDetails.chart.lineFilter;
 const getDateOffset = (state) => state.opinionDetails.chart.dateOffset;
 
@@ -103,11 +105,14 @@ export default {
   selectedSubject,
   selectedTopic,
 
+  selectedProfile,
+
   getChartRawData,
   getChartPagination,
   getChartSliceData,
 
   getLineFilter,
   getDateOffset,
-  comments: (state) => state.opinionDetails.comments
+  comments: (state) => state.opinionDetails.comments,
+  participation: (state) => state.opinionDetails.participation
 };

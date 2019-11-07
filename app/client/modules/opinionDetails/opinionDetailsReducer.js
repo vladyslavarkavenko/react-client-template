@@ -64,6 +64,18 @@ const selectedTopic = handleActions(
   null
 );
 
+const selectedProfile = handleActions(
+  {
+    [actions.fetchOpinionDetails.SUCCESS](state, { payload }) {
+      return payload.profile;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return null;
+    }
+  },
+  null
+);
+
 const comments = handleActions(
   {
     [actions.fetchOpinionDetails.SUCCESS](state, { payload }) {
@@ -75,6 +87,21 @@ const comments = handleActions(
   },
   []
 );
+
+const participation = combineReducers({
+  status: makeStatusWithResetReducer(actions.fetchOpinionParticipation, actions.clearAll.TRIGGER),
+  data: handleActions(
+    {
+      [actions.fetchOpinionParticipation.SUCCESS](state, { payload }) {
+        return payload;
+      },
+      [actions.clearAll.TRIGGER]() {
+        return {};
+      }
+    },
+    {}
+  )
+});
 
 /* eslint-disable */
 const chartDataGenerator = () => {
@@ -191,9 +218,12 @@ const opinionDetails = combineReducers({
   criteria,
   chart,
   comments,
+  participation,
   selectedCriteria,
   selectedSubject,
-  selectedTopic
+  selectedTopic,
+
+  selectedProfile
 });
 
 export default opinionDetails;

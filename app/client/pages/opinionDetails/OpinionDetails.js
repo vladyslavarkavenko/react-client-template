@@ -1,10 +1,9 @@
 import React from 'react';
 
-import ParticipationCircle from '../../components/widgets/ParticipationCircle';
-import BlockWrapper from '../../components/widgets/BlockWrapper';
 import HeaderWithTabs from './HeaderWithTabs';
 import TopicBody from './TopicBody';
 import CommentsContainer from './CommentsContainer';
+import ParticipationCircleContainer from './ParticipationCircleContainer';
 
 export default function OpinionDetails() {
   return (
@@ -18,9 +17,7 @@ export default function OpinionDetails() {
           <CommentsContainer />
         </div>
         <div className="sidebar">
-          <BlockWrapper>
-            <ParticipationCircle />
-          </BlockWrapper>
+          <ParticipationCircleContainer />
         </div>
       </section>
     </section>

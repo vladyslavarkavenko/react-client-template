@@ -12,12 +12,12 @@ function TopicBody({ status, topic }) {
   //   return null;
   // }
 
-  const { topicName = '' } = topic;
+  const { name = '' } = topic;
 
   return (
     <section className="topic-details">
       <div className="topic-details__header">
-        <h2 className="topic-details__title">{topicName}</h2>
+        <h2 className="topic-details__title">{name}</h2>
         <ChartControls />
       </div>
       <div className="topic-details__body">
