@@ -147,7 +147,7 @@ function* fastSelectTopicTask({ fastSelect, id, type }) {
 
     if (selectedTopics.length !== 0) {
       yield put(selectOpinionTopic(selectedTopics));
-      yield put(historyPush(routing().shareOpinionChart));
+      // yield put(historyPush(routing().shareOpinionChart));
     }
   } else {
     const subject = subjects.find((subject) => subject.id === Number(subjectId));
