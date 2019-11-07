@@ -4,11 +4,7 @@ import { connect } from 'react-redux';
 import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
 import CommentsList from '../../../components/widgets/comment/CommentsList';
 
-function CommentsContainer({ status, data }) {
-  if (status !== 'success' || !data.length) {
-    return null;
-  }
-
+function CommentsContainer({ data }) {
   return <CommentsList data={data} />;
 }
 

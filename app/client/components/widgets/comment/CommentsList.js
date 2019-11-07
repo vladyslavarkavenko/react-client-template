@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Comment from './Comment';
+import Placeholder from './Placeholder';
 
 export default function CommentsList({ data, selectedTopicId }) {
   const list = selectedTopicId
@@ -15,14 +17,10 @@ export default function CommentsList({ data, selectedTopicId }) {
       <Comment key={`${item.id}_comm`} data={item} selectedTopicId={selectedTopicId} />
     ));
 
-  if (!comments.length) {
-    return null;
-  }
-
   return (
     <>
       <h2 className="info-block__title">Comments</h2>
-      <ul className="comment__list">{comments}</ul>
+      <ul className="comment__list">{comments.length !== 0 ? comments : <Placeholder />}</ul>
     </>
   );
 }
