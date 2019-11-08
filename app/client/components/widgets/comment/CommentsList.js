@@ -1,7 +1,8 @@
 import React from 'react';
 
+import MessageSvg from '../../../../../public/assets/svg/comment-alt-lines.duotone.svg';
 import Comment from './Comment';
-import Placeholder from './Placeholder';
+import WidgetPlaceholder from '../WidgetPlaceholder';
 
 export default function CommentsList({ data, selectedTopicId }) {
   const list = selectedTopicId
@@ -20,7 +21,13 @@ export default function CommentsList({ data, selectedTopicId }) {
   return (
     <>
       <h2 className="info-block__title">Comments</h2>
-      <ul className="comment__list">{comments.length !== 0 ? comments : <Placeholder />}</ul>
+      {comments.length !== 0 ? (
+        <ul className="comment__list">{comments}</ul>
+      ) : (
+        <div className="comment__list">
+          <WidgetPlaceholder icon={<MessageSvg />} title="No Comments Yet" withWrapper />
+        </div>
+      )}
     </>
   );
 }

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { fetchTop } from '../../modules/dashboard/dashboardActions';
 import dashboardSelectors from '../../modules/dashboard/dashboardSelectors';
+import WidgetPlaceholder from '../../components/widgets/WidgetPlaceholder';
+import DataFileSvg from '../../../../public/assets/svg/file-chart-line.duotone.svg';
 
 const rand = (min = 0, max = 10) =>
   (Math.floor(Math.random() * (max - min) * 10) / 10 + min).toFixed(1);
@@ -42,7 +44,11 @@ class TopBlock extends React.Component {
     const data = top[requestKey];
 
     if (!data) {
-      return <div className="top-3" />;
+      return (
+        <div className="top-3">
+          <WidgetPlaceholder icon={<DataFileSvg />} />
+        </div>
+      );
     }
 
     return (

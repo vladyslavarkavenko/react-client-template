@@ -21,6 +21,7 @@ const Overview = ({ radarData, getRadarScores, detailsData, avgSatisfaction }) =
     ]}
     sidebar={[
       {
+        className: 'no-border',
         body: () => <SatisfiedClients avgSatisfaction={avgSatisfaction} />
       }
     ]}

@@ -5,6 +5,8 @@ import { fetchFeedback } from '../../modules/dashboard/dashboardActions';
 import dashboardSelectors from '../../modules/dashboard/dashboardSelectors';
 
 import FeedbackItem from './feedback/FeedbackItem';
+import WidgetPlaceholder from '../../components/widgets/WidgetPlaceholder';
+import FeedbackSvg from '../../../../public/assets/svg/user-chart.duotone.svg';
 
 class Feedback extends React.Component {
   constructor(props) {
@@ -34,7 +36,7 @@ class Feedback extends React.Component {
     const { showCount } = this.state;
 
     if (!feedback) {
-      return null;
+      return <WidgetPlaceholder icon={<FeedbackSvg />} title="No Feedback Yet" />;
     }
 
     return (

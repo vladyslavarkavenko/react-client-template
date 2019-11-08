@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { fetchActiveStaff } from '../../modules/dashboard/dashboardActions';
 import dashboardSelectors from '../../modules/dashboard/dashboardSelectors';
+import StaffIcon from '../../../../public/assets/svg/user-friends.duotone.svg';
+import WidgetPlaceholder from '../../components/widgets/WidgetPlaceholder';
 
 function parseStaff(data) {
   return data.map(({ userData: { avatar, name, title }, avgSatisfaction, ctruScore }) => ({
@@ -53,7 +55,7 @@ class StaffData extends React.Component {
     const { showCount, staff } = this.state;
 
     if (!staff) {
-      return null;
+      return <WidgetPlaceholder icon={<StaffIcon />} title="No Staff Yet" />;
     }
 
     return (
