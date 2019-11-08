@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import i18next from 'i18next';
 
-import { ROLES } from '../../../../../utils/constants';
+import { ROUTING_PARAMS } from '../../../../../utils/constants';
 import routing from '../../../../../utils/routing';
 
 export default function RateHeader({ profile }) {
@@ -12,7 +12,7 @@ export default function RateHeader({ profile }) {
 
   const { id, type, title } = profile;
   const link =
-    type === ROLES.MANAGER
+    type === ROUTING_PARAMS.MANAGER
       ? routing(id).managerProfileOverview
       : routing(id).companyProfileOverview;
 

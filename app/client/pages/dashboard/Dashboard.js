@@ -18,7 +18,6 @@ const {
   ROLES: { CUSTOMER, MANAGER }
 } = CONST;
 
-// TODO: Create EmptyHeader.js
 // TODO: Split for different roles.
 
 const CtruScoreForCompanyTitle = connect((state) => ({
