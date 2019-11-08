@@ -58,7 +58,7 @@ class ProfileForManager extends React.Component {
           isEdit={isEdit}
           history={history}
           onChange={onChange}
-          subTitle="I'm satisfied"
+          subTitle={title}
           avatar={newAvatar || avatar}
           toggleEditMode={toggleEditMode}
           title={`${firstName} ${lastName}`}
