@@ -8,7 +8,6 @@ import Tooltip from './chart/Tooltip';
 import Indicator from './chart/Indicator';
 import AxisLabels from './chart/AxisLabels';
 import { calculateBgColor } from './chart/utils';
-import OpinionAboutBlock from './OpinionAboutBlock';
 import PROPS, { allPoints } from './chart/chartProperties';
 import { axisStyle, bubbleStyle, activeBubbleStyle } from './chart/styles';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
@@ -57,7 +56,10 @@ class ShareOpinionChart extends React.Component {
   onActivated(points) {
     const { satisfaction, importance } = points[0];
 
-    const activePoint = { importance, satisfaction };
+    const activePoint = {
+      importance,
+      satisfaction
+    };
     this.setState({ activePoint });
   }
 
@@ -125,18 +127,45 @@ class ShareOpinionChart extends React.Component {
   }
 
   render() {
-    const { opinions } = this.props;
+    const { opinions, topics, activeTopic } = this.props;
     const { activePoint, showOpinions, tooltipData } = this.state;
 
     const { satisfaction: s, importance: i } = activePoint;
 
     const rateText = `${i18next.t('shareOpinion.i')} ${i} & ${i18next.t('shareOpinion.s')} ${s}`;
 
+    const list =
+      activeTopic &&
+      topics.map((topic) => (
+        <li
+          key={topic.id}
+          className={`opinion-item ${
+            // eslint-disable-next-line no-nested-ternary
+            topic.id === activeTopic.id ? (showOpinions ? 'open' : 'active') : ''
+          }`}
+        >
+          <p>
+            {topic.name} {topic.score && <span className="score"> - {topic.score.toFixed(1)}</span>}
+          </p>
+          {showOpinions && topic.id === activeTopic.id && (
+            <div>
+              <h1 className="uppercase">{i18next.t('shareOpinion.rate')}</h1>
+              <ReactSVG className="emoji" src={`/assets/svg/emoji/${s}_${i}.svg`} />
+              <h3>{rateText}</h3>
+              <button onClick={this.onNextClick}>{i18next.t('shareOpinion.buttons.next')}</button>
+            </div>
+          )}
+        </li>
+      ));
+
     return (
       <div ref={this.chartWrapper} className="opinion-chart-wrapper content">
-        <OpinionAboutBlock backgroundColor="transparent" />
+        <ul className="opinion-topics-list">{list}</ul>
         <div
-          style={{ width: w, height: h }}
+          style={{
+            width: w,
+            height: h
+          }}
           className="p-relative cursor-pointer"
           onMouseMove={showOpinions ? null : this.onMouseMove}
         >
@@ -144,52 +173,43 @@ class ShareOpinionChart extends React.Component {
           <Tooltip data={tooltipData} />
           <Indicator activePoint={activePoint} />
           {showOpinions ? (
-            <>
-              <div className="info-msg">
-                <h1 className="uppercase">{i18next.t('shareOpinion.rate')}</h1>
-                <ReactSVG className="emoji" src={`/assets/svg/emoji/${s}_${i}.svg`} />
-                <h3>{rateText}</h3>
-                <button onClick={this.onNextClick}>{i18next.t('shareOpinion.buttons.next')}</button>
-              </div>
-
-              <VictoryChart
-                width={w}
-                height={h}
-                padding={p}
-                domain={[0, t]}
-                containerComponent={
-                  <VictoryVoronoiContainer
-                    responsive={false}
-                    radius={tooltipTriggerRadius}
-                    onActivated={this.showTooltip}
-                    onDeactivated={this.hideTooltip}
-                    voronoiBlacklist={['active-tooltip']}
-                  />
-                }
-              >
-                <VictoryAxis style={axisStyle} tickFormat={tickFormat} offsetY={p} />
-                <VictoryAxis style={axisStyle} tickFormat={tickFormat} offsetX={p} dependentAxis />
+            <VictoryChart
+              width={w}
+              height={h}
+              padding={p}
+              domain={[0, t]}
+              containerComponent={
+                <VictoryVoronoiContainer
+                  responsive={false}
+                  radius={tooltipTriggerRadius}
+                  onActivated={this.showTooltip}
+                  onDeactivated={this.hideTooltip}
+                  voronoiBlacklist={['active-tooltip']}
+                />
+              }
+            >
+              <VictoryAxis style={axisStyle} tickFormat={tickFormat} offsetY={p} />
+              <VictoryAxis style={axisStyle} tickFormat={tickFormat} offsetX={p} dependentAxis />
+              <VictoryScatter
+                y="importance"
+                x="satisfaction"
+                data={opinions}
+                style={bubbleStyle}
+                bubbleProperty="quantity"
+                maxBubbleSize={maxBubbleSize}
+                minBubbleSize={minBubbleSize}
+              />
+              {tooltipData && (
                 <VictoryScatter
                   y="importance"
                   x="satisfaction"
-                  data={opinions}
-                  style={bubbleStyle}
-                  bubbleProperty="quantity"
-                  maxBubbleSize={maxBubbleSize}
-                  minBubbleSize={minBubbleSize}
+                  data={[tooltipData]}
+                  name="active-tooltip"
+                  size={activeBubbleSize}
+                  style={activeBubbleStyle}
                 />
-                {tooltipData && (
-                  <VictoryScatter
-                    y="importance"
-                    x="satisfaction"
-                    data={[tooltipData]}
-                    name="active-tooltip"
-                    size={activeBubbleSize}
-                    style={activeBubbleStyle}
-                  />
-                )}
-              </VictoryChart>
-            </>
+              )}
+            </VictoryChart>
           ) : (
             <VictoryChart
               width={w}
@@ -221,11 +241,16 @@ class ShareOpinionChart extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  topics: shareOpinionSelectors.selectedTopics(state),
+  activeTopic: shareOpinionSelectors.nextUnratedTopic(state),
   opinions: shareOpinionSelectors.topicOpinions(state),
   saveTopicStatus: shareOpinionSelectors.saveTopicStatus(state)
 });
 
 export default connect(
   mapStateToProps,
-  { pushRateTopic: saveTopicRate, fetchTopicOpinions }
+  {
+    pushRateTopic: saveTopicRate,
+    fetchTopicOpinions
+  }
 )(ShareOpinionChart);

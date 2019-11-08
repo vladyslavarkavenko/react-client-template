@@ -83,6 +83,7 @@ class CompanyProfile extends React.Component {
           loc={location}
           navLinks={navLinks}
           customButtons={customButtons}
+          goBack={{ to: routing().myCompanies, title: 'Companies list' }}
         />
 
         {status === 'request' ? (

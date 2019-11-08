@@ -71,10 +71,18 @@ function* fetchExpiredGlobalWorker() {
 
       const tasks = [
         ...companies.map(({ id }) =>
-          fork(expiredGlobalTask, { type: RATE_PROFILE_TYPE.COMPANY, id, time })
+          fork(expiredGlobalTask, {
+            type: RATE_PROFILE_TYPE.COMPANY,
+            id,
+            time
+          })
         ),
         ...managers.map(({ id }) =>
-          fork(expiredGlobalTask, { type: RATE_PROFILE_TYPE.MANAGER, id, time })
+          fork(expiredGlobalTask, {
+            type: RATE_PROFILE_TYPE.MANAGER,
+            id,
+            time
+          })
         )
       ];
 
@@ -335,7 +343,14 @@ function* saveTopicRateWorker({
       importance
     });
 
-    yield put(saveTopicRate.success({ ...currentTopic, satisfaction, importance, score: result }));
+    yield put(
+      saveTopicRate.success({
+        ...currentTopic,
+        satisfaction,
+        importance,
+        score: result
+      })
+    );
 
     const nextTopic = yield select(shareOpinionSelectors.nextUnratedTopic);
 

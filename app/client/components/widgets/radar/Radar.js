@@ -31,16 +31,29 @@ class Radar extends React.Component {
       activeCategory: null
     };
 
+    this.radar = React.createRef();
+
     this.showTooltip = this.showTooltip.bind(this);
     this.hideTooltip = this.hideTooltip.bind(this);
     this.activateFeature = this.activateFeature.bind(this);
     this.activateCategory = this.activateCategory.bind(this);
+    this.handelClickOutside = this.handelClickOutside.bind(this);
   }
 
   componentDidMount() {
     const { getRadarScores, data } = this.props;
 
     data && getRadarScores && data.isInitial && getRadarScores();
+    window.addEventListener('click', this.handelClickOutside);
+  }
+
+  handelClickOutside(e) {
+    if (this.radar && !this.radar.current.contains(e.target)) {
+      this.setState({
+        activeFeature: null,
+        activeCategory: null
+      });
+    }
   }
 
   activateFeature(name) {
@@ -150,7 +163,7 @@ class Radar extends React.Component {
               <InlineSvgLoader />
             </div>
           )}
-          <div className="radar p-relative">
+          <div className="radar p-relative" ref={this.radar}>
             <VictoryChart
               polar
               domain={domain}

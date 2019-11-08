@@ -16,6 +16,7 @@ import Button from '../../components/ui-components/Form/Button';
 import CompareLine from './CompareLine';
 import parseLinesData from './parseLinesData';
 import Profile from './Profile';
+import Loader from '../../components/ui-components/Layout/Loader';
 
 const { a } = PROPS;
 
@@ -116,15 +117,19 @@ class Compare extends React.Component {
     const { compareData, history } = this.props;
 
     if (!linesData) {
-      return <div>Loading...</div>;
+      return (
+        <div className="d-flex h-100">
+          <Loader />
+        </div>
+      );
     }
 
     const { main, compare } = compareData;
 
     return (
       <div className="compare">
-        <div className="content-header">
-          <button onClick={history.goBack}>
+        <div className="content-header with-back-btn">
+          <button className="go-back" onClick={history.goBack}>
             <span className="arrow" />
             Back
           </button>

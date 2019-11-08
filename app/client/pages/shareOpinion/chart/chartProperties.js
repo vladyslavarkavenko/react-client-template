@@ -1,7 +1,7 @@
 const PROPS = {
   ticks: 10,
   padding: 50,
-  height: 600,
+  height: 900,
   width: 1500,
   maxBubbleSize: 70,
   minBubbleSize: 10,
