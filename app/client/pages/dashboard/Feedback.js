@@ -35,7 +35,7 @@ class Feedback extends React.Component {
     const { feedback } = this.props;
     const { showCount } = this.state;
 
-    if (!feedback) {
+    if (!feedback || feedback.length === 0) {
       return <WidgetPlaceholder icon={<FeedbackSvg />} title="No Feedback Yet" />;
     }
 

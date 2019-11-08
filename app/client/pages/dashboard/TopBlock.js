@@ -43,7 +43,7 @@ class TopBlock extends React.Component {
     const { requestKey, top } = this.props;
     const data = top[requestKey];
 
-    if (!data) {
+    if (!data || data.length === 0) {
       return (
         <div className="top-3">
           <WidgetPlaceholder icon={<DataFileSvg />} />

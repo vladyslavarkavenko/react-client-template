@@ -54,7 +54,7 @@ class StaffData extends React.Component {
   render() {
     const { showCount, staff } = this.state;
 
-    if (!staff) {
+    if (!staff || staff.length === 0) {
       return <WidgetPlaceholder icon={<StaffIcon />} title="No Staff Yet" />;
     }
 
