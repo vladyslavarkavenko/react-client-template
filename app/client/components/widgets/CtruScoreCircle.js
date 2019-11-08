@@ -26,10 +26,10 @@ const circleInner = {
 };
 
 export default function CtruScoreCircle({
-  ctruScore,
+  ctruScore = 0,
   companyCtruScore,
   profileLabel,
-  reviewsCount
+  reviewsCount = 0
 }) {
   const { size } = config;
 

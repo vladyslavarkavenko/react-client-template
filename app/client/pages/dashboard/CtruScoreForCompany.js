@@ -15,11 +15,7 @@ class CtruScoreForCompany extends React.Component {
   render() {
     const { statistics } = this.props;
 
-    if (!statistics) {
-      return null;
-    }
-
-    const { ctruScore, numberOpinions } = statistics;
+    const { ctruScore, numberOpinions } = statistics || {};
     return <CtruScoreCircle ctruScore={ctruScore} reviewsCount={numberOpinions} />;
   }
 }
