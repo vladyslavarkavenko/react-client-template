@@ -1,5 +1,5 @@
-/* eslint-disable */
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 import NavTabs from '../../../components/ui-components/Layout/NavTabs';
 import Button from './Button';
@@ -8,6 +8,13 @@ import SvgMapMarker from '../../../../../public/assets/svg/map-marker.svg';
 
 const { PEN, CAMERA, DELETE } = HEADER_ICONS;
 const { TRANSPARENT } = BTN_TYPES;
+
+const BackBtn = withRouter(({ history, to, title }) => (
+  <button className="go-back" onClick={() => history.push(to)}>
+    <span className="arrow" />
+    {title}
+  </button>
+));
 
 // TODO: Add loading when updating.
 // TODO: Add validation for image.
@@ -36,11 +43,12 @@ class ContentHeader extends React.Component {
       navLinks,
       isEdit,
       onChange,
-      customButtons
+      customButtons,
+      goBack
     } = this.props;
 
     return (
-      <div className="content-header">
+      <div className={`content-header ${goBack ? 'with-back-btn' : ''}`}>
         {displayAvatar && (
           <div className="avatar-wrapper">
             <div className="avatar circle">
@@ -49,6 +57,7 @@ class ContentHeader extends React.Component {
           </div>
         )}
         <div className="info">
+          {goBack && <BackBtn to={goBack.to} title={goBack.title} />}
           {isEdit ? (
             <div className="buttons">
               <>
@@ -92,9 +101,7 @@ class ContentHeader extends React.Component {
             type={TRANSPARENT}
           />
         )}
-
         {isEdit && editForm}
-
         <NavTabs navLinks={navLinks} />
       </div>
     );

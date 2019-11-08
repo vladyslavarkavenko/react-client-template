@@ -85,6 +85,7 @@ class ManagerProfile extends React.Component {
           subTitle={avgSatisfaction ? `${avgSatisfaction}% of clients are satisfied` : ''}
           navLinks={navLinks}
           customButtons={customButtons}
+          goBack={{ to: routing().myManagers, title: 'Managers list' }}
         />
         <Switch>
           <WrappedRoute exact path={routing().managerProfileAbout} component={About} />
