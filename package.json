@@ -57,6 +57,7 @@
     "express-http-proxy": "^1.5.1",
     "i18next": "^17.0.6",
     "query-string": "^6.8.3",
+    "rc-slider": "^8.7.1",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "react-helmet": "^5.2.0",

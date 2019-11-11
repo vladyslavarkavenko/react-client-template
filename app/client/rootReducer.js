@@ -13,6 +13,7 @@ import opinions from './modules/opinions/opinionsReducer';
 import compare from './modules/compare/compareReducer';
 import benchmarks from './modules/benchmarks/benchmarksReducer';
 import customerDashboard from './modules/customerDashboard/customerDashboardReducer';
+import kpiSettings from './modules/kpiSettings/kpiSettingsReducer';
 import { pushLogout } from './modules/auth/authActions';
 
 const appReducer = combineReducers({
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
 
   opinionDetails,
   benchmarks,
+  kpiSettings,
   customerDashboard
 });
 

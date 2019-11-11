@@ -95,6 +95,10 @@ const Benchmarks = customLoadable({
   loader: () => import('../pages/benchmarks/Benchmarks')
 });
 
+const KpiSettings = customLoadable({
+  loader: () => import('../pages/kpiSettings/KpiSettings')
+});
+
 const PageNotFound = customLoadable({
   loader: () => import('../pages/notFound/NotFound')
 });
@@ -148,6 +152,8 @@ export default function App() {
         forAdmin={Benchmarks}
         forAnalyst={Benchmarks}
       />
+      <WrappedRoute exact path={routing().kpiSettings} component={KpiSettings} />
+      {/*<RolesRoute exact path={routing().kpiSettings} forAdmin={KpiSettings} />*/}
 
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />
