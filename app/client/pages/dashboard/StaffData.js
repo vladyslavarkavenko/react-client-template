@@ -5,6 +5,7 @@ import { fetchActiveStaff } from '../../modules/dashboard/dashboardActions';
 import dashboardSelectors from '../../modules/dashboard/dashboardSelectors';
 import StaffIcon from '../../../../public/assets/svg/user-friends.duotone.svg';
 import WidgetPlaceholder from '../../components/widgets/WidgetPlaceholder';
+import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 
 function parseStaff(data) {
   return data.map(({ userData: { avatar, name, title }, avgSatisfaction, ctruScore }) => ({
@@ -52,7 +53,12 @@ class StaffData extends React.Component {
   }
 
   render() {
+    const { status } = this.props;
     const { showCount, staff } = this.state;
+
+    if (status === 'request') {
+      return <LoaderBlock />;
+    }
 
     if (!staff || staff.length === 0) {
       return <WidgetPlaceholder icon={<StaffIcon />} title="No Staff Yet" />;
@@ -104,7 +110,8 @@ class StaffData extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  staff: dashboardSelectors.staff(state)
+  staff: dashboardSelectors.staff(state),
+  status: dashboardSelectors.staffStatus(state)
 });
 
 export default connect(

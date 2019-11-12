@@ -25,7 +25,7 @@ const userReducer = handleActions(
       return userInitial;
     },
     [actions.pushUpdateUser.SUCCESS](state, { payload }) {
-      return payload;
+      return { ...state, ...payload };
     }
   },
   userInitial

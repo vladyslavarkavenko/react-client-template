@@ -17,6 +17,7 @@
     background: rgba(0, 0, 0, 0.2);
     padding: 1rem;
     z-index: 2;
+    overflow-y: scroll;
 
     .opinion-item {
       width: 100%;
@@ -24,9 +25,18 @@
       text-align: center;
       color: white;
       border-radius: 4px;
-      margin-bottom: 1rem;
       padding: 0.25rem;
-      transition: height 2s;
+      height: 2.25rem;
+      transition: height 0.15s, padding 0.15s;
+      overflow: hidden;
+
+      p {
+        transition: font-size 0.15s;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 1rem;
+      }
 
       &.active {
         background: white;
@@ -37,6 +47,12 @@
         padding: 1rem;
         background: rgba(0, 0, 0, 0.4);
         box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.25);
+        height: 19.25rem;
+        transition: height 0.15s, padding 0.15s;
+
+        * {
+          white-space: nowrap;
+        }
 
         p {
           font-size: 1.5rem;
