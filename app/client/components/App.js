@@ -152,8 +152,8 @@ export default function App() {
         forAdmin={Benchmarks}
         forAnalyst={Benchmarks}
       />
-      <WrappedRoute exact path={routing().kpiSettings} component={KpiSettings} />
-      {/*<RolesRoute exact path={routing().kpiSettings} forAdmin={KpiSettings} />*/}
+      {/*<WrappedRoute exact path={routing().kpiSettings} component={KpiSettings} />*/}
+      <RolesRoute exact path={routing().kpiSettings} forAdmin={KpiSettings} />
 
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />

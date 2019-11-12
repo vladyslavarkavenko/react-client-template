@@ -1,4 +1,6 @@
 .kpi-settings {
+  position: relative;
+  padding-bottom: 70px;
 
   .kpi-options {
     @border-color: #e6e9f1;
@@ -159,6 +161,40 @@
         }
       }
     }
+
+    &__save {
+      position: fixed;
+      bottom: 0;
+      //background-color: @alert-color-green;
+      left: @sidebar-width;
+      right: 0;
+      display: flex;
+      justify-content: center;
+
+      .save-changes {
+        background-color: @accent-color;
+        color: white;
+        margin: unset;
+        border-radius: unset;
+        width: 100%;
+        padding: 1rem 0;
+
+        &:disabled {
+          background-color: darken(white, 40%);
+          color: darken(white, 3%);
+
+          &:hover {
+            background-color: darken(white, 40%);
+            color: darken(white, 3%);
+          }
+        }
+
+        &:hover {
+          background-color: darken(@accent-color, 20%);
+        }
+      }
+    }
+
   }
 
   .kpi-slider {

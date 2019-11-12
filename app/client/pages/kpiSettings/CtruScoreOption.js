@@ -41,7 +41,7 @@ class CtruScoreOption extends React.Component {
         <Slider
           min={1}
           max={10}
-          step={0.5}
+          step={0.1}
           onChange={setValue}
           value={currentValue}
           className="kpi-slider"

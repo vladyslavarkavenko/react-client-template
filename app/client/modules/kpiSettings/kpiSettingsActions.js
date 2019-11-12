@@ -1,15 +1,12 @@
-/* eslint-disable */
-import { all, call, put, select, takeLatest, spawn } from '@redux-saga/core/effects';
+import { all, call, put, select, takeLatest } from '@redux-saga/core/effects';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 
-import ShareOpinionService from '../../services/shareOpinion';
 import Notification from '../../utils/notifications';
 import companiesSelectors from '../companies/companiesSelectors';
-import benchmarksSelectors from './kpiSettingsSelectors';
-import { ToastPosition } from 'react-toastify';
 import CompaniesService from '../../services/companies';
+import normalizeSettings from './helpers/normalizeSettings';
 
 export const prefix = 'kpiSettings';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -32,7 +29,9 @@ function* fetchStatisticsWorker() {
 
     const statistics = yield call(CompaniesService.getStatistics, id);
 
-    yield put(fetchStatistics.success(statistics));
+    const normalize = normalizeSettings(statistics);
+
+    yield put(fetchStatistics.success(normalize));
   } catch (err) {
     console.error(err);
     Notification.error(err);
