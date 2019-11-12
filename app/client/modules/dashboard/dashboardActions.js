@@ -57,14 +57,14 @@ function* getFeedbackWorker() {
 }
 
 function* getTopWorker({ payload: { key } }) {
-  // yield put(fetchTop.request());
+  yield put(fetchTop.request({ key }));
   try {
     const top = yield call(CompaniesService.getTop, key);
 
-    yield put(fetchTop.success({ [key]: top }));
+    yield put(fetchTop.success({ key, data: { [key]: top } }));
   } catch (err) {
     console.error(err);
-    // yield put(fetchTop.failure());
+    yield put(fetchTop.failure({ key }));
   }
 }
 

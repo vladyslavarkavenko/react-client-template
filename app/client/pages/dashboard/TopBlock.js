@@ -5,6 +5,7 @@ import { fetchTop } from '../../modules/dashboard/dashboardActions';
 import dashboardSelectors from '../../modules/dashboard/dashboardSelectors';
 import WidgetPlaceholder from '../../components/widgets/WidgetPlaceholder';
 import DataFileSvg from '../../../../public/assets/svg/file-chart-line.duotone.svg';
+import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 
 const rand = (min = 0, max = 10) =>
   (Math.floor(Math.random() * (max - min) * 10) / 10 + min).toFixed(1);
@@ -40,8 +41,13 @@ class TopBlock extends React.Component {
   }
 
   render() {
-    const { requestKey, top } = this.props;
+    const { requestKey, top, status } = this.props;
     const data = top[requestKey];
+    const keyStatus = status[requestKey];
+
+    if (keyStatus === 'request') {
+      return <LoaderBlock height="6.875rem" />;
+    }
 
     if (!data || data.length === 0) {
       return (
@@ -90,7 +96,8 @@ class TopBlock extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  top: dashboardSelectors.top(state)
+  top: dashboardSelectors.top(state),
+  status: dashboardSelectors.topStatus(state)
 });
 
 export default connect(

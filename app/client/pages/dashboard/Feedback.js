@@ -7,6 +7,7 @@ import dashboardSelectors from '../../modules/dashboard/dashboardSelectors';
 import FeedbackItem from './feedback/FeedbackItem';
 import WidgetPlaceholder from '../../components/widgets/WidgetPlaceholder';
 import FeedbackSvg from '../../../../public/assets/svg/user-chart.duotone.svg';
+import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 
 class Feedback extends React.Component {
   constructor(props) {
@@ -32,8 +33,12 @@ class Feedback extends React.Component {
   }
 
   render() {
-    const { feedback } = this.props;
+    const { feedback, status } = this.props;
     const { showCount } = this.state;
+
+    if (status === 'request') {
+      return <LoaderBlock />;
+    }
 
     if (!feedback || feedback.length === 0) {
       return <WidgetPlaceholder icon={<FeedbackSvg />} title="No Feedback Yet" />;
@@ -59,7 +64,8 @@ class Feedback extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  feedback: dashboardSelectors.feedback(state)
+  feedback: dashboardSelectors.feedback(state),
+  status: dashboardSelectors.feedbackStatus(state)
 });
 
 export default connect(

@@ -39,8 +39,12 @@ class ShareOpinionChart extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { ...initialState };
+    this.state = {
+      ...initialState
+    };
 
+    this.activeTopic = React.createRef();
+    this.opinionList = React.createRef();
     this.chartWrapper = React.createRef();
 
     this.updateBG = this.updateBG.bind(this);
@@ -94,7 +98,11 @@ class ShareOpinionChart extends React.Component {
 
     if (activePoint !== initialState.activePoint) {
       fetchTopicOpinions();
-      this.setState({ showOpinions: true });
+      this.setState({ showOpinions: true }, () => {
+        setTimeout(() => {
+          this.activeTopic.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 150);
+      });
     }
   }
 
@@ -136,9 +144,10 @@ class ShareOpinionChart extends React.Component {
 
     const list =
       activeTopic &&
-      topics.map((topic) => (
+      topics.map((topic, id) => (
         <li
           key={topic.id}
+          ref={topic.id === activeTopic.id && this.activeTopic}
           className={`opinion-item ${
             // eslint-disable-next-line no-nested-ternary
             topic.id === activeTopic.id ? (showOpinions ? 'open' : 'active') : ''
@@ -152,7 +161,11 @@ class ShareOpinionChart extends React.Component {
               <h1 className="uppercase">{i18next.t('shareOpinion.rate')}</h1>
               <ReactSVG className="emoji" src={`/assets/svg/emoji/${s}_${i}.svg`} />
               <h3>{rateText}</h3>
-              <button onClick={this.onNextClick}>{i18next.t('shareOpinion.buttons.next')}</button>
+              <button onClick={this.onNextClick}>
+                {id === topics.length - 1
+                  ? i18next.t('shareOpinion.buttons.finish')
+                  : i18next.t('shareOpinion.buttons.next')}
+              </button>
             </div>
           )}
         </li>
@@ -160,7 +173,9 @@ class ShareOpinionChart extends React.Component {
 
     return (
       <div ref={this.chartWrapper} className="opinion-chart-wrapper content">
-        <ul className="opinion-topics-list">{list}</ul>
+        <ul className="opinion-topics-list" ref={this.opinionList}>
+          {list}
+        </ul>
         <div
           style={{
             width: w,

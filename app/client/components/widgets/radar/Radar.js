@@ -47,6 +47,10 @@ class Radar extends React.Component {
     window.addEventListener('click', this.handelClickOutside);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handelClickOutside);
+  }
+
   handelClickOutside(e) {
     if (this.radar && !this.radar.current.contains(e.target)) {
       this.setState({
