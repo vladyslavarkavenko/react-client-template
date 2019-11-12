@@ -3,8 +3,11 @@ import { handleActions } from 'redux-actions';
 
 import * as actions from './opinionDetailsActions';
 import { LINE_TYPES, DATE_OFFSET } from './helpers/constants';
+import { DATE_GRANULARITY } from '../../utils/constants';
 import { makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 import { minMaxRandom } from '../../utils/helpers';
+import calcYearOffset from './helpers/calcYearOffset';
+import trimDate from './helpers/trimDate';
 
 const criteriaStatus = makeStatusWithResetReducer(
   actions.fetchOpinionDetails,
@@ -149,6 +152,9 @@ const lineFilter = handleActions(
 
 const dateOffset = handleActions(
   {
+    [actions.setProfile.SUCCESS]() {
+      return DATE_OFFSET.YEAR;
+    },
     [actions.setDateOffset.TRIGGER](state, { payload }) {
       return payload;
     },
@@ -159,45 +165,33 @@ const dateOffset = handleActions(
   DATE_OFFSET.YEAR
 );
 
-const paginationInitial = {
-  step: null,
-  maxStep: 5,
-  minStep: 1,
+const now = new Date();
 
-  maxDate: null,
-  minDate: null
+const initialYear = calcYearOffset(now);
+
+const yearDiff = now.getFullYear() - 2014;
+const initialMaxStep = yearDiff <= 1 ? 1 : yearDiff; //if local time is corrupted
+const minYearDate = new Date(`${now.getFullYear() - initialMaxStep}-01-01`);
+
+const paginationInitial = {
+  granularity: DATE_GRANULARITY.MONTH,
+  step: 1,
+  maxStep: initialMaxStep,
+
+  maxDate: initialYear.maxDate,
+  minDate: initialYear.minDate,
+
+  maxYearDiff: yearDiff,
+  minYearDate: trimDate(minYearDate)
 };
 
 const chartPagination = handleActions(
   {
-    [actions.calcChartOffset.REQUEST](state) {
-      return {
-        ...state,
-        step: null
-      };
+    [actions.setProfile.SUCCESS]() {
+      return paginationInitial;
     },
     [actions.calcChartOffset.SUCCESS](state, { payload }) {
       return payload;
-    },
-    [actions.handleNextOffset.TRIGGER](state) {
-      const cloned = { ...state };
-
-      if (!cloned.step || cloned.step === cloned.maxStep) {
-        return state;
-      }
-
-      cloned.step = cloned.step + 1;
-      return cloned;
-    },
-    [actions.handlePrevOffset.TRIGGER](state) {
-      const cloned = { ...state };
-
-      if (!cloned.step || cloned.step === cloned.minStep) {
-        return state;
-      }
-
-      cloned.step = cloned.step - 1;
-      return cloned;
     }
   },
   paginationInitial
@@ -205,13 +199,9 @@ const chartPagination = handleActions(
 
 const chart = combineReducers({
   data: chartData,
+  pagination: chartPagination,
   lineFilter,
-  dateOffset,
-  pagination: chartPagination
-  // pagination: {
-  //
-  // },
-  // status: null
+  dateOffset
 });
 
 const opinionDetails = combineReducers({

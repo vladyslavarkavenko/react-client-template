@@ -77,5 +77,10 @@ module.exports = {
     COMPARE_ID: 'compareId',
 
     SELECT_EXPIRED: 'getExpired'
+  },
+  DATE_GRANULARITY: {
+    DAY: 'D',
+    WEEK: 'W',
+    MONTH: 'M'
   }
 };
