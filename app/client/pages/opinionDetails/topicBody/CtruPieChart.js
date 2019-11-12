@@ -3,8 +3,8 @@ import React from 'react';
 import { VictoryPie } from 'victory';
 import { Link } from 'react-router-dom';
 
-import { COLORS } from '../../utils/constants';
-import { lightenDarkenColor } from '../../utils/helpers';
+import { COLORS } from '../../../utils/constants';
+import { lightenDarkenColor } from '../../../utils/helpers';
 
 const config = {
   size: 300,

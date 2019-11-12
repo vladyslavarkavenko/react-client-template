@@ -6,10 +6,10 @@ import {
   setLineFilter,
   handleNextOffset,
   handlePrevOffset
-} from '../../modules/opinionDetails/opinionDetailsActions';
-import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
-import RadioGroup from '../../components/ui-components/Form/RadioGroup';
-import { DATE_OFFSET, LINE_TYPES } from '../../modules/opinionDetails/helpers/constants';
+} from '../../../modules/opinionDetails/opinionDetailsActions';
+import opinionDetailsSelectors from '../../../modules/opinionDetails/opinionDetailsSelectors';
+import RadioGroup from '../../../components/ui-components/Form/RadioGroup';
+import { DATE_OFFSET, LINE_TYPES } from '../../../modules/opinionDetails/helpers/constants';
 
 function ChartControls({
   setDateOffset,

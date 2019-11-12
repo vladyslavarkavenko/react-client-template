@@ -3,10 +3,10 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
+import opinionDetailsSelectors from '../../../modules/opinionDetails/opinionDetailsSelectors';
 import CtruPieChart from './CtruPieChart';
 import { withRouter } from 'react-router-dom';
-import routing from '../../utils/routing';
+import routing from '../../../utils/routing';
 
 function CtruPieChartContainer(props) {
   return <CtruPieChart {...props} />;

@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React from 'react';
-import { format } from 'date-fns';
 
 import {
   VictoryChart,
@@ -11,8 +10,8 @@ import {
   VictoryArea
 } from 'victory';
 
-import { LINE_TYPES, DATE_OFFSET } from '../../modules/opinionDetails/helpers/constants';
-import { InlineSvgLoader } from '../../components/ui-components/Layout/Loader';
+import { LINE_TYPES, DATE_OFFSET } from '../../../modules/opinionDetails/helpers/constants';
+import { InlineSvgLoader } from '../../../components/ui-components/Layout/Loader';
 import RateChartLegend from './RateChartLegend';
 
 const config = {
@@ -60,8 +59,8 @@ export default class RateChart extends React.Component {
     this.formatTicks = this.formatTicks.bind(this);
   }
 
-  formatTicks(tick, index, ticks) {
-    const { tickType, domain } = this.props;
+  formatTicks(tick) {
+    const { tickType } = this.props;
 
     const tickDate = new Date(tick);
 
@@ -69,10 +68,8 @@ export default class RateChart extends React.Component {
       case DATE_OFFSET.YEAR:
         return tickDate.toLocaleString('en-US', { month: 'short' });
       case DATE_OFFSET.MONTH:
-        console.log(tickDate);
         return tickDate.toLocaleString('en-US', { day: 'numeric' });
       case DATE_OFFSET.WEEK:
-        console.log(tickDate);
         return tickDate.toLocaleString('en-US', { month: 'short', day: 'numeric' });
     }
   }
@@ -104,15 +101,6 @@ export default class RateChart extends React.Component {
     const gradientKey = 'opinion_details_grad_1';
 
     const tickCount = domain.length;
-
-    // console.log('DOMAIN', domain.map((item) => new Date(item)));
-    // console.log('DOMAIN-MS', domain);
-
-    // debugger;
-
-    // console.log(importanceData, satisfactionData);
-
-    console.log(importanceData[0], domain[0]);
 
     return (
       <div className="rate-chart">
@@ -181,7 +169,6 @@ export default class RateChart extends React.Component {
                     }}
                     interpolation={interpolation}
                     data={satisfactionData}
-                    // data={satisfactionData}
                   />
                 )}
 
@@ -197,7 +184,6 @@ export default class RateChart extends React.Component {
                     }}
                     interpolation={interpolation}
                     data={importanceData}
-                    // data={importanceData}
                   />
                 )}
               </VictoryGroup>
