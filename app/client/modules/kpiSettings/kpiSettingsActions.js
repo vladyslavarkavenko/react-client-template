@@ -1,4 +1,4 @@
-import { all, call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
