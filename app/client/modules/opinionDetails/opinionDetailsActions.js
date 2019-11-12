@@ -68,7 +68,7 @@ function* getHistoryWorker() {
 
     const history = yield call(ShareOpinionService.getOpinionHistory, historyOptions);
 
-    yield put(fetchHistory.success({ history }));
+    yield put(fetchHistory.success(history));
   } catch (err) {
     console.error(err);
     yield put(fetchHistory.failure());
@@ -276,6 +276,7 @@ function* selectOptionWorker({ payload }) {
 
   yield put(setProfile.success(selected));
   yield fork(getOpinionParticipationWorker);
+  yield fork(getHistoryWorker);
 }
 
 export function* opinionDetailsWatcher() {

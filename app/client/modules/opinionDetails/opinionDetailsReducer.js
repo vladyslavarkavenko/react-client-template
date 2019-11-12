@@ -5,7 +5,6 @@ import * as actions from './opinionDetailsActions';
 import { LINE_TYPES, DATE_OFFSET } from './helpers/constants';
 import { DATE_GRANULARITY } from '../../utils/constants';
 import { makeStatusWithResetReducer } from '../../utils/reduxHelpers';
-import { minMaxRandom } from '../../utils/helpers';
 import calcYearOffset from './helpers/calcYearOffset';
 import trimDate from './helpers/trimDate';
 
@@ -106,31 +105,19 @@ const participation = combineReducers({
   )
 });
 
-/* eslint-disable */
-const chartDataGenerator = () => {
-  // const t0 = window.performance.now();
-  const data = [];
+const chartStatus = makeStatusWithResetReducer(actions.fetchHistory, actions.clearAll.TRIGGER);
 
-  const months = 0;
-
-  for (let i = 1; i <= months; i++) {
-    const date = new Date(2019, i - 1, 1);
-    data.push({ date, importance: minMaxRandom(7, 9), satisfaction: minMaxRandom(3, 5) });
-  }
-
-  // const days = 365 * 2;
-  //
-  // for (let i = 1; i <= days; i++) {
-  //   const date = new Date(2018, 0, i);
-  //   data.push({ date, importance: minMaxRandom(6, 9), satisfaction: minMaxRandom(4, 5) });
-  // }
-
-  // console.log(data, window.performance.now() - t0);
-
-  return data;
-};
-
-const chartData = handleActions({}, chartDataGenerator());
+const chartData = handleActions(
+  {
+    [actions.fetchHistory.SUCCESS](state, { payload }) {
+      return payload;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return [];
+    }
+  },
+  []
+);
 
 const lineFilterInitial = [LINE_TYPES.IMPORTANCE, LINE_TYPES.SATISFACTION];
 
@@ -198,6 +185,7 @@ const chartPagination = handleActions(
 );
 
 const chart = combineReducers({
+  status: chartStatus,
   data: chartData,
   pagination: chartPagination,
   lineFilter,

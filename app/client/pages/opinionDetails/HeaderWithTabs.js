@@ -161,7 +161,6 @@ class HeaderWithTabs extends React.Component {
 const mapStateToProps = (state) => {
   return {
     user: authSelectors.user(state),
-
     status: opinionDetailsSelectors.getCriteriaStatus(state),
     criteriaList: opinionDetailsSelectors.getCriteriaList(state),
     subjectList: opinionDetailsSelectors.getSubjectList(state),

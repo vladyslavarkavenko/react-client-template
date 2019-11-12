@@ -1,5 +1,3 @@
-import { DATE_OFFSET } from './helpers/constants';
-
 const getCriteriaStatus = (state) => state.opinionDetails.criteria.status;
 const getCriteriaData = (state) => state.opinionDetails.criteria.data;
 
@@ -12,42 +10,11 @@ const selectedProfile = (state) => state.opinionDetails.selectedProfile;
 const getLineFilter = (state) => state.opinionDetails.chart.lineFilter;
 const getDateOffset = (state) => state.opinionDetails.chart.dateOffset;
 
-const getChartRawData = (state) => state.opinionDetails.chart.data;
+const getChartStatus = (state) => state.opinionDetails.chart.status;
+const getChartData = (state) => state.opinionDetails.chart.data;
 const getChartPagination = (state) => state.opinionDetails.chart.pagination;
 
 /* eslint-disable */
-
-const groupByMonths = (dates) => {};
-
-const getChartSliceData = (state) => {
-  const rawData = getChartRawData(state);
-  const dateOffset = getDateOffset(state);
-  const { step, maxStep, minStep, minDate, maxDate } = getChartPagination(state);
-
-  let filterFunc;
-
-  switch (dateOffset) {
-    case DATE_OFFSET.YEAR:
-      const minYear = new Date(minDate).getFullYear();
-      const maxYear = new Date(maxDate).getFullYear();
-
-      const rightLimit = new Date(maxYear - (maxStep - step) + 1, 0, 1);
-      const leftLimit = new Date(rightLimit.getFullYear() - 1, 0, 1);
-
-      console.log(leftLimit.getFullYear(), rightLimit.getFullYear());
-      filterFunc = (item) => {
-        const itemDate = new Date(item.date);
-
-        return itemDate >= leftLimit && itemDate <= rightLimit;
-      };
-      break;
-  }
-
-  const slice = rawData.filter(filterFunc);
-
-  return slice;
-};
-
 const getCriteriaList = (state) => {
   const criteria = Object.values(getCriteriaData(state));
   const normalizedCriteria = criteria.map(({ subjects, ...criteriaProps }) => criteriaProps);
@@ -107,9 +74,9 @@ export default {
 
   selectedProfile,
 
-  getChartRawData,
+  getChartStatus,
+  getChartData,
   getChartPagination,
-  getChartSliceData,
 
   getLineFilter,
   getDateOffset,

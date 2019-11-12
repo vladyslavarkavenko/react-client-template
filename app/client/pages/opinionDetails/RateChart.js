@@ -1,24 +1,19 @@
 /* eslint-disable */
 import React from 'react';
-
-import { differenceInWeeks, differenceInMonths, differenceInDays } from 'date-fns';
+import { format } from 'date-fns';
 
 import {
   VictoryChart,
-  VictoryZoomContainer,
   VictoryGroup,
   VictoryLine,
   VictoryAxis,
   VictoryLabel,
   VictoryArea
 } from 'victory';
-import { connect } from 'react-redux';
 
-import { COLORS } from '../../utils/constants';
-import { lightenDarkenColor, minMaxRandom } from '../../utils/helpers';
-import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
 import { LINE_TYPES, DATE_OFFSET } from '../../modules/opinionDetails/helpers/constants';
-import { setDateOffset } from '../../modules/opinionDetails/opinionDetailsActions';
+import { InlineSvgLoader } from '../../components/ui-components/Layout/Loader';
+import RateChartLegend from './RateChartLegend';
 
 const config = {
   canvasX: 1000,
@@ -27,7 +22,7 @@ const config = {
   padding: 0,
 
   strokeWidth: 2,
-  interpolation: 'catmullRom',
+  interpolation: 'monotoneX',
 
   rateDomain: [1, 10],
   rateTicks: 10,
@@ -48,40 +43,6 @@ const config = {
   fontFamily: 'Muli'
 };
 
-const generateDomain = () => {
-  const domain = [];
-
-  for (let i = 0; i <= 11; i++) {
-    const date = new Date(2000, i);
-    domain.push(date);
-  }
-
-  return domain;
-};
-
-const generatePoints = (arr) => {
-  const importanceData = [];
-  const satisfactionData = [];
-
-  arr.forEach((item) => {
-    const date = new Date(item.date);
-
-    importanceData.push({
-      x: date,
-      y0: 1,
-      y: item.importance
-    });
-
-    satisfactionData.push({
-      x: date,
-      y0: 1,
-      y: item.satisfaction
-    });
-  });
-
-  return { importanceData, satisfactionData };
-};
-
 const LineGradient = ({ name, color }) => {
   return (
     <linearGradient id={name} x1={0} y1={0} x2={0} y2={1}>
@@ -92,85 +53,40 @@ const LineGradient = ({ name, color }) => {
   );
 };
 
-class RateChart extends React.Component {
+export default class RateChart extends React.Component {
   constructor(props) {
     super(props);
 
-    this.now = new Date();
-
-    this.handleZoom = this.handleZoom.bind(this);
     this.formatTicks = this.formatTicks.bind(this);
-    this.getTickCount = this.getTickCount.bind(this);
   }
 
-  handleZoom(domain) {
-    const { tickType, setDateOffset } = this.props;
+  formatTicks(tick, index, ticks) {
+    const { tickType, domain } = this.props;
 
-    const diffMonths = differenceInMonths(domain.x[1], domain.x[0]);
-
-    if (diffMonths >= 6) {
-      if (tickType !== DATE_OFFSET.YEAR) {
-        setDateOffset(DATE_OFFSET.YEAR);
-        // this.setState({
-        //   tickType: DATE_OFFSET.YEAR
-        // });
-      }
-      return;
-    }
-
-    const diffWeeks = differenceInWeeks(domain.x[1], domain.x[0]);
-    if (diffMonths < 6 && diffWeeks > 4) {
-      if (tickType !== DATE_OFFSET.MONTH) {
-        setDateOffset(DATE_OFFSET.MONTH);
-        // this.setState({
-        //   tickType: DATE_OFFSET.MONTH
-        // });
-      }
-
-      return;
-    }
-
-    if (diffWeeks <= 4) {
-      if (tickType !== DATE_OFFSET.WEEK) {
-        setDateOffset(DATE_OFFSET.WEEK);
-        // this.setState({
-        //   selectedDomain: domain,
-        //   tickType: DATE_OFFSET.WEEK
-        // });
-      }
-
-      return;
-    }
-  }
-
-  formatTicks(tick) {
-    const { tickType } = this.props;
+    const tickDate = new Date(tick);
 
     switch (tickType) {
       case DATE_OFFSET.YEAR:
-        return tick.toLocaleString('en-US', { month: 'short' });
+        return tickDate.toLocaleString('en-US', { month: 'short' });
       case DATE_OFFSET.MONTH:
-        return tick.toLocaleString('en-US', { month: 'short', day: '2-digit' });
+        console.log(tickDate);
+        return tickDate.toLocaleString('en-US', { day: 'numeric' });
       case DATE_OFFSET.WEEK:
-        return tick.toLocaleString('en-US', { month: 'long', day: '2-digit' });
-    }
-  }
-
-  getTickCount() {
-    const { tickType } = this.props;
-
-    switch (tickType) {
-      case DATE_OFFSET.YEAR:
-        return 12;
-      case DATE_OFFSET.MONTH:
-        return 10;
-      case DATE_OFFSET.WEEK:
-        return 7;
+        console.log(tickDate);
+        return tickDate.toLocaleString('en-US', { month: 'short', day: 'numeric' });
     }
   }
 
   render() {
-    const { visibleLines, satisfactionData, importanceData } = this.props;
+    const {
+      visibleLines,
+      satisfactionData,
+      importanceData,
+      domain,
+      status,
+      minDate,
+      maxDate
+    } = this.props;
     const {
       padding,
       canvasX,
@@ -187,45 +103,51 @@ class RateChart extends React.Component {
 
     const gradientKey = 'opinion_details_grad_1';
 
-    const tickCount = this.getTickCount();
+    const tickCount = domain.length;
+
+    // console.log('DOMAIN', domain.map((item) => new Date(item)));
+    // console.log('DOMAIN-MS', domain);
+
+    // debugger;
+
+    // console.log(importanceData, satisfactionData);
+
+    console.log(importanceData[0], domain[0]);
 
     return (
       <div className="rate-chart">
+        <RateChartLegend minDate={minDate} maxDate={maxDate} visibleLines={visibleLines} />
         <div className="rate-chart__wrapper">
-          <svg style={{ height: 0 }}>
+          {status === 'request' && (
+            <div className="screen-loader">
+              <InlineSvgLoader />
+            </div>
+          )}
+          <svg style={{ height: 0, position: 'absolute' }}>
             <defs>
               <LineGradient name={gradientKey} color={satisfaction.color} />
             </defs>
           </svg>
-          <VictoryChart
-            width={canvasX}
-            height={canvasY}
-            scale={{ x: 'time' }}
-            padding={30}
-            containerComponent={
-              <VictoryZoomContainer
-                zoomDimension="x"
-                minimumZoom={{ x: 604800000 }}
-                onZoomDomainChange={this.handleZoom}
-                downsample={12}
-              />
-            }
-          >
+          <VictoryChart width={canvasX} height={canvasY} padding={35}>
             <VictoryAxis
-              // domain={[1, 12]}
-              // domain={generateDomain()}
+              scale="linear"
               standalone={false}
+              tickValues={domain}
               tickFormat={this.formatTicks}
               tickCount={tickCount}
               tickLabelComponent={<VictoryLabel textAnchor="middle" />}
               style={{
                 axis: { stroke: 'transparent' },
-                tickLabels: { fontSize, fontFamily, fill: fontColor }
+                tickLabels: {
+                  fontSize,
+                  fontFamily,
+                  fill: status === 'request' ? 'transparent' : fontColor
+                }
               }}
             />
             <VictoryAxis
               dependentAxis
-              domain={[1, 10]}
+              domain={[1, 10.5]}
               standalone={false}
               tickLabelComponent={<VictoryLabel dx={-10} textAnchor="middle" />}
               tickCount={10}
@@ -245,44 +167,44 @@ class RateChart extends React.Component {
               }}
             />
 
-            <VictoryGroup>
-              {visibleLines.includes(LINE_TYPES.IMPORTANCE) && (
-                <VictoryArea
-                  style={{
-                    data: {
-                      fill: `url(#${gradientKey})`,
-                      stroke: satisfaction.color,
-                      strokeWidth
-                    },
-                    parent: { border: '1px solid #ccc' }
-                  }}
-                  interpolation={interpolation}
-                  data={satisfactionData}
-                  // data={satisfactionData}
-                />
-              )}
+            {(importanceData.length !== 0 || satisfactionData.length !== 0) && (
+              <VictoryGroup>
+                {visibleLines.includes(LINE_TYPES.IMPORTANCE) && (
+                  <VictoryArea
+                    style={{
+                      data: {
+                        fill: `url(#${gradientKey})`,
+                        stroke: satisfaction.color,
+                        strokeWidth
+                      },
+                      parent: { border: '1px solid #ccc' }
+                    }}
+                    interpolation={interpolation}
+                    data={satisfactionData}
+                    // data={satisfactionData}
+                  />
+                )}
 
-              {visibleLines.includes(LINE_TYPES.SATISFACTION) && (
-                <VictoryLine
-                  style={{
-                    data: {
-                      stroke: importance.color,
-                      strokeDasharray: importance.strokeDasharray,
-                      strokeWidth
-                    },
-                    parent: { border: '1px solid #ccc' }
-                  }}
-                  interpolation={interpolation}
-                  data={importanceData}
-                  // data={importanceData}
-                />
-              )}
-            </VictoryGroup>
+                {visibleLines.includes(LINE_TYPES.SATISFACTION) && (
+                  <VictoryLine
+                    style={{
+                      data: {
+                        stroke: importance.color,
+                        strokeDasharray: importance.strokeDasharray,
+                        strokeWidth
+                      },
+                      parent: { border: '1px solid #ccc' }
+                    }}
+                    interpolation={interpolation}
+                    data={importanceData}
+                    // data={importanceData}
+                  />
+                )}
+              </VictoryGroup>
+            )}
           </VictoryChart>
         </div>
       </div>
     );
   }
 }
-
-export default RateChart;
