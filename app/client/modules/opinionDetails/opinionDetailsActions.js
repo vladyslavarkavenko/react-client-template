@@ -8,11 +8,13 @@ import Notification from '../../utils/notifications';
 import ManagerService from '../../services/manager';
 import ShareOpinionService from '../../services/shareOpinion';
 import CompaniesService from '../../services/companies';
+import opinionDetailsSelectors from './opinionDetailsSelectors';
+
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
+
 import normalizeCriteria from './helpers/normalizeCriteria';
 import recursiveSelect from './helpers/recursiveSelect';
-import opinionDetailsSelectors from './opinionDetailsSelectors';
 import calcYearOffset from './helpers/calcYearOffset';
 import calcMonthOffset from './helpers/calcMonthOffset';
 import calcMonthMaxStep from './helpers/calcMonthMaxStep';
@@ -85,23 +87,25 @@ function* prevOffsetWorker() {
 
   if (nextStep <= maxStep) {
     switch (offset) {
-      case DATE_OFFSET.YEAR:
+      case DATE_OFFSET.YEAR: {
         const prevYear = addYears(new Date(minDate), -1);
         nextPagination = {
           ...prevPagination,
-          step: nextStep,
-          ...calcYearOffset(prevYear)
+          ...calcYearOffset(prevYear),
+          step: nextStep
         };
         break;
-      case DATE_OFFSET.MONTH:
+      }
+      case DATE_OFFSET.MONTH: {
         const prevMonth = addMonths(new Date(minDate), -1);
         nextPagination = {
           ...prevPagination,
-          step: nextStep,
-          ...calcMonthOffset(prevMonth)
+          ...calcMonthOffset(prevMonth),
+          step: nextStep
         };
         break;
-      case DATE_OFFSET.WEEK:
+      }
+      case DATE_OFFSET.WEEK: {
         const prevWeek = addWeeks(new Date(minDate), -1);
         nextPagination = {
           ...prevPagination,
@@ -109,6 +113,8 @@ function* prevOffsetWorker() {
           ...calcWeekOffset(prevWeek)
         };
         break;
+      }
+      default:
     }
 
     yield put(calcChartOffset.success(nextPagination));
@@ -126,7 +132,7 @@ function* nextOffsetWorker() {
 
   if (nextStep >= 1) {
     switch (offset) {
-      case DATE_OFFSET.YEAR:
+      case DATE_OFFSET.YEAR: {
         const nextYear = addYears(new Date(minDate), 1);
         nextPagination = {
           ...prevPagination,
@@ -134,22 +140,26 @@ function* nextOffsetWorker() {
           ...calcYearOffset(nextYear)
         };
         break;
-      case DATE_OFFSET.MONTH:
+      }
+      case DATE_OFFSET.MONTH: {
         const nextMonth = addMonths(new Date(minDate), 1);
         nextPagination = {
           ...prevPagination,
-          step: nextStep,
-          ...calcMonthOffset(nextMonth)
+          ...calcMonthOffset(nextMonth),
+          step: nextStep
         };
         break;
-      case DATE_OFFSET.WEEK:
+      }
+      case DATE_OFFSET.WEEK: {
         const nextWeek = addWeeks(new Date(minDate), 1);
         nextPagination = {
           ...prevPagination,
-          step: nextStep,
-          ...calcWeekOffset(nextWeek)
+          ...calcWeekOffset(nextWeek),
+          step: nextStep
         };
         break;
+      }
+      default:
     }
 
     yield put(calcChartOffset.success(nextPagination));
@@ -164,33 +174,37 @@ function* changeOffsetWorker({ payload }) {
   const date = new Date();
 
   switch (payload) {
-    case DATE_OFFSET.YEAR:
+    case DATE_OFFSET.YEAR: {
       nextPagination = {
         ...prevPagination,
+        ...calcYearOffset(date),
         granularity: DATE_GRANULARITY.MONTH,
-        step: 1,
         maxStep: maxYearDiff,
-        ...calcYearOffset(date)
+        step: 1
       };
       break;
-    case DATE_OFFSET.MONTH:
+    }
+    case DATE_OFFSET.MONTH: {
       nextPagination = {
         ...prevPagination,
+        ...calcMonthOffset(date),
         granularity: DATE_GRANULARITY.DAY,
-        step: 1,
         maxStep: calcMonthMaxStep(date, minYearDate),
-        ...calcMonthOffset(date)
+        step: 1
       };
       break;
-    case DATE_OFFSET.WEEK:
+    }
+    case DATE_OFFSET.WEEK: {
       nextPagination = {
         ...prevPagination,
+        ...calcWeekOffset(date),
         granularity: DATE_GRANULARITY.DAY,
-        step: 1,
         maxStep: calcWeekMaxStep(date, minYearDate),
-        ...calcWeekOffset(date)
+        step: 1
       };
       break;
+    }
+    default:
   }
 
   yield put(calcChartOffset.success(nextPagination));
