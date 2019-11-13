@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import normalizePoints from '../../../modules/opinionDetails/helpers/normalizePoints';
 import generateDomain from '../../../modules/opinionDetails/helpers/generateDomain';
 import opinionDetailsSelectors from '../../../modules/opinionDetails/opinionDetailsSelectors';
-import RateChart from './RateChart';
+import RateChart from './rateChart/RateChart';
 
 function RateChartContainer({ status, history, pagination, visibleLines, dateOffset }) {
   const { minDate, maxDate } = pagination;

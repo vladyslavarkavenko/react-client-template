@@ -6,18 +6,21 @@ import {
   setLineFilter,
   handleNextOffset,
   handlePrevOffset
-} from '../../../modules/opinionDetails/opinionDetailsActions';
-import opinionDetailsSelectors from '../../../modules/opinionDetails/opinionDetailsSelectors';
-import RadioGroup from '../../../components/ui-components/Form/RadioGroup';
-import { DATE_OFFSET, LINE_TYPES } from '../../../modules/opinionDetails/helpers/constants';
+} from '../../../../modules/opinionDetails/opinionDetailsActions';
+import ArrowSvg from '../../../../../../public/assets/svg/arrow-down.svg';
+import opinionDetailsSelectors from '../../../../modules/opinionDetails/opinionDetailsSelectors';
+import RadioGroup from '../../../../components/ui-components/Form/RadioGroup';
+import { DATE_OFFSET, LINE_TYPES } from '../../../../modules/opinionDetails/helpers/constants';
 
-function ChartControls({
+function RateChartControls({
   setDateOffset,
   setLineFilter,
   handleNextOffset,
   handlePrevOffset,
   lineFilter,
-  dateOffset
+  dateOffset,
+  isNextDisabled,
+  isPrevDisabled
 }) {
   return (
     <>
@@ -49,11 +52,21 @@ function ChartControls({
           />
         </div>
 
-        <button className="arrow" type="button" onClick={() => handlePrevOffset()}>
-          {'<'}
+        <button
+          className="arrow left"
+          type="button"
+          onClick={() => handlePrevOffset()}
+          disabled={isPrevDisabled}
+        >
+          <ArrowSvg />
         </button>
-        <button className="arrow" type="button" onClick={() => handleNextOffset()}>
-          {'>'}
+        <button
+          className="arrow right"
+          type="button"
+          onClick={() => handleNextOffset()}
+          disabled={isNextDisabled}
+        >
+          <ArrowSvg />
         </button>
       </div>
     </>
@@ -61,7 +74,15 @@ function ChartControls({
 }
 
 const mapStateToProps = (state) => {
+  const { maxStep, step } = opinionDetailsSelectors.getChartPagination(state);
+
+  const isNextDisabled = step <= 1;
+  const isPrevDisabled = step >= maxStep;
+
   return {
+    isNextDisabled,
+    isPrevDisabled,
+
     lineFilter: opinionDetailsSelectors.getLineFilter(state),
     dateOffset: opinionDetailsSelectors.getDateOffset(state)
   };
@@ -77,4 +98,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ChartControls);
+)(RateChartControls);

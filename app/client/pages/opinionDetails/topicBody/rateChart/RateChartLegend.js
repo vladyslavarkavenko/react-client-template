@@ -1,7 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 
-import { LINE_TYPES } from '../../../modules/opinionDetails/helpers/constants';
+import { LINE_TYPES } from '../../../../modules/opinionDetails/helpers/constants';
 
 export default function RateChartLegend({ minDate, maxDate, visibleLines }) {
   const start = format(new Date(minDate), 'MMM dd, yyyy');

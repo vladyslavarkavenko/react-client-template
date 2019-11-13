@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 
 import {
@@ -10,47 +9,12 @@ import {
   VictoryArea
 } from 'victory';
 
-import { LINE_TYPES, DATE_OFFSET } from '../../../modules/opinionDetails/helpers/constants';
-import { InlineSvgLoader } from '../../../components/ui-components/Layout/Loader';
+import { LINE_TYPES, DATE_OFFSET } from '../../../../modules/opinionDetails/helpers/constants';
+import { InlineSvgLoader } from '../../../../components/ui-components/Layout/Loader';
+
+import defaultConfig from './config';
+import LineGradient from '../../../../components/ui-components/LineGradient';
 import RateChartLegend from './RateChartLegend';
-
-const config = {
-  canvasX: 1000,
-  canvasY: 450,
-
-  padding: 0,
-
-  strokeWidth: 2,
-  interpolation: 'monotoneX',
-
-  rateDomain: [1, 10],
-  rateTicks: 10,
-
-  satisfaction: {
-    color: '#F57575'
-  },
-
-  importance: {
-    color: '#938cf5',
-    strokeDasharray: 5
-  },
-
-  baseColor: '#3ea0da',
-  fontColor: '#808fa3',
-  gridColor: '#808fa3',
-  fontSize: '14px',
-  fontFamily: 'Muli'
-};
-
-const LineGradient = ({ name, color }) => {
-  return (
-    <linearGradient id={name} x1={0} y1={0} x2={0} y2={1}>
-      <stop offset="0%" stopColor={color} stopOpacity={0.1} />
-      <stop offset="25%" stopColor={color} stopOpacity={0.05} />
-      <stop offset="75%" stopColor={color} stopOpacity={0.0} />
-    </linearGradient>
-  );
-};
 
 export default class RateChart extends React.Component {
   constructor(props) {
@@ -71,6 +35,8 @@ export default class RateChart extends React.Component {
         return tickDate.toLocaleString('en-US', { day: 'numeric' });
       case DATE_OFFSET.WEEK:
         return tickDate.toLocaleString('en-US', { month: 'short', day: 'numeric' });
+      default:
+        return '';
     }
   }
 
@@ -82,10 +48,11 @@ export default class RateChart extends React.Component {
       domain,
       status,
       minDate,
-      maxDate
+      maxDate,
+      config = defaultConfig
     } = this.props;
+
     const {
-      padding,
       canvasX,
       canvasY,
       fontColor,
@@ -99,8 +66,6 @@ export default class RateChart extends React.Component {
     } = config;
 
     const gradientKey = 'opinion_details_grad_1';
-
-    const tickCount = domain.length;
 
     return (
       <div className="rate-chart">
@@ -122,7 +87,7 @@ export default class RateChart extends React.Component {
               standalone={false}
               tickValues={domain}
               tickFormat={this.formatTicks}
-              tickCount={tickCount}
+              tickCount={domain.length}
               tickLabelComponent={<VictoryLabel textAnchor="middle" />}
               style={{
                 axis: { stroke: 'transparent' },
@@ -135,7 +100,7 @@ export default class RateChart extends React.Component {
             />
             <VictoryAxis
               dependentAxis
-              domain={[1, 10.5]}
+              domain={[1, 10.25]}
               standalone={false}
               tickLabelComponent={<VictoryLabel dx={-10} textAnchor="middle" />}
               tickCount={10}
@@ -147,11 +112,7 @@ export default class RateChart extends React.Component {
                   stroke: gridColor,
                   strokeOpacity: 0.3
                 },
-                tickLabels: {
-                  fontSize: fontSize,
-                  fontFamily: fontFamily,
-                  fill: fontColor
-                }
+                tickLabels: { fontSize, fontFamily, fill: fontColor }
               }}
             />
 

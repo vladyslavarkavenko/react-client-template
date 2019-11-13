@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
-import ChartControls from './topicBody/ChartControls';
+import ChartControls from './topicBody/rateChart/RateChartControls';
 import RateChartContainer from './topicBody/RateChartContainer';
 import CtruPieChartContainer from './topicBody/CtruPieChartContainer';
 
