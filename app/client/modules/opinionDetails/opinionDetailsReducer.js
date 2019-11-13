@@ -90,6 +90,32 @@ const comments = handleActions(
   []
 );
 
+const topicGrades = combineReducers({
+  status: makeStatusWithResetReducer(actions.fetchOpinionGrades, actions.clearAll.TRIGGER),
+  ctruScore: handleActions(
+    {
+      [actions.fetchOpinionGrades.SUCCESS](state, { payload }) {
+        return payload.ctruScore;
+      },
+      [actions.clearAll.TRIGGER]() {
+        return 0;
+      }
+    },
+    0
+  ),
+  grades: handleActions(
+    {
+      [actions.fetchOpinionGrades.SUCCESS](state, { payload }) {
+        return payload.grades;
+      },
+      [actions.clearAll.TRIGGER]() {
+        return [];
+      }
+    },
+    []
+  )
+});
+
 const participation = combineReducers({
   status: makeStatusWithResetReducer(actions.fetchOpinionParticipation, actions.clearAll.TRIGGER),
   data: handleActions(
@@ -196,6 +222,7 @@ const opinionDetails = combineReducers({
   criteria,
   chart,
   comments,
+  topicGrades,
   participation,
   selectedCriteria,
   selectedSubject,

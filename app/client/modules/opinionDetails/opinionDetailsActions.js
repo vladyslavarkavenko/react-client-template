@@ -30,6 +30,7 @@ export const fetchOpinionDetails = createRequestBound('OPINION_DETAILS_FETCH');
 export const fetchHistory = createRequestBound('OPINION_HISTORY_FETCH');
 
 export const fetchOpinionParticipation = createRequestBound('OPINION_PARTICIPATION_FETCH');
+export const fetchOpinionGrades = createRequestBound('OPINION_GRADES_FETCH');
 
 export const setProfile = createRequestBound('PROFILE_SET');
 
@@ -136,8 +137,8 @@ function* nextOffsetWorker() {
         const nextYear = addYears(new Date(minDate), 1);
         nextPagination = {
           ...prevPagination,
-          step: nextStep,
-          ...calcYearOffset(nextYear)
+          ...calcYearOffset(nextYear),
+          step: nextStep
         };
         break;
       }
@@ -241,11 +242,36 @@ function* getDetailsWorker({ payload }) {
     yield put(fetchOpinionDetails.success({ data: normalize, comments, profile }));
 
     yield fork(getHistoryWorker);
+    yield fork(getOpinionGradesWorker);
     yield fork(getOpinionParticipationWorker);
   } catch (err) {
     console.error(err);
     Notification.error(err);
     yield put(fetchOpinionDetails.failure());
+  }
+}
+
+function* getOpinionGradesWorker() {
+  yield put(fetchOpinionGrades.request());
+  try {
+    const profile = yield select(opinionDetailsSelectors.selectedProfile);
+    const topic = yield select(opinionDetailsSelectors.selectedTopic);
+
+    const grades =
+      profile.type === ROUTING_PARAMS.MANAGER
+        ? yield call(ShareOpinionService.getTopicGradesByManager, {
+            id: profile.id,
+            topic: topic.id
+          })
+        : yield call(ShareOpinionService.getTopicGradesByCompany, {
+            id: profile.id,
+            topic: topic.id
+          });
+
+    yield put(fetchOpinionGrades.success(grades));
+  } catch (err) {
+    console.error(err);
+    yield put(fetchOpinionGrades.failure());
   }
 }
 
@@ -289,6 +315,7 @@ function* selectOptionWorker({ payload }) {
   });
 
   yield put(setProfile.success(selected));
+  yield fork(getOpinionGradesWorker);
   yield fork(getOpinionParticipationWorker);
   yield fork(getHistoryWorker);
 }
@@ -301,7 +328,5 @@ export function* opinionDetailsWatcher() {
     takeLatest(setDateOffset.TRIGGER, changeOffsetWorker),
     takeLatest(handlePrevOffset.TRIGGER, prevOffsetWorker),
     takeLatest(handleNextOffset.TRIGGER, nextOffsetWorker)
-
-    // takeLatest(setDateOffset.TRIGGER, calculatePaginationWorker)
   ]);
 }

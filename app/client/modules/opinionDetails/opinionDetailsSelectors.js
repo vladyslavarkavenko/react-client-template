@@ -14,6 +14,10 @@ const getChartStatus = (state) => state.opinionDetails.chart.status;
 const getChartData = (state) => state.opinionDetails.chart.data;
 const getChartPagination = (state) => state.opinionDetails.chart.pagination;
 
+const getTopicGradesStatus = (state) => state.opinionDetails.topicGrades.status;
+const getTopicCtruScore = (state) => state.opinionDetails.topicGrades.ctruScore;
+const getTopicGrades = (state) => state.opinionDetails.topicGrades.grades;
+
 /* eslint-disable */
 const getCriteriaList = (state) => {
   const criteria = Object.values(getCriteriaData(state));
@@ -80,6 +84,11 @@ export default {
 
   getLineFilter,
   getDateOffset,
+
+  getTopicGradesStatus,
+  getTopicCtruScore,
+  getTopicGrades,
+
   comments: (state) => state.opinionDetails.comments,
   participation: (state) => state.opinionDetails.participation
 };
