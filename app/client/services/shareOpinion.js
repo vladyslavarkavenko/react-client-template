@@ -81,87 +81,16 @@ class ShareOpinionService {
     return api.get('/opinion/tag/');
   }
 
+  static getTopicGradesByManager({ id, topic }) {
+    return api.post(`/opinion/manager/${id}/topic_ctru_grades/`, { topic });
+  }
+
+  static getTopicGradesByCompany({ id, topic }) {
+    return api.post(`/opinion/company/${id}/topic_ctru_grades/`, { topic });
+  }
+
   static getOpinionHistory(data) {
     console.log(data);
-
-    // const mock = [
-    //   {
-    //     date: '2019-01-01',
-    //     importance: 9.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.5
-    //   },
-    //   {
-    //     date: '2019-02-01',
-    //     importance: 8.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.0
-    //   },
-    //   {
-    //     date: '2019-03-01',
-    //     importance: 9.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.5
-    //   },
-    //   {
-    //     date: '2019-04-01',
-    //     importance: 9.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.5
-    //   },
-    //   {
-    //     date: '2019-05-01',
-    //     importance: 8.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.0
-    //   },
-    //   {
-    //     date: '2019-06-01',
-    //     importance: 9.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.5
-    //   },
-    //   {
-    //     date: '2019-07-01',
-    //     importance: 9.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.5
-    //   },
-    //   {
-    //     date: '2019-08-01',
-    //     importance: 8.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.0
-    //   },
-    //   {
-    //     date: '2019-09-01',
-    //     importance: 9.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.5
-    //   },
-    //   {
-    //     date: '2019-10-01',
-    //     importance: 9.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.5
-    //   },
-    //   {
-    //     date: '2019-11-01',
-    //     importance: 8.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.0
-    //   },
-    //   {
-    //     date: '2019-12-01',
-    //     importance: 9.0,
-    //     satisfaction: 10.0,
-    //     ctruScore: 9.5
-    //   }
-    // ];
-    // return new Promise((resolve) => {
-    //   setTimeout(() => resolve(mock), 300);
-    // });
-
     return api.get('/history/history/', { params: data });
   }
 }
