@@ -185,13 +185,47 @@
       }
 
       .arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin-left: 1rem;
-        min-width: 42px;
-        min-height: 42px;
+        width: 42px;
+        height: 42px;
         color: @font-color-lighter;
-        font-weight: bold;
         border: 1px solid @font-color-light;
         border-radius: @border-radius-block;
+
+        &:hover {
+          border: 1px solid @font-color-dark;
+          svg {
+            fill: @font-color-dark;
+            transform: scale(1.1);
+          }
+        }
+
+        &:disabled {
+          cursor: auto;
+          border: 1px solid @font-color-light;
+          svg {
+            fill: @font-color-light;
+          }
+        }
+
+        svg {
+          height: 1rem;
+          width: 1rem;
+          fill: @font-color-lighter;
+        }
+
+        &.left {
+          transform: rotate(90deg);
+        }
+
+        &.right {
+          transform: rotate(-90deg);
+        }
+
+
       }
     }
 
@@ -262,13 +296,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            //background-color: @primary-bg-color;
+            margin-right: 30px;
             border-radius: @border-radius-block;
             line-height: 1.2rem;
             font-size: 1rem;
 
             .date {
-
               color: darken(@font-color-lighter, 20%);
               font-weight: 600;
               padding: 2px 6px;
