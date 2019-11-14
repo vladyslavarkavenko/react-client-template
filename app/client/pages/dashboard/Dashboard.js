@@ -7,7 +7,7 @@ import CtruScoreForCompany from './CtruScoreForCompany';
 import SatisfiedClientsWrapper from './SatisfiedClientsWrapper';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
-import StaffData from './StaffData';
+import StaffData from './StaffTable';
 import Feedback from './Feedback';
 import ShiftedHeader from '../../components/ui-components/Layout/ShiftedHeader';
 import RadarWrapper from './RadarWrapper';
