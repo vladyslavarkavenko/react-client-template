@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -35,6 +36,8 @@ class Feedback extends React.Component {
   render() {
     const { feedback, status } = this.props;
     const { showCount } = this.state;
+
+    return null;
 
     if (status === 'request') {
       return <LoaderBlock />;
