@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Block from './Block';
+import ProfileBlock from './components/ProfileBlock';
 import parseData from './helpers';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import authSelectors from '../../modules/auth/authSelectors';
@@ -44,7 +44,9 @@ class Opinions extends React.Component {
           <ul>
             {parseData(companies, staffStatistics, companiesStatistics).map((datum) => {
               const { id, type } = datum;
-              return <Block key={datum.id} to={routing({ id, type }).opinionDetails} {...datum} />;
+              return (
+                <ProfileBlock key={datum.id} to={routing({ id, type }).opinionDetails} {...datum} />
+              );
             })}
           </ul>
         </div>

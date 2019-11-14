@@ -25,10 +25,10 @@ const Opinions = customLoadable({
   loader: () => import('../pages/opinions/Opinions')
 });
 const MyManagers = customLoadable({
-  loader: () => import('../pages/myManagers/MyManagers')
+  loader: () => import('../pages/opinions/MyManagers')
 });
 const MyCompanies = customLoadable({
-  loader: () => import('../pages/myCompanies/MyCompanies')
+  loader: () => import('../pages/opinions/MyCompanies')
 });
 const ProfileForAdmin = customLoadable({
   loader: () => import('../pages/profile/ProfileForAdmin')

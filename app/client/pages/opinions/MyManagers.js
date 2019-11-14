@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Block from '../opinions/Block';
-import { parseManager } from '../opinions/helpers';
+import ProfileBlock from './components/ProfileBlock';
+import { parseManager } from './helpers';
 import opinionsSelectors from '../../modules/opinions/opinionsSelectors';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { fetchStaffStatistics } from '../../modules/opinions/opinionsActions';
@@ -38,7 +38,7 @@ class MyManagers extends React.Component {
               const data = parseManager(manager, staffStatistics);
 
               return (
-                <Block
+                <ProfileBlock
                   key={id}
                   shareOpinion
                   withContact

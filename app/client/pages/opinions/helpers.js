@@ -4,11 +4,11 @@ const { MANAGER, COMPANY } = RATE_PROFILE_TYPE;
 
 // prettier-ignore
 const colors = [
-  [6, 200, 155],
-  [245, 123, 123],
-  [255, 150, 10],
-  [190, 120, 230],
-  [90, 170, 220]
+  [4, 171, 131],
+  [210, 59, 59],
+  [226, 129, 0],
+  [157, 65, 210],
+  [27, 133, 199]
 ];
 
 const parseScores = (scores) =>
