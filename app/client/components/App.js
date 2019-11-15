@@ -124,6 +124,7 @@ export default function App() {
         exact
         path={routing().dashboard}
         forAdmin={Dashboard}
+        forAnalyst={Dashboard}
         forCustomer={CustomerDashboard}
       />
 
