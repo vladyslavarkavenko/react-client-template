@@ -1,8 +1,10 @@
+console.log('window', window.innerWidth, window.innerHeight);
+
 const PROPS = {
   ticks: 10,
   padding: 50,
-  height: 900,
-  width: 1500,
+  height: window.innerHeight * 0.9,
+  width: window.innerWidth * 0.78,
   maxBubbleSize: 70,
   minBubbleSize: 10,
   activeBubbleSize: 5,

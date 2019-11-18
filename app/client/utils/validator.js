@@ -363,6 +363,7 @@ export function validateCompany(data, keys = Object.keys(companyValidators)) {
 
 const userValidators = {
   avatar: () => ({}),
+  satisfaction: () => ({}),
   email: validateEmail,
   phone: validatePhone,
   about: validateUserAbout,
