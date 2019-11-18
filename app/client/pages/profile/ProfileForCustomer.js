@@ -24,7 +24,7 @@ class ProfileForCustomer extends React.Component {
 
     e.preventDefault();
 
-    saveChanges(['firstName', 'lastName', 'location', 'avatar'], () => {
+    saveChanges(['firstName', 'lastName', 'location', 'avatar', 'satisfaction'], () => {
       toggleEditMode();
       cancelChanges(['about', 'email', 'phone']);
     });
@@ -40,14 +40,23 @@ class ProfileForCustomer extends React.Component {
   }
 
   render() {
-    const {
-      isEdit,
-      errors,
-      history,
-      onChange,
-      toggleEditMode,
-      data: { avatar, newAvatar, firstName, lastName, location }
-    } = this.props;
+    const { isEdit, errors, history, onChange, toggleEditMode, data } = this.props;
+    const { avatar, newAvatar, firstName, lastName, location, satisfaction } = data;
+
+    let subTitle;
+    switch (satisfaction) {
+      case 1:
+        subTitle = "I'm unhappy";
+        break;
+      case 2:
+        subTitle = "I'm neutral";
+        break;
+      case 3:
+        subTitle = "I'm satisfied";
+        break;
+      default:
+        break;
+    }
 
     return (
       <>
@@ -57,7 +66,7 @@ class ProfileForCustomer extends React.Component {
           isEdit={isEdit}
           history={history}
           onChange={onChange}
-          subTitle="I'm satisfied"
+          subTitle={subTitle}
           avatar={newAvatar || avatar}
           toggleEditMode={toggleEditMode}
           title={`${firstName} ${lastName}`}
@@ -67,6 +76,7 @@ class ProfileForCustomer extends React.Component {
               saveChanges={this.mainSaveChanges}
               cancelChanges={this.mainCancelChanges}
               errors={errors}
+              satisfaction={satisfaction}
               inputs={[
                 {
                   labelText: 'First name',

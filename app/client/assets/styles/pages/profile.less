@@ -128,13 +128,13 @@
   }
 
 
-    .info {
-      color: #fff;
-      background: @default-gradient;
-      padding: 20px 20px 20px 150px;
-      min-height: 82px;
-      display: flex;
-      justify-content: space-between;
+  .info {
+    color: #fff;
+    background: @default-gradient;
+    padding: 20px 20px 20px 150px;
+    min-height: 82px;
+    display: flex;
+    justify-content: space-between;
 
     &.simple {
       padding: 24px 20px 18px 20px;
@@ -185,6 +185,53 @@
   .content-edit-info {
     padding: 20px 20px 20px 150px;
     background-color: #fff;
+
+    .satisfaction-block {
+      p {
+        font-size: 1rem;
+        color: #353535;
+        font-weight: bold;
+        margin-bottom: 2rem;
+      }
+
+      .btns {
+        display: flex;
+
+        .satisfaction-btn {
+          box-shadow: 0 0 3px 1px rgba(0, 0, 0, .15);
+          background: white;
+          height: 5.5rem;
+          width: 5.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          color: #6F91BA;
+          transition: 0.2s;
+
+          &:not(:last-child) {
+            margin-right: 1.5rem;
+          }
+
+          svg {
+            transition: 0.2s;
+            height: 1.5rem;
+            FILL: #6F91BA;
+            margin-bottom: 0.5rem;
+          }
+
+          &.active {
+            background-color: #3EA0DA;
+            color: white;
+
+            svg {
+              fill: white;
+            }
+          }
+        }
+      }
+    }
 
     .input-block {
       margin-bottom: 16px;
