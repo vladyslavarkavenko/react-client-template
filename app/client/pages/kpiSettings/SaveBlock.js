@@ -5,14 +5,14 @@ import { pushSaveChanges } from '../../modules/kpiSettings/kpiSettingsActions';
 import Button from '../../components/ui-components/Form/Button';
 import kpiSettingsSelectors from '../../modules/kpiSettings/kpiSettingsSelectors';
 
-function SaveBlock({ isChanged, handleSave }) {
+function SaveBlock({ isChanged, saveChanges }) {
   if (!isChanged) {
     return null;
   }
 
   return (
     <div className="kpi-options__save">
-      <Button className="save-changes" onClick={() => handleSave()}>
+      <Button className="save-changes" onClick={() => saveChanges()}>
         Save Changes
       </Button>
     </div>

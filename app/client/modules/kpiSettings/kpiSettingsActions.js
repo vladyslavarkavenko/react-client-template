@@ -1,12 +1,15 @@
+/* eslint-disable */
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 
 import Notification from '../../utils/notifications';
+import KpiService from '../../services/kpi';
+import kpiSettingsSelectors from './kpiSettingsSelectors';
+import normalizeSettings from './helpers/normalizeSettings';
 import companiesSelectors from '../companies/companiesSelectors';
 import CompaniesService from '../../services/companies';
-import normalizeSettings from './helpers/normalizeSettings';
 
 export const prefix = 'kpiSettings';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -22,16 +25,20 @@ export const fetchStatistics = createRequestBound('STATISTICS_FETCH');
 
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
 
-function* fetchStatisticsWorker() {
+function* fetchKpiSettingsWorker() {
   yield put(fetchStatistics.request());
   try {
     const { id } = yield select(companiesSelectors.getCurrentCompany);
 
-    const statistics = yield call(CompaniesService.getStatistics, id);
+    const [kpiRaw, statisticsRaw] = yield all([
+      call(KpiService.getKpiSettings),
+      call(CompaniesService.getStatistics, id)
+    ]);
 
-    const normalize = normalizeSettings(statistics);
+    const kpi = normalizeSettings(kpiRaw);
+    const statistics = normalizeSettings(statisticsRaw);
 
-    yield put(fetchStatistics.success(normalize));
+    yield put(fetchStatistics.success({ kpi, statistics }));
   } catch (err) {
     console.error(err);
     Notification.error(err);
@@ -39,6 +46,32 @@ function* fetchStatisticsWorker() {
   }
 }
 
+function* pushKpiSettingsWorker() {
+  yield put(pushSaveChanges.request());
+  try {
+    const { participation, nps, satisfaction, ctru } = yield select(kpiSettingsSelectors.getInput);
+
+    const kpi = yield call(KpiService.setKpiParam, {
+      participationShare: participation,
+      avgSatisfaction: satisfaction,
+      ctruScore: ctru,
+      nps
+    });
+
+    const normalize = normalizeSettings(kpi);
+
+    Notification.success('The Changes have been saved');
+    yield put(pushSaveChanges.success(normalize));
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(pushSaveChanges.failure());
+  }
+}
+
 export function* kpiSettingsWatcher() {
-  yield all([takeLatest(fetchStatistics.TRIGGER, fetchStatisticsWorker)]);
+  yield all([
+    takeLatest(fetchStatistics.TRIGGER, fetchKpiSettingsWorker),
+    takeLatest(pushSaveChanges, pushKpiSettingsWorker)
+  ]);
 }

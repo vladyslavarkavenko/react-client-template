@@ -27,13 +27,29 @@ class SatisfactionOption extends React.Component {
   }
 
   render() {
-    const { currentValue, initialValue, setValue } = this.props;
+    const { initialValue, currentValue, realValue, setValue } = this.props;
+
+    const diffArr = [
+      {
+        mark: 'Real',
+        title: 'Real Satisfied Clients',
+        value: realValue,
+        diff: currentValue - realValue
+      }
+    ];
+
+    const marks = {};
+
+    diffArr.forEach(({ value, mark }) => {
+      marks[value] = mark;
+    });
 
     return (
       <OptionWrapper
         title="Satisfied Clients"
         oldValue={initialValue}
         newValue={currentValue}
+        diffArr={diffArr}
         handleReset={this.handleReset}
         formatValue={SatisfactionOption.handleFormat}
       >
@@ -41,6 +57,7 @@ class SatisfactionOption extends React.Component {
           min={0}
           max={100}
           step={1}
+          marks={marks}
           onChange={setValue}
           value={currentValue}
           className="kpi-slider"
@@ -52,14 +69,16 @@ class SatisfactionOption extends React.Component {
 
 const mapStateToProps = (state) => {
   const status = kpiSettingsSelectors.getSettingsStatus(state);
-  const { satisfaction: initialValue } = kpiSettingsSelectors.getSettingsData(state);
+  const { satisfaction: initialValue } = kpiSettingsSelectors.getSettingsTarget(state);
+  const { satisfaction = 0 } = kpiSettingsSelectors.getSettingsActual(state);
 
   const currentValue = kpiSettingsSelectors.getSatisfaction(state);
 
   return {
     status,
     initialValue,
-    currentValue
+    currentValue,
+    realValue: satisfaction
   };
 };
 

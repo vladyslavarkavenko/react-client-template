@@ -28,13 +28,29 @@ class CtruScoreOption extends React.Component {
   }
 
   render() {
-    const { currentValue, initialValue, setValue } = this.props;
+    const { initialValue, currentValue, realValue, setValue } = this.props;
+
+    const diffArr = [
+      {
+        mark: 'Real',
+        title: 'Real cTRU Score',
+        value: realValue,
+        diff: currentValue - realValue
+      }
+    ];
+
+    const marks = {};
+
+    diffArr.forEach(({ value, mark }) => {
+      marks[value] = mark;
+    });
 
     return (
       <OptionWrapper
         title="cTRU Score"
         oldValue={initialValue}
         newValue={currentValue}
+        diffArr={diffArr}
         handleReset={this.handleReset}
         formatValue={CtruScoreOption.handleFormat}
       >
@@ -44,6 +60,7 @@ class CtruScoreOption extends React.Component {
           step={0.1}
           onChange={setValue}
           value={currentValue}
+          marks={marks}
           className="kpi-slider"
         />
       </OptionWrapper>
@@ -53,14 +70,16 @@ class CtruScoreOption extends React.Component {
 
 const mapStateToProps = (state) => {
   const status = kpiSettingsSelectors.getSettingsStatus(state);
-  const { ctruScore: initialValue } = kpiSettingsSelectors.getSettingsData(state);
+  const { ctru: initialValue } = kpiSettingsSelectors.getSettingsTarget(state);
+  const { ctru = 0 } = kpiSettingsSelectors.getSettingsActual(state);
 
   const currentValue = kpiSettingsSelectors.getCtru(state);
 
   return {
     status,
     initialValue,
-    currentValue
+    currentValue,
+    realValue: ctru
   };
 };
 

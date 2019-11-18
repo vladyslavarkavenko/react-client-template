@@ -9,9 +9,12 @@ const settingsInitial = normalizeSettings();
 
 const settings = combineReducers({
   status: makeStatusWithResetReducer(actions.fetchStatistics, actions.clearAll.TRIGGER),
-  data: handleActions(
+  target: handleActions(
     {
       [actions.fetchStatistics.SUCCESS](state, { payload }) {
+        return payload.kpi;
+      },
+      [actions.pushSaveChanges.SUCCESS](state, { payload }) {
         return payload;
       },
       [actions.clearAll.TRIGGER]() {
@@ -19,13 +22,24 @@ const settings = combineReducers({
       }
     },
     settingsInitial
+  ),
+  actual: handleActions(
+    {
+      [actions.fetchStatistics.SUCCESS](state, { payload }) {
+        return payload.statistics;
+      },
+      [actions.clearAll.TRIGGER]() {
+        return {};
+      }
+    },
+    {}
   )
 });
 
 const ctru = handleActions(
   {
     [actions.fetchStatistics.SUCCESS](state, { payload }) {
-      return payload.ctruScore;
+      return payload.kpi.ctru;
     },
     [actions.setCtruValue.TRIGGER](state, { payload }) {
       return payload;
@@ -43,7 +57,7 @@ const ctru = handleActions(
 const satisfaction = handleActions(
   {
     [actions.fetchStatistics.SUCCESS](state, { payload }) {
-      return payload.satisfaction;
+      return payload.kpi.satisfaction;
     },
     [actions.setSatisfactionValue.TRIGGER](state, { payload }) {
       return payload;
@@ -61,7 +75,7 @@ const satisfaction = handleActions(
 const participation = handleActions(
   {
     [actions.fetchStatistics.SUCCESS](state, { payload }) {
-      return payload.participation;
+      return payload.kpi.participation;
     },
     [actions.setParticipationValue.TRIGGER](state, { payload }) {
       return payload;
@@ -79,7 +93,7 @@ const participation = handleActions(
 const nps = handleActions(
   {
     [actions.fetchStatistics.SUCCESS](state, { payload }) {
-      return payload.nps;
+      return payload.kpi.nps;
     },
     [actions.setNPSValue.TRIGGER](state, { payload }) {
       return payload;
