@@ -19,12 +19,7 @@ const mapStateToProps = (state, { match: { path, params } }) => {
 
   let changeOpinionLink;
 
-  if (
-    path !== routing().myOpinionDetails &&
-    status === 'success' &&
-    selectedSubjectId &&
-    selectedTopic
-  ) {
+  if (path !== routing().myOpinionDetails && selectedSubjectId && selectedTopic) {
     const { id, type } = params;
     changeOpinionLink = routing({
       id,

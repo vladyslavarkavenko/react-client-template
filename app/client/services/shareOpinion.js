@@ -82,11 +82,11 @@ class ShareOpinionService {
   }
 
   static getTopicGradesByManager({ id, topic }) {
-    return api.post(`/opinion/manager/${id}/topic_ctru_grades/`, { topic });
+    return api.get(`/opinion/manager/${id}/topic_ctru_grades/`, { params: { topic } });
   }
 
   static getTopicGradesByCompany({ id, topic }) {
-    return api.post(`/opinion/company/${id}/topic_ctru_grades/`, { topic });
+    return api.get(`/opinion/company/${id}/topic_ctru_grades/`, { params: { topic } });
   }
 
   static getOpinionHistory(data) {

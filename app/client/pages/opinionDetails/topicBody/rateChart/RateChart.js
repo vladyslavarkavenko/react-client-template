@@ -85,6 +85,7 @@ export default class RateChart extends React.Component {
             <VictoryAxis
               scale="linear"
               standalone={false}
+              domain={domain}
               tickValues={domain}
               tickFormat={this.formatTicks}
               tickCount={domain.length}

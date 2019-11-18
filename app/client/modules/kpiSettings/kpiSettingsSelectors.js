@@ -1,5 +1,8 @@
 const getSettingsStatus = (state) => state.kpiSettings.settings.status;
-const getSettingsData = (state) => state.kpiSettings.settings.data;
+const getSettingsTarget = (state) => state.kpiSettings.settings.target;
+const getSettingsActual = (state) => state.kpiSettings.settings.actual;
+
+const getInput = (state) => state.kpiSettings.input;
 
 const getCtru = (state) => state.kpiSettings.input.ctru;
 const getSatisfaction = (state) => state.kpiSettings.input.satisfaction;
@@ -7,10 +10,10 @@ const getParticipation = (state) => state.kpiSettings.input.participation;
 const getNPS = (state) => state.kpiSettings.input.nps;
 
 const isChanged = (state) => {
-  const { satisfaction, ctruScore, participation, nps } = getSettingsData(state);
+  const { satisfaction, ctru, participation, nps } = getSettingsTarget(state);
 
   const isSatisfactionChanged = satisfaction !== getSatisfaction(state);
-  const isCtruScoreChanged = ctruScore !== getCtru(state);
+  const isCtruScoreChanged = ctru !== getCtru(state);
   const isParticipationChanged = participation !== getParticipation(state);
   const isNpsChanged = nps !== getNPS(state);
 
@@ -19,7 +22,9 @@ const isChanged = (state) => {
 
 export default {
   getSettingsStatus,
-  getSettingsData,
+  getSettingsTarget,
+  getSettingsActual,
+  getInput,
 
   getCtru,
   getSatisfaction,
