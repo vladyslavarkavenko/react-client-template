@@ -1,3 +1,9 @@
+import { format } from 'date-fns';
+
+export function formatDate(date) {
+  return format(date, 'MMM d, yyyy');
+}
+
 // eslint-disable-next-line import/prefer-default-export
 export function debounce(f, ms) {
   let timer = null;

@@ -111,6 +111,7 @@ export default (params) => ({
 
   staff: '/manage/staff',
   clients: '/manage/clients',
+  kpiSettings: '/manage/kpi',
 
   messages: '/account/messages',
   opinions: '/account/opinions',

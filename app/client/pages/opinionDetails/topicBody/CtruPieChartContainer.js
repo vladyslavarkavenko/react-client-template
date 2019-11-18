@@ -3,20 +3,19 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import opinionDetailsSelectors from '../../modules/opinionDetails/opinionDetailsSelectors';
-import CtruPieChart from './CtruPieChart';
+import opinionDetailsSelectors from '../../../modules/opinionDetails/opinionDetailsSelectors';
+import CtruPieChart from './ctruPieChart/CtruPieChart';
 import { withRouter } from 'react-router-dom';
-import routing from '../../utils/routing';
-
-function CtruPieChartContainer(props) {
-  return <CtruPieChart {...props} />;
-}
+import routing from '../../../utils/routing';
 
 const mapStateToProps = (state, { match: { path, params } }) => {
   const selectedCriteriaId = opinionDetailsSelectors.selectedCriteria(state);
   const selectedSubjectId = opinionDetailsSelectors.selectedSubject(state);
   const selectedTopic = opinionDetailsSelectors.selectedTopic(state);
-  const status = opinionDetailsSelectors.getCriteriaStatus(state);
+
+  const status = opinionDetailsSelectors.getTopicGradesStatus(state);
+  const ctruScore = opinionDetailsSelectors.getTopicCtruScore(state);
+  const grades = opinionDetailsSelectors.getTopicGrades(state);
 
   let changeOpinionLink;
 
@@ -37,6 +36,8 @@ const mapStateToProps = (state, { match: { path, params } }) => {
 
   return {
     status,
+    grades,
+    ctruScore,
     selectedCriteriaId,
     selectedSubjectId,
     selectedTopic,
@@ -47,4 +48,4 @@ const mapStateToProps = (state, { match: { path, params } }) => {
 export default compose(
   withRouter,
   connect(mapStateToProps)
-)(CtruPieChartContainer);
+)(CtruPieChart);

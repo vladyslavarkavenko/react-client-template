@@ -1,52 +1,58 @@
 import React from 'react';
-import { format } from 'date-fns';
 
-const limit = 5;
+import { formatDate } from '../../../utils/helpers';
 
-class FeedbackItem extends React.Component {
+export default class FeedbackItem extends React.Component {
   constructor(props) {
     super(props);
 
+    this.maxLength = 5;
+
     this.state = {
-      showCount: 4
+      showAll: false
     };
 
     this.increaseShowCount = this.increaseShowCount.bind(this);
   }
 
   increaseShowCount() {
-    this.setState((state) => ({
-      showCount: state.showCount + limit
-    }));
+    this.setState({
+      showAll: true
+    });
   }
 
   render() {
-    const { showCount } = this.state;
+    const { showAll } = this.state;
     const {
-      data: { id, date, fullName, avatar, topics }
+      data: { id, datetime, fullName, avatar, topics }
     } = this.props;
 
-    const restTopics = topics.length - showCount;
+    const topicList = topics
+      .slice(0, showAll ? topics.length : this.maxLength)
+      .map(({ id: topicId, name, opinionCtruScore }) => (
+        <li key={`${id}_${topicId}_${opinionCtruScore}`} className="topic-block">
+          {name} <span className="score">{opinionCtruScore.toFixed(1)}</span>
+        </li>
+      ));
+
+    const restLength = topics.length - topicList.length;
 
     return (
-      <li key={id} className="d-flex feedback-item">
+      <li key={`${id}_feed_item`} className="d-flex feedback-item">
         <div className="avatar circle">
           <img src={avatar || '/assets/img/empty-avatar.jpg'} alt="Avatar" />
         </div>
         <div className="w-100">
           <div className="top d-flex jc-between">
             <h6 className="name">{fullName}</h6>
-            <p className="date">{format(new Date(date), 'MMM i')}</p>
+            <p className="date">{formatDate(new Date(datetime))}</p>
           </div>
           <ul className="topics">
-            {topics.slice(0, showCount).map(({ id, name, opinionCtruScore }) => (
-              <li key={id} className="topic-block">
-                <span>{opinionCtruScore}</span> {name}
-              </li>
-            ))}
-            {restTopics > 0 && (
-              <li key={id} className="topic-block cursor-pointer" onClick={this.increaseShowCount}>
-                +{restTopics > limit ? limit : restTopics}
+            {topicList}
+
+            {restLength > 0 && (
+              <li className="topic-btn" onClick={this.increaseShowCount}>
+                +{restLength}
               </li>
             )}
           </ul>
@@ -55,5 +61,3 @@ class FeedbackItem extends React.Component {
     );
   }
 }
-
-export default FeedbackItem;

@@ -4,6 +4,7 @@ import createRequestRoutine from '../helpers/createRequestRoutine';
 import StaffService from '../../services/staff';
 import CompaniesService from '../../services/companies';
 import companiesSelectors from '../companies/companiesSelectors';
+import normalizeStaff from './helpers/normalizeStaff';
 
 export const prefix = 'dashboard';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -23,7 +24,9 @@ function* getActiveStaffWorker() {
         .map(({ id }) => call(CompaniesService.getManager, id))
     );
 
-    yield put(fetchActiveStaff.success(stats));
+    const normalized = normalizeStaff(stats);
+
+    yield put(fetchActiveStaff.success(normalized));
   } catch (err) {
     console.error(err);
     // Notification.error(err);

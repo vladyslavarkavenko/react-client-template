@@ -80,6 +80,19 @@ class ShareOpinionService {
   static getTags() {
     return api.get('/opinion/tag/');
   }
+
+  static getTopicGradesByManager({ id, topic }) {
+    return api.post(`/opinion/manager/${id}/topic_ctru_grades/`, { topic });
+  }
+
+  static getTopicGradesByCompany({ id, topic }) {
+    return api.post(`/opinion/company/${id}/topic_ctru_grades/`, { topic });
+  }
+
+  static getOpinionHistory(data) {
+    console.log(data);
+    return api.get('/history/history/', { params: data });
+  }
 }
 
 export default ShareOpinionService;

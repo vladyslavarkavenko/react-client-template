@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Block from '../opinions/Block';
-import { parseCompany } from '../opinions/helpers';
+import ProfileBlock from './components/ProfileBlock';
+import { parseCompany } from './helpers';
 import opinionsSelectors from '../../modules/opinions/opinionsSelectors';
 import companiesSelectors from '../../modules/companies/companiesSelectors';
 import { fetchCompaniesStatistics } from '../../modules/opinions/opinionsActions';
@@ -10,7 +10,7 @@ import Button from '../../components/ui-components/Form/Button';
 import routing from '../../utils/routing';
 import ShiftedHeader from '../../components/ui-components/Layout/ShiftedHeader';
 
-class MyManagers extends React.Component {
+class MyCompanies extends React.Component {
   componentDidMount() {
     const { companiesStatistics, fetchCompaniesStatistics } = this.props;
 
@@ -38,7 +38,12 @@ class MyManagers extends React.Component {
               const data = parseCompany(company, companiesStatistics);
 
               return (
-                <Block key={id} shareOpinion to={routing(id).companyProfileOverview} {...data} />
+                <ProfileBlock
+                  key={id}
+                  shareOpinion
+                  to={routing(id).companyProfileOverview}
+                  {...data}
+                />
               );
             })}
           </ul>
@@ -57,4 +62,4 @@ const mapStateToProps = (state) => ({
 export default connect(
   mapStateToProps,
   { fetchCompaniesStatistics }
-)(MyManagers);
+)(MyCompanies);

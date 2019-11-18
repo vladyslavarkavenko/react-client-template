@@ -13,8 +13,10 @@ class Feedback extends React.Component {
   constructor(props) {
     super(props);
 
+    this.maxLength = 3;
+
     this.state = {
-      showCount: 3
+      showAll: false
     };
 
     this.increaseShowCount = this.increaseShowCount.bind(this);
@@ -27,33 +29,31 @@ class Feedback extends React.Component {
   }
 
   increaseShowCount() {
-    this.setState((state) => ({
-      showCount: state.showCount + 5
-    }));
+    this.setState({
+      showAll: true
+    });
   }
 
   render() {
     const { feedback, status } = this.props;
-    const { showCount } = this.state;
+    const { showAll } = this.state;
 
     if (status === 'request') {
       return <LoaderBlock />;
     }
 
-    if (!feedback || feedback.length === 0) {
+    if (!feedback || feedback.results.length === 0) {
       return <WidgetPlaceholder icon={<FeedbackSvg />} title="No Feedback Yet" />;
     }
 
+    const list = feedback.results
+      .slice(0, showAll ? feedback.results.length : this.maxLength)
+      .map((data) => <FeedbackItem data={data} key={`${data.id}_${data.datetime}_f`} />);
+
     return (
       <div className="feedback-block">
-        {feedback && (
-          <ul>
-            {feedback.slice(0, showCount).map((d) => (
-              <FeedbackItem data={d} />
-            ))}
-          </ul>
-        )}
-        {feedback.length > showCount && (
+        {feedback && <ul>{list}</ul>}
+        {feedback.results.length > list.length && (
           <button className="see-more" onClick={this.increaseShowCount}>
             See More <span>→</span>
           </button>

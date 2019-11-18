@@ -7,7 +7,7 @@ import CtruScoreForCompany from './CtruScoreForCompany';
 import SatisfiedClientsWrapper from './SatisfiedClientsWrapper';
 import authSelectors from '../../modules/auth/authSelectors';
 import CONST from '../../utils/constants';
-import StaffData from './StaffData';
+import StaffData from './StaffTable';
 import Feedback from './Feedback';
 import ShiftedHeader from '../../components/ui-components/Layout/ShiftedHeader';
 import RadarWrapper from './RadarWrapper';
@@ -63,15 +63,15 @@ const Dashboard = ({ activeRole }) => {
           },
           {
             title: 'Top 3 by participation share',
-            body: <TopBlock requestKey={1} />
+            body: <TopBlock requestKey={1} scoreFormat={(grade) => `${grade}%`} />
           },
           {
             title: 'Top 3 by importance',
-            body: <TopBlock requestKey={2} />
+            body: <TopBlock requestKey={2} scoreFormat={(grade) => grade.toFixed(1)} />
           },
           {
             title: 'Worst 3 by cTRU Score',
-            body: <TopBlock requestKey={3} />
+            body: <TopBlock requestKey={3} scoreFormat={(grade) => grade.toFixed(1)} noCtruScore />
           }
         ]}
       />

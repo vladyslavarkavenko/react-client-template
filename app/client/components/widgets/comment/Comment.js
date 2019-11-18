@@ -1,5 +1,5 @@
 import React from 'react';
-import { format } from 'date-fns';
+import { formatDate } from '../../../utils/helpers';
 
 import RatingDots from './RatingDots';
 import RatingList from './RatingList';
@@ -8,7 +8,7 @@ export default function Comment({
   data: { id, fullName, dateComment, text, opinions },
   selectedTopicId
 }) {
-  const formattedDate = format(new Date(dateComment), 'MMM d, yyyy');
+  const formattedDate = formatDate(new Date(dateComment));
 
   const selectedTopic =
     selectedTopicId && opinions.find((item) => item.topic.id === selectedTopicId);

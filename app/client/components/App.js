@@ -25,10 +25,10 @@ const Opinions = customLoadable({
   loader: () => import('../pages/opinions/Opinions')
 });
 const MyManagers = customLoadable({
-  loader: () => import('../pages/myManagers/MyManagers')
+  loader: () => import('../pages/opinions/MyManagers')
 });
 const MyCompanies = customLoadable({
-  loader: () => import('../pages/myCompanies/MyCompanies')
+  loader: () => import('../pages/opinions/MyCompanies')
 });
 const ProfileForAdmin = customLoadable({
   loader: () => import('../pages/profile/ProfileForAdmin')
@@ -95,6 +95,10 @@ const Benchmarks = customLoadable({
   loader: () => import('../pages/benchmarks/Benchmarks')
 });
 
+const KpiSettings = customLoadable({
+  loader: () => import('../pages/kpiSettings/KpiSettings')
+});
+
 const PageNotFound = customLoadable({
   loader: () => import('../pages/notFound/NotFound')
 });
@@ -120,6 +124,7 @@ export default function App() {
         exact
         path={routing().dashboard}
         forAdmin={Dashboard}
+        forAnalyst={Dashboard}
         forCustomer={CustomerDashboard}
       />
 
@@ -148,6 +153,8 @@ export default function App() {
         forAdmin={Benchmarks}
         forAnalyst={Benchmarks}
       />
+      {/*<WrappedRoute exact path={routing().kpiSettings} component={KpiSettings} />*/}
+      <RolesRoute exact path={routing().kpiSettings} forAdmin={KpiSettings} />
 
       {/* Share your opinion */}
       <AuthRoute exact path={routing().shareOpinion} component={ShareOpinion} />

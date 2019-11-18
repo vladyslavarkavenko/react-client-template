@@ -1,52 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import TopItem from './topBlock/TopItem';
 import { fetchTop } from '../../modules/dashboard/dashboardActions';
 import dashboardSelectors from '../../modules/dashboard/dashboardSelectors';
 import WidgetPlaceholder from '../../components/widgets/WidgetPlaceholder';
 import DataFileSvg from '../../../../public/assets/svg/file-chart-line.duotone.svg';
 import { LoaderBlock } from '../../components/ui-components/Layout/Loader';
 
-const rand = (min = 0, max = 10) =>
-  (Math.floor(Math.random() * (max - min) * 10) / 10 + min).toFixed(1);
-
-const colors = [
-  [235, 200, 91].join(','),
-  [98, 189, 111].join(','),
-  [68, 163, 219].join(','),
-  [188, 115, 228].join(','),
-  [255, 150, 11].join(','),
-  [245, 121, 121].join(','),
-  [46, 208, 172].join(',')
-];
-
-const UpArrow = ({ style }) => (
-  <span className="arrow" style={style}>
-    ↑
-  </span>
-);
-const DownArrow = ({ style }) => (
-  <span className="arrow" style={style}>
-    ↓
-  </span>
-);
-
 class TopBlock extends React.Component {
   componentDidMount() {
-    const { requestKey, top, fetchTop } = this.props;
+    const { requestKey, status, fetchTop } = this.props;
 
-    if (!top[requestKey]) {
+    if (status !== 'success') {
       fetchTop({ key: requestKey });
     }
   }
 
   render() {
-    const { requestKey, top, status } = this.props;
-    const data = top[requestKey];
-    const keyStatus = status[requestKey];
+    const { status, data, requestKey, scoreFormat, noCtruScore } = this.props;
 
-    if (keyStatus === 'request') {
-      return <LoaderBlock height="6.875rem" />;
+    if (status === 'request') {
+      return <LoaderBlock height="203px" />;
     }
 
     if (!data || data.length === 0) {
@@ -57,48 +32,24 @@ class TopBlock extends React.Component {
       );
     }
 
-    return (
-      <div className="top-3">
-        {data.map(({ ctruScore, name, keyValue, subject: { name: sName } }) => {
-          const c = Math.floor(rand(0, colors.length - 1));
-          const style = {
-            color: `rgb(${colors[c]})`,
-            background: `rgb(${colors[c]}, 0.1)`
-          };
+    const list = data.map((item, index) => (
+      <TopItem
+        noCtruScore={noCtruScore}
+        data={item}
+        key={`top_${item.id}_${requestKey}`}
+        scoreFormat={scoreFormat}
+        diff={index < 1 ? 25 : -17}
+      />
+    ));
 
-          return (
-            <div className="d-flex info-item">
-              <p style={style}>
-                {sName}-{name}-{ctruScore}
-              </p>
-              {requestKey !== 3 && (
-                <p className="indicator text-bold" style={style}>
-                  {keyValue}
-                </p>
-              )}
-              {c > colors.length / 2 ? (
-                <span style={{ color: '#2bbd73' }}>
-                  {rand()}
-                  <UpArrow style={{ color: '#2bbd73' }} />
-                </span>
-              ) : (
-                <span style={{ color: '#dd2f54' }}>
-                  {rand()}
-                  <DownArrow style={{ color: '#dd2f54' }} />
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
+    return <ul className="top-widget__list">{list}</ul>;
   }
 }
 
-const mapStateToProps = (state) => ({
-  top: dashboardSelectors.top(state),
-  status: dashboardSelectors.topStatus(state)
-});
+const mapStateToProps = (state, { requestKey }) => {
+  const { status, data } = dashboardSelectors.getTopByKey(state, requestKey);
+  return { status, data };
+};
 
 export default connect(
   mapStateToProps,

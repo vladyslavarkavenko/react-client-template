@@ -76,13 +76,21 @@ function RecommendBlock({
               </button>
             </div>
             <div className="opinion-rec__remind">
-              <button className="ask-btn">{i18next.t('shareOpinion.buttons.askLater')}</button>
-              {false && (
+              {rate === 4 ? (
                 <Alert
                   type={Alert.info}
                   icon={<AlarmClockSvg />}
                   message={i18next.t('shareOpinion.alert.askLater')}
                 />
+              ) : (
+                <button
+                  className="ask-btn"
+                  data-rate={4}
+                  onClick={handleRateBound}
+                  disabled={isRequest}
+                >
+                  {i18next.t('shareOpinion.buttons.askLater')}
+                </button>
               )}
             </div>
             <div className="opinion-rec__actions">

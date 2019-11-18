@@ -3,7 +3,7 @@
   .feedback-item {
 
     &:not(:last-child) {
-      border-bottom: 1px solid rgba(128, 143, 163, 0.31);
+      border-bottom: 1px solid lighten(@font-color-lighter, 40%);
       padding-bottom: 1rem;
       margin-bottom: 1rem;
     }
@@ -11,6 +11,7 @@
     .avatar {
       height: 2.5rem;
       width: 2.5rem;
+      min-width: 2.5rem;
       margin-right: 1rem;
     }
 
@@ -19,24 +20,45 @@
     }
 
     .date {
-      color: #808FA3;
-      font-size: 0.75rem;
+      color: @font-color-lighter;
+      font-size: 0.85rem;
+      font-weight: 600;
     }
 
     .topics {
       display: flex;
       flex-wrap: wrap;
 
+      @color: darken(white, 5%);
+
+      .topic-btn,
       .topic-block {
+        @gap:0.825rem;
         color: #353535;
-        font-size: 0.825rem;
-        font-weight: bold;
-        background: #F7F8FA;
+        font-size: @gap;
+        line-height: 1.25rem;
+        font-weight: 600;
+        background: @color;
         border-radius: 0.5rem;
         padding: 0.25rem 0.5rem;
 
-        &:not(:last-child) {
-          margin-right: 0.825rem;
+        margin-right: @gap;
+        margin-bottom: @gap;
+        &:last-child {
+          margin-right: unset;
+        }
+
+        .score {
+          font-weight: 800;
+        }
+      }
+
+      .topic-btn {
+        cursor: pointer;
+        font-weight: 800;
+
+        &:hover {
+          background-color: darken(@color, 10%);
         }
       }
     }

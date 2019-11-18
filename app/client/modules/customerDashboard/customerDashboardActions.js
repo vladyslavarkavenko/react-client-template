@@ -115,7 +115,7 @@ function* fetchAllWorker() {
   yield put(fetchAll.success());
 }
 
-export function* customerDashboardWorker() {
+export function* customerDashboardWatcher() {
   yield all([
     takeLatest(fetchAll.TRIGGER, fetchAllWorker),
 

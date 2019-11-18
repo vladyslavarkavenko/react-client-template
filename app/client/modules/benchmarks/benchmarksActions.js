@@ -1,15 +1,14 @@
-/* eslint-disable */
-import { all, call, put, select, takeLatest, spawn } from '@redux-saga/core/effects';
+import { all, call, put, select, takeLatest, spawn } from 'redux-saga/effects';
+import { ToastPosition } from 'react-toastify';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 
 import ShareOpinionService from '../../services/shareOpinion';
 import Notification from '../../utils/notifications';
+import CompaniesService from '../../services/companies';
 import companiesSelectors from '../companies/companiesSelectors';
 import benchmarksSelectors from './benchmarksSelectors';
-import { ToastPosition } from 'react-toastify';
-import CompaniesService from '../../services/companies';
 
 export const prefix = 'benchmarks';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -24,22 +23,6 @@ export const fetchBenchmarks = createRequestBound('BENCHMARK_FETCH');
 export const fetchAllStaff = createRequestBound('STAFF_ALL_FETCH');
 
 export const clearAll = createOnlyTriggerBound('CLEAR_ALL');
-
-function* fetchFiltersWorker() {
-  yield put(fetchFilters.request());
-  try {
-    const { id } = yield select(companiesSelectors.getCurrentCompany);
-
-    yield spawn(fetchStaffWorker);
-    const subjects = yield call(ShareOpinionService.getSubjectsByCompany, id);
-
-    yield put(fetchFilters.success(subjects));
-  } catch (err) {
-    console.error(err);
-    Notification.error(err);
-    yield put(fetchFilters.failure());
-  }
-}
 
 function* fetchStaffWorker() {
   yield put(fetchBenchmarks.request());
@@ -57,6 +40,22 @@ function* fetchStaffWorker() {
     console.error(err);
     Notification.error(err);
     yield put(fetchBenchmarks.failure());
+  }
+}
+
+function* fetchFiltersWorker() {
+  yield put(fetchFilters.request());
+  try {
+    const { id } = yield select(companiesSelectors.getCurrentCompany);
+
+    yield spawn(fetchStaffWorker);
+    const subjects = yield call(ShareOpinionService.getSubjectsByCompany, id);
+
+    yield put(fetchFilters.success(subjects));
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(fetchFilters.failure());
   }
 }
 

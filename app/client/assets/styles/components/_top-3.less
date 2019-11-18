@@ -1,27 +1,123 @@
-.top-3 {
-  .info-item {
-    font-weight: bold;
-    font-size: 0.75rem;
+.top-widget {
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
 
-    &:not(:last-child) {
-      margin-bottom: 1rem;
+  &__item {
+    .makeTheme(@color, @index) {
+      &:nth-child(@{index}) {
+        border-left: 3px solid @color;
+
+        .title .score {
+          margin-left: 0.25rem;
+          font-weight: 700;
+          color: darken(@color, 5%);
+        }
+
+        .value {
+          .count {
+            color: darken(@color, 5%);
+          }
+        }
+      }
     }
 
-    p, span {
-      border-radius: 0.5rem;
-      padding: 0.25rem 0.75rem;
-      margin-right: 0.5rem;
+    @color-list:  #8e87ed, #2196f3, #e680c0,;
+    //@color-list:  #8e87ed, #2196f3, #63c6e6;
+
+    .makeTheme(extract(@color-list, 1), 1);
+    .makeTheme(extract(@color-list, 2), 2);
+    .makeTheme(extract(@color-list, 3), 3);
+
+    @accent: #8e87ed;
+
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 0.5rem 0.25rem;
+    border-left: 3px solid @accent;
+
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+
+    margin-bottom: 1rem;
+
+    &:hover {
+      .value .diff-tooltip {
+        display: flex;
+      }
     }
 
-    span {
-      position: relative;
+    .title {
+      margin-left: 0.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
-      .arrow {
+      .subject {
+        color: @font-color-lighter;
+        font-weight: 800;
+        font-size: 0.95rem;
+        line-height: 1rem;
+      }
+      .topic {
+        border-radius: @border-radius-block;
+        color: black;
+        line-height: 1.25rem;
+        font-weight: 600;
+      }
+      .score {
+        margin-left: 0.25rem;
+        font-weight: 700;
+        color: darken(@accent, 5%);
+      }
+    }
+
+    .value {
+      display: flex;
+      position:relative;
+
+      justify-content: center;
+      align-content: center;
+      align-items: center;
+
+      .count {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: darken(@accent, 5%);
+        border-radius: 6px;
+        min-width: 60px;
+        text-align: right;
+      }
+
+      .diff-tooltip {
+        display: none;
         position: absolute;
-        transform: translate(-55%, -55%);
-        top: 50%;
-        font-size: 2rem;
-        right: -3rem;
+        z-index: @z-index-tooltip;
+        left: -110%;
+
+        justify-content: space-between;
+        line-height:  1.15rem;
+        padding: 0.25rem 0.5rem;
+
+        font-weight: 800;
+        font-size: 0.95rem;
+
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+
+        &.green {
+          background-color: lighten(@alert-color-green, 50%);
+          border-right: 3px solid @alert-color-green;
+          color: @alert-color-green;
+        }
+
+        &.red {
+          background-color: lighten(@alert-color-red, 35%);
+          border-right: 3px solid @alert-color-red;
+          color: @alert-color-red;
+        }
       }
     }
   }
