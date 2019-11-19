@@ -12,6 +12,7 @@ import companiesSelectors from '../companies/companiesSelectors';
 import Notification from '../../utils/notifications';
 import createToggleRoutine from '../helpers/createToggleRoutine';
 import { fetchExpiredGlobal } from '../shareOpinion/shareOpinionActions';
+import { setCompanies } from '../companies/companiesActions';
 
 const { MANAGER, CUSTOMER } = ROLES;
 
@@ -38,7 +39,13 @@ export const setUserErrors = createRequestBound('USER_SET_ERRORS');
 function* updateUserWorker({ payload: { data, cb } }) {
   yield put(pushUpdateUser.request());
   try {
-    const user = yield call(() => AuthService.updateUser(data));
+    const [user, roles] = yield all([
+      call(AuthService.updateUser, data),
+      call(AuthService.getRoles)
+    ]);
+
+    const { companies } = formatRolesPayload(roles);
+    yield put(setCompanies.success(companies));
 
     cb && cb();
     yield put(pushUpdateUser.success(user));
