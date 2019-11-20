@@ -1,6 +1,10 @@
 import api from '../utils/api';
 
 class ManagerService {
+  static getTop5Topics(criteriaId, managerId) {
+    return api.get(`/history/manager/${managerId}/criteria_benchmark/?criteria=${criteriaId}`);
+  }
+
   static getProfile(managerId) {
     return api.get(`/company/detail/manager/${managerId}/`);
   }

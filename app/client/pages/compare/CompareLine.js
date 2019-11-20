@@ -1,6 +1,31 @@
 import React from 'react';
 
-const CompareLine = ({ domain, values, withPercent, title }) => {
+const SingleLine = ({ type, title, domain, value }) => {
+  const isMain = type === 'main';
+
+  return (
+    <div className="compare-scale">
+      <h1>{title}</h1>
+      <div className="flex-center w-100">
+        {isMain && <p>{value}</p>}
+        <div className="legend">
+          <div
+            className="whole"
+            style={{
+              height: '100%',
+              width: `${(value * 100) / domain}%`,
+              background: '#3EA0DA',
+              [`margin-${isMain ? 'right' : 'left'}`]: 'auto'
+            }}
+          />
+        </div>
+        {!isMain && <p>{value}</p>}
+      </div>
+    </div>
+  );
+};
+
+const MultipleLine = ({ domain, values, withPercent, title }) => {
   const ld = Math.floor((values[0] - values[1]) * 10) / 10; // left difference
   const rd = Math.floor((values[1] - values[0]) * 10) / 10; // right difference
   domain = domain || Math.max(...values);
@@ -39,4 +64,6 @@ const CompareLine = ({ domain, values, withPercent, title }) => {
   );
 };
 
+const CompareLine = ({ single, ...rest }) =>
+  single ? <SingleLine {...rest} /> : <MultipleLine {...rest} />;
 export default CompareLine;

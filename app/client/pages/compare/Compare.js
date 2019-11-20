@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { ROUTING_PARAMS } from '../../utils/constants';
 import compareSelectors from '../../modules/compare/compareSelectors';
-import { fetchCompareData } from '../../modules/compare/compareActions';
+import { fetchCompareData, fetchTop5Topics } from '../../modules/compare/compareActions';
 import Radar from '../../components/widgets/radar/Radar';
 import {
   LEGEND_COLORS,
@@ -15,6 +15,7 @@ import {
 import Button from '../../components/ui-components/Form/Button';
 import CompareLine from './CompareLine';
 import parseLinesData from './parseLinesData';
+import parseCompareTopics from './parseCompareTopics';
 import Profile from './Profile';
 import Loader from '../../components/ui-components/Layout/Loader';
 
@@ -32,6 +33,8 @@ class Compare extends React.Component {
 
     this.state = {
       isCompare: false,
+      compareTopics: [],
+      linesData: undefined,
       animationFinished: true
     };
 
@@ -72,7 +75,8 @@ class Compare extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { compareData } = nextProps;
+    const { compareData, compareTopics: nCompareTopics } = nextProps;
+    const { compareTopics: pCompareTopics } = this.props;
     const { linesData } = this.state;
 
     if (!linesData && compareData) {
@@ -80,13 +84,35 @@ class Compare extends React.Component {
         linesData: parseLinesData(compareData)
       });
     }
+
+    if (pCompareTopics !== nCompareTopics) {
+      this.setState({
+        compareTopics: parseCompareTopics(nCompareTopics)
+      });
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 0);
+    }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   onFeatureActivate(name) {
-    const id = FEATURES.NAME_ID[name];
+    const criteriaId = FEATURES.NAME_ID[name];
+    const {
+      fetchTop5Topics,
+      location: { search },
+      match: {
+        params: { type }
+      }
+    } = this.props;
 
-    console.log('feature', name, id);
+    const paramsObj = new URLSearchParams(search.slice(1));
+    const mainId = paramsObj.get(ROUTING_PARAMS.MAIN_ID);
+    const compareId = paramsObj.get(ROUTING_PARAMS.COMPARE_ID);
+
+    fetchTop5Topics({ type, criteriaId, mainId, compareId });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -113,7 +139,7 @@ class Compare extends React.Component {
   }
 
   render() {
-    const { isCompare, animationFinished, linesData } = this.state;
+    const { isCompare, animationFinished, linesData, compareTopics } = this.state;
     const { compareData, history } = this.props;
 
     if (!linesData) {
@@ -186,6 +212,9 @@ class Compare extends React.Component {
           {linesData.map((datum) => (
             <CompareLine {...datum} />
           ))}
+          {compareTopics.map((datum) => (
+            <CompareLine {...datum} />
+          ))}
         </div>
       </div>
     );
@@ -193,10 +222,11 @@ class Compare extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  compareData: compareSelectors.compareData(state)
+  compareData: compareSelectors.compareData(state),
+  compareTopics: compareSelectors.compareTopics(state)
 });
 
 export default connect(
   mapStateToProps,
-  { fetchCompareData }
+  { fetchCompareData, fetchTop5Topics }
 )(Compare);
