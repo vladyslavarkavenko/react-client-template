@@ -66,7 +66,7 @@ class CompanyProfile extends React.Component {
       >
         Share Opinion
       </Link>,
-      <Link to={navLinks[1].to} className="btn btn-transparent" key="header_btn_contact">
+      <Link to={navLinks[2].to} className="btn btn-transparent" key="header_btn_contact">
         Contact
       </Link>
     ];
