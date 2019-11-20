@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import RedirectWatcher from '../ui-components/RedirectWatcher';
+import ResizeWatcher from '../ui-components/ResizeWatcher';
 
 const AppWrapper = ({ children }) => (
   <>
@@ -19,6 +20,7 @@ const AppWrapper = ({ children }) => (
       autoClose={4000}
     />
     <RedirectWatcher />
+    <ResizeWatcher />
     {/* Other modules such as analytics */}
     <div className="app-wrap">{children}</div>
   </>

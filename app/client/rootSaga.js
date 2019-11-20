@@ -1,4 +1,5 @@
 import { all, fork } from 'redux-saga/effects';
+import { deviceWatcher } from './modules/device/deviceActions';
 import { companiesWatcher } from './modules/companies/companiesActions';
 import { authWatcher } from './modules/auth/authActions';
 import { redirectWatcher } from './modules/redirect/redirectActions';
@@ -18,6 +19,7 @@ import { kpiSettingsWatcher } from './modules/kpiSettings/kpiSettingsActions';
 
 export default function* rootSaga() {
   yield all([
+    fork(deviceWatcher),
     fork(compareWatcher),
     fork(authWatcher),
     fork(companiesWatcher),

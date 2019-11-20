@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import device from './modules/device/deviceReducer';
 import auth from './modules/auth/authReducer';
 import companies from './modules/companies/companiesReducer';
 import shareOpinion from './modules/shareOpinion/shareOpinionReducer';
@@ -17,7 +18,7 @@ import kpiSettings from './modules/kpiSettings/kpiSettingsReducer';
 import { pushLogout } from './modules/auth/authActions';
 
 const appReducer = combineReducers({
-  compare,
+  device,
   auth,
   companies,
   shareOpinion,
@@ -32,7 +33,8 @@ const appReducer = combineReducers({
   opinionDetails,
   benchmarks,
   kpiSettings,
-  customerDashboard
+  customerDashboard,
+  compare
 });
 
 export default (state, action) => {
