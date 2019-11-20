@@ -28,7 +28,42 @@ function formatProfile(profile) {
 export const prefix = 'compare';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
+export const fetchTop5Topics = createRequestBound('FETCH_TOP5_TOPICS');
 export const fetchCompareData = createRequestBound('FETCH_COMPARE_DATA');
+
+function* fetchTop5TopicsWorker({ payload: { type, criteriaId, mainId, compareId } }) {
+  yield put(fetchTop5Topics.request());
+
+  let main;
+  let compare;
+
+  try {
+    switch (type) {
+      case ROUTING_PARAMS.MANAGER: {
+        [main, compare] = yield all([
+          call(ManagerService.getTop5Topics, criteriaId, mainId),
+          call(ManagerService.getTop5Topics, criteriaId, compareId)
+        ]);
+        break;
+      }
+      case ROUTING_PARAMS.COMPANY: {
+        [main, compare] = yield all([
+          call(CompanyService.getTop5Topics, criteriaId, mainId),
+          call(CompanyService.getTop5Topics, criteriaId, compareId)
+        ]);
+        break;
+      }
+      default:
+        break;
+    }
+
+    yield put(fetchTop5Topics.success({ main, compare }));
+  } catch (err) {
+    console.error(err);
+    // Notification.error(err);
+    yield put(fetchTop5Topics.failure());
+  }
+}
 
 function* getCompareDataWorker({ payload: { type, mainId, compareId } }) {
   yield put(fetchCompareData.request());
@@ -96,5 +131,8 @@ function* getCompareDataWorker({ payload: { type, mainId, compareId } }) {
 }
 
 export function* compareWatcher() {
-  yield all([takeLatest(fetchCompareData.TRIGGER, getCompareDataWorker)]);
+  yield all([
+    takeLatest(fetchCompareData.TRIGGER, getCompareDataWorker),
+    takeLatest(fetchTop5Topics.TRIGGER, fetchTop5TopicsWorker)
+  ]);
 }

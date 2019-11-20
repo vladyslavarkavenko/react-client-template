@@ -1,5 +1,3 @@
-console.log('window', window.innerWidth, window.innerHeight);
-
 const PROPS = {
   ticks: 10,
   padding: 50,
@@ -10,6 +8,10 @@ const PROPS = {
   activeBubbleSize: 5,
   tooltipTriggerRadius: 50
 };
+// window.addEventListener('resize', () => {
+//   PROPS.height = window.innerHeight * 0.9;
+//   PROPS.width = window.innerWidth * 0.78;
+// });
 export default PROPS;
 
 const { ticks: t } = PROPS;

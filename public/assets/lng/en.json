@@ -147,7 +147,7 @@
         "opinions": "opinions",
         "i": "Importance",
         "s": "Satisfaction",
-        "rate": "Your rate",
+        "yourRate": "Your rate",
         "opinionAbout": "Opinion about",
         "addComment": "Add Comment",
         "criteria": "Select criteria that connect to this situation",
