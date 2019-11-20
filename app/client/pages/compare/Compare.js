@@ -195,9 +195,21 @@ class Compare extends React.Component {
             style={{ height }}
             className={`radars-wrapper d-flex jc-center p-relative ${isCompare ? 'overlay' : ''}`}
           >
-            <Radar colorScale={colorScaleMain} withBgIcons={false} {...main.radar} />
+            <Radar
+              onFeatureActivate={this.onFeatureActivate}
+              onCategoryActivate={this.onCategoryActivate}
+              colorScale={colorScaleMain}
+              withBgIcons={false}
+              {...main.radar}
+            />
             <hr />
-            <Radar colorScale={colorScaleCompare} withBgIcons={false} {...compare.radar} />
+            <Radar
+              onFeatureActivate={this.onFeatureActivate}
+              onCategoryActivate={this.onCategoryActivate}
+              colorScale={colorScaleCompare}
+              withBgIcons={false}
+              {...compare.radar}
+            />
             {isCompare && animationFinished && (
               <Radar
                 onFeatureActivate={this.onFeatureActivate}
