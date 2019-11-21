@@ -147,8 +147,8 @@ class Compare extends React.Component {
   }
 
   render() {
-    const { isCompare, animationFinished, linesData, compareTopics, activeFeature } = this.state;
     const { compareData, history } = this.props;
+    const { isCompare, animationFinished, linesData, compareTopics, activeFeature } = this.state;
 
     if (!linesData) {
       return (
