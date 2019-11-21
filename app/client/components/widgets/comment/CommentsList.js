@@ -3,8 +3,9 @@ import React from 'react';
 import MessageSvg from '../../../../../public/assets/svg/comment-alt-lines.duotone.svg';
 import Comment from './Comment';
 import WidgetPlaceholder from '../WidgetPlaceholder';
+import Pagination from '../Pagination';
 
-export default function CommentsList({ data, selectedTopicId }) {
+export default function CommentsList({ data, selectedTopicId, pagination, handleNextPage }) {
   const list = selectedTopicId
     ? data.filter((comment) => {
         const idList = comment.opinions.map((item) => item.topic.id);
@@ -18,6 +19,8 @@ export default function CommentsList({ data, selectedTopicId }) {
       <Comment key={`${item.id}_comm`} data={item} selectedTopicId={selectedTopicId} />
     ));
 
+  const { lastPage, currentPage } = pagination;
+
   return (
     <>
       <h2 className="info-block__title">Comments</h2>
@@ -28,6 +31,7 @@ export default function CommentsList({ data, selectedTopicId }) {
           <WidgetPlaceholder icon={<MessageSvg />} title="No Comments Yet" withWrapper />
         </div>
       )}
+      <Pagination currentPage={currentPage} lastPage={lastPage} onPageChanged={handleNextPage} />
     </>
   );
 }

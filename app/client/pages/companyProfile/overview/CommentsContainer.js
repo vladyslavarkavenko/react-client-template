@@ -3,15 +3,33 @@ import { connect } from 'react-redux';
 
 import companyProfileSelectors from '../../../modules/companyProfile/companyProfileSelectors';
 import CommentsList from '../../../components/widgets/comment/CommentsList';
+import { fetchComments } from '../../../modules/managerProfile/managerProfileActions';
 
-function CommentsContainer({ data }) {
-  return <CommentsList data={data} />;
+function CommentsContainer({ data, pagination, fetchComments, id }) {
+  return (
+    <CommentsList
+      data={data}
+      pagination={pagination}
+      handleNextPage={(page) => fetchComments({ page, id })}
+    />
+  );
 }
 
-const mapStateToProps = (state) => {
-  const { status, data } = companyProfileSelectors.comments(state);
+const mapStateToProps = (state, { match }) => {
+  const {
+    params: { id }
+  } = match;
 
-  return { status, data };
+  const { status, data, pagination } = companyProfileSelectors.comments(state);
+
+  return { status, data, pagination, id };
 };
 
-export default connect(mapStateToProps)(CommentsContainer);
+const mapDispatchToProps = {
+  fetchComments
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentsContainer);

@@ -5,6 +5,7 @@ import * as actions from './companyProfileActions';
 import { makeStatusWithResetReducer } from '../../utils/reduxHelpers';
 
 import { PROPS } from '../../components/widgets/radar/const';
+import { paginationInitial } from '../helpers/paginate';
 
 const { emptyData } = PROPS;
 
@@ -82,9 +83,22 @@ const commentsData = handleActions(
   []
 );
 
+const commentsPagination = handleActions(
+  {
+    [actions.fetchComments.SUCCESS](state, { payload }) {
+      return payload.pagination;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return paginationInitial();
+    }
+  },
+  paginationInitial()
+);
+
 const comments = combineReducers({
   status: commentsStatus,
-  data: commentsData
+  data: commentsData,
+  pagination: commentsPagination
 });
 
 const productsStatus = makeStatusWithResetReducer(actions.fetchProducts, actions.clearAll.TRIGGER);

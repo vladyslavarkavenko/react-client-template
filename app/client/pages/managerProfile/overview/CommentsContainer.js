@@ -1,17 +1,35 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { fetchComments } from '../../../modules/managerProfile/managerProfileActions';
 import CommentsList from '../../../components/widgets/comment/CommentsList';
 import managerProfileSelectors from '../../../modules/managerProfile/managerProfileSelectors';
 
-function CommentsContainer({ data }) {
-  return <CommentsList data={data} />;
+function CommentsContainer({ data, pagination, fetchComments, id }) {
+  return (
+    <CommentsList
+      data={data}
+      pagination={pagination}
+      handleNextPage={(page) => fetchComments({ page, id })}
+    />
+  );
 }
 
-const mapStateToProps = (state) => {
-  const { status, data } = managerProfileSelectors.comments(state);
+const mapStateToProps = (state, { match }) => {
+  const {
+    params: { id }
+  } = match;
 
-  return { status, data };
+  const { status, data, pagination } = managerProfileSelectors.comments(state);
+
+  return { status, data, pagination, id };
 };
 
-export default connect(mapStateToProps)(CommentsContainer);
+const mapDispatchToProps = {
+  fetchComments
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentsContainer);

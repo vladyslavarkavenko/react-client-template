@@ -22,7 +22,7 @@ function Overview({ match }) {
       <main className="main">
         <TopScoresContainer />
         <RadarContainer match={match} />
-        <CommentsContainer />
+        <CommentsContainer match={match} />
       </main>
       <aside className="sidebar">
         <SatisfiedClientsContainer match={match} />

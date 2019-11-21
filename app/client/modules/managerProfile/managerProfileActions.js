@@ -1,4 +1,4 @@
-import { put, takeLatest, all, call, select } from 'redux-saga/effects';
+import { put, fork, takeLatest, all, call, select } from 'redux-saga/effects';
 
 import ManagerService from '../../services/manager';
 import createRequestRoutine from '../helpers/createRequestRoutine';
@@ -6,6 +6,7 @@ import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 import parseRadarScores from '../helpers/parseRadarScores';
 import CompaniesService from '../../services/companies';
 import companiesSelectors from '../companies/companiesSelectors';
+import paginate from '../helpers/paginate';
 
 export const prefix = 'managerProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -66,14 +67,17 @@ function* getStatisticsWorker({ payload }) {
 }
 
 function* getCommentsWorker({ payload }) {
-  yield put(fetchComments.request());
+  const { id, page } = payload;
+  yield put(fetchComments.request({ isNext: page > 1 }));
   try {
-    const comments = yield call(ManagerService.getComments, payload);
+    const comments = yield call(ManagerService.getComments, { managerId: id, page, offset: 10 });
 
-    yield put(fetchComments.success(comments));
+    const { pagination, results } = paginate({ currentPage: page, data: comments });
+
+    yield put(fetchComments.success({ pagination, results }));
   } catch (err) {
     console.error(err);
-    yield put(fetchComments.failure());
+    yield put(fetchComments.failure({ isNext: page > 1 }));
   }
 }
 
@@ -96,9 +100,11 @@ function* fetchAllWorker({ payload }) {
     getUserDataWorker,
     getTopScoresWorker,
     getRadarScoresWorker,
-    getCommentsWorker,
+    // getCommentsWorker,
     getStatisticsWorker
   ];
+
+  yield fork(getCommentsWorker, { payload: { id: payload } });
 
   yield all(taskList.map((task) => call(task, { payload })));
 

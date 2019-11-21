@@ -66,3 +66,34 @@ export function makeStatusWithResetReducer(action, resetAction) {
     'none'
   );
 }
+
+export function makePaginationStatus(action, resetAction) {
+  return handleActions(
+    {
+      [action.REQUEST](state, { payload }) {
+        if (payload.isNext) {
+          return 'request';
+        }
+
+        return state;
+      },
+      [action.SUCCESS]() {
+        return 'success';
+      },
+      [action.FAILURE](state, { payload }) {
+        if (payload.isNext) {
+          return 'failure';
+        }
+
+        return state;
+      },
+      [action.FULFILL]() {
+        return 'none';
+      },
+      [resetAction]() {
+        return 'none';
+      }
+    },
+    'none'
+  );
+}
