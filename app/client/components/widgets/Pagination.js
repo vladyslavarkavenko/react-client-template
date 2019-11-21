@@ -3,16 +3,32 @@ import ReactPaginate from 'react-paginate';
 
 import ArrowUp from '../../../../public/assets/svg/arrow-up.regular.svg';
 
-/* eslint-disable */
-
 export default class Pagination extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handlePagination = this.handlePagination.bind(this);
+  }
+
+  handlePagination({ selected }) {
+    const { onPageChanged } = this.props;
+    onPageChanged(selected + 1);
+  }
+
   render() {
-    // const { }
+    const { currentPage, lastPage } = this.props;
+
+    if (lastPage <= 1) {
+      return <div className="pagination" />;
+    }
 
     return (
       <div className="pagination">
         <ReactPaginate
-          pageCount={20}
+          onPageChange={this.handlePagination}
+          initialPage={1}
+          forcePage={currentPage}
+          pageCount={lastPage}
           containerClassName="pagination__list"
           pageClassName="pagination__page"
           breakClassName="pagination__break"

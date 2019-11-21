@@ -1,12 +1,12 @@
 .pagination {
-  display: flex;
-  justify-content: center;
-
   @size: 40px;
 
   @default-color: darken(@font-color-lighter, 10%);
   @disabled-color: lighten(@font-color-lighter, 20%);
 
+  display: flex;
+  justify-content: center;
+  height: @size;
   &__list {
     display: flex;
     align-items: center;

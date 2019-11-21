@@ -41,8 +41,10 @@ class CompaniesService {
     return api.get(`/opinion/company/${companyId}/statistics/`);
   }
 
-  static getComments(companyId) {
-    return api.get(`/opinion/company/${companyId}/comments/`);
+  static getComments({ managerId, page = 1, offset = 10 }) {
+    return api.get(
+      `/opinion/manager/${managerId}/comments/?page=${page}&offset=${offset}&limit=${offset}`
+    );
   }
 
   static getManagersList() {

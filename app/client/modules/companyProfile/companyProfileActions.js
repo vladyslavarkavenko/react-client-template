@@ -1,10 +1,11 @@
-import { put, takeLatest, all, call } from 'redux-saga/effects';
+import { put, fork, takeLatest, all, call } from 'redux-saga/effects';
 
 import createRequestRoutine from '../helpers/createRequestRoutine';
 import CompaniesService from '../../services/companies';
 import parseRadarScores from '../helpers/parseRadarScores';
 import createOnlyTriggerRoutine from '../helpers/createOnlyTriggerRoutine';
 import ShareOpinionService from '../../services/shareOpinion';
+import paginate from '../helpers/paginate';
 
 export const prefix = 'companyProfile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
@@ -88,14 +89,17 @@ function* getStatisticsWorker({ payload }) {
 }
 
 function* getCommentsWorker({ payload }) {
-  yield put(fetchComments.request());
+  const { id, page } = payload;
+  yield put(fetchComments.request({ isNext: page > 1 }));
   try {
-    const comments = yield call(CompaniesService.getComments, payload);
+    const comments = yield call(CompaniesService.getComments, { companyId: id, page, offset: 10 });
 
-    yield put(fetchComments.success(comments));
+    const { pagination, results } = paginate({ currentPage: page, data: comments });
+
+    yield put(fetchComments.success({ pagination, results }));
   } catch (err) {
     console.error(err);
-    yield put(fetchComments.failure());
+    yield put(fetchComments.failure({ isNext: page > 1 }));
   }
 }
 
@@ -104,10 +108,11 @@ function* fetchAllWorker({ payload }) {
   const taskList = [
     getTopScoresWorker,
     getRadarScoresWorker,
-    getCommentsWorker,
     getStatisticsWorker,
     getProductsWorker
   ];
+
+  yield fork(getCommentsWorker, { payload: { id: payload } });
 
   yield all(taskList.map((task) => call(task, { payload })));
 

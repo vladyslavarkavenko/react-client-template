@@ -29,8 +29,10 @@ class ManagerService {
     return api.get(`/opinion/manager/${managerId}/statistics/`);
   }
 
-  static getComments(managerId) {
-    return api.get(`/opinion/manager/${managerId}/comments/`);
+  static getComments({ managerId, page = 1, offset = 10 }) {
+    return api.get(
+      `/opinion/manager/${managerId}/comments/?page=${page}&offset=${offset}&limit=${offset}`
+    );
   }
 }
 
