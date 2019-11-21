@@ -3,11 +3,11 @@ import i18next from 'i18next';
 
 import { getCoordByPoint } from './utils';
 
-const Tooltip = ({ data }) => {
+const Tooltip = ({ data, width, height }) => {
   if (!data) return null;
 
   const { importance, satisfaction, quantity } = data;
-  const { top, left } = getCoordByPoint(data);
+  const { top, left } = getCoordByPoint(data, width, height);
 
   return (
     <div className="p-absolute tooltip" style={{ top: top - 5, left: left + 15 }}>

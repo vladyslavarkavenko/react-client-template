@@ -21,7 +21,7 @@ class ResizeWatcher extends React.Component {
 
   handleResize() {
     const { deviceChange } = this.props;
-    deviceChange(window.innerWidth);
+    deviceChange({ width: window.innerWidth, height: window.innerHeight });
   }
 
   render() {

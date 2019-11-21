@@ -1,8 +1,8 @@
 import PROPS, { colors } from './chartProperties';
 import calculateColor from '../../../utils/calculateColor';
 
-export function calculateBgColor(x, y) {
-  const { height, width, padding } = PROPS;
+export function calculateBgColor(x, y, width, height) {
+  const { padding } = PROPS;
 
   // Reverse y-axis
   y = height - y;
@@ -22,8 +22,8 @@ export function calculateBgColor(x, y) {
   return calculateColor(x, y, w, h, colors);
 }
 
-export function getCoordByPoint({ importance: i, satisfaction: s }) {
-  const { height: h, width: w, padding: p, ticks: t } = PROPS;
+export function getCoordByPoint({ importance: i, satisfaction: s }, w, h) {
+  const { padding: p, ticks: t } = PROPS;
 
   const top = ((t - i) * (h - 2 * p)) / t + p;
   const right = ((t - s) * (w - 2 * p)) / t + p;

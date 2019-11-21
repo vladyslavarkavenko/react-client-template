@@ -150,8 +150,6 @@ class Compare extends React.Component {
     const { isCompare, animationFinished, linesData, compareTopics, activeFeature } = this.state;
     const { compareData, history } = this.props;
 
-    console.log('activeFeature', activeFeature);
-
     if (!linesData) {
       return (
         <div className="d-flex h-100">

@@ -7,10 +7,19 @@ import * as actions from './deviceActions';
 const currentWidth = handleActions(
   {
     [actions.deviceChange.SUCCESS](state, { payload }) {
-      return payload;
+      return payload.width;
     }
   },
   1920
+);
+
+const currentHeight = handleActions(
+  {
+    [actions.deviceChange.SUCCESS](state, { payload }) {
+      return payload.height;
+    }
+  },
+  1080
 );
 
 const isMobile = handleActions(
@@ -23,8 +32,9 @@ const isMobile = handleActions(
 );
 
 const device = combineReducers({
+  isMobile,
   currentWidth,
-  isMobile
+  currentHeight
 });
 
 export default device;

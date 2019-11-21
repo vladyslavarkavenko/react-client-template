@@ -1,17 +1,13 @@
 const PROPS = {
   ticks: 10,
   padding: 50,
-  height: window.innerHeight * 0.9,
-  width: window.innerWidth * 0.78,
+  heightFactor: 0.9,
+  widthFactor: 0.78,
   maxBubbleSize: 70,
   minBubbleSize: 10,
   activeBubbleSize: 5,
   tooltipTriggerRadius: 50
 };
-// window.addEventListener('resize', () => {
-//   PROPS.height = window.innerHeight * 0.9;
-//   PROPS.width = window.innerWidth * 0.78;
-// });
 export default PROPS;
 
 const { ticks: t } = PROPS;

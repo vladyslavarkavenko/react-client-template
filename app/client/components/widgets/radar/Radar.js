@@ -190,10 +190,15 @@ class Radar extends React.Component {
     } = this.props;
     const { activeFeature, activeCategory, tooltipData } = this.state;
 
-    console.log('activeFeature from render', activeFeature);
-
     return (
       <>
+        {withBgIcons && (
+          <div className="radar-icons-wrapper">
+            {Object.values(ICONS).map((src, i) => (
+              <ReactSVG key={src} className={`bg-icon bg-icon-${i}`} src={src} />
+            ))}
+          </div>
+        )}
         <div className="radar-wrapper" ref={this.radarWrapper}>
           {status === 'request' && (
             <div className="screen-loader">
@@ -265,13 +270,6 @@ class Radar extends React.Component {
             <Tooltip colorScale={colorScale} data={grades} tooltipData={tooltipData} />
           </div>
         </div>
-        {withBgIcons && (
-          <div className="radar-icons-wrapper">
-            {Object.values(ICONS).map((src, i) => (
-              <ReactSVG key={src} className={`bg-icon bg-icon-${i}`} src={src} />
-            ))}
-          </div>
-        )}
       </>
     );
   }
