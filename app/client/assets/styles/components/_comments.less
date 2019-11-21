@@ -62,8 +62,6 @@
         background-color: lighten(@color, 20%);
       }
 
-      //.makeColor(@secondary-bg-color);
-
       margin: 0px 10px 10px 0;
       padding: 1px 5px;
 
@@ -98,35 +96,57 @@
         }
       }
 
-
-      //&:nth-child(8n) {
-      //  .makeColor(@caring-color);
-      //}
-      //
-      //&:nth-child(7n) {
-      //  .makeColor(@convenient-color);
-      //}
-
-      //&:nth-child(6n) {
-      //  .makeColor(@creative-color);
-      //}
-
-      //&:nth-child(5n) {
-      //  .makeColor(lime);
-      //}
-      //
-      //&:nth-child(4n + 4) {
-      //  .makeColor(@compensating-color);
-      //}
-
-      //&:nth-child(6n + 2) {
-      //  .makeColor(@convenient-color);
-      //}
-
     }
   }
+}
 
-  &__body {
+.skeleton {
+  @skeleton-color: darken(white, 6%);
+  @radius: @border-radius-block;
 
+  .comment {
+    &__title {
+      height: 28px;
+      .author {
+        border-radius: @radius;
+        background-color: @skeleton-color;
+        width: 150px;
+      }
+      .date {
+        border-radius: @radius;
+        background-color: @skeleton-color;
+        width: 100px;
+      }
+    }
+
+    &__rate-list {
+      .rate-opinion {
+        border-radius: @radius;
+        background-color: @skeleton-color;
+        width: 130px;
+        height: 28px;
+      }
+    }
+
+    &__rate-dots {
+      .count {
+        border-radius: @radius;
+        height: 33px;
+        width: 46px;
+        color: @skeleton-color;
+        background-color: @skeleton-color;
+      }
+
+      .progress .dot {
+        background-color: @skeleton-color;
+      }
+    }
+
+    &__body {
+      border-radius: @radius;
+      background-color: @skeleton-color;
+      height: 28px;
+      width: 300px;
+    }
   }
 }

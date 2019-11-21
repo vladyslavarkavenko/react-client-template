@@ -2,6 +2,8 @@ import React from 'react';
 import ReactPaginate from 'react-paginate';
 
 import ArrowUp from '../../../../public/assets/svg/arrow-up.regular.svg';
+import { scrollToElement } from '../../utils/domUtils';
+/* eslint-disable */
 
 export default class Pagination extends React.Component {
   constructor(props) {
@@ -11,7 +13,12 @@ export default class Pagination extends React.Component {
   }
 
   handlePagination({ selected }) {
-    const { onPageChanged } = this.props;
+    const { onPageChanged, forwardRef } = this.props;
+
+    if (forwardRef && forwardRef.current) {
+      scrollToElement(forwardRef.current, 70);
+    }
+
     onPageChanged(selected + 1);
   }
 
@@ -26,8 +33,7 @@ export default class Pagination extends React.Component {
       <div className="pagination">
         <ReactPaginate
           onPageChange={this.handlePagination}
-          initialPage={1}
-          forcePage={currentPage}
+          forcePage={currentPage - 1}
           pageCount={lastPage}
           containerClassName="pagination__list"
           pageClassName="pagination__page"

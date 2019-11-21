@@ -20,6 +20,7 @@ import calcMonthOffset from './helpers/calcMonthOffset';
 import calcMonthMaxStep from './helpers/calcMonthMaxStep';
 import calcWeekMaxStep from './helpers/calcWeekMaxStep';
 import calcWeekOffset from './helpers/calcWeekOffset';
+import paginate from '../helpers/paginate';
 
 export const prefix = 'opinionDetails';
 
@@ -27,6 +28,7 @@ const createRequestBound = createRequestRoutine.bind(null, prefix);
 const createOnlyTriggerBound = createOnlyTriggerRoutine.bind(null, prefix);
 
 export const fetchOpinionDetails = createRequestBound('OPINION_DETAILS_FETCH');
+export const fetchOpinionComments = createRequestBound('OPINION_COMMENTS_FETCH');
 export const fetchHistory = createRequestBound('OPINION_HISTORY_FETCH');
 
 export const fetchOpinionParticipation = createRequestBound('OPINION_PARTICIPATION_FETCH');
@@ -212,25 +214,34 @@ function* changeOffsetWorker({ payload }) {
   yield call(getHistoryWorker);
 }
 
+function* getCommentsWorker({ payload = {} }) {
+  const { page = 1 } = payload;
+  const { id, type } = yield select(opinionDetailsSelectors.selectedProfile);
+  yield put(fetchOpinionComments.request({ isNext: page > 1 }));
+  try {
+    const comments =
+      type === ROUTING_PARAMS.MANAGER
+        ? yield call(ManagerService.getComments, { managerId: id, page, limit: 10 })
+        : yield call(CompaniesService.getComments, { companyId: id, page, limit: 10 });
+
+    const { pagination, results } = paginate({ currentPage: page, data: comments });
+
+    yield put(fetchOpinionComments.success({ pagination, results }));
+  } catch (err) {
+    console.error(err);
+    yield put(fetchOpinionComments.failure({ isNext: page > 1 }));
+  }
+}
+
 function* getDetailsWorker({ payload }) {
   yield put(fetchOpinionDetails.request());
   try {
     const { id, type, criteriaId, subjectId, topicId } = payload;
 
-    let data;
-    let comments;
-
-    if (type === ROUTING_PARAMS.MANAGER) {
-      [data, comments] = yield all([
-        call(ManagerService.getCriteria, id),
-        call(ManagerService.getComments, id)
-      ]);
-    } else {
-      [data, comments] = yield all([
-        call(CompaniesService.getCriteria, id),
-        call(CompaniesService.getComments, id)
-      ]);
-    }
+    const data =
+      type === ROUTING_PARAMS.MANAGER
+        ? yield call(ManagerService.getCriteria, id)
+        : yield call(CompaniesService.getCriteria, id);
 
     const normalize = normalizeCriteria(data);
 
@@ -239,8 +250,9 @@ function* getDetailsWorker({ payload }) {
     const profile = { type, id };
 
     yield put(setProfile.success(selected));
-    yield put(fetchOpinionDetails.success({ data: normalize, comments, profile }));
+    yield put(fetchOpinionDetails.success({ data: normalize, profile }));
 
+    yield fork(getCommentsWorker, {});
     yield fork(getHistoryWorker);
     yield fork(getOpinionGradesWorker);
     yield fork(getOpinionParticipationWorker);
@@ -318,6 +330,7 @@ function* selectOptionWorker({ payload }) {
   yield fork(getOpinionGradesWorker);
   yield fork(getOpinionParticipationWorker);
   yield fork(getHistoryWorker);
+  yield fork(getCommentsWorker, {});
 }
 
 export function* opinionDetailsWatcher() {
@@ -327,6 +340,8 @@ export function* opinionDetailsWatcher() {
 
     takeLatest(setDateOffset.TRIGGER, changeOffsetWorker),
     takeLatest(handlePrevOffset.TRIGGER, prevOffsetWorker),
-    takeLatest(handleNextOffset.TRIGGER, nextOffsetWorker)
+    takeLatest(handleNextOffset.TRIGGER, nextOffsetWorker),
+
+    takeLatest(fetchOpinionComments.TRIGGER, getCommentsWorker)
   ]);
 }
