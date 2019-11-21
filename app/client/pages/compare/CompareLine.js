@@ -1,29 +1,29 @@
 import React from 'react';
 
-const SingleLine = ({ type, title, domain, value }) => {
-  const isMain = type === 'main';
-
-  return (
-    <div className="compare-scale">
-      <h1>{title}</h1>
-      <div className="flex-center w-100">
-        {isMain && <p>{value}</p>}
-        <div className="legend">
-          <div
-            className="whole"
-            style={{
-              height: '100%',
-              width: `${(value * 100) / domain}%`,
-              background: '#3EA0DA',
-              [`margin-${isMain ? 'right' : 'left'}`]: 'auto'
-            }}
-          />
-        </div>
-        {!isMain && <p>{value}</p>}
-      </div>
-    </div>
-  );
-};
+// const SingleLine = ({ type, title, domain, value }) => {
+//   const isMain = type === 'main';
+//
+//   return (
+//     <div className="compare-scale">
+//       <h1>{title}</h1>
+//       <div className="flex-center w-100">
+//         {isMain && <p>{value}</p>}
+//         <div className="legend">
+//           <div
+//             className="whole"
+//             style={{
+//               height: '100%',
+//               width: `${(value * 100) / domain}%`,
+//               background: '#3EA0DA',
+//               [`margin${isMain ? 'Right' : 'Left'}`]: 'auto'
+//             }}
+//           />
+//         </div>
+//         {!isMain && <p>{value}</p>}
+//       </div>
+//     </div>
+//   );
+// };
 
 const MultipleLine = ({ domain, values, withPercent, title }) => {
   const ld = Math.floor((values[0] - values[1]) * 10) / 10; // left difference
@@ -35,7 +35,7 @@ const MultipleLine = ({ domain, values, withPercent, title }) => {
       <h1>{title}</h1>
       <div className="flex-center w-100">
         <p>
-          {`${values[0]}${withPercent ? '%' : ''}`}
+          {values[0] ? `${values[0]}${withPercent ? '%' : ''}` : '—'}
           {ld > 0 ? <span>+{ld}</span> : ''}
         </p>
         <div className="legend">
@@ -56,7 +56,7 @@ const MultipleLine = ({ domain, values, withPercent, title }) => {
           />
         </div>
         <p>
-          {`${values[1]}${withPercent ? '%' : ''}`}
+          {values[1] ? `${values[1]}${withPercent ? '%' : ''}` : '—'}
           {rd > 0 ? <span>+{rd}</span> : ''}
         </p>
       </div>
@@ -64,6 +64,7 @@ const MultipleLine = ({ domain, values, withPercent, title }) => {
   );
 };
 
-const CompareLine = ({ single, ...rest }) =>
-  single ? <SingleLine {...rest} /> : <MultipleLine {...rest} />;
-export default CompareLine;
+export default MultipleLine;
+
+// const CompareLine = ({ single, ...rest }) => single ? <SingleLine {...rest} /> : <MultipleLine {...rest} />;
+// export default CompareLine;

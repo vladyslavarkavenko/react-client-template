@@ -9,19 +9,21 @@ const parseCompareTopics = (data) => {
     const index = usedTopicsIds[id];
 
     if (index === undefined) {
+      const values = type === 'main' ? [ctruScore, 0] : [0, ctruScore];
+
       compareTopics.push({
         type,
         title,
-        domain: 10,
-        single: true,
-        value: ctruScore
+        values,
+        domain: 10
       });
       usedTopicsIds[id] = compareTopics.length - 1;
     } else {
-      const item = compareTopics[index];
-      const values = item.type === 'main' ? [item.value, ctruScore] : [ctruScore, item.value];
+      const { type, value } = compareTopics[index];
+      const values = type === 'main' ? [value, ctruScore] : [ctruScore, value];
 
       compareTopics[index] = {
+        type,
         title,
         values,
         domain: 10
