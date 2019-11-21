@@ -127,14 +127,14 @@ const commentsPagination = handleActions(
   paginationInitial()
 );
 
-const status = makeStatusWithResetReducer(actions.fetchAll, actions.clearAll.TRIGGER);
-
 const comments = combineReducers({
   status: commentsStatus,
   data: commentsData,
 
   pagination: commentsPagination
 });
+
+const status = makeStatusWithResetReducer(actions.fetchAll, actions.clearAll.TRIGGER);
 
 const managerProfile = combineReducers({
   status,

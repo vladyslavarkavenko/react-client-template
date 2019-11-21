@@ -5,9 +5,10 @@ import companyProfileSelectors from '../../../modules/companyProfile/companyProf
 import CommentsList from '../../../components/widgets/comment/CommentsList';
 import { fetchComments } from '../../../modules/managerProfile/managerProfileActions';
 
-function CommentsContainer({ data, pagination, fetchComments, id }) {
+function CommentsContainer({ status, data, pagination, fetchComments, id }) {
   return (
     <CommentsList
+      status={status}
       data={data}
       pagination={pagination}
       handleNextPage={(page) => fetchComments({ page, id })}

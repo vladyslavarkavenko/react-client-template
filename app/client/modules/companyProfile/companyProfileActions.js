@@ -92,7 +92,7 @@ function* getCommentsWorker({ payload }) {
   const { id, page } = payload;
   yield put(fetchComments.request({ isNext: page > 1 }));
   try {
-    const comments = yield call(CompaniesService.getComments, { companyId: id, page, offset: 10 });
+    const comments = yield call(CompaniesService.getComments, { companyId: id, page, limit: 10 });
 
     const { pagination, results } = paginate({ currentPage: page, data: comments });
 

@@ -5,6 +5,7 @@ import * as actions from './opinionDetailsActions';
 import { LINE_TYPES, DATE_OFFSET } from './helpers/constants';
 import { DATE_GRANULARITY } from '../../utils/constants';
 import { makeStatusWithResetReducer } from '../../utils/reduxHelpers';
+import { paginationInitial as commentPaginationInitial } from '../helpers/paginate';
 import calcYearOffset from './helpers/calcYearOffset';
 import trimDate from './helpers/trimDate';
 
@@ -78,10 +79,15 @@ const selectedProfile = handleActions(
   null
 );
 
-const comments = handleActions(
+const commentsStatus = makeStatusWithResetReducer(
+  actions.fetchOpinionComments,
+  actions.clearAll.TRIGGER
+);
+
+const commentsData = handleActions(
   {
-    [actions.fetchOpinionDetails.SUCCESS](state, { payload }) {
-      return payload.comments;
+    [actions.fetchOpinionComments.SUCCESS](state, { payload }) {
+      return payload.results;
     },
     [actions.clearAll.TRIGGER]() {
       return [];
@@ -89,6 +95,25 @@ const comments = handleActions(
   },
   []
 );
+
+const commentsPagination = handleActions(
+  {
+    [actions.fetchOpinionComments.SUCCESS](state, { payload }) {
+      return payload.pagination;
+    },
+    [actions.clearAll.TRIGGER]() {
+      return commentPaginationInitial();
+    }
+  },
+  commentPaginationInitial()
+);
+
+const comments = combineReducers({
+  status: commentsStatus,
+  data: commentsData,
+
+  pagination: commentsPagination
+});
 
 const topicGrades = combineReducers({
   status: makeStatusWithResetReducer(actions.fetchOpinionGrades, actions.clearAll.TRIGGER),
