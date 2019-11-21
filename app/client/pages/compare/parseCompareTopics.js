@@ -19,13 +19,12 @@ const parseCompareTopics = (data) => {
       });
       usedTopicsIds[id] = compareTopics.length - 1;
     } else {
-      const { type, value } = compareTopics[index];
-      const values = type === 'main' ? [value, ctruScore] : [ctruScore, value];
+      const { type, values } = compareTopics[index];
 
       compareTopics[index] = {
         type,
         title,
-        values,
+        values: type === 'main' ? [values[0], ctruScore] : [ctruScore, values[1]],
         domain: 10
       };
     }
