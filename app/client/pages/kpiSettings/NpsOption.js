@@ -31,33 +31,26 @@ class NpsOption extends React.Component {
 
     const diffArr = [
       {
-        mark: 'Recommendation',
-        title: 'Real NPS Recommendation',
-        value: npsRecommendation,
-        diff: currentValue - npsRecommendation
-      },
-      {
         mark: 'Satisfaction',
         title: 'Real NPS Satisfaction',
         value: npsSatisfaction,
-        // diff: currentValue - npsSatisfaction,
-        diff: null,
-        markStyle: { top: '-40px' }
+        diff: currentValue - npsSatisfaction
+
+        // markStyle: { top: '-40px', backgroundColor: 'red' }
+      },
+      {
+        mark: 'Recommendation',
+        title: 'Real NPS Recommendation',
+        value: npsRecommendation,
+        diff: null
+        // diff: currentValue - npsRecommendation
       }
     ];
 
     const marks = {};
 
-    diffArr.forEach(({ value, mark, markStyle }) => {
-      if (markStyle) {
-        marks[value] = {
-          style: markStyle,
-          label: mark
-        };
-        return;
-      }
-
-      marks[value] = mark;
+    diffArr.forEach(({ value }) => {
+      marks[value] = '';
     });
 
     return (

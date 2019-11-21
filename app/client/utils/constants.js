@@ -82,5 +82,8 @@ module.exports = {
     DAY: 'D',
     WEEK: 'W',
     MONTH: 'M'
+  },
+  DEVICE: {
+    MOBILE: 991
   }
 };

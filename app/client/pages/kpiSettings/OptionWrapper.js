@@ -76,7 +76,8 @@ export default function OptionWrapper(props) {
 
     return (
       <div className="real-data__block" key={`kpi_${item.title}`}>
-        <div className="real-data__item">
+        <div className="real-data__item theme-1">
+          <span className="dot" />
           <span className="label">{item.title}</span>
           <span className="value">({value})</span>
         </div>

@@ -7,3 +7,4 @@ public/*.js
 public/*.css
 public/react-loadable.json
 public/ssr-template.txt
+*.log
