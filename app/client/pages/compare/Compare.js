@@ -35,7 +35,8 @@ class Compare extends React.Component {
       isCompare: false,
       compareTopics: [],
       linesData: undefined,
-      animationFinished: true
+      animationFinished: true,
+      activeFeature: undefined
     };
 
     this.toggleCompare = this.toggleCompare.bind(this);
@@ -98,28 +99,35 @@ class Compare extends React.Component {
     }
   }
 
-  onFeatureActivate(name) {
-    const criteriaId = FEATURES.NAME_ID[name];
-    const {
-      fetchTop5Topics,
-      location: { search },
-      match: {
-        params: { type }
-      }
-    } = this.props;
+  onFeatureActivate(activeFeature) {
+    this.setState({ activeFeature });
 
-    const paramsObj = new URLSearchParams(search.slice(1));
-    const mainId = paramsObj.get(ROUTING_PARAMS.MAIN_ID);
-    const compareId = paramsObj.get(ROUTING_PARAMS.COMPARE_ID);
+    if (activeFeature) {
+      const criteriaId = FEATURES.NAME_ID[activeFeature.name];
+      const {
+        fetchTop5Topics,
+        location: { search },
+        match: {
+          params: { type }
+        }
+      } = this.props;
 
-    fetchTop5Topics({ type, criteriaId, mainId, compareId });
+      const paramsObj = new URLSearchParams(search.slice(1));
+      const mainId = paramsObj.get(ROUTING_PARAMS.MAIN_ID);
+      const compareId = paramsObj.get(ROUTING_PARAMS.COMPARE_ID);
+
+      fetchTop5Topics({ type, criteriaId, mainId, compareId });
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
-  onCategoryActivate(name) {
-    const id = CATEGORIES.NAME_ID[name];
+  onCategoryActivate(activeCategory) {
+    console.log('activeCategory', activeCategory);
 
-    console.log('category', name, id);
+    if (activeCategory) {
+      const id = CATEGORIES.NAME_ID[activeCategory.name];
+      console.log('category id', id);
+    }
   }
 
   toggleCompare() {
@@ -139,7 +147,7 @@ class Compare extends React.Component {
   }
 
   render() {
-    const { isCompare, animationFinished, linesData, compareTopics } = this.state;
+    const { isCompare, animationFinished, linesData, compareTopics, activeFeature } = this.state;
     const { compareData, history } = this.props;
 
     if (!linesData) {
@@ -196,6 +204,8 @@ class Compare extends React.Component {
             className={`radars-wrapper d-flex jc-center p-relative ${isCompare ? 'overlay' : ''}`}
           >
             <Radar
+              withDetails={false}
+              activeFeature={activeFeature}
               onFeatureActivate={this.onFeatureActivate}
               onCategoryActivate={this.onCategoryActivate}
               colorScale={colorScaleMain}
@@ -204,6 +214,8 @@ class Compare extends React.Component {
             />
             <hr />
             <Radar
+              withDetails={false}
+              activeFeature={activeFeature}
               onFeatureActivate={this.onFeatureActivate}
               onCategoryActivate={this.onCategoryActivate}
               colorScale={colorScaleCompare}
@@ -212,6 +224,8 @@ class Compare extends React.Component {
             />
             {isCompare && animationFinished && (
               <Radar
+                withDetails={false}
+                activeFeature={activeFeature}
                 onFeatureActivate={this.onFeatureActivate}
                 onCategoryActivate={this.onCategoryActivate}
                 colorScale={[...colorScaleMain, ...colorScaleCompare]}
@@ -222,10 +236,10 @@ class Compare extends React.Component {
         </div>
         <div className="compare-line compare-scale-wrapper">
           {linesData.map((datum) => (
-            <CompareLine {...datum} />
+            <CompareLine key={datum.title} {...datum} />
           ))}
           {compareTopics.map((datum) => (
-            <CompareLine {...datum} />
+            <CompareLine key={datum.title} {...datum} />
           ))}
         </div>
       </div>

@@ -5,13 +5,13 @@ import { getCoordByPoint } from './utils';
 
 const { padding: p } = PROPS;
 
-const Indicator = ({ activePoint }) => {
+const Indicator = ({ activePoint, width, height }) => {
   if (!Object.keys(activePoint).length) {
     return null;
   }
 
   const { importance, satisfaction } = activePoint;
-  const { top, right } = getCoordByPoint(activePoint);
+  const { top, right } = getCoordByPoint(activePoint, width, height);
 
   return (
     <div

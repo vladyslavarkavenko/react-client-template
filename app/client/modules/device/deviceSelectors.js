@@ -1,4 +1,5 @@
 export default {
+  isMobile: (state) => state.device.isMobile,
   currentWidth: (state) => state.device.currentWidth,
-  isMobile: (state) => state.device.isMobile
+  currentHeight: (state) => state.device.currentHeight
 };

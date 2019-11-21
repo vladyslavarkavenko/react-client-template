@@ -1,14 +1,16 @@
 import React from 'react';
 import i18next from 'i18next';
+import { connect } from 'react-redux';
 
-import chartProperties from './chartProperties';
+import PROPS from './chartProperties';
 
 import StarSvg from '../../../../../public/assets/svg/star.svg';
 import SmileSvg from '../../../../../public/assets/svg/smile.svg';
+import deviceSelectors from '../../../modules/device/deviceSelectors';
 
-const { height: h, width: w, padding: p } = chartProperties;
+const { heightFactor: hf, widthFactor: wf, padding: p } = PROPS;
 
-const CustomLabelX = () => {
+const CustomLabelX = ({ height: h, width: w }) => {
   return (
     <div className="label p-absolute" style={{ top: h - p / 2, left: w / 2 }}>
       <SmileSvg />
@@ -17,7 +19,7 @@ const CustomLabelX = () => {
   );
 };
 
-const CustomLabelY = () => {
+const CustomLabelY = ({ height: h }) => {
   return (
     <div className="label label-y p-absolute" style={{ top: h / 2, left: p / 2 }}>
       <StarSvg />
@@ -26,11 +28,16 @@ const CustomLabelY = () => {
   );
 };
 
-const AxisLabels = () => (
+const AxisLabels = ({ height, width }) => (
   <>
-    <CustomLabelX />
-    <CustomLabelY />
+    <CustomLabelX height={height} width={width} />
+    <CustomLabelY height={height} />
   </>
 );
 
-export default AxisLabels;
+const mapStateToProps = (state) => ({
+  width: wf * deviceSelectors.currentWidth(state),
+  height: hf * deviceSelectors.currentHeight(state)
+});
+
+export default connect(mapStateToProps)(AxisLabels);

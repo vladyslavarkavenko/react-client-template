@@ -32,6 +32,7 @@ class Radar extends React.Component {
     };
 
     this.radar = React.createRef();
+    this.radarWrapper = React.createRef();
 
     this.showTooltip = this.showTooltip.bind(this);
     this.hideTooltip = this.hideTooltip.bind(this);
@@ -47,21 +48,44 @@ class Radar extends React.Component {
     window.addEventListener('click', this.handelClickOutside);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { activeFeature: currentActiveFeature } = this.props;
+    const { activeFeature: nextActiveFeature } = nextProps;
+
+    if (currentActiveFeature !== nextActiveFeature) {
+      this.setState({
+        activeCategory: null,
+        activeFeature: nextActiveFeature
+      });
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('click', this.handelClickOutside);
   }
 
   handelClickOutside(e) {
-    if (this.radar && !this.radar.current.contains(e.target)) {
+    const { onFeatureActivate, onCategoryActivate } = this.props;
+
+    if (!this.radar.current.contains(e.target) && this.radarWrapper.current.contains(e.target)) {
       this.setState({
         activeFeature: null,
         activeCategory: null
       });
+
+      if (onFeatureActivate) {
+        onFeatureActivate(null);
+      }
+
+      if (onCategoryActivate) {
+        onCategoryActivate(null);
+      }
     }
   }
 
   activateFeature(name) {
     const { NAMES, COLORS } = FEATURES;
+    const { onFeatureActivate } = this.props;
 
     const data = Object.values(NAMES).map((x) => {
       const y = x === name ? domain.y[1] : 0;
@@ -79,7 +103,10 @@ class Radar extends React.Component {
       style
     };
 
-    this.setState({
+    if (onFeatureActivate) {
+      onFeatureActivate(activeFeature);
+    }
+    return this.setState({
       activeFeature,
       activeCategory: null
     });
@@ -88,6 +115,11 @@ class Radar extends React.Component {
   activateCategory(name) {
     const { NAMES } = FEATURES;
     const { FEATURES: C_FEATURES, COLORS } = CATEGORIES;
+    const { onCategoryActivate } = this.props;
+
+    if (onCategoryActivate) {
+      return onCategoryActivate(onCategoryActivate);
+    }
 
     const data = Object.values(NAMES).map((x) => {
       const y = C_FEATURES[name].indexOf(x) !== -1 ? domain.y[1] * (1.2 + factor) : 0;
@@ -105,7 +137,7 @@ class Radar extends React.Component {
       style
     };
 
-    this.setState({
+    return this.setState({
       activeCategory,
       activeFeature: null
     });
@@ -151,17 +183,23 @@ class Radar extends React.Component {
     const {
       colorScale = Object.values(LEGEND_COLORS),
       detailsData,
-      onFeatureActivate,
-      onCategoryActivate,
       withBgIcons = true,
       status,
-      data: { grades, categoriesDetails, featuresDetails } = emptyData
+      data: { grades, categoriesDetails, featuresDetails } = emptyData,
+      withDetails = true
     } = this.props;
     const { activeFeature, activeCategory, tooltipData } = this.state;
 
     return (
       <>
-        <div className="radar-wrapper">
+        {withBgIcons && (
+          <div className="radar-icons-wrapper">
+            {Object.values(ICONS).map((src, i) => (
+              <ReactSVG key={src} className={`bg-icon bg-icon-${i}`} src={src} />
+            ))}
+          </div>
+        )}
+        <div className="radar-wrapper" ref={this.radarWrapper}>
           {status === 'request' && (
             <div className="screen-loader">
               <InlineSvgLoader />
@@ -218,25 +256,20 @@ class Radar extends React.Component {
               {activeFeature && <VictoryBar {...activeFeature} />}
               {activeCategory && <VictoryBar {...activeCategory} />}
             </VictoryChart>
-            <FeaturesLabels onClick={onFeatureActivate || this.activateFeature} />
-            <CategoriesLabels onClick={onCategoryActivate || this.activateCategory} />
-            <Details
-              feature={activeFeature}
-              category={activeCategory}
-              detailsData={detailsData}
-              featuresDetails={featuresDetails}
-              categoriesDetails={categoriesDetails}
-            />
+            <FeaturesLabels onClick={this.activateFeature} />
+            <CategoriesLabels onClick={this.activateCategory} />
+            {withDetails && (
+              <Details
+                feature={activeFeature}
+                category={activeCategory}
+                detailsData={detailsData}
+                featuresDetails={featuresDetails}
+                categoriesDetails={categoriesDetails}
+              />
+            )}
             <Tooltip colorScale={colorScale} data={grades} tooltipData={tooltipData} />
           </div>
         </div>
-        {withBgIcons && (
-          <div className="radar-icons-wrapper">
-            {Object.values(ICONS).map((src, i) => (
-              <ReactSVG key={src} className={`bg-icon bg-icon-${i}`} src={src} />
-            ))}
-          </div>
-        )}
       </>
     );
   }

@@ -9,6 +9,7 @@ import Indicator from './chart/Indicator';
 import AxisLabels from './chart/AxisLabels';
 import { calculateBgColor } from './chart/utils';
 import PROPS, { allPoints } from './chart/chartProperties';
+import deviceSelectors from '../../modules/device/deviceSelectors';
 import { axisStyle, bubbleStyle, activeBubbleStyle } from './chart/styles';
 import shareOpinionSelectors from '../../modules/shareOpinion/shareOpinionSelectors';
 import { saveTopicRate, fetchTopicOpinions } from '../../modules/shareOpinion/shareOpinionActions';
@@ -16,10 +17,10 @@ import { saveTopicRate, fetchTopicOpinions } from '../../modules/shareOpinion/sh
 import '../../assets/styles/pages/chart.less';
 
 const {
-  width: w,
   ticks: t,
-  height: h,
   padding: p,
+  widthFactor: wf,
+  heightFactor: hf,
   maxBubbleSize,
   minBubbleSize,
   activeBubbleSize,
@@ -108,8 +109,9 @@ class ShareOpinionChart extends React.Component {
 
   updateBG() {
     const { x, y } = this.state;
+    const { width, height } = this.props;
 
-    this.chartWrapper.current.style.backgroundColor = calculateBgColor(x, y);
+    this.chartWrapper.current.style.backgroundColor = calculateBgColor(x, y, width, height);
   }
 
   showTooltip(points) {
@@ -135,7 +137,7 @@ class ShareOpinionChart extends React.Component {
   }
 
   render() {
-    const { opinions, topics, activeTopic } = this.props;
+    const { opinions, topics, activeTopic, width, height } = this.props;
     const { activePoint, showOpinions, tooltipData } = this.state;
 
     const { satisfaction: s, importance: i } = activePoint;
@@ -158,7 +160,6 @@ class ShareOpinionChart extends React.Component {
           </p>
           {showOpinions && topic.id === activeTopic.id && (
             <div>
-              <h1 className="uppercase">{i18next.t('shareOpinion.yourRate')}</h1>
               <ReactSVG className="emoji" src={`/assets/svg/emoji/${s}_${i}.svg`} />
               <h3>{rateText}</h3>
               <button onClick={this.onNextClick}>
@@ -178,19 +179,19 @@ class ShareOpinionChart extends React.Component {
         </ul>
         <div
           style={{
-            width: w,
-            height: h
+            width,
+            height
           }}
           className="p-relative cursor-pointer"
           onMouseMove={showOpinions ? null : this.onMouseMove}
         >
           <AxisLabels />
-          <Tooltip data={tooltipData} />
-          <Indicator activePoint={activePoint} />
+          <Tooltip data={tooltipData} width={width} height={height} />
+          <Indicator activePoint={activePoint} width={width} height={height} />
           {showOpinions ? (
             <VictoryChart
-              width={w}
-              height={h}
+              width={width}
+              height={height}
               padding={p}
               domain={[0, t]}
               containerComponent={
@@ -227,8 +228,8 @@ class ShareOpinionChart extends React.Component {
             </VictoryChart>
           ) : (
             <VictoryChart
-              width={w}
-              height={h}
+              width={width}
+              height={height}
               padding={p}
               domain={[0, t]}
               containerComponent={
@@ -256,6 +257,8 @@ class ShareOpinionChart extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  width: wf * deviceSelectors.currentWidth(state),
+  height: hf * deviceSelectors.currentHeight(state),
   topics: shareOpinionSelectors.selectedTopics(state),
   activeTopic: shareOpinionSelectors.nextUnratedTopic(state),
   opinions: shareOpinionSelectors.topicOpinions(state),
