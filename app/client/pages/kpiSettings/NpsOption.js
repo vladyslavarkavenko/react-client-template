@@ -32,7 +32,7 @@ class NpsOption extends React.Component {
     const diffArr = [
       {
         mark: 'Satisfaction',
-        title: 'Real NPS Satisfaction',
+        title: 'NPS Satisfaction',
         value: npsSatisfaction,
         diff: currentValue - npsSatisfaction
 
@@ -40,7 +40,7 @@ class NpsOption extends React.Component {
       },
       {
         mark: 'Recommendation',
-        title: 'Real NPS Recommendation',
+        title: 'NPS Recommendation',
         value: npsRecommendation,
         diff: null
         // diff: currentValue - npsRecommendation
@@ -50,7 +50,9 @@ class NpsOption extends React.Component {
     const marks = {};
 
     diffArr.forEach(({ value }) => {
-      marks[value] = '';
+      if (value <= 100 && value >= -100) {
+        marks[value] = '';
+      }
     });
 
     return (

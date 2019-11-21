@@ -32,7 +32,7 @@ class ParticipationOption extends React.Component {
     const diffArr = [
       {
         // mark: 'Real',
-        title: 'Real Satisfied Clients',
+        title: 'Participation Share',
         value: realValue,
         diff: currentValue - realValue
       }

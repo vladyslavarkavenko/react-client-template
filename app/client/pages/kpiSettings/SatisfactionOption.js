@@ -32,7 +32,7 @@ class SatisfactionOption extends React.Component {
     const diffArr = [
       {
         // mark: 'Real',
-        title: 'Real Satisfied Clients',
+        title: 'Satisfied Clients',
         value: realValue,
         diff: currentValue - realValue
       }

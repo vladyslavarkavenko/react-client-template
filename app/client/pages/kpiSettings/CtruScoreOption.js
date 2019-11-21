@@ -33,7 +33,7 @@ class CtruScoreOption extends React.Component {
     const diffArr = [
       {
         // mark: 'Real',
-        title: 'Real cTRU Score',
+        title: 'cTRU Score',
         value: realValue,
         diff: currentValue - realValue
       }
@@ -42,7 +42,9 @@ class CtruScoreOption extends React.Component {
     const marks = {};
 
     diffArr.forEach(({ value }) => {
-      marks[value] = '';
+      if (value >= 1) {
+        marks[value] = '';
+      }
     });
 
     return (
