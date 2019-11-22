@@ -103,6 +103,10 @@ const PageNotFound = customLoadable({
   loader: () => import('../pages/notFound/NotFound')
 });
 
+const Temp = customLoadable({
+  loader: () => import('../pages/_temp/Temp')
+});
+
 // additional subroutes
 // Overview, CompanyAbout
 
@@ -127,6 +131,8 @@ export default function App() {
         forAnalyst={Dashboard}
         forCustomer={CustomerDashboard}
       />
+
+      <RolesRoute exact path="/temp" forAdmin={Temp} />
 
       <RolesRoute
         exact

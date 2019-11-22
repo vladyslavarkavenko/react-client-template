@@ -11,6 +11,11 @@ const getTopByKey = (state, key) => {
   };
 };
 
+const getChartStatus = (state) => state.dashboard.chart.status;
+const getChartData = (state) => state.dashboard.chart.data;
+const getChartPagination = (state) => state.dashboard.chart.pagination;
+const getLineFilter = (state) => state.dashboard.chart.lineFilter;
+
 export default {
   staff: (state) => state.dashboard.staff.data,
   staffStatus: (state) => state.dashboard.staff.status,
@@ -19,5 +24,10 @@ export default {
   companyData: (state) => state.dashboard.companyData.data,
   companyDataStatus: (state) => state.dashboard.companyData.status,
 
-  getTopByKey
+  getTopByKey,
+
+  getChartStatus,
+  getChartData,
+  getChartPagination,
+  getLineFilter
 };

@@ -13,14 +13,16 @@ export default function normalizePoints(history, dateOffset) {
 
     date.setHours(0, 0, 0, 0);
 
+    const time = date.getTime();
+
     importance.push({
-      x: date.getTime(),
+      x: time,
       y0: 1,
       y: point.importance
     });
 
     satisfaction.push({
-      x: date.getTime(),
+      x: time,
       y0: 1,
       y: point.satisfaction
     });
