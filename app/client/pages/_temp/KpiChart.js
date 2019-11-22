@@ -94,8 +94,6 @@ export default class KpiChart extends React.Component {
 
     const additionalAxis = KpiChart.additionalAxisParams(visibleLines);
 
-    console.log('_____________________');
-
     return (
       <div className="rate-chart">
         <KpiChartLegend

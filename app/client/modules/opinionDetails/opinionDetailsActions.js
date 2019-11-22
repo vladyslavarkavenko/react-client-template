@@ -217,12 +217,13 @@ function* changeOffsetWorker({ payload }) {
 function* getCommentsWorker({ payload = {} }) {
   const { page = 1 } = payload;
   const { id, type } = yield select(opinionDetailsSelectors.selectedProfile);
+  const { id: topic } = yield select(opinionDetailsSelectors.selectedTopic);
   yield put(fetchOpinionComments.request({ isNext: page > 1 }));
   try {
     const comments =
       type === ROUTING_PARAMS.MANAGER
-        ? yield call(ManagerService.getComments, { managerId: id, page, limit: 10 })
-        : yield call(CompaniesService.getComments, { companyId: id, page, limit: 10 });
+        ? yield call(ManagerService.getComments, { limit: 10, managerId: id, page, topic })
+        : yield call(CompaniesService.getComments, { limit: 10, companyId: id, page, topic });
 
     const { pagination, results } = paginate({ currentPage: page, data: comments });
 

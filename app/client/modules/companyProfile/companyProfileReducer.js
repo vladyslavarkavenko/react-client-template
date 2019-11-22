@@ -74,7 +74,7 @@ const commentsStatus = makeStatusWithResetReducer(actions.fetchComments, actions
 const commentsData = handleActions(
   {
     [actions.fetchComments.SUCCESS](state, { payload }) {
-      return payload;
+      return payload.results;
     },
     [actions.clearAll.TRIGGER]() {
       return [];

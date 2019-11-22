@@ -29,9 +29,11 @@ class ManagerService {
     return api.get(`/opinion/manager/${managerId}/statistics/`);
   }
 
-  static getComments({ managerId, page = 1, limit = 10 }) {
+  static getComments({ managerId, page = 1, limit = 10, topic }) {
     const offset = limit * (page - 1);
-    return api.get(`/opinion/manager/${managerId}/comments/?offset=${offset}&limit=${limit}`);
+    const params = { limit, offset, topic };
+
+    return api.get(`/opinion/manager/${managerId}/comments/`, { params });
   }
 }
 
