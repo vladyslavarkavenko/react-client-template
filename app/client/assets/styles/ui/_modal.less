@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 30px;
+    padding-top: 1.875rem;
     width: 100%;
     margin: auto;
     position: relative;
@@ -26,7 +26,7 @@
   &__body {
     position: relative;
     background-color: white;
-    padding: 42px 42px;
+    padding: 2.625rem  2.625rem;
 
     .m {
       &-title {
@@ -34,7 +34,7 @@
         font-size: 1.35rem;
         line-height: 2rem;
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 0.625rem;
       }
 
       &-subtitle {
@@ -42,7 +42,7 @@
         color: @font-color-lighter;
         font-size: 1.1rem;
         line-height: 1.5rem;
-        margin-bottom: 15px;
+        margin-bottom: 1rem;
       }
 
       &-close-btn {
@@ -73,7 +73,7 @@
       }
 
       &-btn {
-        padding: 10px 24px;
+        padding: 0.625rem 1.5rem;
         text-align: center;
         font-size: 1rem;
         border-radius: @border-radius-block;
@@ -93,11 +93,13 @@
             border: 1px solid black;
             color: black;
           }
+
           &:active {
             background-color: @font-color-lighter;
             border: 1px solid @font-color-lighter;
             color: white;
           }
+
           &:disabled {
             border: 1px solid @font-color-lighter;
             color: @font-color-lighter;
@@ -119,10 +121,11 @@
             border: 1px solid @button-bg-dark-blue_hover;
             color: @button-bg-dark-blue_hover;
           }
+
           &:disabled {
-              border: 1px solid @font-color-lighter;
-              background-color: @font-color-lighter;
-              color: white;
+            border: 1px solid @font-color-lighter;
+            background-color: @font-color-lighter;
+            color: white;
           }
         }
       }
@@ -134,8 +137,8 @@
           .makeShadow(0.4);
           position: absolute;
           top: 0;
-          left: 0px;
-          right: 0px;
+          left: 0;
+          right: 0;
           z-index: @z-index-dropdown;
           display: flex;
           flex-direction: column;
@@ -143,14 +146,15 @@
         }
 
         .drop-item {
-          padding: 8px 13px;
+          padding: 0.5rem 0.8125rem;
           text-align: left;
           width: 100%;
           background-color: white;
           border-bottom: 1px solid @font-color-light;
           border-left: 2px solid transparent;
           font-size: 0.9rem;
-          line-height: 26px;
+          line-height: 1.625rem;
+
           &:hover {
             border-left: 2px solid @alert-color-blue;
           }

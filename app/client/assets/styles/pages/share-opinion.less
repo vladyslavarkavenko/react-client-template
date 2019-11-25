@@ -19,10 +19,10 @@
         height: 80px;
         //text-align: justify;
         font-size: 1.05rem;
-        line-height: 40px;
+        line-height: 2.5rem;
         font-weight: bold;
         background-color: white;
-        padding: 18px 20px 13px 20px;
+        padding: 1.125rem 1.25rem 0.8125rem 1.25rem;
         border-bottom: 1px solid @border-color-list;
 
       }
@@ -32,8 +32,8 @@
         position: relative;
         height: 80px;
         font-size: 1.05rem;
-        line-height: 40px;
-        padding: 18px 20px 13px 20px;
+        line-height: 2.5rem;
+        padding: 1.125rem 1.25rem 0.8125rem 1.25rem;
         background-color: white;
         border-bottom: 1px solid @border-color-list;
 
@@ -61,7 +61,7 @@
           }
 
           &-info {
-            line-height: 25px;
+            line-height: 1.5rem;
             font-size: 1rem;
           }
 
@@ -73,16 +73,16 @@
           }
 
           &-img {
-            margin-right: 10px;
+            margin-right: 0.625rem;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 3.125rem;
+            height: 3.125rem;
             overflow: hidden;
 
             img {
               object-fit: cover;
-              height: 50px;
-              width: 50px;
+              height: 3.125rem;
+              width: 3.125rem;
             }
           }
 
@@ -108,7 +108,7 @@
 
       .selected-profile {
         width: 100%;
-        padding: 12px 15px;
+        padding: 0.75rem 1rem;
         background-color: white;
         border-bottom: 1px solid @border-color-list;
         min-height: 80px;
@@ -127,7 +127,7 @@
 
       .details-list {
         position: relative;
-        padding: 15px 15px 0 15px;
+        padding: 1rem 1rem 0 1rem;
 
         &__block {
           position: sticky;
@@ -146,11 +146,11 @@
             border-radius: @border-radius-block;
             border: 2px solid @border-color-list;
             text-align: center;
-            padding: 10px;
+            padding: 0.625rem;
             color: white;
             font-size: 0.9rem;
             font-weight: bold;
-            line-height: 20px;
+            line-height: 1.25rem;
 
             &:hover {
               background-color: @border-color-list;
@@ -166,7 +166,7 @@
         }
 
         &__btn {
-          margin-bottom: 15px;
+          margin-bottom: 1rem;
 
 
           .add-new-btn {
@@ -175,11 +175,11 @@
             background-color: white;
             border: 2px dashed @border-color-list;
             text-align: center;
-            padding: 24px;
+            padding: 1.5rem;
             color: @font-color-blue;
             font-size: 1.15rem;
             font-weight: bold;
-            line-height: 20px;
+            line-height: 1.25rem;
 
             &:hover {
               border: 2px dashed @font-color-lighter;
@@ -191,18 +191,18 @@
 
         &_preloader {
           min-height: 40vh;
-          padding: 10px 15px;
+          padding: 0.625rem 1rem;
         }
 
         &__notify {
           .notify-btn {
             margin: 0 0 0 auto;
-            padding: 10px 15px;
+            padding: 0.625rem 1rem;
             font-size: 0.9rem;
             font-weight: bold;
             color: white;
             background-color: @button-bg-dark-blue;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
 
             &:hover {
@@ -215,12 +215,12 @@
           position: relative;
           display: flex;
           //flex-direction: column;
-          margin-bottom: 15px;
+          margin-bottom: 1rem;
           min-height: 90px;
           background-color: white;
           border: 1px solid @border-color-list;
           //border-left: 3px solid @alert-color-red;
-          padding: 10px 15px;
+          padding: 0.625rem 1rem;
 
           &.active {
             flex-direction: column;
@@ -234,11 +234,11 @@
           .subject-arrow {
             align-self: center;
             cursor: pointer;
-            width: 15px;
-            line-height: 15px;
+            width: 1rem;
+            line-height: 1rem;
             fill: @font-color-lighter;
             transition: transform 0.2s;
-            margin-right: 20px;
+            margin-right: 1.25rem;
           }
 
           .subject-add {
@@ -252,7 +252,7 @@
             color: @font-color-blue;
             font-size: 1.25rem;
             font-weight: bold;
-            line-height: 32px;
+            line-height: 2rem;
             text-align: center;
             cursor: pointer;
 
@@ -272,14 +272,14 @@
           }
 
           .subject-img {
-            margin-right: 20px;
-            width: 60px;
-            height: 60px;
+            margin-right: 1.25rem;
+            width: 3.75rem;
+            height: 3.75rem;
 
             > img {
               object-fit: cover;
-              height: 60px;
-              width: 60px;
+              height: 3.75rem;
+              width: 3.75rem;
               border-radius: 50%;
             }
           }
@@ -300,17 +300,17 @@
             align-items: center;
 
             span {
-              margin-left: 10px;
+              margin-left: 0.625rem;
               line-height: 1rem;
 
               &.red svg {
                 fill: @alert-color-red;
-                width: 18px;
+                width: 1.125rem;
               }
 
               &.green svg {
                 fill: @alert-color-green;
-                width: 18px;
+                width: 1.125rem;
               }
             }
           }
@@ -321,8 +321,8 @@
           }
 
           .topics-list {
-            margin: 20px 0 0 0;
-            padding-left: 20px;
+            margin: 1.25rem 0 0 0;
+            padding-left: 1.25rem;
             background-color: white;
 
             .topic {
@@ -330,8 +330,8 @@
               align-items: center;
               justify-content: space-between;
               min-height: 50px;
-              margin: 5px 5px;
-              padding: 0 10px;
+              margin: 0.3125rem 0.3125rem;
+              padding: 0 0.625rem;
               background-color: white;
               border-top: 1px solid transparent;
               border-bottom: 1px solid transparent;
@@ -343,7 +343,7 @@
 
               &-name {
                 font-size: 1rem;
-                line-height: 24px;
+                line-height: 1.5rem;
               }
 
               &-checkbox {
@@ -351,7 +351,7 @@
                 [type="checkbox"]:checked + label {
                   color: black;
                   font-size: 1rem;
-                  line-height: 20px;
+                  line-height: 1.25rem;
                   padding-left: 2rem;
                   font-weight: normal;
                 }
@@ -361,7 +361,7 @@
                 //justify-self: flex-end;
                 display: flex;
                 align-content: center;
-                margin-left: 20px;
+                margin-left: 1.25rem;
 
                 &.red {
                   svg {
@@ -395,7 +395,7 @@
 .modal-wrapper__body {
   .m-create-subject {
     .form__row {
-      margin-bottom: 10px;
+      margin-bottom: 0.625rem;
     }
   }
 }
@@ -433,7 +433,7 @@
     }
 
     &-btn {
-      line-height: 10px;
+      line-height: 0.625rem;
       font-weight: bold;
       font-size: 0.9rem;
       cursor: pointer;
@@ -457,8 +457,8 @@
       font-size: 1.4rem;
       font-weight: bold;
       line-height: 1.5rem;
-      margin-bottom: 20px;
-      margin-top: 10px;
+      margin-bottom: 1.25rem;
+      margin-top: 0.625rem;
     }
 
     &__list {
@@ -468,7 +468,7 @@
     }
 
     &__item {
-      margin: 10px 10px;
+      margin: 0.625rem 0.625rem;
 
       padding: 4px 6px;
       border: 1px solid white;
@@ -546,7 +546,7 @@
     }
 
     &__remind {
-      margin: 60px 0;
+      margin: 3.75rem 0;
       display: flex;
       justify-content: center;
 
@@ -570,7 +570,7 @@
     &__actions {
       display: flex;
       justify-content: space-between;
-      margin: 20px 0;
+      margin: 1.25rem 0;
 
       .or {
         color: @font-color-lighter;
@@ -615,7 +615,7 @@
         min-width: 200px;
         max-width: 300px;
         border: 1px solid @button-bg-dark-blue;
-        border-radius: 6px;
+        border-radius: 4px;
 
         &.white {
           color: @button-bg-dark-blue;
@@ -676,8 +676,8 @@
 
       [type="checkbox"]:checked + label {
         color: black;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 1rem;
+        line-height: 1.25rem;
 
         &:before {
           background-color: @font-color-blue;
@@ -695,8 +695,8 @@
 
       [type="checkbox"]:not(:checked) + label {
         color: black;
-        font-size: 16px;
-        line-height: 20px;
+        font-size: 1rem;
+        line-height: 1.25rem;
       }
 
     }
@@ -761,7 +761,7 @@
       resize: vertical;
       border: 1px solid @font-color-lighter;
       border-radius: @border-radius-block;
-      line-height: 20px;
+      line-height: 1.25rem;
       font-size: 0.9rem;
       padding: 1.25rem;
       color: @font-color-dark;
