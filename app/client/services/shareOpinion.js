@@ -1,6 +1,22 @@
 import api from '../utils/api';
 
 class ShareOpinionService {
+  static getMainImportanceAspects({ id: customerId }) {
+    return api.get(`/opinion/customer/${customerId}/main_importance_aspects/`);
+  }
+
+  static getMainImportanceCriteria({ id: customerId }) {
+    return api.get(`/opinion/customer/${customerId}/main_importance_criteria/`);
+  }
+
+  static getMainOpinionSubjects({ id: customerId }) {
+    return api.get(`/opinion/customer/${customerId}/main_opinion_subjects/`);
+  }
+
+  static getMainSatisfactionSubjects({ id: customerId }) {
+    return api.get(`/opinion/customer/${customerId}/main_satisfaction_subjects/`);
+  }
+
   static getTopicStatsByCompany({ id, topic }) {
     return api.post(`/opinion/company/${id}/topic_statistics/`, { topic });
   }

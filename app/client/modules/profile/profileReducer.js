@@ -17,11 +17,51 @@ const profile = handleActions(
   initialData
 );
 
+const mainAspects = handleActions(
+  {
+    [actions.getImportanceAspects.SUCCESS](state, { payload }) {
+      return payload;
+    }
+  },
+  null
+);
+
+const mainCriteria = handleActions(
+  {
+    [actions.getImportanceCriteria.SUCCESS](state, { payload }) {
+      return payload;
+    }
+  },
+  null
+);
+
+const mainSubjects = handleActions(
+  {
+    [actions.getOpinionSubjects.SUCCESS](state, { payload }) {
+      return payload;
+    }
+  },
+  null
+);
+
+const mainOpinions = handleActions(
+  {
+    [actions.getSatisfactionSubjects.SUCCESS](state, { payload }) {
+      return payload;
+    }
+  },
+  null
+);
+
 const profileStatus = makeStatusReducer(actions.getRadarScores);
 
 const profileReducer = combineReducers({
   status: profileStatus,
-  data: profile
+  data: profile,
+  mainAspects,
+  mainCriteria,
+  mainSubjects,
+  mainOpinions
 });
 
 export default profileReducer;

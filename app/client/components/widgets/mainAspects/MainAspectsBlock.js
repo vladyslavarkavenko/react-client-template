@@ -4,15 +4,7 @@ import RationalSvg from '../../../../../public/assets/svg/categories/puzzle.svg'
 import ProcessSvg from '../../../../../public/assets/svg/categories/cogs.svg';
 import FeelingSvg from '../../../../../public/assets/svg/categories/hand-heart.svg';
 import ResultSvg from '../../../../../public/assets/svg/categories/bullseye-arrow.svg';
-
-/*
-*  [RATIONAL]: '/assets/svg/categories/puzzle.svg',
-    [PROCESS]: '/assets/svg/categories/cogs.svg',
-    [FEELING]: '/assets/svg/categories/hand-heart.svg',
-    [RESULT]: '/assets/svg/categories/bullseye-arrow.svg'
-* */
-
-/* eslint-disable */
+import { LoaderBlock } from '../../ui-components/Layout/Loader';
 
 const aspectSvg = {
   1: <ProcessSvg />,
@@ -21,20 +13,26 @@ const aspectSvg = {
   4: <FeelingSvg />
 };
 
-const mockData = [
-  { id: 1, name: 'Process' },
-  { id: 2, name: 'Rational' },
-  { id: 3, name: 'Result' }
-];
+// const mockData = [
+//   { id: 1, name: 'Process' },
+//   { id: 2, name: 'Rational' },
+//   { id: 3, name: 'Result' }
+// ];
 
-export default function MainAspectsBlock({ aspects = mockData }) {
-  const list = aspects.slice(0, 3).map(({ id, name }) => (
-    <li className={`widget-aspect__item theme-${id}`} key={`${id}_my_asp`}>
-      <span className="aspect-icon">{aspectSvg[id]}</span>
-      <span className="background-icon">{aspectSvg[id]}</span>
-      <p className="label">{name}</p>
-    </li>
-  ));
+export default function MainAspectsBlock({ data }) {
+  let list;
+
+  if (!data) {
+    list = <LoaderBlock />;
+  } else {
+    list = data.slice(0, 3).map(({ id, name }) => (
+      <li className={`widget-aspect__item theme-${id}`} key={`${id}_my_asp`}>
+        <span className="aspect-icon">{aspectSvg[id]}</span>
+        <span className="background-icon">{aspectSvg[id]}</span>
+        <p className="label">{name}</p>
+      </li>
+    ));
+  }
 
   return (
     <>

@@ -9,6 +9,7 @@ import authSelectors from '../auth/authSelectors';
 import { ROLES, RATE_PROFILE_TYPE } from '../../utils/constants';
 import companiesSelectors from '../companies/companiesSelectors';
 import CompaniesService from '../../services/companies';
+import ShareOpinionService from '../../services/shareOpinion';
 
 const { MANAGER } = ROLES;
 
@@ -16,6 +17,10 @@ export const prefix = 'profile';
 const createRequestBound = createRequestRoutine.bind(null, prefix);
 
 export const getRadarScores = createRequestBound('RADAR_SCORES_FETCH');
+export const getImportanceAspects = createRequestBound('GET_IMPORTANCE_ASPECTS');
+export const getImportanceCriteria = createRequestBound('GET_IMPORTANCE_CRITERIA');
+export const getOpinionSubjects = createRequestBound('GET_OPINION_SUBJECTS');
+export const getSatisfactionSubjects = createRequestBound('GET_SATISFACTION_SUBJECTS');
 
 function* getRadarScoresWorker() {
   yield put(getRadarScores.request());
@@ -62,6 +67,72 @@ function* getRadarScoresWorker() {
   }
 }
 
+function* getImportanceAspectsWorker() {
+  yield put(getImportanceAspects.request());
+
+  try {
+    const { staffId: id } = yield select(authSelectors.user);
+
+    const res = yield call(ShareOpinionService.getMainImportanceAspects, { id });
+    yield put(getImportanceAspects.success(res));
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(getImportanceAspects.failure());
+  }
+}
+
+function* getImportanceCriteriaWorker() {
+  yield put(getImportanceCriteria.request());
+
+  try {
+    const { staffId: id } = yield select(authSelectors.user);
+
+    const res = yield call(ShareOpinionService.getMainImportanceCriteria, { id });
+    yield put(getImportanceCriteria.success(res));
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(getImportanceCriteria.failure());
+  }
+}
+
+function* getOpinionSubjectsWorker() {
+  yield put(getOpinionSubjects.request());
+
+  try {
+    const { staffId: id } = yield select(authSelectors.user);
+
+    const res = yield call(ShareOpinionService.getMainOpinionSubjects, { id });
+    yield put(getOpinionSubjects.success(res));
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(getOpinionSubjects.failure());
+  }
+}
+
+function* getSatisfactionSubjectsWorker() {
+  yield put(getSatisfactionSubjects.request());
+
+  try {
+    const { staffId: id } = yield select(authSelectors.user);
+
+    const res = yield call(ShareOpinionService.getMainSatisfactionSubjects, { id });
+    yield put(getSatisfactionSubjects.success(res));
+  } catch (err) {
+    console.error(err);
+    Notification.error(err);
+    yield put(getSatisfactionSubjects.failure());
+  }
+}
+
 export function* profileWatcher() {
-  yield all([takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker)]);
+  yield all([
+    takeLatest(getRadarScores.TRIGGER, getRadarScoresWorker),
+    takeLatest(getImportanceAspects.TRIGGER, getImportanceAspectsWorker),
+    takeLatest(getImportanceCriteria.TRIGGER, getImportanceCriteriaWorker),
+    takeLatest(getOpinionSubjects.TRIGGER, getOpinionSubjectsWorker),
+    takeLatest(getSatisfactionSubjects.TRIGGER, getSatisfactionSubjectsWorker)
+  ]);
 }
